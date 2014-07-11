@@ -1,8 +1,9 @@
-package com.votinginfoproject.VotingInformationProject;
+package com.votinginfoproject.VotingInformationProject.activities;
 
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,14 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 
+import com.votinginfoproject.VotingInformationProject.R;
 
-public class ContestsActivity extends Activity {
+public class HomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contests);
+        setContentView(R.layout.activity_home);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -30,7 +33,7 @@ public class ContestsActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.contests, menu);
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
@@ -46,6 +49,11 @@ public class ContestsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onGoButtonClicked(View view) {
+        Intent intent = new Intent(this, VIPTabBarActivity.class);
+        startActivity(intent);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -57,8 +65,9 @@ public class ContestsActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_contests, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
             return rootView;
         }
+
     }
 }
