@@ -8,13 +8,22 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ContestsActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.HomeActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.VIPTabBarActivity"
+            android:label="@string/title_activity_viptab_bar"
+            android:parentActivityName=".activities.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.votinginfoproject.VotingInformationProject.activities.HomeActivity" />
         </activity>
     </application>
 
