@@ -1,29 +1,22 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-import android.app.Activity;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 
-public class VIPTabBarActivity extends FragmentActivity {
+public class VIPTabBarActivity extends FragmentActivity implements BallotFragment.OnInteractionListener {
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -139,6 +132,8 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
+            // TODO: Use switch here to return the proper Fragment type
+            //       given the tab
             return BallotFragment.newInstance(position);
         }
 
@@ -173,42 +168,4 @@ public class VIPTabBarActivity extends FragmentActivity {
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
         }
     }
-
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class BallotFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static BallotFragment newInstance(int sectionNumber) {
-            BallotFragment fragment = new BallotFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public BallotFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            Bundle bundle = getArguments();
-            View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
-            TextView sectionLabel = (TextView)rootView.findViewById(R.id.section_label);
-            sectionLabel.setText("Section Number: " + bundle.getInt(ARG_SECTION_NUMBER, 0));
-            return rootView;
-        }
-    }
-
 }

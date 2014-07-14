@@ -1,32 +1,21 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-
-import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity implements HomeFragment.OnInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        setContentView(R.layout.fragment_home);
     }
 
 
@@ -49,25 +38,8 @@ public class HomeActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onGoButtonClicked(View view) {
+    public void onGoButtonPressed(View view) {
         Intent intent = new Intent(this, VIPTabBarActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            return rootView;
-        }
-
     }
 }
