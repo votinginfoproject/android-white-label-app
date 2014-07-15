@@ -89,6 +89,9 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
      * view to show as the tab content.  It listens to changes in tabs, and takes
      * care of switch to the correct paged in the ViewPager whenever the selected
      * tab changes.
+     *
+     * NOTE: This class is lifted directly from the ViewPager class docs:
+     *       http://developer.android.com/reference/android/support/v4/view/ViewPager.html
      */
     public static class TabsAdapter extends FragmentPagerAdapter
             implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
@@ -139,6 +142,7 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
         }
 
         @Override
@@ -148,6 +152,7 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
 
         @Override
         public void onPageScrollStateChanged(int state) {
+
         }
 
         @Override
@@ -162,10 +167,12 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
 
         @Override
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
         }
 
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
         }
     }
 }
