@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,18 +7,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
-import com.votinginfoproject.VotingInformationProject.models.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.Election;
-import com.votinginfoproject.VotingInformationProject.models.ElectionQueryResponse;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.State;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener {
 
