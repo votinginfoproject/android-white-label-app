@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -67,6 +68,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, Void, T> {
                 throw new CivicInfoApiQueryException("Query URL should end with 'key='");
             }
             url = new URL(this.baseQueryUrl + urls[0] + this.apiKey);
+            Log.d("CivicInfoApiQuery", "Url: " + url);
             HttpURLConnection myConnection = (HttpURLConnection) url.openConnection();
             InputStream in = myConnection.getInputStream();
             BufferedReader ir = new BufferedReader(new InputStreamReader(in));
@@ -79,6 +81,8 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, Void, T> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // TODO: Add VIPError object to catch valid errors returned from the API,
+        //       such as "Failed to parse address"
         return null;
     }
 

@@ -9,4 +9,11 @@
     <string name="homeactivity_go_button">GO</string>
     <string name="title_activity_viptab_bar">VIPTabBarActivity</string>
 
+    <!-- Home View Strings -->
+    <string name="home_textview_brandname">Brand Name</string>
+    <string name="home_textview_votinginfo">Voting Information</string>
+    <string name="home_textview_getting_started">Get started by providing the address at which you are registered to vote.</string>
+    <string name="home_status_loading">Loading data…</string>
+    <string name="home_error_no_address">Weird. Looks like we can\'t find your address. Please check that it\'s right and try again.</string>
+
 </resources>

@@ -19,7 +19,7 @@ Adding API keys for the app:
 ----------------------------
 Copy the api_keys.xml.template file to api_keys.xml: 
 ```
-cp app/src/main/res/values/api_keys.xml.template app/src/main/res/values/api_keys.xml
+cp xmltemplates/api_keys.xml.template app/src/main/res/values/api_keys.xml
 ```
 Edit api_keys.xml to add in your API keys from the [Google Developer Console](https://console.developers.google.com).  
 Note that the Google Maps API key is the Anroid key, and the Civic Info API key is the browser key.
