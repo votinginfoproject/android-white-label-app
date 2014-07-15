@@ -18,3 +18,8 @@
 bin/
 gen/
 
+# Temp files
+*~
+
+# Key files
+api_keys.xml

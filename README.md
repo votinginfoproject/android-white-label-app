@@ -14,6 +14,12 @@ Target SDK Version: 20 (Android L)
 Android Support Library v4 revision 20  
 
 
+Adding API keys for the app:
+----------------------------
+- Copy app/src/main/res/values/api_keys.xml.template to app/src/main/res/values/api_keys.xml
+- Edit api_keys.xml to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
+    Note that the Google Maps API key is the Anroid key, and the Civic Info API key is the browser key.
+
 Building the app:
 -----------------
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_api_android_key"></string>
+    <string name="google_api_browser_key"></string>
+    <string name="civic_info_api_url">https://www.googleapis.com/civicinfo/v1/</string>
+</resources>
