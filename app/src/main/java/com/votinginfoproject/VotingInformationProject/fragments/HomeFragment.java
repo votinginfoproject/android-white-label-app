@@ -1,16 +1,25 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.CivicInfoApiQuery;
+import com.votinginfoproject.VotingInformationProject.models.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +40,15 @@ public class HomeFragment extends Fragment {
     //private String mParam1;
     //private String mParam2;
 
-    Button goButton;
+    Button homeGoButton;
+    CivicInfoApiQuery.CallBackListener voterInfoListener;
+    Context context;
+    EditText homeEditTextAddress;
+    TextView homeTextViewStatus;
+
+    String address;
+
+    SharedPreferences preferences;
 
     private OnInteractionListener mListener;
 
@@ -58,6 +75,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         //if (getArguments() != null) {
             //mParam1 = getArguments().getString(ARG_PARAM1);
             //mParam2 = getArguments().getString(ARG_PARAM2);
@@ -68,7 +86,18 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        context = getActivity().getApplicationContext();
+
+        homeTextViewStatus = (TextView)rootView.findViewById(R.id.home_textview_status);
+
+        homeGoButton = (Button)rootView.findViewById(R.id.home_go_button);
+        homeGoButton.setVisibility(View.INVISIBLE);
+
+        homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
+        homeEditTextAddress.setText(getAddress());
+
         setupViewListeners(rootView);
+        setupCivicAPIListeners(rootView);
 
         return rootView;
     }
@@ -93,12 +122,51 @@ public class HomeFragment extends Fragment {
     private void setupViewListeners(View rootView) {
 
         // Go Button onClick Listener
-        rootView.findViewById(R.id.homeGoButton).setOnClickListener(view -> {
+        homeGoButton.setOnClickListener(view -> {
             if (mListener != null) {
                 mListener.onGoButtonPressed(view);
             }
         });
 
+        // EditText onSearch Listener
+        homeEditTextAddress.setOnEditorActionListener((view, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
+                String address = view.getText().toString();
+                setAddress(address);
+                try {
+                    String apiUrl = "voterinfo?officialOnly=true" +
+                            "&electionId=2000" +
+                            "&address=" + URLEncoder.encode(address, "UTF-8") +
+                            "&key=";
+                    Log.d("HomeActivity", "searchedAddress: " + apiUrl);
+                    homeTextViewStatus.setText(R.string.home_status_loading);
+                    homeTextViewStatus.setVisibility(View.VISIBLE);
+                    new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener).execute(apiUrl);
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("HomeActivity Exception", "searchedAddress: " + address);
+                }
+            }
+            // Return false to close the keyboard
+            return false;
+        });
+
+    }
+
+    private void setupCivicAPIListeners(View rootView) {
+
+        // Callback for voterInfoQuery result
+        voterInfoListener = (result) -> {
+            if (result == null) {
+                Log.e("HomeFragment", "Null Pointer for result");
+                homeTextViewStatus.setText(R.string.home_error_no_address);
+                homeGoButton.setVisibility(View.INVISIBLE);
+                return;
+            }
+            VoterInfo voterInfo = (VoterInfo) result;
+            homeTextViewStatus.setVisibility(View.GONE);
+            homeGoButton.setVisibility(View.VISIBLE);
+            mListener.searchedAddress(voterInfo);
+        };
     }
 
     /**
@@ -113,6 +181,22 @@ public class HomeFragment extends Fragment {
      */
     public interface OnInteractionListener {
         public void onGoButtonPressed(View view);
+        public void searchedAddress(VoterInfo voterInfo);
     }
 
+    public String getAddress() {
+        if (address == null) {
+            String addressKey = getString(R.string.LAST_ADDRESS_KEY);
+            address = preferences.getString(addressKey, "");
+        }
+        return address;
+    }
+
+    public void setAddress(String address) {
+        SharedPreferences.Editor editor = preferences.edit();
+        String addressKey = getString(R.string.LAST_ADDRESS_KEY);
+        editor.putString(addressKey, address);
+        editor.commit();
+        this.address = address;
+    }
 }
