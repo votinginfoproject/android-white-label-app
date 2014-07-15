@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,14 +18,15 @@ import com.votinginfoproject.VotingInformationProject.models.ElectionQueryRespon
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.State;
 
-public class HomeActivity extends Activity implements HomeFragment.OnInteractionListener {
+public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener {
 
     TextView testText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_home);
+
+        setContentView(R.layout.activity_home);
     }
 
 

@@ -3,9 +3,13 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import com.votinginfoproject.VotingInformationProject.R;
 
 /**
@@ -26,6 +30,8 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     //private String mParam1;
     //private String mParam2;
+
+    Button goButton;
 
     private OnInteractionListener mListener;
 
@@ -62,6 +68,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        setupViewListeners(rootView);
+
         return rootView;
     }
 
@@ -82,10 +90,15 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-    public void onGoButtonPressed(View view) {
-        if (mListener != null) {
-            mListener.onGoButtonPressed(view);
-        }
+    private void setupViewListeners(View rootView) {
+
+        // Go Button onClick Listener
+        rootView.findViewById(R.id.homeGoButton).setOnClickListener(view -> {
+            if (mListener != null) {
+                mListener.onGoButtonPressed(view);
+            }
+        });
+
     }
 
     /**
