@@ -18,13 +18,7 @@ import java.net.URL;
 /**
  * Created by kathrynkillebrew on 7/14/14.
  *
- * Generalized class for querying the API.  Instantiation parameters:
- * ctx -> application context
- * ret -> class type of object returned by query
- * cb -> callback function on view to handle receiving the return object
- *
- * Execution parameter:
- * url -> method/parameter portion of query url, ending with "key=" (API key will be added here)
+ * Generalized class for querying the API
  */
 public class CivicInfoApiQuery<T> extends AsyncTask<String, Void, T> {
 
@@ -38,6 +32,12 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, Void, T> {
     private String apiKey;
     private String baseQueryUrl;
 
+    /**
+     * Constructor
+     * @param context Application context
+     * @param clazz Class of object expected to be returned by query for gson to parse into
+     * @param callBack Callback method that takes returned object of type clazz
+     */
     public CivicInfoApiQuery (Context context, Class clazz, CallBackListener callBack) {
         try {
             this.returnClass = clazz;
@@ -53,6 +53,11 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, Void, T> {
         }
     }
 
+    /**
+     *
+     * @param urls  method/parameter portion of query url, ending with "key=" (API key will be added here)
+     * @return returns object of type of the class passed into the constructor
+     */
     @Override
     protected T doInBackground(String... urls) {
         URL url = null;
@@ -77,6 +82,10 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, Void, T> {
         return null;
     }
 
+    /**
+     *
+     * @param thing Object of type of class passed to constructor; returned to callback method
+     */
     protected void onPostExecute(T thing) {
         callbackListener.callback(thing);
     }
