@@ -157,11 +157,7 @@ public class HomeFragment extends Fragment {
 
         // Callback for voterInfoQuery result
         voterInfoListener = (result) -> {
-            if (result == null) {
-                Log.d("HomeFragment", "Null result");
-                homeGoButton.setVisibility(View.INVISIBLE);
-                return;
-            }
+            if (result == null) { return; }
             VoterInfo voterInfo = (VoterInfo) result;
             homeTextViewStatus.setVisibility(View.GONE);
             homeGoButton.setVisibility(View.VISIBLE);
@@ -170,30 +166,24 @@ public class HomeFragment extends Fragment {
 
         // Callback for voterInfoQuery error result
         voterInfoErrorListener = (result) -> {
-            if (result == null) {
-                Log.e("HomeFragment", "Null error result");
-                homeTextViewStatus.setText(R.string.home_error_no_address);
+            try {
                 homeGoButton.setVisibility(View.INVISIBLE);
-                return;
-            }
-            CivicApiError error = (CivicApiError) result;
-            Log.d("HomeFragment", "Civic API returned error");
-            Log.d("HomeFragment", error.code + ": " + error.message);
-            CivicApiError.Error error1 = error.errors.get(0);
-            if (error1 != null) {
+                CivicApiError error = (CivicApiError) result;
+                Log.d("HomeFragment", "Civic API returned error");
+                Log.d("HomeFragment", error.code + ": " + error.message);
+                CivicApiError.Error error1 = error.errors.get(0);
                 Log.d("HomeFragment", error1.domain + " " + error1.reason + " " + error1.message);
                 if (CivicApiError.errorMessages.get(error1.reason) != null) {
                     homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                 } else {
+                    // TODO: catch this with exception handler below once we've identified them all
                     Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                 }
-            } else {
-                // no reason returned for the error (shouldn't happen)
+            } catch(NullPointerException e) {
+                Log.e("HomeFragment", "Null encountered in API error result");
                 homeTextViewStatus.setText(R.string.home_error_unknown);
             }
-
-
         };
     }
 
