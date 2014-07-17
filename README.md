@@ -83,10 +83,29 @@ install the following:
 Sync your gradle build file if your IDE asks you to, and then run the app via Run->Run.
 
 
-#### Testing the app
+Testing the app
+---------------
 
-Select the VIPAndroidTests configuration in Android Studio  
-and choose a device to run them on from the prompt that appears.
+#### Creating the VIPAndroidTests Run Configuration
+
+In Android Studio, go to Run->Edit Configurations.  
+
+In the window that appears, click the green '+' in the top left and select 'Android Tests'  
+from the dropdown. 
+
+In the box on the right, rename the configuration 'Unnamed' to 'VIPAndroidTests'.  
+Ensure under the General tab that Module is set to 'app' and the  
+selected radio button for the Tests option is 'All in Module'.  
+In the Target Device section, ensure that 'Show chooser dialog' is selected, this will allow  
+you to select the device to run the tests on at runtime.  Optionally check 'Use same device'  
+if you generally only use one device/emulator to test on.
+
+
+#### Running Tests
+
+Ensure that the VIPAndroidTests run configuration is selected in the dropdown in the  
+second toolbar at the top of Android Studio, then select Run->Run or click the 'Run' button  
+just to the right of the run configuration dropdown.
 
 Android Studio will display a green "Tests Succeeded" or a red "Tests Failed" popup  
 in the bottom center of the IDE on test completion.
