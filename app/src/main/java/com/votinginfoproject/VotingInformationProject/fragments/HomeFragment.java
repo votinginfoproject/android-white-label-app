@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
+    CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
     Context context;
     EditText homeEditTextAddress;
     TextView homeTextViewStatus;
@@ -141,7 +142,7 @@ public class HomeFragment extends Fragment {
                     Log.d("HomeActivity", "searchedAddress: " + apiUrl);
                     homeTextViewStatus.setText(R.string.home_status_loading);
                     homeTextViewStatus.setVisibility(View.VISIBLE);
-                    new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener).execute(apiUrl);
+                    new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
                 } catch (UnsupportedEncodingException e) {
                     Log.e("HomeActivity Exception", "searchedAddress: " + address);
                 }
@@ -157,8 +158,7 @@ public class HomeFragment extends Fragment {
         // Callback for voterInfoQuery result
         voterInfoListener = (result) -> {
             if (result == null) {
-                Log.e("HomeFragment", "Null Pointer for result");
-                homeTextViewStatus.setText(R.string.home_error_no_address);
+                Log.d("HomeFragment", "Null result");
                 homeGoButton.setVisibility(View.INVISIBLE);
                 return;
             }
@@ -166,6 +166,34 @@ public class HomeFragment extends Fragment {
             homeTextViewStatus.setVisibility(View.GONE);
             homeGoButton.setVisibility(View.VISIBLE);
             mListener.searchedAddress(voterInfo);
+        };
+
+        // Callback for voterInfoQuery error result
+        voterInfoErrorListener = (result) -> {
+            if (result == null) {
+                Log.e("HomeFragment", "Null error result");
+                homeTextViewStatus.setText(R.string.home_error_no_address);
+                homeGoButton.setVisibility(View.INVISIBLE);
+                return;
+            }
+            CivicApiError error = (CivicApiError) result;
+            Log.d("HomeFragment", "Civic API returned error");
+            Log.d("HomeFragment", error.code + ": " + error.message);
+            CivicApiError.Error error1 = error.errors.get(0);
+            if (error1 != null) {
+                Log.d("HomeFragment", error1.domain + " " + error1.reason + " " + error1.message);
+                if (CivicApiError.errorMessages.get(error1.reason) != null) {
+                    homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
+                } else {
+                    Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
+                    homeTextViewStatus.setText(R.string.home_error_unknown);
+                }
+            } else {
+                // no reason returned for the error (shouldn't happen)
+                homeTextViewStatus.setText(R.string.home_error_unknown);
+            }
+
+
         };
     }
 
