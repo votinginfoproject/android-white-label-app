@@ -97,8 +97,8 @@ public class HomeFragment extends Fragment {
         homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
         homeEditTextAddress.setText(getAddress());
 
-        setupViewListeners(rootView);
-        setupCivicAPIListeners(rootView);
+        setupViewListeners();
+        setupCivicAPIListeners();
 
         return rootView;
     }
@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-    private void setupViewListeners(View rootView) {
+    private void setupViewListeners() {
 
         // Go Button onClick Listener
         homeGoButton.setOnClickListener(view -> {
@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void setupCivicAPIListeners(View rootView) {
+    private void setupCivicAPIListeners() {
 
         // Callback for voterInfoQuery result
         voterInfoListener = (result) -> {
@@ -203,7 +203,9 @@ public class HomeFragment extends Fragment {
     }
 
     public String getAddress() {
-        if (address == null) {
+        // Bias the returned address towards a saved address in preferences if one does
+        //  not exist in memory
+        if (address == null || address.isEmpty()) {
             String addressKey = getString(R.string.LAST_ADDRESS_KEY);
             address = preferences.getString(addressKey, "");
         }
