@@ -57,29 +57,4 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         show += "Sources:\n" + state.sources.get(0).name;
         Log.d("HomeActivity", "Result: " + show);
     }
-
-    //////////////////////////////////////////////////////////////////
-    /* TODO: remove test queries below */
-//    public void testElectionQuery(View view) {
-//        testText = (TextView) findViewById(R.id.testTextView);
-//        testText.setText("Fetching data...");
-//        Context myContext = view.getContext();
-//        String apiUrl = "elections?key=";
-//        CivicInfoApiQuery.CallBackListener myListener = new electionsCallback();
-//        new CivicInfoApiQuery<ElectionQueryResponse>(myContext, ElectionQueryResponse.class, myListener).execute(apiUrl);
-//    }
-//
-//    public class electionsCallback implements CivicInfoApiQuery.CallBackListener {
-//        public void callback(Object obj) {
-//            ElectionQueryResponse qryResult = (ElectionQueryResponse) obj;
-//            String show = "Elections:\n\n";
-//            for (Election el : qryResult.elections) {
-//                show += el.id + ": " + el.name + "\n" + el.electionDay + "\n\n";
-//            }
-//            testText.setText(show);
-//        }
-//    }
-//
-    //////////////////////////////////////////////////////
-
 }

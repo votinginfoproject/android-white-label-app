@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
+    CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
     Context context;
     EditText homeEditTextAddress;
     TextView homeTextViewStatus;
@@ -141,7 +142,7 @@ public class HomeFragment extends Fragment {
                     Log.d("HomeActivity", "searchedAddress: " + apiUrl);
                     homeTextViewStatus.setText(R.string.home_status_loading);
                     homeTextViewStatus.setVisibility(View.VISIBLE);
-                    new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener).execute(apiUrl);
+                    new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
                 } catch (UnsupportedEncodingException e) {
                     Log.e("HomeActivity Exception", "searchedAddress: " + address);
                 }
@@ -156,16 +157,33 @@ public class HomeFragment extends Fragment {
 
         // Callback for voterInfoQuery result
         voterInfoListener = (result) -> {
-            if (result == null) {
-                Log.e("HomeFragment", "Null Pointer for result");
-                homeTextViewStatus.setText(R.string.home_error_no_address);
-                homeGoButton.setVisibility(View.INVISIBLE);
-                return;
-            }
+            if (result == null) { return; }
             VoterInfo voterInfo = (VoterInfo) result;
             homeTextViewStatus.setVisibility(View.GONE);
             homeGoButton.setVisibility(View.VISIBLE);
             mListener.searchedAddress(voterInfo);
+        };
+
+        // Callback for voterInfoQuery error result
+        voterInfoErrorListener = (result) -> {
+            try {
+                homeGoButton.setVisibility(View.INVISIBLE);
+                CivicApiError error = (CivicApiError) result;
+                Log.d("HomeFragment", "Civic API returned error");
+                Log.d("HomeFragment", error.code + ": " + error.message);
+                CivicApiError.Error error1 = error.errors.get(0);
+                Log.d("HomeFragment", error1.domain + " " + error1.reason + " " + error1.message);
+                if (CivicApiError.errorMessages.get(error1.reason) != null) {
+                    homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
+                } else {
+                    // TODO: catch this with exception handler below once we've identified them all
+                    Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
+                    homeTextViewStatus.setText(R.string.home_error_unknown);
+                }
+            } catch(NullPointerException e) {
+                Log.e("HomeFragment", "Null encountered in API error result");
+                homeTextViewStatus.setText(R.string.home_error_unknown);
+            }
         };
     }
 
