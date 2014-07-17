@@ -82,3 +82,12 @@ install the following:
 
 Sync your gradle build file if your IDE asks you to, and then run the app via Run->Run.
 
+
+#### Testing the app
+
+Select the VIPAndroidTests configuration in Android Studio  
+and choose a device to run them on from the prompt that appears.
+
+Android Studio will display a green "Tests Succeeded" or a red "Tests Failed" popup  
+in the bottom center of the IDE on test completion.
+
