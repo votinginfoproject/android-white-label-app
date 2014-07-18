@@ -19,4 +19,7 @@
     <string name="home_error_no_election_for_address">We couldn\'t find any election information for the address you entered.</string>
     <string name="home_error_no_address">Please check that you\'ve got an address entered and try again.</string>
     <string name="home_error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
+
+    <!-- Election View Strings -->
+    <string name="contests_list_header">Contests</string>
 </resources>

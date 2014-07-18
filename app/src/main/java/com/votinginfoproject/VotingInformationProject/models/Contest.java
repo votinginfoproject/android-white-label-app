@@ -23,4 +23,13 @@ public class Contest {
     public String referendumSubtitle;
     public String referendumUrl;
     public List <Source> sources;
+
+    /**
+     * TODO: populate with more appropriate fields (referendumTitle and subtitle are empty in test data)
+     * @return string description of contest, for use in contest list view
+     */
+    @Override
+    public String toString() {
+        return office + "\n" + type;
+    }
 }
