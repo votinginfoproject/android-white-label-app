@@ -23,10 +23,11 @@ android:
 
 before_install:
   - export "JAVA8_HOME=/usr/lib/jvm/java-8-oracle"
+  - cp xmltemplates/api_keys.xml.template  app/src/main/res/values/api_keys.xml
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - sleep 3
+  - sleep 5
   - emulator -avd test -no-skin -no-audio -no-window &
-  - sleep 3
+  - sleep 30
 
 before_script:
   - ./ci/wait_for_emulator.sh
