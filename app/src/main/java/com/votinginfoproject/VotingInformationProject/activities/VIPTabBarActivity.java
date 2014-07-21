@@ -44,9 +44,9 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
 
         // Set up TabsAdapter
         mTabsAdapter = new TabsAdapter(this, mViewPager);
-        mTabsAdapter.addTab(actionBar.newTab().setText("Ballot"), BallotFragment.class, null);
-        mTabsAdapter.addTab(actionBar.newTab().setText("Where Do I Vote"), BallotFragment.class, null);
-        mTabsAdapter.addTab(actionBar.newTab().setText("Details"), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_ballot_tab), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_where_to_vote_tab), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_details_tab), BallotFragment.class, null);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));

@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,15 +60,15 @@ public class BallotFragment extends Fragment {
         Activity myActivity = this.getActivity();
 
         // election label
-        TextView election_name_label = (TextView)rootView.findViewById(R.id.election_name);
-        TextView election_date_label = (TextView)rootView.findViewById(R.id.election_date);
+        TextView election_name_label = (TextView)rootView.findViewById(R.id.ballot_election_name);
+        TextView election_date_label = (TextView)rootView.findViewById(R.id.ballot_election_date);
         election_name_label.setText(voterInfo.election.name);
         election_date_label.setText(voterInfo.election.electionDay);
 
         // populate contest list, using toString override on Contest class
         ArrayList contestInfo = (ArrayList) voterInfo.contests;
         ArrayAdapter adapter = new ArrayAdapter<String>(myActivity, android.R.layout.simple_selectable_list_item, contestInfo);
-        ListView contestList = (ListView)rootView.findViewById(R.id.list);
+        ListView contestList = (ListView)rootView.findViewById(R.id.ballot_contests_list);
         contestList.setAdapter(adapter);
         contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
