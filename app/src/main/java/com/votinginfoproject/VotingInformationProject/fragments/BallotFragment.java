@@ -3,11 +3,19 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.VIPApp;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,10 +27,8 @@ import com.votinginfoproject.VotingInformationProject.R;
  *
  */
 public class BallotFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "ballot_num";
 
-    private int ballotId;
+    VoterInfo voterInfo;
 
     private OnInteractionListener mListener;
 
@@ -30,13 +36,11 @@ public class BallotFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param ballot_num Ballot number
      * @return A new instance of fragment BallotFragment.
      */
-    public static BallotFragment newInstance(int ballot_num) {
+    public static BallotFragment newInstance() {
         BallotFragment fragment = new BallotFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, ballot_num);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,18 +51,33 @@ public class BallotFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ballotId= -1;
-        if (getArguments() != null) {
-            ballotId = getArguments().getInt(ARG_PARAM1, 1);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
-        TextView label = (TextView)rootView.findViewById(R.id.section_label);
-        label.setText("Ballot ID: " + ballotId);
+        Activity myActivity = this.getActivity();
+
+        // election label
+        TextView election_name_label = (TextView)rootView.findViewById(R.id.ballot_election_name);
+        TextView election_date_label = (TextView)rootView.findViewById(R.id.ballot_election_date);
+        election_name_label.setText(voterInfo.election.name);
+        election_date_label.setText(voterInfo.election.electionDay);
+
+        // populate contest list, using toString override on Contest class
+        ArrayList contestInfo = (ArrayList) voterInfo.contests;
+        ArrayAdapter adapter = new ArrayAdapter<String>(myActivity, android.R.layout.simple_selectable_list_item, contestInfo);
+        ListView contestList = (ListView)rootView.findViewById(R.id.ballot_contests_list);
+        contestList.setAdapter(adapter);
+        contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: launch contest view here
+                Log.d("ContestsList", "clicked: " + voterInfo.contests.get(position).office);
+            }
+        });
+
         return rootView;
     }
 
@@ -67,6 +86,12 @@ public class BallotFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnInteractionListener) activity;
+
+            // get election info
+            VIPApp app = (VIPApp) getActivity().getApplicationContext();
+            voterInfo = app.getVoterInfo();
+            Log.d("BallotFragment", "Got election: " + voterInfo.election.name);
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

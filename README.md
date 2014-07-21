@@ -6,6 +6,9 @@ Android White Label Application for the Voting Information Project
 Requires: Android Studio v0.8.0+
 
 
+##Build Status
+![Build Status](https://travis-ci.org/votinginfoproject/android-white-label-app.svg?branch=develop)
+
 Dependencies:
 -------------
 

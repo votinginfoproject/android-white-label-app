@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -43,9 +44,9 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
 
         // Set up TabsAdapter
         mTabsAdapter = new TabsAdapter(this, mViewPager);
-        mTabsAdapter.addTab(actionBar.newTab().setText("Ballot1"), BallotFragment.class, null);
-        mTabsAdapter.addTab(actionBar.newTab().setText("Ballot2"), BallotFragment.class, null);
-        mTabsAdapter.addTab(actionBar.newTab().setText("Ballot3"), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_ballot_tab), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_where_to_vote_tab), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_details_tab), BallotFragment.class, null);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -137,7 +138,16 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
         public Fragment getItem(int position) {
             // TODO: Use switch here to return the proper Fragment type
             //       given the tab
-            return BallotFragment.newInstance(position);
+
+            switch (position) {
+                case 1: {
+                    return BallotFragment.newInstance();
+                }
+                default: {
+                    return BallotFragment.newInstance();
+                }
+            }
+
         }
 
         @Override

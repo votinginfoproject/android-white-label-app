@@ -40,6 +40,7 @@ gen/
 .idea/libraries/*.xml
 .idea/datasources.xml
 .idea/dataSources.ids
+.idea/misc.xml
 
 # Eclipse Stuff, if someone wanted to use that
 proguard/

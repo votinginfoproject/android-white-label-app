@@ -9,8 +9,45 @@
     tools:context="com.votinginfoproject.VotingInformationProject.fragments.BallotFragment">
 
     <TextView
-        android:id="@+id/section_label"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/ballot_election_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/ballot_election_date"
+        android:layout_below="@+id/ballot_election_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/ballot_election_name"
+        android:layout_alignEnd="@+id/ballot_election_name" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ballot_contests_list"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/ballot_contests_list_header"
+        android:layout_below="@+id/ballot_contests_header" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/ballot_contests_list_header"
+        android:id="@+id/ballot_contests_header"
+        android:layout_below="@+id/ballot_election_date"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textStyle="bold" />
 </RelativeLayout>
