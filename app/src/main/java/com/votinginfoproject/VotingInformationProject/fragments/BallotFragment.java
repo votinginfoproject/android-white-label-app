@@ -15,7 +15,10 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,12 +61,21 @@ public class BallotFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
         Activity myActivity = this.getActivity();
+        SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
 
         // election label
         TextView election_name_label = (TextView)rootView.findViewById(R.id.ballot_election_name);
         TextView election_date_label = (TextView)rootView.findViewById(R.id.ballot_election_date);
         election_name_label.setText(voterInfo.election.name);
-        election_date_label.setText(voterInfo.election.electionDay);
+
+        try {
+            Date election_date = election_date_api_format.parse(voterInfo.election.electionDay);
+            election_date_label.setText(election_date_display_format.format(election_date));
+        } catch (ParseException e) {
+            Log.e("BallotFragment", "Failed to parse election date " + voterInfo.election.electionDay);
+            election_date_label.setText(voterInfo.election.electionDay);
+        }
 
         // populate contest list, using toString override on Contest class
         ArrayList contestInfo = (ArrayList) voterInfo.contests;
