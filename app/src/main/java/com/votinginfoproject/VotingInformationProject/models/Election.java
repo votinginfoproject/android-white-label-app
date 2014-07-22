@@ -14,12 +14,18 @@ public class Election {
     public String name;
     public String electionDay;
 
+    private SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+
+    public Election() {
+        election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
+        election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+    }
+
     public String getFormattedDate() {
         if (electionDay == null || electionDay.isEmpty()) {
             return "";
         }
-        SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
         try {
             Date election_date = election_date_api_format.parse(electionDay);
             return election_date_display_format.format(election_date);
