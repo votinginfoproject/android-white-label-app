@@ -1,16 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contest_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.votinginfoproject.VotingInformationProject.fragments.ContestFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/contest_title"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:id="@+id/contest_fragment_inner_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/contest_title"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/contest_subtitle"
+            android:layout_below="@+id/contest_title"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/contest_title"
+            android:layout_alignEnd="@+id/contest_title"
+            android:layout_alignParentEnd="true"
+            android:singleLine="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/contest_details_section_header"
+            android:layout_below="@+id/contest_subtitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textStyle="bold"
+            android:text="@string/contest_details_header" />
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:shrinkColumns="0"
+            android:layout_below="@+id/contest_details_section_header"
+            android:id="@+id/contest_details_table">
+
+
+            <TableRow>
+                <TextView
+                    android:padding="3dip"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/contest_type_label"
+                    android:id="@+id/contest_type_label" />
+
+                <TextView
+                    android:padding="3dip"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/contest_type" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:padding="3dip"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/contest_office_label"
+                    android:id="@+id/contest_office_label" />
+
+                <TextView
+                    android:padding="3dip"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/contest_office" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:padding="3dip"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/contest_number_elected_label"
+                    android:id="@+id/contest_number_elected_label" />
+
+                <TextView
+                    android:padding="3dip"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/contest_number_elected" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:padding="3dip"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/contest_number_voting_for_label"
+                    android:id="@+id/contest_number_voting_for_label" />
+
+                <TextView
+                    android:padding="3dip"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/contest_number_voting_for" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:padding="3dip"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/contest_ballot_placement_label"
+                    android:id="@+id/contest_ballot_placement_label" />
+
+                <TextView
+                    android:padding="3dip"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/contest_ballot_placement" />
+            </TableRow>
+
+        </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/contest_candidate_list_header"
+            android:id="@+id/contest_candidate_list_header"
+            android:layout_below="@+id/contest_details_table"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/contest_details_table"
+            android:layout_alignEnd="@+id/contest_details_table"
+            android:textStyle="bold" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/contest_candidate_list"
+            android:layout_below="@+id/contest_candidate_list_header"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 </RelativeLayout>

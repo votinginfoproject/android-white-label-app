@@ -1,15 +1,23 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
+import com.votinginfoproject.VotingInformationProject.models.VIPApp;
+
+import java.util.ArrayList;
 
 
 public class ContestFragment extends Fragment {
@@ -54,12 +62,61 @@ public class ContestFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("ContestFragment", "In onActivityCreated");
-        TextView contest_label = (TextView)this.getActivity().findViewById(R.id.contest_title);
-        if (contest_label == null) {
-            Log.d("ContestFragment", "contest_label is null in onActivityCreated");
-        } else {
-            Log.d("ContestFragment", "GOT CONTEST LABEL");
-            contest_label.setText("CONTEST IS #" + contestNum);
+        setContents();
+    }
+
+    /** Helper function to populate the view labels.
+    *
+    */
+    private void setContents() {
+        Activity myActivity = getActivity();
+        TextView title = (TextView)myActivity.findViewById(R.id.contest_title);
+        TextView subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
+        TextView contestType = (TextView)myActivity.findViewById(R.id.contest_type);
+        TextView office = (TextView)myActivity.findViewById(R.id.contest_office);
+        TextView numberElected = (TextView)myActivity.findViewById(R.id.contest_number_elected);
+        TextView numberVotingFor = (TextView)myActivity.findViewById(R.id.contest_number_voting_for);
+        TextView ballotPlacement = (TextView)myActivity.findViewById(R.id.contest_ballot_placement);
+
+
+        try {
+            VIPApp app = (VIPApp) getActivity().getApplicationContext();
+            contest = app.getVoterInfo().contests.get(contestNum);
+            Log.d("ContestFragment", "Got contest for office: " + contest.office);
+
+            title.setText(contest.referendumTitle);
+            subtitle.setText(contest.referendumSubtitle);
+            contestType.setText(contest.type);
+            office.setText(contest.office);
+
+            if (contest.numberElected != null) {
+                numberElected.setText(contest.numberElected.toString());
+            }
+            if (contest.numberVotingFor != null) {
+                numberVotingFor.setText(contest.numberVotingFor.toString());
+            }
+            if (contest.ballotPlacement != null) {
+                ballotPlacement.setText(contest.ballotPlacement.toString());
+            }
+
+            // populate candidate list, using toString override on Candidate class
+            ArrayList candidateInfo = (ArrayList) contest.candidates;
+            ArrayAdapter adapter = new ArrayAdapter<String>(myActivity, android.R.layout.simple_selectable_list_item, candidateInfo);
+            ListView candidateList = (ListView)myActivity.findViewById(R.id.contest_candidate_list);
+            candidateList.setAdapter(adapter);
+            candidateList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // TODO: launch candidate detail view here
+                    Candidate candidate = contest.candidates.get(position);
+                    Log.d("CandidateList", "clicked: " + contest.candidates.get(position) + " " + candidate.name);
+                }
+            });
+
+
+        } catch (Exception ex) {
+            Log.e("ContestFragment", "Failed to get contest info!");
+            ex.printStackTrace();
         }
     }
 
