@@ -27,4 +27,5 @@
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Contests</string>
+
 </resources>

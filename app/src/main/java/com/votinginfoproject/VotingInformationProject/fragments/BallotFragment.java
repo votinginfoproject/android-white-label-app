@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
@@ -60,7 +61,7 @@ public class BallotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
-        Activity myActivity = this.getActivity();
+        final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
         SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
 
@@ -87,6 +88,8 @@ public class BallotFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO: launch contest view here
                 Log.d("ContestsList", "clicked: " + voterInfo.contests.get(position).office);
+
+                myActivity.showContestDetails(position);
             }
         });
 
