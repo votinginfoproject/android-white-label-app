@@ -34,7 +34,6 @@ public class ContestFragment extends Fragment {
      * @param contest_number Index of this contest within the list of contests on VoterInfo object
      * @return A new instance of fragment ContestFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ContestFragment newInstance(int contest_number) {
         ContestFragment fragment = new ContestFragment();
         Bundle args = new Bundle();

@@ -86,9 +86,7 @@ public class BallotFragment extends Fragment {
         contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO: launch contest view here
                 Log.d("ContestsList", "clicked: " + voterInfo.contests.get(position).office);
-
                 myActivity.showContestDetails(position);
             }
         });
