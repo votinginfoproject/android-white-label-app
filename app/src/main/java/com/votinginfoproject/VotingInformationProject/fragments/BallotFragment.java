@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
@@ -68,8 +69,16 @@ public class BallotFragment extends Fragment {
         election_name_label.setText(voterInfo.election.name);
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
-        // populate contest list, using toString override on Contest class
-        ArrayList contestInfo = (ArrayList) voterInfo.contests;
+        // populate contest list
+        ArrayList contestInfo = new ArrayList<String>(voterInfo.contests.size());
+        for (Contest contest : voterInfo.contests) {
+            if (contest.type == "Referendum") {
+                contestInfo.add(contest.referendumTitle + "\n" + contest.referendumSubtitle);
+            } else {
+                contestInfo.add(contest.office + "\n" + voterInfo.election.name);
+            }
+        }
+
         ArrayAdapter adapter = new ArrayAdapter<String>(myActivity, android.R.layout.simple_selectable_list_item, contestInfo);
         ListView contestList = (ListView)rootView.findViewById(R.id.ballot_contests_list);
         contestList.setAdapter(adapter);

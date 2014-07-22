@@ -59,7 +59,8 @@
             android:id="@+id/contest_details_table">
 
 
-            <TableRow>
+            <TableRow
+                android:id="@+id/contest_type_row">
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -72,7 +73,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/contest_type" />
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:id="@+id/contest_office_row">>
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -85,7 +87,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/contest_office" />
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:id="@+id/contest_number_elected_row">>
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -98,7 +101,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/contest_number_elected" />
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:id="@+id/contest_number_voting_for_row">>
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -111,7 +115,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/contest_number_voting_for" />
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:id="@+id/contest_ballot_placement_row">>
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"

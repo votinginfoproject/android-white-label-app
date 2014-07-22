@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 public class ContestFragment extends Fragment {
     private static final String CONTEST_NUM = "contest_number";
     private int contestNum;
+    VoterInfo voterInfo;
     Contest contest;
     private OnInteractionListener mListener;
     private ViewGroup mContainer;
@@ -80,22 +83,52 @@ public class ContestFragment extends Fragment {
 
         try {
             VIPApp app = (VIPApp) getActivity().getApplicationContext();
-            contest = app.getVoterInfo().contests.get(contestNum);
+            voterInfo = app.getVoterInfo();
+            contest = voterInfo.contests.get(contestNum);
             Log.d("ContestFragment", "Got contest for office: " + contest.office);
 
-            title.setText(contest.referendumTitle);
-            subtitle.setText(contest.referendumSubtitle);
-            contestType.setText(contest.type);
-            office.setText(contest.office);
+            // title / subtitle is referendumTitle and referendumSubtitle, if election is
+            // of type 'Referendum'; else title is office and subtitle is election name
+
+            if (contest.type != "Referendum") {
+                title.setText(contest.office);
+                subtitle.setText(voterInfo.election.name);
+                contestType.setText(contest.type);
+            } else if (contest.type != null) {
+                title.setText(contest.referendumTitle);
+                subtitle.setText(contest.referendumSubtitle);
+                contestType.setText(contest.type);
+            } else {
+                TableRow row = (TableRow)myActivity.findViewById(R.id.contest_type_row);
+                row.setVisibility(View.GONE);
+            }
+
+
+            if (contest.office != null) {
+                office.setText(contest.office);
+            } else {
+                TableRow row = (TableRow)myActivity.findViewById(R.id.contest_office_row);
+                row.setVisibility(View.GONE);
+            }
 
             if (contest.numberElected != null) {
                 numberElected.setText(contest.numberElected.toString());
+            } else {
+                TableRow row = (TableRow)myActivity.findViewById(R.id.contest_number_elected_row);
+                row.setVisibility(View.GONE);
             }
             if (contest.numberVotingFor != null) {
                 numberVotingFor.setText(contest.numberVotingFor.toString());
+            } else {
+                TableRow row = (TableRow)myActivity.findViewById(R.id.contest_number_voting_for_row);
+                row.setVisibility(View.GONE);
             }
+
             if (contest.ballotPlacement != null) {
                 ballotPlacement.setText(contest.ballotPlacement.toString());
+            } else {
+                TableRow row = (TableRow)myActivity.findViewById(R.id.contest_ballot_placement_row);
+                row.setVisibility(View.GONE);
             }
 
             // populate candidate list, using toString override on Candidate class
