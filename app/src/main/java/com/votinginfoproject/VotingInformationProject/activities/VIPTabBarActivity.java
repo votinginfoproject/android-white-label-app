@@ -3,19 +3,21 @@ package com.votinginfoproject.VotingInformationProject.activities;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 
 public class VIPTabBarActivity extends FragmentActivity implements BallotFragment.OnInteractionListener {
 
@@ -25,11 +27,33 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
     ViewPager mViewPager;
 
     TabsAdapter mTabsAdapter;
+    FragmentManager mFragmentManager;
+
+    /**
+     * Transition from ballot fragment to contest details fragment when user selects list item.
+     *
+     * @param position Index of selected contest within the VoterInfo object's list of contests
+     */
+    public void showContestDetails(int position) {
+        Log.d("VIPTabBarActivity", "Going to show candidate tab...");
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        Fragment contestFragment = ContestFragment.newInstance(position);
+
+        // Ballot fragment is not actually removed by `replace` call here, because it's in a tab bar.
+        // Contest fragment will hide the ballot fragment components, then show them again
+        // when user navigates back.
+        fragmentTransaction.replace(R.id.ballot_fragment, contestFragment);
+
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viptab_bar);
+
+        mFragmentManager = getSupportFragmentManager();
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -166,7 +190,7 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
         }
 
         @Override
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
             Object tag = tab.getTag();
             for (int i=0; i<mTabs.size(); i++) {
                 if (mTabs.get(i) == tag) {
@@ -176,12 +200,12 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
         }
 
         @Override
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
 
         }
 
         @Override
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
 
         }
     }

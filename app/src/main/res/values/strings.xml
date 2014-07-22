@@ -27,4 +27,14 @@
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Contests</string>
+
+    <!-- Contest Detail Strings -->
+    <string name="contest_details_header">Contest Details</string>
+    <string name="contest_type_label">Type</string>
+    <string name="contest_office_label">Office</string>
+    <string name="contest_number_elected_label">Number Elected</string>
+    <string name="contest_number_voting_for_label">Number Voting For</string>
+    <string name="contest_ballot_placement_label">Ballot Placement</string>
+    <string name="contest_candidate_list_header">Candidates</string>
+
 </resources>
