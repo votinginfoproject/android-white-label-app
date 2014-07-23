@@ -18,6 +18,9 @@ import android.view.MenuItem;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
+import com.votinginfoproject.VotingInformationProject.models.VIPApp;
+import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 public class VIPTabBarActivity extends FragmentActivity implements BallotFragment.OnInteractionListener {
 
@@ -28,6 +31,15 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
 
     TabsAdapter mTabsAdapter;
     FragmentManager mFragmentManager;
+    VIPAppContext mAppContext;
+
+    /**
+     * Non-default constructor for testing, to set the application context.
+     * @param context Mock context with a VoterInfo object
+     */
+    public VIPTabBarActivity(VIPAppContext context) {
+        mAppContext = context;
+    }
 
     /**
      * Transition from ballot fragment to contest details fragment when user selects list item.
@@ -48,12 +60,17 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
         fragmentTransaction.commit();
     }
 
+    public VoterInfo getVoterInfo() {
+        return mAppContext.getVIPApp().getVoterInfo();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viptab_bar);
 
         mFragmentManager = getSupportFragmentManager();
+        mAppContext = new VIPAppContext((VIPApp) getApplicationContext());
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();

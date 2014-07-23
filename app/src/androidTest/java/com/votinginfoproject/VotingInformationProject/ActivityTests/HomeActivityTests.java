@@ -75,7 +75,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
     }
 
     public void refreshActivity() {
-        homeActivity = (HomeActivity)getActivity();
+        homeActivity = getActivity();
         fragmentManager = homeActivity.getSupportFragmentManager();
         homeFragment = (HomeFragment)fragmentManager.findFragmentById(R.id.home_fragment);
     }

@@ -14,13 +14,9 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -100,8 +96,7 @@ public class BallotFragment extends Fragment {
             mListener = (OnInteractionListener) activity;
 
             // get election info
-            VIPApp app = (VIPApp) getActivity().getApplicationContext();
-            voterInfo = app.getVoterInfo();
+            voterInfo = ((VIPTabBarActivity) activity).getVoterInfo();
             Log.d("BallotFragment", "Got election: " + voterInfo.election.name);
 
         } catch (ClassCastException e) {
