@@ -51,7 +51,6 @@ public class ContestFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             contestNum = getArguments().getInt(CONTEST_NUM);

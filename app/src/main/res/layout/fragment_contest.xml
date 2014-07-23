@@ -74,7 +74,7 @@
                     android:id="@+id/contest_type" />
             </TableRow>
             <TableRow
-                android:id="@+id/contest_office_row">>
+                android:id="@+id/contest_office_row">
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -88,7 +88,7 @@
                     android:id="@+id/contest_office" />
             </TableRow>
             <TableRow
-                android:id="@+id/contest_number_elected_row">>
+                android:id="@+id/contest_number_elected_row">
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -102,7 +102,7 @@
                     android:id="@+id/contest_number_elected" />
             </TableRow>
             <TableRow
-                android:id="@+id/contest_number_voting_for_row">>
+                android:id="@+id/contest_number_voting_for_row">
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -116,7 +116,7 @@
                     android:id="@+id/contest_number_voting_for" />
             </TableRow>
             <TableRow
-                android:id="@+id/contest_ballot_placement_row">>
+                android:id="@+id/contest_ballot_placement_row">
                 <TextView
                     android:padding="3dip"
                     android:textAppearance="?android:attr/textAppearanceSmall"

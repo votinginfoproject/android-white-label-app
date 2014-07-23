@@ -37,4 +37,26 @@
     <string name="contest_ballot_placement_label">Ballot Placement</string>
     <string name="contest_candidate_list_header">Candidates</string>
 
+    <!-- Election Detail Strings -->
+    <string name="details_state_administration_body_header">State Administration</string>
+    <string name="details_local_administration_body_header">Local Administration</string>
+
+    <!-- Election Links Strings -->
+    <string name="details_links_section_header">Election Information Websites</string>
+    <string name="details_election_info_url_label">Election Information</string>
+    <string name="details_voter_registration_url_label">Voter Registration Information</string>
+    <string name="details_voter_registration_confirmation_url_label">Voter Registration Confirmation</string>
+    <string name="details_absentee_voting_url_label">Absentee Voter Information</string>
+    <string name="details_voting_location_finder_url_label">Voting Location Finder Information</string>
+    <string name="details_ballot_info_url_label">Ballot Information</string>
+    <string name="details_election_rules_url_label">Election Rules</string>
+
+    <string name="details_voter_services_label">Voter Services</string>
+    <string name="details_hours_of_operation_label">Hours of Operation</string>
+    <string name="details_correspondence_address_label">Correspondence Address</string>
+    <string name="details_physical_address_label">Physical Address</string>
+    <string name="details_election_officials_label">Election Officials</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- End Election Detail Strings -->
+
 </resources>

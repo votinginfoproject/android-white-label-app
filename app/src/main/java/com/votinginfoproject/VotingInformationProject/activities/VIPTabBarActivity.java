@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -38,7 +40,12 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
      * @param context Mock context with a VoterInfo object
      */
     public VIPTabBarActivity(VIPAppContext context) {
+        super();
         mAppContext = context;
+    }
+
+    public VIPTabBarActivity() {
+        super();
     }
 
     /**
@@ -86,8 +93,8 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
         // Set up TabsAdapter
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_ballot_tab), BallotFragment.class, null);
-        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_where_to_vote_tab), BallotFragment.class, null);
-        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_details_tab), BallotFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_where_to_vote_tab), LocationsFragment.class, null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_details_tab), ElectionDetailsFragment.class, null);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -181,11 +188,18 @@ public class VIPTabBarActivity extends FragmentActivity implements BallotFragmen
             //       given the tab
 
             switch (position) {
-                case 1: {
+                case 0: {
                     return BallotFragment.newInstance();
                 }
+                case 1: {
+                    return LocationsFragment.newInstance();
+                }
+                case 2: {
+                    return ElectionDetailsFragment.newInstance();
+                }
                 default: {
-                    return BallotFragment.newInstance();
+                    // TODO:  add other views
+                    return LocationsFragment.newInstance();
                 }
             }
 
