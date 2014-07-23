@@ -14,9 +14,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
@@ -82,8 +82,7 @@ public class ContestFragment extends Fragment {
 
 
         try {
-            VIPApp app = (VIPApp) getActivity().getApplicationContext();
-            voterInfo = app.getVoterInfo();
+            voterInfo = ((VIPTabBarActivity) myActivity).getVoterInfo();
             contest = voterInfo.contests.get(contestNum);
             Log.d("ContestFragment", "Got contest for office: " + contest.office);
 

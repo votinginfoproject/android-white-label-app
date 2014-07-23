@@ -12,6 +12,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.State;
 
@@ -51,7 +52,8 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void searchedAddress(VoterInfo voterInfo) {
 
         // set VoterInfo object on app singleton
-        VIPApp app = (VIPApp) getApplicationContext();
+        VIPAppContext appContext = new VIPAppContext((VIPApp) getApplicationContext());
+        VIPApp app = appContext.getVIPApp();
         app.setVoterInfo(voterInfo);
 
         Election el = voterInfo.election;
