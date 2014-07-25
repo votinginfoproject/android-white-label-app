@@ -20,4 +20,70 @@ public class ElectionAdministrationBody {
     public Address correspondenceAddress;
     public Address physicalAddress;
     public List<ElectionOfficial> electionOfficials;
+
+    /**
+     * Helper function to return pretty-printed list of voter services
+     * @return String with each service separated by a newline (or empty string if none)
+     */
+    public String getVoterServices() {
+        if (voter_services == null || voter_services.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (String service : voter_services) {
+            builder.append(service);
+            builder.append("\n");
+        }
+
+        // remove trailing newline
+        builder.deleteCharAt(builder.length() - 1);
+        return builder.toString();
+    }
+
+    // TODO: officials have information such as email address and phone.  Put in their own view?
+    public String getElectionOfficials() {
+        if (electionOfficials == null || electionOfficials.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (ElectionOfficial official : electionOfficials) {
+            if (official.name != null && !official.name.isEmpty()) {
+                builder.append(official.name);
+            }
+            if (official.title != null && !official.title.isEmpty()) {
+                builder.append(" - ");
+                builder.append(official.title);
+            }
+            builder.append("\n");
+        }
+
+        builder.deleteCharAt(builder.length() - 1);
+        return builder.toString();
+    }
+
+    /**
+     * Helper function to avoid null pointer errors when fetching address
+     * @return multi-line address string
+     */
+    public String getCorrespondenceAddress() {
+        if (correspondenceAddress == null) {
+            return "";
+        } else {
+            return correspondenceAddress.toString();
+        }
+    }
+
+    /**
+     * Helper function to avoid null pointer errors when fetching address
+     * @return multi-line address string
+     */
+    public String getPhysicalAddress() {
+        if (physicalAddress == null) {
+            return "";
+        } else {
+            return physicalAddress.toString();
+        }
+    }
 }

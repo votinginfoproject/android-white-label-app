@@ -41,6 +41,7 @@ gen/
 .idea/datasources.xml
 .idea/dataSources.ids
 .idea/misc.xml
+.idea/inspectionProfiles
 
 # Eclipse Stuff, if someone wanted to use that
 proguard/
