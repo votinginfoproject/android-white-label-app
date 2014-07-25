@@ -17,8 +17,8 @@ public class ElectionAdministrationBody {
     public String electionRulesUrl;
     public List<String> voter_services;
     public String hoursOfOperation;
-    public Address correspondenceAddress;
-    public Address physicalAddress;
+    public CivicApiAddress correspondenceAddress;
+    public CivicApiAddress physicalAddress;
     public List<ElectionOfficial> electionOfficials;
 
     /**

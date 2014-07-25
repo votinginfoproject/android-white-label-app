@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class RepresentativeInfoByAddressResponse {
     public String kind;
-    public Address normalizedInput;
+    public CivicApiAddress normalizedInput;
     public Dictionary<String, Division> divisions;
     public List<Office> offices;
     public List<Official> officials;

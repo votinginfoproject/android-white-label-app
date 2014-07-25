@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import android.content.Context;
+
 /**
  * This class abstracts fetching the application, so that the application context
  * may be mocked for testing.
@@ -25,5 +27,13 @@ public class VIPAppContext {
 
     public void setVIPApp(VIPApp vip_app) {
         app = vip_app;
+    }
+
+    /**
+     * For testing, override this method to return a mock context
+     * @return this application's context
+     */
+    public Context getAppContext() {
+        return app.getApplicationContext();
     }
 }

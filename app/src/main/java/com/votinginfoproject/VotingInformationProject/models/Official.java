@@ -6,7 +6,7 @@ import java.util.List;
  * Created by kathrynkillebrew on 7/14/14.
  */
 public class Official {
-    public List<Address> address;
+    public List<CivicApiAddress> address;
     public List<SocialMediaChannel> channels;
     public List<String> emails;
     public String name;

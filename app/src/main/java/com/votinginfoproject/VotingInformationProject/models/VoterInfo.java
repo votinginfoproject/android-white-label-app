@@ -11,7 +11,7 @@ public class VoterInfo {
     public String kind;
     public Election election;
     public List<Election> otherElections;
-    public Address normalizedInput;
+    public CivicApiAddress normalizedInput;
     public List<PollingLocation> pollingLocations;
     public List<PollingLocation> earlyVoteSites;
     public List<Contest> contests;
