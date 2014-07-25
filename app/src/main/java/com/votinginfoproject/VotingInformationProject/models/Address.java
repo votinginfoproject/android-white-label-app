@@ -43,6 +43,9 @@ public class Address {
         if (state != null && !state.isEmpty()) {
             builder.append(state);
             builder.append(" ");
+        } else if (city != null && !city.isEmpty()) {
+            // remove comma after city if there's no state
+            builder.deleteCharAt(builder.length() - 2);
         }
 
         if (zip != null && !zip.isEmpty()) {

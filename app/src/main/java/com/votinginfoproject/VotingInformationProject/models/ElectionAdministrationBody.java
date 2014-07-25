@@ -37,7 +37,7 @@ public class ElectionAdministrationBody {
         }
 
         // remove trailing newline
-        builder.deleteCharAt(builder.lastIndexOf("\n"));
+        builder.deleteCharAt(builder.length() - 1);
         return builder.toString();
     }
 
@@ -59,7 +59,7 @@ public class ElectionAdministrationBody {
             builder.append("\n");
         }
 
-        builder.deleteCharAt(builder.lastIndexOf("\n"));
+        builder.deleteCharAt(builder.length() - 1);
         return builder.toString();
     }
 
