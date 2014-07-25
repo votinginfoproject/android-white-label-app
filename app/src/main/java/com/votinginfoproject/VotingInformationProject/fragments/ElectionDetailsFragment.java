@@ -124,7 +124,7 @@ public class ElectionDetailsFragment extends Fragment {
             title.setText(election.name);
             subTitle.setText(election.getFormattedDate());
 
-            // TODO: what if election is in multiple states?  Find state for current address, and use that?
+            // should have only one state returned for addresses in the US
             State thisState = voterInfo.state.get(0);
             ElectionAdministrationBody stateAdmin = thisState.electionAdministrationBody;
 
