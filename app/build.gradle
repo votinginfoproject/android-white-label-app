@@ -4,7 +4,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:2.1.0'
     }
 }
 
@@ -13,7 +12,6 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'retrolambda'
 
 android {
     compileSdkVersion 19
@@ -26,8 +24,8 @@ android {
         versionName '1.0'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
     buildTypes {
         release {
@@ -48,10 +46,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:19.1.+'
+    compile 'com.google.android.gms:play-services:5.0+'
 }
 
-retrolambda {
-    jdk System.getenv("JAVA8_HOME")
-    javaVersion JavaVersion.VERSION_1_7
-}
 
