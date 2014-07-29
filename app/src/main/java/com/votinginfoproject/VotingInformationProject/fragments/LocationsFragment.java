@@ -61,14 +61,25 @@ public class LocationsFragment extends Fragment {
         setButtonInBarClickListener(R.id.locations_list_polling_button);
         setButtonInBarClickListener(R.id.locations_list_early_button);
 
+        // click handler for map button
+        rootView.findViewById(R.id.locations_list_map_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // zoom to user address
+                myActivity.showMap("home");
+            }
+        });
+
         // set up locations list
         locationsList = (ListView)rootView.findViewById(R.id.locations_list);
         locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("LocationsList", "clicked location at " + position + " with id " + id);
-                // TODO: open map view
-                myActivity.showMap(position);
+                // get location ID tagged onto its distance label in the list adapter
+                String itemTag = view.findViewById(R.id.location_list_item_distance).getTag().toString();
+                Log.d("LocationsList", "clicked location at " + position + " with view tag " + itemTag);
+                // open map view
+                myActivity.showMap(itemTag);
             }
         });
 
@@ -94,6 +105,7 @@ public class LocationsFragment extends Fragment {
      * @param buttonId R id of the button to listen to
      */
     private void setButtonInBarClickListener(final int buttonId) {
+
         rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

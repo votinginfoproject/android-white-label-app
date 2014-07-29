@@ -22,12 +22,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
@@ -91,7 +93,16 @@ public class VIPTabBarActivity extends FragmentActivity {
         return mAppContext;
     }
 
-    public void showMap(int position) {
+    public PollingLocation getLocationForId(String location_id) {
+        if (locationIds.get(location_id) != null) {
+            return allLocations.get(locationIds.get(location_id));
+        } else {
+            Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
+            return null;
+        }
+    }
+
+    public void showMap(String item) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
             Log.d("VIPTabBarActivity", "Google Play services is available!");
         } else {
@@ -102,16 +113,18 @@ public class VIPTabBarActivity extends FragmentActivity {
 
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        SupportMapFragment mapFragment = VIPMapFragment.newInstance(new GoogleMapOptions());
-
+        SupportMapFragment mapFragment = VIPMapFragment.newInstance(item);
         fragmentTransaction.replace(R.id.locations_list_fragment, mapFragment);
-
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     public VoterInfo getVoterInfo() {
         return mAppContext.getVIPApp().getVoterInfo();
+    }
+
+    public LatLng getHomeLatLng() {
+        return new LatLng(homeLocation.getLatitude(), homeLocation.getLongitude());
     }
 
     @Override
@@ -209,7 +222,7 @@ public class VIPTabBarActivity extends FragmentActivity {
                     if (location.id != null) {
                         new GeocodeQuery(context, pollingCallBackListener, location.id, location.address.toGeocodeString()).execute();
                     } else {
-                        new GeocodeQuery(context, pollingCallBackListener, location.address.toString(), location.address.toGeocodeString()).execute();
+                        new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(), location.address.toGeocodeString()).execute();
                     }
                 }
             }
@@ -246,7 +259,7 @@ public class VIPTabBarActivity extends FragmentActivity {
             if (location.id != null) {
                 locationIds.put(location.id, i);
             } else {
-                locationIds.put(location.address.toString(), i);
+                locationIds.put(location.address.toGeocodeString(), i);
             }
         }
     }

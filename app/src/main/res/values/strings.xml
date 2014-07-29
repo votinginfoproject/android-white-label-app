@@ -70,4 +70,7 @@
     <string name="locations_distance_suffix_imperial">mi.</string>
     <string name="locations_distance_suffix_metric">km</string>
 
+    <!-- Locations map strings -->
+    <string name="locations_map_user_address_label">User Address</string>
+
 </resources>

@@ -55,7 +55,6 @@ public class ContestFragment extends Fragment {
         if (getArguments() != null) {
             contestNum = getArguments().getInt(CONTEST_NUM);
             Log.d("ContestFragment", "Got contest #" + contestNum);
-
         }
     }
 
