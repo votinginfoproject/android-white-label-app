@@ -67,5 +67,7 @@
     <string name="locations_none_found">No locations found.</string>
     <string name="locations_no_early_voting_found">No early voting locations found.</string>
     <string name="locations_no_polling_found">No polling locations found.</string>
+    <string name="locations_distance_suffix_imperial">mi.</string>
+    <string name="locations_distance_suffix_metric">km</string>
 
 </resources>

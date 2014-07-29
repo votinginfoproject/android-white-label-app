@@ -49,6 +49,7 @@ public class VIPTabBarActivity extends FragmentActivity {
     Context context;
 
     private final static double MILES_IN_METER = 0.000621371192;
+    private final static double KILOMETERS_IN_METER = 0.001;
 
 
     /**
@@ -80,6 +81,10 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+    
+    public VIPAppContext getAppContext() {
+        return mAppContext;
     }
 
     public VoterInfo getVoterInfo() {
@@ -146,8 +151,14 @@ public class VIPTabBarActivity extends FragmentActivity {
             Location pollingLocation = new Location("polling");
             pollingLocation.setLatitude(lat);
             pollingLocation.setLongitude(lon);
-            // convert result from meters to miles
-            foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
+
+            if (mAppContext.useMetric()) {
+                // convert meters to kilometers
+                foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * KILOMETERS_IN_METER;
+            } else {
+                // convert result from meters to miles
+                foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
+            }
 
             locationsFragment.refreshList();
         };

@@ -8,19 +8,25 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.VIPApp;
+import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by kathrynkillebrew on 7/25/14.
  */
 public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
+    VIPAppContext mAppContext;
     DecimalFormat distanceFormat;
     Comparator<PollingLocation> pollingLocationComparator;
+    String distanceSuffix;
 
     // View lookup cache.  Pattern from here:
     // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
@@ -36,7 +42,12 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
     public LocationsAdapter(Context context, List<PollingLocation> locations) {
         super(context, R.layout.location_list_item, locations);
-        distanceFormat =  new DecimalFormat("0.00");
+        distanceFormat =  new DecimalFormat("0.00 ");
+        if (((VIPTabBarActivity)context).getAppContext().useMetric()) {
+            distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_metric);
+        } else {
+            distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_imperial);
+        }
 
         // sort locations by distance
         pollingLocationComparator = new Comparator<PollingLocation>() {
@@ -81,7 +92,7 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         }
 
         if (location.address.distance > 0) {
-            viewHolder.distance.setText(distanceFormat.format(location.address.distance) + " mi.");
+            viewHolder.distance.setText(distanceFormat.format(location.address.distance) + distanceSuffix);
         }
 
         // tag distance text view so it may be updated later

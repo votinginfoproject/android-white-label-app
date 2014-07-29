@@ -36,4 +36,8 @@ public class VIPAppContext {
     public Context getAppContext() {
         return app.getApplicationContext();
     }
+
+    public boolean useMetric() {
+        return app.useMetric();
+    }
 }
