@@ -8,7 +8,7 @@ import java.util.List;
  * https://developers.google.com/civic-information/docs/v1/voterinfo
  */
 public class PollingLocation {
-    public Address address;
+    public CivicApiAddress address;
     public String id;
     public String name;
     public String startDate;

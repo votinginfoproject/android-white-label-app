@@ -18,31 +18,12 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BallotFragment.OnInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BallotFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class BallotFragment extends Fragment {
 
     VoterInfo voterInfo;
 
-    private OnInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment BallotFragment.
-     */
     public static BallotFragment newInstance() {
         BallotFragment fragment = new BallotFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
     public BallotFragment() {
@@ -92,27 +73,9 @@ public class BallotFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnInteractionListener) activity;
-
-            // get election info
-            voterInfo = ((VIPTabBarActivity) activity).getVoterInfo();
-            Log.d("BallotFragment", "Got election: " + voterInfo.election.name);
-
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnInteractionListener {
-        // TODO: Add methods here as necessary
+        // get election info
+        voterInfo = ((VIPTabBarActivity) activity).getVoterInfo();
+        Log.d("BallotFragment", "Got election: " + voterInfo.election.name);
     }
 
 }
