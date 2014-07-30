@@ -9,6 +9,10 @@
     <string name="homeactivity_go_button">GO</string>
     <string name="title_activity_viptab_bar">Voting Info Project</string>
     <string name="title_activity_about">About This App</string>
+    <string name="ok">Ok</string>
+    <string name="no_phone">Phone not installed</string>
+    <string name="no_email">Email client not installed</string>
+    <string name="no_browser">Web browser not installed</string>
 
     <!-- Tab Bar Strings -->
     <string name="tabbar_ballot_tab">Ballot</string>
@@ -37,6 +41,14 @@
     <string name="contest_number_voting_for_label">Number Voting For</string>
     <string name="contest_ballot_placement_label">Ballot Placement</string>
     <string name="contest_candidate_list_header">Candidates</string>
+
+    <!-- Candidate Details Strings -->
+    <string name="candidate_details_header">Candidate Details</string>
+    <string name="candidate_social_header">Social Media Channels</string>
+    <string name="candidate_no_name">No Name Available</string>
+    <string name="candidate_no_party">No Listed Affiliation</string>
+    <string name="candidate_details_none">No Candidate Details Available</string>
+    <string name="candidate_social_none">No Social Media Channels Available</string>
 
     <!-- Election Detail Strings -->
     <string name="details_state_administration_body_header">State Administration</string>

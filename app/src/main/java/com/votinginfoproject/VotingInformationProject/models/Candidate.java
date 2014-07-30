@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,6 +15,32 @@ public class Candidate {
     public String email;
     public Long orderOnBallot;
     public List<SocialMediaChannel> channels;
+
+    /** Default Constructor
+     *
+     *  Ensures that the channels List is not-null when the class is instantiated
+     */
+    public Candidate() {
+        this.channels = new ArrayList<SocialMediaChannel>(4);
+    }
+
+    /**
+     *
+     * @param type A string that matches to one of the social channel types
+     *             returned by the CivicInfo voterInfo query
+     * @return SocialMediaChannel that matches the passed type, or null if not found
+     */
+    public SocialMediaChannel findChannelForType(String type) {
+        String cleanType = SocialMediaChannel.getCleanType(type);
+        SocialMediaChannel channel = new SocialMediaChannel();
+        for (SocialMediaChannel c : channels) {
+            if (c.getCleanType().equals(cleanType)) {
+                channel = c;
+                break;
+            }
+        }
+        return channel;
+    }
 
     /**
      *
