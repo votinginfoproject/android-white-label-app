@@ -3,13 +3,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/map_fragment"
-    tools:context=".fragments.MapFragment"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        style="@android:style/ButtonBar"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/map"
+        android:id="@+id/locations_map_button_bar">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/locations_list_all_button_label"
+            android:id="@+id/locations_map_all_button"
+            android:clickable="true"
+            android:singleLine="false" />
+
+        <View android:layout_height="fill_parent"
+            android:layout_width="1dp"
+            android:background="#905e5e5e"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_weight="1"
+            android:text="@string/locations_list_early_voting_button_label"
+            android:id="@+id/locations_map_early_button"
+            android:clickable="true"
+            android:singleLine="false" />
+
+        <View android:layout_height="fill_parent"
+            android:layout_width="1dp"
+            android:background="#905e5e5e"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_weight="1"
+            android:text="@string/locations_list_polling_sites_button_label"
+            android:id="@+id/locations_map_polling_button"
+            android:clickable="true"
+            android:singleLine="false" />
+    </LinearLayout>
 
 </RelativeLayout>

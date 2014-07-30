@@ -77,7 +77,6 @@ public class LocationsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // get location ID tagged onto its distance label in the list adapter
                 String itemTag = view.findViewById(R.id.location_list_item_distance).getTag().toString();
-                Log.d("LocationsList", "clicked location at " + position + " with view tag " + itemTag);
                 // open map view
                 myActivity.showMap(itemTag);
             }

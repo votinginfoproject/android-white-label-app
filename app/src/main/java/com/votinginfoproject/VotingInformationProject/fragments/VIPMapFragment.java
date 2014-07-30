@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,7 +36,8 @@ public class VIPMapFragment extends SupportMapFragment {
     VoterInfo voterInfo;
     VIPTabBarActivity mActivity;
     static final Resources mResources = VIPAppContext.getContext().getResources();
-    View rootView;
+    View mapView;
+    RelativeLayout rootView;
     LayoutInflater layoutInflater;
     ArrayList<PollingLocation> allLocations;
     GoogleMap map;
@@ -44,6 +46,10 @@ public class VIPMapFragment extends SupportMapFragment {
     LatLng thisLocation;
     LatLng homeLocation;
     HashMap<String, MarkerOptions> markers;
+
+    // track filters
+    boolean showPolling = true;
+    boolean showEarly = true;
 
 
     public static VIPMapFragment newInstance(String tag) {
@@ -75,7 +81,13 @@ public class VIPMapFragment extends SupportMapFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = super.onCreateView(inflater, container, savedInstanceState);
+        // programmatically add map view, so button bar appears on top
+        mapView = super.onCreateView(inflater, container, savedInstanceState);
+        rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_map, container, false);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.locations_map_button_bar);
+        rootView.addView(mapView, layoutParams);
+
         mActivity = (VIPTabBarActivity) this.getActivity();
 
         voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
@@ -100,7 +112,7 @@ public class VIPMapFragment extends SupportMapFragment {
             new AddMarkersTask().execute(locationId);
 
             // wait for map layout to occur before zooming to location
-            final ViewTreeObserver observer = rootView.getViewTreeObserver();
+            final ViewTreeObserver observer = mapView.getViewTreeObserver();
             observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -122,7 +134,46 @@ public class VIPMapFragment extends SupportMapFragment {
             map.clear();
         }
 
+        // set click handlers for filter buttons
+        rootView.findViewById(R.id.locations_map_all_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEarly = true;
+                showPolling = true;
+                refreshMapView();
+            }
+        });
+
+        rootView.findViewById(R.id.locations_map_early_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEarly = true;
+                showPolling = false;
+                refreshMapView();
+            }
+        });
+
+        rootView.findViewById(R.id.locations_map_polling_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEarly = false;
+                showPolling = true;
+                refreshMapView();
+            }
+        });
+
         return rootView;
+    }
+
+    private void refreshMapView() {
+        map.clear();
+        new AddMarkersTask().execute(locationId);
+
+        // add marker for user-entered address
+        map.addMarker(new MarkerOptions()
+                        .position(homeLocation)
+                        .title(mResources.getString(R.string.locations_map_user_address_label))
+        );
     }
 
     @Override
@@ -145,7 +196,7 @@ public class VIPMapFragment extends SupportMapFragment {
             String showId = select_locations[0];
 
             // use green markers for early voting sites
-            if (voterInfo.earlyVoteSites != null) {
+            if (voterInfo.earlyVoteSites != null && showEarly) {
                 for (PollingLocation location : voterInfo.earlyVoteSites) {
                     if (location.address.latitude == 0) {
                         Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
@@ -156,7 +207,7 @@ public class VIPMapFragment extends SupportMapFragment {
             }
 
             // use blue markers for polling locations
-            if (voterInfo.pollingLocations != null) {
+            if (voterInfo.pollingLocations != null && showPolling) {
                 for (PollingLocation location : voterInfo.pollingLocations) {
                     if (location.address.latitude == 0) {
                         Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
