@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
@@ -243,6 +244,10 @@ public class VIPTabBarActivity extends FragmentActivity {
         if (id == android.R.id.home) {
             // Navigate to HomeActivity from main TabBar
             NavUtils.navigateUpFromSameTask(this);
+        }
+        if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

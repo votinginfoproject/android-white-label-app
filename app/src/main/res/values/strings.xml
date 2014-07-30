@@ -5,9 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_home">Voting Info Project</string>
     <string name="homeactivity_go_button">GO</string>
-    <string name="title_activity_viptab_bar">VIPTabBarActivity</string>
+    <string name="title_activity_viptab_bar">Voting Info Project</string>
+    <string name="title_activity_about">About This App</string>
 
     <!-- Tab Bar Strings -->
     <string name="tabbar_ballot_tab">Ballot</string>
@@ -50,7 +51,6 @@
     <string name="details_voting_location_finder_url_label">Voting Location Finder Information</string>
     <string name="details_ballot_info_url_label">Ballot Information</string>
     <string name="details_election_rules_url_label">Election Rules</string>
-
     <string name="details_voter_services_label">Voter Services</string>
     <string name="details_hours_of_operation_label">Hours of Operation</string>
     <string name="details_correspondence_address_label">Correspondence Address</string>
@@ -58,6 +58,7 @@
     <string name="details_election_officials_label">Election Officials</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- End Election Detail Strings -->
+
 
     <!-- Locations strings -->
     <string name="locations_list_map_button_label">Map</string>
@@ -69,5 +70,13 @@
     <string name="locations_no_polling_found">No polling locations found.</string>
     <string name="locations_distance_suffix_imperial">mi.</string>
     <string name="locations_distance_suffix_metric">km</string>
+
+    <!-- About App strings -->
+    <string name="about_app_title">About This App</string>
+    <string name="about_app">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci.</string>
+    <string name="about_terms_title">Terms of Use</string>
+    <string name="about_terms">Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit.</string>
+    <string name="about_privacy_title">Privacy Policy</string>
+    <string name="about_privacy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</string>
 
 </resources>
