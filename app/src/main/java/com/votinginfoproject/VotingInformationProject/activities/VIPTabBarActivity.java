@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -134,7 +136,7 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mAppContext = new VIPAppContext((VIPApp) getApplicationContext());
-        context = VIPAppContext.getContext();
+        context = mAppContext.getAppContext();
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -172,58 +174,52 @@ public class VIPTabBarActivity extends FragmentActivity {
         setLocationIds();
 
         // Callback for polling location geocode result
-        pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
-            @Override
-            public void callback(String key, double lat, double lon) {
-                if (key == "error") {
-                    Log.e("VIPTabBarActivity", "Geocode failed!");
-                    return;
-                }
-
-                // find object and set values on it
-                PollingLocation foundLoc = allLocations.get(locationIds.get(key));
-                foundLoc.address.latitude = lat;
-                foundLoc.address.longitude = lon;
-
-                // distance calculation
-                Location pollingLocation = new Location("polling");
-                pollingLocation.setLatitude(lat);
-                pollingLocation.setLongitude(lon);
-
-                if (mAppContext.useMetric()) {
-                    // convert meters to kilometers
-                    foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * KILOMETERS_IN_METER;
-                } else {
-                    // convert result from meters to miles
-                    foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
-                }
-
-                locationsFragment.refreshList();
+        pollingCallBackListener = (key, lat, lon) -> {
+            if (key == "error") {
+                Log.e("VIPTabBarActivity", "Geocode failed!");
+                return;
             }
+
+            // find object and set values on it
+            PollingLocation foundLoc = allLocations.get(locationIds.get(key));
+            foundLoc.address.latitude = lat;
+            foundLoc.address.longitude = lon;
+
+            // distance calculation
+            Location pollingLocation = new Location("polling");
+            pollingLocation.setLatitude(lat);
+            pollingLocation.setLongitude(lon);
+
+            if (mAppContext.useMetric()) {
+                // convert meters to kilometers
+                foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * KILOMETERS_IN_METER;
+            } else {
+                // convert result from meters to miles
+                foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
+            }
+
+            locationsFragment.refreshList();
         };
 
 
         // callback for home address geocode result
-        homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
-            @Override
-            public void callback(String key, double lat, double lon) {
-                if (key == "error") {
-                    Log.e("VIPTabBarActivity", "Failed to geocode home address!");
-                    return;
-                }
+        homeCallBackListener = (key, lat, lon) -> {
+            if (key == "error") {
+                Log.e("VIPTabBarActivity", "Failed to geocode home address!");
+                return;
+            }
 
-                homeLocation = new Location("home");
-                homeLocation.setLatitude(lat);
-                homeLocation.setLongitude(lon);
+            homeLocation = new Location("home");
+            homeLocation.setLatitude(lat);
+            homeLocation.setLongitude(lon);
 
-                // start background geocode tasks for polling locations
-                for (PollingLocation location : allLocations) {
-                    // key by address, if location has no ID
-                    if (location.id != null) {
-                        new GeocodeQuery(context, pollingCallBackListener, location.id, location.address.toGeocodeString()).execute();
-                    } else {
-                        new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(), location.address.toGeocodeString()).execute();
-                    }
+            // start background geocode tasks for polling locations
+            for (PollingLocation location : allLocations) {
+                // key by address, if location has no ID
+                if (location.id != null) {
+                    new GeocodeQuery(context, pollingCallBackListener, location.id, location.address.toGeocodeString()).execute();
+                } else {
+                    new GeocodeQuery(context, pollingCallBackListener, location.address.toString(), location.address.toGeocodeString()).execute();
                 }
             }
         };
@@ -259,7 +255,7 @@ public class VIPTabBarActivity extends FragmentActivity {
             if (location.id != null) {
                 locationIds.put(location.id, i);
             } else {
-                locationIds.put(location.address.toGeocodeString(), i);
+                locationIds.put(location.address.toString(), i);
             }
         }
     }
@@ -286,6 +282,10 @@ public class VIPTabBarActivity extends FragmentActivity {
         if (id == android.R.id.home) {
             // Navigate to HomeActivity from main TabBar
             NavUtils.navigateUpFromSameTask(this);
+        }
+        if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -25,15 +25,24 @@
         </activity>
         <activity
             android:name=".activities.VIPTabBarActivity"
-            android:label="@string/title_activity_viptab_bar"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName=".activities.HomeActivity" >
+            android:label="@string/title_activity_viptab_bar"
+            android:parentActivityName=".activities.HomeActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.votinginfoproject.VotingInformationProject.activities.HomeActivity" />
         </activity>
-        <meta-data
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".activities.VIPTabBarActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity" />
+        </activity>
+
+		<meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
