@@ -145,21 +145,25 @@ public class VIPMapFragment extends SupportMapFragment {
             String showId = select_locations[0];
 
             // use green markers for early voting sites
-            for (PollingLocation location : voterInfo.earlyVoteSites) {
-                if (location.address.latitude == 0) {
-                    Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
-                    continue;
+            if (voterInfo.earlyVoteSites != null) {
+                for (PollingLocation location : voterInfo.earlyVoteSites) {
+                    if (location.address.latitude == 0) {
+                        Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
+                        continue;
+                    }
+                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_GREEN));
                 }
-                markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_GREEN));
             }
 
             // use blue markers for polling locations
-            for (PollingLocation location : voterInfo.pollingLocations) {
-                if (location.address.latitude == 0) {
-                    Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
-                    continue;
+            if (voterInfo.pollingLocations != null) {
+                for (PollingLocation location : voterInfo.pollingLocations) {
+                    if (location.address.latitude == 0) {
+                        Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
+                        continue;
+                    }
+                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_AZURE));
                 }
-                markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_AZURE));
             }
 
             return locationId;

@@ -31,7 +31,6 @@ import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
-import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
@@ -136,7 +135,7 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mAppContext = new VIPAppContext((VIPApp) getApplicationContext());
-        context = mAppContext.getAppContext();
+        context = VIPApp.getContext();
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -174,52 +173,57 @@ public class VIPTabBarActivity extends FragmentActivity {
         setLocationIds();
 
         // Callback for polling location geocode result
-        pollingCallBackListener = (key, lat, lon) -> {
-            if (key == "error") {
-                Log.e("VIPTabBarActivity", "Geocode failed!");
-                return;
+        pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
+            @Override
+            public void callback(String key, double lat, double lon) {
+                if (key == "error") {
+                    Log.e("VIPTabBarActivity", "Geocode failed!");
+                    return;
+                }
+
+                // find object and set values on it
+                PollingLocation foundLoc = allLocations.get(locationIds.get(key));
+                foundLoc.address.latitude = lat;
+                foundLoc.address.longitude = lon;
+
+                // distance calculation
+                Location pollingLocation = new Location("polling");
+                pollingLocation.setLatitude(lat);
+                pollingLocation.setLongitude(lon);
+
+                if (mAppContext.useMetric()) {
+                    // convert meters to kilometers
+                    foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * KILOMETERS_IN_METER;
+                } else {
+                    // convert result from meters to miles
+                    foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
+                }
+
+                locationsFragment.refreshList();
             }
-
-            // find object and set values on it
-            PollingLocation foundLoc = allLocations.get(locationIds.get(key));
-            foundLoc.address.latitude = lat;
-            foundLoc.address.longitude = lon;
-
-            // distance calculation
-            Location pollingLocation = new Location("polling");
-            pollingLocation.setLatitude(lat);
-            pollingLocation.setLongitude(lon);
-
-            if (mAppContext.useMetric()) {
-                // convert meters to kilometers
-                foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * KILOMETERS_IN_METER;
-            } else {
-                // convert result from meters to miles
-                foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
-            }
-
-            locationsFragment.refreshList();
         };
 
-
         // callback for home address geocode result
-        homeCallBackListener = (key, lat, lon) -> {
-            if (key == "error") {
-                Log.e("VIPTabBarActivity", "Failed to geocode home address!");
-                return;
-            }
+        homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
+            @Override
+            public void callback(String key, double lat, double lon) {
+                if (key == "error") {
+                    Log.e("VIPTabBarActivity", "Failed to geocode home address!");
+                    return;
+                }
 
-            homeLocation = new Location("home");
-            homeLocation.setLatitude(lat);
-            homeLocation.setLongitude(lon);
+                homeLocation = new Location("home");
+                homeLocation.setLatitude(lat);
+                homeLocation.setLongitude(lon);
 
-            // start background geocode tasks for polling locations
-            for (PollingLocation location : allLocations) {
-                // key by address, if location has no ID
-                if (location.id != null) {
-                    new GeocodeQuery(context, pollingCallBackListener, location.id, location.address.toGeocodeString()).execute();
-                } else {
-                    new GeocodeQuery(context, pollingCallBackListener, location.address.toString(), location.address.toGeocodeString()).execute();
+                // start background geocode tasks for polling locations
+                for (PollingLocation location : allLocations) {
+                    // key by address, if location has no ID
+                    if (location.id != null) {
+                        new GeocodeQuery(context, pollingCallBackListener, location.id, location.address.toGeocodeString()).execute();
+                    } else {
+                        new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(), location.address.toGeocodeString()).execute();
+                    }
                 }
             }
         };
@@ -255,7 +259,7 @@ public class VIPTabBarActivity extends FragmentActivity {
             if (location.id != null) {
                 locationIds.put(location.id, i);
             } else {
-                locationIds.put(location.address.toString(), i);
+                locationIds.put(location.address.toGeocodeString(), i);
             }
         }
     }
