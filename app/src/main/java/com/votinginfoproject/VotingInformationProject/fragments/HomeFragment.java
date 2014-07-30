@@ -3,9 +3,11 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,33 +91,39 @@ public class HomeFragment extends Fragment {
     private void setupViewListeners() {
 
         // Go Button onClick Listener
-        homeGoButton.setOnClickListener(view -> {
-            if (mListener != null) {
-                mListener.onGoButtonPressed(view);
+        homeGoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onGoButtonPressed(view);
+                }
             }
         });
 
         // EditText onSearch Listener
-        homeEditTextAddress.setOnEditorActionListener((view, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
-                String address = view.getText().toString();
-                setAddress(address);
-                try {
-                    // TODO: election ID should be in the keys file, not hard-coded
-                    String apiUrl = "voterinfo?officialOnly=true" +
-                            "&electionId=2000" +
-                            "&address=" + URLEncoder.encode(address, "UTF-8") +
-                            "&key=";
-                    Log.d("HomeActivity", "searchedAddress: " + apiUrl);
-                    homeTextViewStatus.setText(R.string.home_status_loading);
-                    homeTextViewStatus.setVisibility(View.VISIBLE);
-                    new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
-                } catch (UnsupportedEncodingException e) {
-                    Log.e("HomeActivity Exception", "searchedAddress: " + address);
+        homeEditTextAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
+                    String address = view.getText().toString();
+                    setAddress(address);
+                    try {
+                        // TODO: election ID should be in the keys file, not hard-coded
+                        String apiUrl = "voterinfo?officialOnly=true" +
+                                "&electionId=2000" +
+                                "&address=" + URLEncoder.encode(address, "UTF-8") +
+                                "&key=";
+                        Log.d("HomeActivity", "searchedAddress: " + apiUrl);
+                        homeTextViewStatus.setText(R.string.home_status_loading);
+                        homeTextViewStatus.setVisibility(View.VISIBLE);
+                        new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
+                    } catch (UnsupportedEncodingException e) {
+                        Log.e("HomeActivity Exception", "searchedAddress: " + address);
+                    }
                 }
+                // Return false to close the keyboard
+                return false;
             }
-            // Return false to close the keyboard
-            return false;
         });
 
     }
@@ -123,33 +131,39 @@ public class HomeFragment extends Fragment {
     private void setupCivicAPIListeners() {
 
         // Callback for voterInfoQuery result
-        voterInfoListener = (result) -> {
-            if (result == null) { return; }
-            VoterInfo voterInfo = (VoterInfo) result;
-            homeTextViewStatus.setVisibility(View.GONE);
-            homeGoButton.setVisibility(View.VISIBLE);
-            mListener.searchedAddress(voterInfo);
+        voterInfoListener = new CivicInfoApiQuery.CallBackListener() {
+            @Override
+            public void callback(Object result) {
+                if (result == null) { return; }
+                VoterInfo voterInfo = (VoterInfo)result;
+                homeTextViewStatus.setVisibility(View.GONE);
+                homeGoButton.setVisibility(View.VISIBLE);
+                mListener.searchedAddress(voterInfo);
+            }
         };
 
         // Callback for voterInfoQuery error result
-        voterInfoErrorListener = (result) -> {
-            try {
-                homeGoButton.setVisibility(View.INVISIBLE);
-                CivicApiError error = (CivicApiError) result;
-                Log.d("HomeFragment", "Civic API returned error");
-                Log.d("HomeFragment", error.code + ": " + error.message);
-                CivicApiError.Error error1 = error.errors.get(0);
-                Log.d("HomeFragment", error1.domain + " " + error1.reason + " " + error1.message);
-                if (CivicApiError.errorMessages.get(error1.reason) != null) {
-                    homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
-                } else {
-                    // TODO: catch this with exception handler below once we've identified them all
-                    Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
+        voterInfoErrorListener = new CivicInfoApiQuery.CallBackListener() {
+            @Override
+            public void callback(Object result) {
+                try {
+                    homeGoButton.setVisibility(View.INVISIBLE);
+                    CivicApiError error = (CivicApiError) result;
+                    Log.d("HomeFragment", "Civic API returned error");
+                    Log.d("HomeFragment", error.code + ": " + error.message);
+                    CivicApiError.Error error1 = error.errors.get(0);
+                    Log.d("HomeFragment", error1.domain + " " + error1.reason + " " + error1.message);
+                    if (CivicApiError.errorMessages.get(error1.reason) != null) {
+                        homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
+                    } else {
+                        // TODO: catch this with exception handler below once we've identified them all
+                        Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
+                        homeTextViewStatus.setText(R.string.home_error_unknown);
+                    }
+                } catch(NullPointerException e) {
+                    Log.e("HomeFragment", "Null encountered in API error result");
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                 }
-            } catch(NullPointerException e) {
-                Log.e("HomeFragment", "Null encountered in API error result");
-                homeTextViewStatus.setText(R.string.home_error_unknown);
             }
         };
     }

@@ -45,7 +45,7 @@ public class LocationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_locations, container, false);
-        VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
+        final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
 
         // election labels
         TextView election_name_label = (TextView)rootView.findViewById(R.id.locations_election_title);
@@ -61,13 +61,25 @@ public class LocationsFragment extends Fragment {
         setButtonInBarClickListener(R.id.locations_list_polling_button);
         setButtonInBarClickListener(R.id.locations_list_early_button);
 
+        // click handler for map button
+        rootView.findViewById(R.id.locations_list_map_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // zoom to user address
+                myActivity.showMap("home");
+            }
+        });
+
         // set up locations list
         locationsList = (ListView)rootView.findViewById(R.id.locations_list);
         locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("LocationsList", "clicked location at " + position + " with id " + id);
-                // TODO: open map view
+                // get location ID tagged onto its distance label in the list adapter
+                String itemTag = view.findViewById(R.id.location_list_item_distance).getTag().toString();
+                Log.d("LocationsList", "clicked location at " + position + " with view tag " + itemTag);
+                // open map view
+                myActivity.showMap(itemTag);
             }
         });
 
@@ -92,21 +104,25 @@ public class LocationsFragment extends Fragment {
      * Helper function to set click handlers for the list filter buttons
      * @param buttonId R id of the button to listen to
      */
-    private void setButtonInBarClickListener(int buttonId) {
-        rootView.findViewById(buttonId).setOnClickListener(view -> {
-            if (buttonId == lastSelectedListButton) {
-                return; // ignore button click if already viewing that list
-            }
+    private void setButtonInBarClickListener(final int buttonId) {
 
-            if (buttonId == R.id.locations_list_polling_button) {
-                setFilter(voterInfo.pollingLocations, R.string.locations_no_polling_found);
-            } else if (buttonId == R.id.locations_list_early_button) {
-                setFilter(voterInfo.earlyVoteSites, R.string.locations_no_early_voting_found);
-            } else {
-                setFilter(allLocations, R.string.locations_none_found);
-            }
+        rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (buttonId == lastSelectedListButton) {
+                    return; // ignore button click if already viewing that list
+                }
 
-            lastSelectedListButton = buttonId;
+                if (buttonId == R.id.locations_list_polling_button) {
+                    setFilter(voterInfo.pollingLocations, R.string.locations_no_polling_found);
+                } else if (buttonId == R.id.locations_list_early_button) {
+                    setFilter(voterInfo.earlyVoteSites, R.string.locations_no_early_voting_found);
+                } else {
+                    setFilter(allLocations, R.string.locations_none_found);
+                }
+
+                lastSelectedListButton = buttonId;
+            }
         });
     }
 

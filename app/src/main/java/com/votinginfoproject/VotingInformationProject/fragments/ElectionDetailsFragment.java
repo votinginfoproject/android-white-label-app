@@ -97,16 +97,19 @@ public class ElectionDetailsFragment extends Fragment {
      * @param sectionHeaderId R id of section header (button)
      * @param sectionId R id of sub-section to show/hide on click
      */
-    private void setSectionClickListener(int sectionHeaderId, int sectionId) {
-        mActivity.findViewById(sectionHeaderId).setOnClickListener(view -> {
-            Button btn = (Button)view;
-            View section = mActivity.findViewById(sectionId);
-            if (section.getVisibility() == View.GONE) {
-                section.setVisibility(View.VISIBLE);
-                btn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_find_previous_holo_dark, 0);
-            } else {
-                section.setVisibility(View.GONE);
-                btn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_find_next_holo_dark, 0);
+    private void setSectionClickListener(int sectionHeaderId, final int sectionId) {
+        mActivity.findViewById(sectionHeaderId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button btn = (Button) view;
+                View section = mActivity.findViewById(sectionId);
+                if (section.getVisibility() == View.GONE) {
+                    section.setVisibility(View.VISIBLE);
+                    btn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_find_previous_holo_dark, 0);
+                } else {
+                    section.setVisibility(View.GONE);
+                    btn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_find_next_holo_dark, 0);
+                }
             }
         });
     }

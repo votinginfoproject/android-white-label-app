@@ -14,6 +14,7 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
+
   licenses:
     - android-sdk-license-bcbbd656
     - android-sdk-license-5be876d5

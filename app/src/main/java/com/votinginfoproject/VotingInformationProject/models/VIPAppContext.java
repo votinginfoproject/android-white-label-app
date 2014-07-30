@@ -33,8 +33,8 @@ public class VIPAppContext {
      * For testing, override this method to return a mock context
      * @return this application's context
      */
-    public Context getAppContext() {
-        return app.getApplicationContext();
+    public static Context getContext() {
+        return VIPApp.getContext();
     }
 
     public boolean useMetric() {
