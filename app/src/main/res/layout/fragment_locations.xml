@@ -10,7 +10,7 @@
     tools:context=".fragments.LocationsFragment">
 
     <RelativeLayout
-        android:id="@+id/contest_fragment_inner_layout"
+        android:id="@+id/locations_list_fragment_inner_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
