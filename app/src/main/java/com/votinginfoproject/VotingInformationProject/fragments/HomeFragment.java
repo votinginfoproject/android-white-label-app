@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,7 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.CivicInfoApiQuery;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
+import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
 
 import java.io.UnsupportedEncodingException;

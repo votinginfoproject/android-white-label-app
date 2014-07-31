@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +47,14 @@ public class VIPMapFragment extends SupportMapFragment {
     PollingLocation selectedLocation;
     LatLng thisLocation;
     LatLng homeLocation;
+
     HashMap<String, MarkerOptions> markers;
+    // track the internally-assigned ID for each marker and map it to the location's key
+    HashMap<String, String> markerIds;
+
+    Button allButton;
+    Button earlyButton;
+    Button pollingButton;
 
     // track filters
     boolean showPolling = true;
@@ -134,31 +143,59 @@ public class VIPMapFragment extends SupportMapFragment {
             map.clear();
         }
 
+        allButton = (Button)rootView.findViewById(R.id.locations_map_all_button);
+        pollingButton = (Button)rootView.findViewById(R.id.locations_map_polling_button);
+        earlyButton = (Button)rootView.findViewById(R.id.locations_map_early_button);
+
+        // highlight default button
+        allButton.setBackgroundColor(Color.LTGRAY);
+
         // set click handlers for filter buttons
-        rootView.findViewById(R.id.locations_map_all_button).setOnClickListener(new View.OnClickListener() {
+        allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showEarly = true;
                 showPolling = true;
+                allButton.setBackgroundColor(Color.LTGRAY);
+                earlyButton.setBackgroundColor(Color.TRANSPARENT);
+                pollingButton.setBackgroundColor(Color.TRANSPARENT);
                 refreshMapView();
             }
         });
 
-        rootView.findViewById(R.id.locations_map_early_button).setOnClickListener(new View.OnClickListener() {
+        earlyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showEarly = true;
                 showPolling = false;
+                earlyButton.setBackgroundColor(Color.LTGRAY);
+                pollingButton.setBackgroundColor(Color.TRANSPARENT);
+                allButton.setBackgroundColor(Color.TRANSPARENT);
                 refreshMapView();
             }
         });
 
-        rootView.findViewById(R.id.locations_map_polling_button).setOnClickListener(new View.OnClickListener() {
+        pollingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showEarly = false;
                 showPolling = true;
+                pollingButton.setBackgroundColor(Color.LTGRAY);
+                earlyButton.setBackgroundColor(Color.TRANSPARENT);
+                allButton.setBackgroundColor(Color.TRANSPARENT);
                 refreshMapView();
+            }
+        });
+
+        // set click handler for info window (to go to directions list)
+        // info window is just a bitmap, so can't listen for clicks on elements within it.
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                // get location key for this marker's ID
+                String key = markerIds.get(marker.getId());
+                Log.d("LocationsFragment", "Clicked marker for " + key);
+                mActivity.showDirections(key);
             }
         });
 
@@ -193,7 +230,7 @@ public class VIPMapFragment extends SupportMapFragment {
         @Override
         protected String doInBackground(String... select_locations) {
             markers = new HashMap<String, MarkerOptions>(allLocations.size());
-            String showId = select_locations[0];
+            markerIds = new HashMap<String, String>(allLocations.size());
 
             // use green markers for early voting sites
             if (voterInfo.earlyVoteSites != null && showEarly) {
@@ -224,6 +261,7 @@ public class VIPMapFragment extends SupportMapFragment {
         protected  void onPostExecute(String checkId) {
             for (String key : markers.keySet()) {
                 Marker marker = map.addMarker(markers.get(key));
+                markerIds.put(marker.getId(), key);
                 if (key.equals(locationId)) {
                     // show popup for marker at selected location
                     marker.showInfoWindow();

@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +31,10 @@ public class LocationsFragment extends Fragment {
     TextView noneFoundMessage;
     ListView locationsList;
     ArrayList<PollingLocation> allLocations;
+
+    Button allButton;
+    Button pollingButton;
+    Button earlyButton;
 
     // track which location filter button was last clicked, and only refresh list if it changed
     int lastSelectedListButton = R.id.locations_list_all_button;
@@ -57,6 +63,13 @@ public class LocationsFragment extends Fragment {
         noneFoundMessage = (TextView) rootView.findViewById(R.id.locations_none_found_message);
 
         // add click handlers for button bar filter buttons
+        allButton = (Button)rootView.findViewById(R.id.locations_list_all_button);
+        pollingButton = (Button)rootView.findViewById(R.id.locations_list_polling_button);
+        earlyButton = (Button)rootView.findViewById(R.id.locations_list_early_button);
+
+        // highlight default button
+        allButton.setBackgroundColor(Color.LTGRAY);
+
         setButtonInBarClickListener(R.id.locations_list_all_button);
         setButtonInBarClickListener(R.id.locations_list_polling_button);
         setButtonInBarClickListener(R.id.locations_list_early_button);
@@ -77,8 +90,10 @@ public class LocationsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // get location ID tagged onto its distance label in the list adapter
                 String itemTag = view.findViewById(R.id.location_list_item_distance).getTag().toString();
-                // open map view
-                myActivity.showMap(itemTag);
+                // open directions view on list item tap (will open map view on item button tap)
+                // open directions view
+                Log.d("LocationsFragment", "Clicked list item " + itemTag);
+                myActivity.showDirections(itemTag);
             }
         });
 
@@ -112,12 +127,21 @@ public class LocationsFragment extends Fragment {
                     return; // ignore button click if already viewing that list
                 }
 
+                // highlight current selection (and un-highlight others)
+                v.setBackgroundColor(Color.LTGRAY);
+
                 if (buttonId == R.id.locations_list_polling_button) {
                     setFilter(voterInfo.pollingLocations, R.string.locations_no_polling_found);
+                    earlyButton.setBackgroundColor(Color.TRANSPARENT);
+                    allButton.setBackgroundColor(Color.TRANSPARENT);
                 } else if (buttonId == R.id.locations_list_early_button) {
                     setFilter(voterInfo.earlyVoteSites, R.string.locations_no_early_voting_found);
+                    pollingButton.setBackgroundColor(Color.TRANSPARENT);
+                    allButton.setBackgroundColor(Color.TRANSPARENT);
                 } else {
                     setFilter(allLocations, R.string.locations_none_found);
+                    earlyButton.setBackgroundColor(Color.TRANSPARENT);
+                    pollingButton.setBackgroundColor(Color.TRANSPARENT);
                 }
 
                 lastSelectedListButton = buttonId;

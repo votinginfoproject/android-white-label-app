@@ -75,6 +75,14 @@
 	<!-- Locations map strings -->
     <string name="locations_map_user_address_label">User Address</string>
 
+    <!-- Directions list strings -->
+    <string name="directions_walk_button_label">Walk</string>
+    <string name="directions_bike_button_label">Bike</string>
+    <string name="directions_transit_button_label">Transit</string>
+    <string name="directions_drive_button_label">Drive</string>
+    <string name="directions_open_in_maps_button_label">Open in Google Maps</string>
+    <string name="directions_error_message">No directions found.</string>
+
     <!-- About App strings -->
     <string name="about_app_title">About This App</string>
     <string name="about_app">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci.</string>
