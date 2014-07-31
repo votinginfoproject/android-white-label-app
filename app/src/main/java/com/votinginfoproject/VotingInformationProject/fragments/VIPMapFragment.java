@@ -95,7 +95,7 @@ public class VIPMapFragment extends SupportMapFragment {
         homeLocation = mActivity.getHomeLatLng();
 
         // set selected location to zoom to
-        if (locationId  == "home") {
+        if (locationId.equals("home")) {
             thisLocation = homeLocation;
         } else {
             selectedLocation = mActivity.getLocationForId(locationId);
