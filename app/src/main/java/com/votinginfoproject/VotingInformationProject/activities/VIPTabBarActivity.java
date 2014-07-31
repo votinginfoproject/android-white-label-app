@@ -27,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
@@ -89,7 +90,25 @@ public class VIPTabBarActivity extends FragmentActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    
+
+    /**
+     * Transition from contest fragment to candidate fragment when user selects list item.
+     *
+     * @param contestPosition Index of selected contest within the VoterInfo object's list of contests
+     * @param candidatePosition Index of selected candidate within the contest's list of candidates
+     */
+    public void showCandidateDetails(int contestPosition, int candidatePosition) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        Fragment candidateFragment = CandidateFragment.newInstance(contestPosition, candidatePosition);
+
+        // See showContestDetails for info on how the fragment transition occurs
+        fragmentTransaction.replace(R.id.ballot_fragment, candidateFragment);
+
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+
     public VIPAppContext getAppContext() {
         return mAppContext;
     }

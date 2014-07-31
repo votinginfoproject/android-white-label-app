@@ -27,7 +27,6 @@ public class ContestFragment extends Fragment {
     private int contestNum;
     VoterInfo voterInfo;
     Contest contest;
-    private OnInteractionListener mListener;
     private ViewGroup mContainer;
 
     /**
@@ -69,7 +68,7 @@ public class ContestFragment extends Fragment {
     *
     */
     private void setContents() {
-        Activity myActivity = getActivity();
+        final Activity myActivity = getActivity();
         TextView title = (TextView)myActivity.findViewById(R.id.contest_title);
         TextView subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
         TextView contestType = (TextView)myActivity.findViewById(R.id.contest_type);
@@ -137,8 +136,8 @@ public class ContestFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // TODO: launch candidate detail view here
-                    Candidate candidate = contest.candidates.get(position);
-                    Log.d("CandidateList", "clicked: " + contest.candidates.get(position) + " " + candidate.name);
+                    Log.d("CandidateList", "clicked: " + contest.candidates.get(position).name);
+                    ((VIPTabBarActivity) myActivity).showCandidateDetails(contestNum, position);
                 }
             });
 
@@ -173,7 +172,6 @@ public class ContestFragment extends Fragment {
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
 
         super.onDetach();
-        mListener = null;
     }
 
     public interface OnInteractionListener {
