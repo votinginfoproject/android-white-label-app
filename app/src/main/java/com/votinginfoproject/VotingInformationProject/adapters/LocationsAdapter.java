@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -23,7 +24,7 @@ import java.util.Locale;
  */
 public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
-    VIPAppContext mAppContext;
+    VIPTabBarActivity myActivity;
     DecimalFormat distanceFormat;
     Comparator<PollingLocation> pollingLocationComparator;
     String distanceSuffix;
@@ -40,8 +41,14 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         sort(pollingLocationComparator);
     }
 
+    /**
+     *
+     * @param context expected to be VIPTabBarActivity
+     * @param locations list of polling locations to display
+     */
     public LocationsAdapter(Context context, List<PollingLocation> locations) {
         super(context, R.layout.location_list_item, locations);
+        myActivity = (VIPTabBarActivity)context;
         distanceFormat =  new DecimalFormat("0.00 ");
         if (((VIPTabBarActivity)context).getAppContext().useMetric()) {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_metric);
@@ -71,6 +78,20 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
             viewHolder.address = (TextView) convertView.findViewById(R.id.location_list_item_address);
             viewHolder.distance = (TextView) convertView.findViewById(R.id.location_list_item_distance);
             convertView.setTag(viewHolder);
+
+            // declare a final copy, for use in inner class OnClickListener
+            final View finalConvertView = convertView;
+
+            // set click handler for button to open map
+            Button mapButton = (Button) convertView.findViewById(R.id.location_list_item_open_map_button);
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String itemTag = finalConvertView.findViewById(R.id.location_list_item_distance).getTag().toString();
+                    // open map view on item button tap
+                    myActivity.showMap(itemTag);
+                }
+            });
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }

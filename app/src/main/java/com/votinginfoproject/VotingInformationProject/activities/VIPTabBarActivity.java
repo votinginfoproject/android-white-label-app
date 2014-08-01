@@ -29,10 +29,11 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.DirectionsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
-import com.votinginfoproject.VotingInformationProject.models.GeocodeQuery;
+import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
@@ -73,6 +74,19 @@ public class VIPTabBarActivity extends FragmentActivity {
         super();
     }
 
+    public VIPAppContext getAppContext() {
+        return mAppContext;
+    }
+
+    public PollingLocation getLocationForId(String location_id) {
+        if (locationIds.get(location_id) != null) {
+            return allLocations.get(locationIds.get(location_id));
+        } else {
+            Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
+            return null;
+        }
+    }
+
     /**
      * Transition from ballot fragment to contest details fragment when user selects list item.
      *
@@ -91,7 +105,7 @@ public class VIPTabBarActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
 
-    /**
+	/**
      * Transition from contest fragment to candidate fragment when user selects list item.
      *
      * @param contestPosition Index of selected contest within the VoterInfo object's list of contests
@@ -108,18 +122,13 @@ public class VIPTabBarActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
 
-
-    public VIPAppContext getAppContext() {
-        return mAppContext;
-    }
-
-    public PollingLocation getLocationForId(String location_id) {
-        if (locationIds.get(location_id) != null) {
-            return allLocations.get(locationIds.get(location_id));
-        } else {
-            Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
-            return null;
-        }
+    public void showDirections(String item) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        Fragment directionsFragment = DirectionsFragment.newInstance(item);
+        // have to hide/reshow parent within DirectionsFragment, as replace doesn't actually replace
+        fragmentTransaction.replace(R.id.locations_list_fragment, directionsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void showMap(String item) {
@@ -130,7 +139,6 @@ public class VIPTabBarActivity extends FragmentActivity {
             // TODO:  display toast message?
             return;
         }
-
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         SupportMapFragment mapFragment = VIPMapFragment.newInstance(item);

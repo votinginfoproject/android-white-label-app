@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.models;
+package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;

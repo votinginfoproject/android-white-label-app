@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.models;
+package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 /**
  * Created by kathrynkillebrew on 7/15/14.

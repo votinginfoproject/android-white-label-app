@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.models;
+package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
