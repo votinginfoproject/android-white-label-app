@@ -2,5 +2,6 @@
 <resources>
     <string name="google_api_android_key"></string>
     <string name="google_api_browser_key"></string>
-    <string name="civic_info_api_url">https://www.googleapis.com/civicinfo/v1/</string>
+    <string name="civic_info_api_version">v1</string>
+    <string name="election_id">2000</string>
 </resources>

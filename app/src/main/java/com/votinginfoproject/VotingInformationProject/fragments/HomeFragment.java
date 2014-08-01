@@ -3,8 +3,10 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -113,16 +115,20 @@ public class HomeFragment extends Fragment {
                     setAddress(address);
                     checkInternetConnectivity(); // check for connection before querying
                     try {
-                        // TODO: election ID should be in the keys file, not hard-coded
-                        String apiUrl = "voterinfo?officialOnly=true" +
-                                "&electionId=2000" +
-                                "&address=" + URLEncoder.encode(address, "UTF-8") +
-                                "&key=";
+                        Resources res = context.getResources();
+                        Uri.Builder builder = new Uri.Builder();
+                        builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
+                        builder.appendPath(res.getString(R.string.civic_info_api_version));
+                        builder.appendPath("voterinfo").appendQueryParameter("officialOnly", "true");
+                        builder.appendQueryParameter("electionId", res.getString(R.string.election_id));
+                        builder.appendQueryParameter("address", address);
+                        builder.appendQueryParameter("key", res.getString(R.string.google_api_browser_key));
+                        String apiUrl = builder.build().toString();
                         Log.d("HomeActivity", "searchedAddress: " + apiUrl);
                         homeTextViewStatus.setText(R.string.home_status_loading);
                         homeTextViewStatus.setVisibility(View.VISIBLE);
-                        new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
-                    } catch (UnsupportedEncodingException e) {
+                        new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
+                    } catch (Exception e) {
                         Log.e("HomeActivity Exception", "searchedAddress: " + address);
                     }
                 }
