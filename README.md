@@ -12,7 +12,7 @@ Requires: Android Studio v0.8.0+
 Dependencies:
 -------------
 
-Min SDK Version: 15 (Ice Cream Sandwich 4.0.3)
+Min SDK Version: 16 (Jelly Bean 4.1)
 Target SDK Version: 19 (Android KitKat)
 Android Support Library v4 revision 19.1
 
@@ -23,7 +23,7 @@ Copy the api_keys.xml.template file to api_keys.xml:
 ```
 cp xmltemplates/api_keys.xml.template app/src/main/res/values/api_keys.xml
 ```
-Edit api_keys.xml to add in your API keys from the [Google Developer Console](https://console.developers.google.com).  
+Edit api_keys.xml to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
 Note that the Google Maps API key is the Anroid key, and the Civic Info API key is the browser key.
 
 

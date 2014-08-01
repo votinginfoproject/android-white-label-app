@@ -126,9 +126,7 @@ public class VIPMapFragment extends SupportMapFragment {
                 @Override
                 public void onGlobalLayout() {
                     if (observer.isAlive()) {
-                        observer.removeGlobalOnLayoutListener(this);
-                        // TODO: switch to below command for next API level
-                        //observer.removeOnGlobalLayoutListener(this);
+                        observer.removeOnGlobalLayoutListener(this);
                     }
 
                     // add marker for user-entered address
