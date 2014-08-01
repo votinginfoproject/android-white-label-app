@@ -19,9 +19,6 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.

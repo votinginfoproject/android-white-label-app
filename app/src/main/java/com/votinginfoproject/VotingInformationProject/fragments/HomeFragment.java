@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -205,6 +206,10 @@ public class HomeFragment extends Fragment {
                 currentElection = voterInfo.election;
                 homeTextViewStatus.setVisibility(View.GONE);
                 homeGoButton.setVisibility(View.VISIBLE);
+
+                // read Go button to user, if TalkBack enabled
+                homeGoButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+
                 mListener.searchedAddress(voterInfo);
 
                 // Show election picker if there are other elections
@@ -232,12 +237,13 @@ public class HomeFragment extends Fragment {
                         Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
                         homeTextViewStatus.setText(R.string.home_error_unknown);
                     }
-
-
                 } catch(NullPointerException e) {
                     Log.e("HomeFragment", "Null encountered in API error result");
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                 }
+
+                // read error result, if TalkBack enabled
+                homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
         };
     }

@@ -29,6 +29,7 @@
     <string name="home_error_no_address">Please check that you\'ve got an address entered and try again.</string>
     <string name="home_error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
     <string name="home_error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
+    <string name="home_go_button_accessibility_description">Go to search results.</string>
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Contests</string>
@@ -49,6 +50,16 @@
     <string name="candidate_no_party">No Listed Affiliation</string>
     <string name="candidate_details_none">No Candidate Details Available</string>
     <string name="candidate_social_none">No Social Media Channels Available</string>
+
+    <!-- Accessibility descriptions for images -->
+    <string name="social_channel_youtube_description">Visit YouTube channel</string>
+    <string name="social_channel_twitter_description">Visit Twitter feed</string>
+    <string name="social_channel_facebook_description">Visit FaceBook page</string>
+    <string name="social_channel_google_plus_description">Visit Google Plus page</string>
+    <string name="email_accessibility_description">Send email</string>
+    <string name="phone_accessibility_description">Call phone number</string>
+    <string name="website_accessibility_description">Visit website</string>
+    <string name="candidate_picture_description">Candidate picture</string>
 
     <!-- Election Detail Strings -->
     <string name="details_state_administration_body_header">State Administration</string>
