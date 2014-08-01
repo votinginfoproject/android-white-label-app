@@ -86,6 +86,7 @@
 
 	<!-- Locations map strings -->
     <string name="locations_map_user_address_label">User Address</string>
+    <string name="locations_map_play_services_unavailable">Google Play services are unavailable.  Cannot show map.</string>
 
     <!-- Directions list strings -->
     <string name="directions_walk_button_label">Walk</string>

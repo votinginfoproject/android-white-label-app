@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -136,7 +137,9 @@ public class VIPTabBarActivity extends FragmentActivity {
             Log.d("VIPTabBarActivity", "Google Play services is available!");
         } else {
             Log.e("VIPTabBarActivity", "Google Play services are unavailable!");
-            // TODO:  display toast message?
+            // alert user
+            CharSequence errorMessage = context.getResources().getText(R.string.locations_map_play_services_unavailable);
+            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT);
             return;
         }
 
