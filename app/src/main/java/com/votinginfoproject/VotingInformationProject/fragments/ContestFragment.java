@@ -127,7 +127,7 @@ public class ContestFragment extends Fragment {
             }
 
             // populate candidate list, using toString override on Candidate class
-            ArrayList candidateInfo = (ArrayList) contest.candidates;
+            ArrayList<String> candidateInfo = (ArrayList) contest.candidates;
             ArrayAdapter adapter = new ArrayAdapter<String>(myActivity, android.R.layout.simple_selectable_list_item, candidateInfo);
             ListView candidateList = (ListView)myActivity.findViewById(R.id.contest_candidate_list);
             candidateList.setAdapter(adapter);

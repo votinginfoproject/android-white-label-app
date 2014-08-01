@@ -70,8 +70,8 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
     @Override
     protected HashMap<String, ArrayList<Double>> doInBackground(String... addresses) {
 
-        HashMap returnMap = new HashMap(1);
-        ArrayList<Double> returnVals = new ArrayList<Double>(2);
+        HashMap<String, ArrayList<Double>> returnMap = new HashMap(1);
+        ArrayList<Double> returnVals = new ArrayList<Double>(3);
 
         if (!Geocoder.isPresent()) {
             Log.e("GeocodeQuery", "No geocoder service available!");

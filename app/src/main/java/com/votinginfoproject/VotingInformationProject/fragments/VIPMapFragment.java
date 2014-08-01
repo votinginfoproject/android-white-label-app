@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -126,7 +127,14 @@ public class VIPMapFragment extends SupportMapFragment {
                 @Override
                 public void onGlobalLayout() {
                     if (observer.isAlive()) {
-                        observer.removeOnGlobalLayoutListener(this);
+
+                        // deal with SDK compatibility
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            //noinspection deprecation
+                            observer.removeGlobalOnLayoutListener(this);
+                        } else {
+                            observer.removeOnGlobalLayoutListener(this);
+                        }
                     }
 
                     if (homeLocation != null) {

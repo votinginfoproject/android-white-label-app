@@ -12,7 +12,7 @@ Requires: Android Studio v0.8.0+
 Dependencies:
 -------------
 
-Min SDK Version: 16 (Jelly Bean 4.1)
+Min SDK Version: 15 (Ice Cream Sandwich 4.0.3)
 Target SDK Version: 19 (Android KitKat)
 Android Support Library v4 revision 19.1
 

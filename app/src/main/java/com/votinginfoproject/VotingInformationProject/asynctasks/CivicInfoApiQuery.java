@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
  *
  * Generalized class for querying the API
  */
+@SuppressWarnings("unchecked")
 public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
     public interface CallBackListener {

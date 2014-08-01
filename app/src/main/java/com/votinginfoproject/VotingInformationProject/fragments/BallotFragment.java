@@ -41,7 +41,7 @@ public class BallotFragment extends Fragment {
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // populate contest list
-        ArrayList contestInfo = new ArrayList<String>(voterInfo.contests.size());
+        ArrayList<String> contestInfo = new ArrayList<String>(voterInfo.contests.size());
         for (Contest contest : voterInfo.contests) {
             if (contest.type.equals("Referendum")) {
                 contestInfo.add(contest.referendumTitle + "\n" + contest.referendumSubtitle);
