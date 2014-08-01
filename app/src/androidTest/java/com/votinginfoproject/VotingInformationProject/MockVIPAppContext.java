@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject;
 
-import android.test.mock.MockApplication;
-
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.District;

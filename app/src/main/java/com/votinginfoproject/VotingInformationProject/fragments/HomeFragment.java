@@ -3,9 +3,14 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +19,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 
 public class HomeFragment extends Fragment {
@@ -38,8 +40,7 @@ public class HomeFragment extends Fragment {
     private OnInteractionListener mListener;
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+        return new HomeFragment();
     }
     public HomeFragment() {
         // Required empty public constructor
@@ -107,17 +108,22 @@ public class HomeFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
                     String address = view.getText().toString();
                     setAddress(address);
+                    checkInternetConnectivity(); // check for connection before querying
                     try {
-                        // TODO: election ID should be in the keys file, not hard-coded
-                        String apiUrl = "voterinfo?officialOnly=true" +
-                                "&electionId=2000" +
-                                "&address=" + URLEncoder.encode(address, "UTF-8") +
-                                "&key=";
+                        Resources res = context.getResources();
+                        Uri.Builder builder = new Uri.Builder();
+                        builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
+                        builder.appendPath(res.getString(R.string.civic_info_api_version));
+                        builder.appendPath("voterinfo").appendQueryParameter("officialOnly", "true");
+                        builder.appendQueryParameter("electionId", res.getString(R.string.election_id));
+                        builder.appendQueryParameter("address", address);
+                        builder.appendQueryParameter("key", res.getString(R.string.google_api_browser_key));
+                        String apiUrl = builder.build().toString();
                         Log.d("HomeActivity", "searchedAddress: " + apiUrl);
                         homeTextViewStatus.setText(R.string.home_status_loading);
                         homeTextViewStatus.setVisibility(View.VISIBLE);
-                        new CivicInfoApiQuery<VoterInfo>(context, VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
-                    } catch (UnsupportedEncodingException e) {
+                        new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
+                    } catch (Exception e) {
                         Log.e("HomeActivity Exception", "searchedAddress: " + address);
                     }
                 }
@@ -125,7 +131,24 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
+    }
 
+    /**
+     * Check for Internet connectivity before querying API.  If the Internet is unavailable or
+     * disconnected, display a message and quit the app.
+     */
+    public void checkInternetConnectivity() {
+        Context context = VIPAppContext.getContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
+            CharSequence errorMessage = context.getResources().getText(R.string.home_error_no_internet);
+            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            getActivity().finish();
+        }
     }
 
     private void setupCivicAPIListeners() {
@@ -197,7 +220,7 @@ public class HomeFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         String addressKey = getString(R.string.LAST_ADDRESS_KEY);
         editor.putString(addressKey, address);
-        editor.commit();
+        editor.apply();
         this.address = address;
     }
 }

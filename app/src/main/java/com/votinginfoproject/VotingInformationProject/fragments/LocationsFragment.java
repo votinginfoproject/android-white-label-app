@@ -40,8 +40,7 @@ public class LocationsFragment extends Fragment {
     int lastSelectedListButton = R.id.locations_list_all_button;
 
     public static LocationsFragment newInstance() {
-        LocationsFragment fragment = new LocationsFragment();
-        return fragment;
+        return new LocationsFragment();
     }
     public LocationsFragment() {
         // Required empty public constructor
@@ -99,6 +98,7 @@ public class LocationsFragment extends Fragment {
         // initialize list adapter with all locations
         allLocations = myActivity.getAllLocations();
         // copy the list, so the original isn't destroyed by the adapter construction
+        //noinspection unchecked
         listAdapter = new LocationsAdapter(myActivity, (ArrayList<PollingLocation>) allLocations.clone());
         locationsList.setAdapter(listAdapter);
 

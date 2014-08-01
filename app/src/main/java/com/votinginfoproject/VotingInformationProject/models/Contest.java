@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

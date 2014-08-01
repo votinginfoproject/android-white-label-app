@@ -6,7 +6,6 @@ import java.util.HashMap;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,12 +16,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
@@ -56,9 +56,7 @@ public class VIPTabBarActivity extends FragmentActivity {
     Location homeLocation;
     LocationsFragment locationsFragment;
     Context context;
-
-    private final static double MILES_IN_METER = 0.000621371192;
-    private final static double KILOMETERS_IN_METER = 0.001;
+    boolean useMetric;
 
 
     /**
@@ -136,7 +134,11 @@ public class VIPTabBarActivity extends FragmentActivity {
             Log.d("VIPTabBarActivity", "Google Play services is available!");
         } else {
             Log.e("VIPTabBarActivity", "Google Play services are unavailable!");
-            // TODO:  display toast message?
+            // alert user
+            CharSequence errorMessage = context.getResources().getText(R.string.locations_map_play_services_unavailable);
+            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
             return;
         }
 
@@ -199,11 +201,14 @@ public class VIPTabBarActivity extends FragmentActivity {
         setAllLocations();
         setLocationIds();
 
+        useMetric = mAppContext.useMetric();
+
         // Callback for polling location geocode result
         pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
+
             @Override
-            public void callback(String key, double lat, double lon) {
-                if (key == "error") {
+            public void callback(String key, double lat, double lon, double distance) {
+                if (key.equals("error")) {
                     Log.e("VIPTabBarActivity", "Geocode failed!");
                     return;
                 }
@@ -212,19 +217,7 @@ public class VIPTabBarActivity extends FragmentActivity {
                 PollingLocation foundLoc = allLocations.get(locationIds.get(key));
                 foundLoc.address.latitude = lat;
                 foundLoc.address.longitude = lon;
-
-                // distance calculation
-                Location pollingLocation = new Location("polling");
-                pollingLocation.setLatitude(lat);
-                pollingLocation.setLongitude(lon);
-
-                if (mAppContext.useMetric()) {
-                    // convert meters to kilometers
-                    foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * KILOMETERS_IN_METER;
-                } else {
-                    // convert result from meters to miles
-                    foundLoc.address.distance = pollingLocation.distanceTo(homeLocation) * MILES_IN_METER;
-                }
+                foundLoc.address.distance = distance;
 
                 locationsFragment.refreshList();
             }
@@ -233,8 +226,8 @@ public class VIPTabBarActivity extends FragmentActivity {
         // callback for home address geocode result
         homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
             @Override
-            public void callback(String key, double lat, double lon) {
-                if (key == "error") {
+            public void callback(String key, double lat, double lon, double distance) {
+                if (key.equals("error")) {
                     Log.e("VIPTabBarActivity", "Failed to geocode home address!");
                     return;
                 }
@@ -247,16 +240,19 @@ public class VIPTabBarActivity extends FragmentActivity {
                 for (PollingLocation location : allLocations) {
                     // key by address, if location has no ID
                     if (location.id != null) {
-                        new GeocodeQuery(context, pollingCallBackListener, location.id, location.address.toGeocodeString()).execute();
+                        new GeocodeQuery(context, pollingCallBackListener, location.id,
+                                location.address.toGeocodeString(), homeLocation, useMetric).execute();
                     } else {
-                        new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(), location.address.toGeocodeString()).execute();
+                        new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(),
+                                location.address.toGeocodeString(), homeLocation, useMetric).execute();
                     }
                 }
             }
         };
 
         // geocode home address; once result returned, geocode polling locations
-        new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString()).execute();
+        new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
+                null, useMetric).execute();
     }
 
     private void setAllLocations() {

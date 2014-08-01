@@ -83,7 +83,7 @@ public class SocialMediaChannel {
             default:
                 return null;
         }
-    };
+    }
 
     /**
      *

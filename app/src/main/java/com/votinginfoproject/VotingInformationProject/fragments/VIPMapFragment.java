@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,7 +100,7 @@ public class VIPMapFragment extends SupportMapFragment {
 
         mActivity = (VIPTabBarActivity) this.getActivity();
 
-        voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
+        voterInfo = mActivity.getVoterInfo();
         allLocations = mActivity.getAllLocations();
         homeLocation = mActivity.getHomeLatLng();
 
@@ -126,17 +127,24 @@ public class VIPMapFragment extends SupportMapFragment {
                 @Override
                 public void onGlobalLayout() {
                     if (observer.isAlive()) {
-                        observer.removeGlobalOnLayoutListener(this);
-                        // TODO: switch to below command for next API level
-                        //observer.removeOnGlobalLayoutListener(this);
+
+                        // deal with SDK compatibility
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            //noinspection deprecation
+                            observer.removeGlobalOnLayoutListener(this);
+                        } else {
+                            observer.removeOnGlobalLayoutListener(this);
+                        }
                     }
 
-                    // add marker for user-entered address
-                    map.addMarker(new MarkerOptions()
-                                    .position(homeLocation)
-                                    .title(mResources.getString(R.string.locations_map_user_address_label))
-                    );
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
+                    if (homeLocation != null) {
+                        // add marker for user-entered address
+                        map.addMarker(new MarkerOptions()
+                                        .position(homeLocation)
+                                        .title(mResources.getString(R.string.locations_map_user_address_label))
+                        );
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
+                    }
                 }
             });
         } else {
@@ -207,10 +215,12 @@ public class VIPMapFragment extends SupportMapFragment {
         new AddMarkersTask().execute(locationId);
 
         // add marker for user-entered address
-        map.addMarker(new MarkerOptions()
-                        .position(homeLocation)
-                        .title(mResources.getString(R.string.locations_map_user_address_label))
-        );
+        if (homeLocation != null) {
+            map.addMarker(new MarkerOptions()
+                            .position(homeLocation)
+                            .title(mResources.getString(R.string.locations_map_user_address_label))
+            );
+        }
     }
 
     @Override

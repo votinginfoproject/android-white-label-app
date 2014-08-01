@@ -23,16 +23,10 @@ public class BallotFragment extends Fragment {
     VoterInfo voterInfo;
 
     public static BallotFragment newInstance() {
-        BallotFragment fragment = new BallotFragment();
-        return fragment;
+        return new BallotFragment();
     }
     public BallotFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -47,9 +41,9 @@ public class BallotFragment extends Fragment {
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // populate contest list
-        ArrayList contestInfo = new ArrayList<String>(voterInfo.contests.size());
+        ArrayList<String> contestInfo = new ArrayList<String>(voterInfo.contests.size());
         for (Contest contest : voterInfo.contests) {
-            if (contest.type == "Referendum") {
+            if (contest.type.equals("Referendum")) {
                 contestInfo.add(contest.referendumTitle + "\n" + contest.referendumSubtitle);
             } else {
                 contestInfo.add(contest.office + "\n" + voterInfo.election.name);

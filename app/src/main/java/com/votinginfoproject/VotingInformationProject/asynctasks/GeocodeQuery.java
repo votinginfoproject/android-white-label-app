@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.location.Geocoder;
 import android.location.Address;
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Asynchronously query the geocoding service with an address (must not be done on the UI thread!)
@@ -23,42 +23,62 @@ import java.util.Map;
  */
 public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, ArrayList<Double>>> {
 
+    private final static double MILES_IN_METER = 0.000621371192;
+    private final static double KILOMETERS_IN_METER = 0.001;
+
     Geocoder geocoder;
     GeocodeCallBackListener callBackListener;
     String key;
     String geocodeAddress;
+    Location home;
+    boolean useMetric;
 
 
     public interface GeocodeCallBackListener {
-        public void callback(String label, double latitude, double longitude);
+        /**
+         * Callback for geocoder response.
+         *
+         * @param label Identifier for address sent; same as ID sent into constructor.
+         * @param latitude Coordinate found in geocoding respnse (negative value indicates error)
+         * @param longitude Coordinate found in geocoding respnse (negative value indicates error)
+         * @param distance Distance from given address to user-entered location (zero if this is user's address)
+         */
+        public void callback(String label, double latitude, double longitude, double distance);
     }
 
     /**
+     * Constructor.  Set parameters for geocoding job here.
      *
      * @param context application context
      * @param callBack function to be called with geocode results
      * @param id string identifier for the address that will also be returned
      * @param address string containing the address to geocode
+     * @param home Android Location object for user-entered address; used for distance calculation
+     * @param useMetric boolean for units of measurement; false -> imperial units, true -> metric
      */
-    public GeocodeQuery(Context context, GeocodeCallBackListener callBack, String id, String address) {
+    public GeocodeQuery(Context context, GeocodeCallBackListener callBack, String id, String address,
+                        Location home, boolean useMetric) {
         super();
         this.geocoder = new Geocoder(context);
         this.callBackListener = callBack;
         this.key = id;
         this.geocodeAddress = address;
+        this.home = home;
+        this.useMetric = useMetric;
     }
 
     @Override
     protected HashMap<String, ArrayList<Double>> doInBackground(String... addresses) {
 
-        HashMap returnMap = new HashMap(1);
-        ArrayList<Double> coords = new ArrayList<Double>(2);
+        HashMap<String, ArrayList<Double>> returnMap = new HashMap(1);
+        ArrayList<Double> returnVals = new ArrayList<Double>(3);
 
-        if (!geocoder.isPresent()) {
+        if (!Geocoder.isPresent()) {
             Log.e("GeocodeQuery", "No geocoder service available!");
-            coords.add(-2.0);
-            coords.add(-2.0);
-            returnMap.put("error", coords);
+            returnVals.add(-2.0);
+            returnVals.add(-2.0);
+            returnVals.add(0.0);
+            returnMap.put("error", returnVals);
             return returnMap;
         }
 
@@ -70,21 +90,43 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
             List<Address> results = geocoder.getFromLocationName(geocodeAddress, 1);
             if (results != null && !results.isEmpty()) {
                 Address gotAddress = results.get(0);
-                coords.add(gotAddress.getLatitude());
-                coords.add(gotAddress.getLongitude());
-                returnMap.put(key, coords);
+                double lat = gotAddress.getLatitude();
+                double lon = gotAddress.getLongitude();
+                returnVals.add(lat);
+                returnVals.add(lon);
+
+                // calculate distance from this location to home location, if this isn't home
+                if (!key.equals("home")) {
+                    // distance calculation
+                    Location pollingLocation = new Location("polling");
+                    pollingLocation.setLatitude(lat);
+                    pollingLocation.setLongitude(lon);
+
+                    if (useMetric) {
+                        // convert meters to kilometers
+                        returnVals.add(pollingLocation.distanceTo(home) * KILOMETERS_IN_METER);
+                    } else {
+                        // convert result from meters to miles
+                        returnVals.add(pollingLocation.distanceTo(home) * MILES_IN_METER);
+                    }
+                } else {
+                    returnVals.add(0.0);
+                }
+                returnMap.put(key, returnVals);
             } else {
                 Log.d("GeocodeQuery", "No result found for address " + geocodeAddress);
-                coords.add(-1.0);
-                coords.add(-1.0);
-                returnMap.put("error", coords);
+                returnVals.add(-1.0);
+                returnVals.add(-1.0);
+                returnVals.add(0.0);
+                returnMap.put("error", returnVals);
             }
         } catch (IOException e) {
             Log.e("GeocodeQuery", "IOException geocoding address " + geocodeAddress);
             e.printStackTrace();
-            coords.add(-3.0);
-            coords.add(-3.0);
-            returnMap.put("error", coords);
+            returnVals.add(-3.0);
+            returnVals.add(-3.0);
+            returnVals.add(0.0);
+            returnMap.put("error", returnVals);
         }
 
         return returnMap;
@@ -94,10 +136,10 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
     protected void onPostExecute(HashMap<String, ArrayList<Double>> addressMap) {
         if (addressMap != null && !addressMap.isEmpty()) {
             String key = addressMap.keySet().iterator().next();
-            ArrayList<Double> coords = addressMap.get(key);
-            callBackListener.callback(key, coords.get(0), coords.get(1));
+            ArrayList<Double> returnedVals = addressMap.get(key);
+            callBackListener.callback(key, returnedVals.get(0), returnedVals.get(1), returnedVals.get(2));
         } else {
-            callBackListener.callback("error", -4, -4);
+            callBackListener.callback("error", -4, -4, 0);
         }
     }
 }

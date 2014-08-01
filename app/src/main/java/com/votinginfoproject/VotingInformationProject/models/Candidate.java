@@ -21,7 +21,7 @@ public class Candidate {
      *  Ensures that the channels List is not-null when the class is instantiated
      */
     public Candidate() {
-        this.channels = new ArrayList<SocialMediaChannel>(4);
+        this.channels = new ArrayList<>(4);
     }
 
     /**

@@ -11,13 +11,9 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
-
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by kathrynkillebrew on 7/25/14.

@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.ActivityTests;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
