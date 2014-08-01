@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.GoogleDirectionsApiStep;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by kathrynkillebrew on 8/1/14.
  */
-public class DirectionsAdapter extends ArrayAdapter<GoogleDirectionsApiStep> {
+public class DirectionsAdapter extends ArrayAdapter<Step> {
 
     // View lookup cache.  Pattern from here:
     // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
@@ -28,13 +28,13 @@ public class DirectionsAdapter extends ArrayAdapter<GoogleDirectionsApiStep> {
      *
      * @param steps list of steps returned by Google Directions API to put in ListView
      */
-    public DirectionsAdapter(List<GoogleDirectionsApiStep> steps) {
+    public DirectionsAdapter(List<Step> steps) {
         super(VIPAppContext.getContext(), R.layout.directions_list_item, steps);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        GoogleDirectionsApiStep step = getItem(position);
+        Step step = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder;
         if (convertView == null) {

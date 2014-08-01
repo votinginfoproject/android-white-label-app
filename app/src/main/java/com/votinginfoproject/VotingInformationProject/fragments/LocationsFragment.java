@@ -91,7 +91,6 @@ public class LocationsFragment extends Fragment {
                 // get location ID tagged onto its distance label in the list adapter
                 String itemTag = view.findViewById(R.id.location_list_item_distance).getTag().toString();
                 // open directions view on list item tap (will open map view on item button tap)
-                // open directions view
                 Log.d("LocationsFragment", "Clicked list item " + itemTag);
                 myActivity.showDirections(itemTag);
             }

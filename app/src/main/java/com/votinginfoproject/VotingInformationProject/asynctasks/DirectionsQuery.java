@@ -1,9 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +11,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.adapters.DirectionsAdapter;
-import com.votinginfoproject.VotingInformationProject.adapters.LocationsAdapter;
-import com.votinginfoproject.VotingInformationProject.models.GoogleDirectionsApiLeg;
-import com.votinginfoproject.VotingInformationProject.models.GoogleDirectionsApiResponse;
-import com.votinginfoproject.VotingInformationProject.models.GoogleDirectionsApiStep;
-import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Leg;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Response;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import org.apache.http.HttpResponse;
@@ -32,9 +27,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Asynchronously query the Google Directions API for directions from user's address to a polling
@@ -43,7 +35,7 @@ import java.util.List;
  *
  * Created by kathrynkillebrew on 7/31/14.
  */
-public class DirectionsQuery extends AsyncTask<String, String, GoogleDirectionsApiResponse> {
+public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
     String homeCoordinates;
     String destinationCoordinates;
@@ -72,9 +64,9 @@ public class DirectionsQuery extends AsyncTask<String, String, GoogleDirectionsA
     }
 
     @Override
-    protected GoogleDirectionsApiResponse doInBackground(String... addresses) {
+    protected Response doInBackground(String... addresses) {
 
-        GoogleDirectionsApiResponse directionsResponse = null;
+        Response directionsResponse = null;
 
         // Uri.Builder is not safe for concurrent use, so just build a string
         StringBuilder uri = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?origin=");
@@ -105,7 +97,7 @@ public class DirectionsQuery extends AsyncTask<String, String, GoogleDirectionsA
 
             Gson gson = new GsonBuilder().create();
             if (status == 200) {
-                return gson.fromJson(ir, GoogleDirectionsApiResponse.class);
+                return gson.fromJson(ir, Response.class);
             } else {
                 // error
                 Log.e("DirectionsQuery", "Error with response: " + ir.readLine());
@@ -120,7 +112,7 @@ public class DirectionsQuery extends AsyncTask<String, String, GoogleDirectionsA
     }
 
     @Override
-    protected void onPostExecute(GoogleDirectionsApiResponse response) {
+    protected void onPostExecute(Response response) {
         if (response == null) {
             Log.e("DirectionsQuery", "Did not get directions query response");
             showError();
@@ -134,14 +126,14 @@ public class DirectionsQuery extends AsyncTask<String, String, GoogleDirectionsA
         }
 
         // did not query for alternate routes or provide waypoints, so should get one route with one leg
-        GoogleDirectionsApiLeg leg = response.routes.get(0).legs.get(0);
+        Leg leg = response.routes.get(0).legs.get(0);
 
         Log.d("DirectionsQuery", "Start at " + leg.start_address);
         Log.d("DirectionsQuery", "End at " + leg.end_address);
         Log.d("DirectionsQuery", "Distance / duration: " + leg.distance.text + " - " + leg.duration.text);
         Log.d("DirectionsQuery", "Number of steps: " + leg.steps.size());
 
-        for (GoogleDirectionsApiStep step : leg.steps) {
+        for (Step step : leg.steps) {
             Log.d("DirectionsQuery", step.html_instructions);
             Log.d("DirectionsQuery", step.distance.text + " - " + step.duration.text);
         }
