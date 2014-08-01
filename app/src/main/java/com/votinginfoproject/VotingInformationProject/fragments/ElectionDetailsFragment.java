@@ -55,17 +55,10 @@ public class ElectionDetailsFragment extends Fragment {
      * @return A new instance of fragment ElectionDetailsFragment.
      */
     public static ElectionDetailsFragment newInstance() {
-        ElectionDetailsFragment fragment = new ElectionDetailsFragment();
-        return fragment;
+        return new ElectionDetailsFragment();
     }
     public ElectionDetailsFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -235,11 +228,6 @@ public class ElectionDetailsFragment extends Fragment {
             View container = mActivity.findViewById(containerId);
             container.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
 }

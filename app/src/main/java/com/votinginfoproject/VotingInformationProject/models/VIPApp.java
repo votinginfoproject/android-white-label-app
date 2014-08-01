@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
 import android.app.Application;
-import android.util.Log;
 import android.content.Context;
 import java.util.Locale;
 
@@ -37,10 +36,6 @@ public class VIPApp extends Application {
      * @return whether to use metric units or not (false -> use imperial)
      */
     public boolean useMetric() {
-        if (Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country())) {
-            return false;
-        } else {
-            return true;
-        }
+        return !Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country());
     }
 }

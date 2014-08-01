@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
@@ -86,7 +85,7 @@ public class ContestFragment extends Fragment {
             // title / subtitle is referendumTitle and referendumSubtitle, if election is
             // of type 'Referendum'; else title is office and subtitle is election name
 
-            if (contest.type != "Referendum") {
+            if (!contest.type.equals("Referendum")) {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
                 contestType.setText(contest.type);
@@ -161,8 +160,7 @@ public class ContestFragment extends Fragment {
         Log.d("ContestFragment:onCreateView", "Hiding ballot container's view");
         container.getChildAt(0).setVisibility(View.INVISIBLE);
 
-        View rootView = inflater.inflate(R.layout.fragment_contest, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_contest, container, false);
     }
 
     @Override

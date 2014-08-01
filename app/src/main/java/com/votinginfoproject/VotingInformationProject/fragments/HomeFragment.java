@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
 
@@ -41,8 +40,7 @@ public class HomeFragment extends Fragment {
     private OnInteractionListener mListener;
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+        return new HomeFragment();
     }
     public HomeFragment() {
         // Required empty public constructor
@@ -222,7 +220,7 @@ public class HomeFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         String addressKey = getString(R.string.LAST_ADDRESS_KEY);
         editor.putString(addressKey, address);
-        editor.commit();
+        editor.apply();
         this.address = address;
     }
 }

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Asynchronously query the geocoding service with an address (must not be done on the UI thread!)
@@ -74,7 +73,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
         HashMap returnMap = new HashMap(1);
         ArrayList<Double> returnVals = new ArrayList<Double>(2);
 
-        if (!geocoder.isPresent()) {
+        if (!Geocoder.isPresent()) {
             Log.e("GeocodeQuery", "No geocoder service available!");
             returnVals.add(-2.0);
             returnVals.add(-2.0);

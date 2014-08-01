@@ -122,7 +122,6 @@
 
                 <TableRow
                     android:id="@+id/candidate_details_none_row"
-                    android:layout_span="2"
                     android:visibility="gone">
 
                     <TextView
@@ -217,7 +216,6 @@
 
                 <TableRow
                     android:id="@+id/candidate_social_none_row"
-                    android:layout_span="2"
                     android:visibility="gone">
 
                     <TextView

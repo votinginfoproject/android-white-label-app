@@ -99,7 +99,7 @@ public class VIPMapFragment extends SupportMapFragment {
 
         mActivity = (VIPTabBarActivity) this.getActivity();
 
-        voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
+        voterInfo = mActivity.getVoterInfo();
         allLocations = mActivity.getAllLocations();
         homeLocation = mActivity.getHomeLatLng();
 

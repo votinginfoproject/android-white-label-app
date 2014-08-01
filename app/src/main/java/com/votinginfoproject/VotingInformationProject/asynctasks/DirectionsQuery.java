@@ -65,9 +65,6 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
     @Override
     protected Response doInBackground(String... addresses) {
-
-        Response directionsResponse = null;
-
         // Uri.Builder is not safe for concurrent use, so just build a string
         StringBuilder uri = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?origin=");
         uri.append(homeCoordinates);
@@ -76,7 +73,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         uri.append("&mode=");
         uri.append(travelMode);
 
-        if (travelMode == "transit") {
+        if (travelMode.equals("transit")) {
             // must specify departure or arrival time
             uri.append("&departure_time=");
             uri.append(String.valueOf(System.currentTimeMillis() / 1000)); // now, as seconds since epoch
@@ -108,7 +105,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             e.printStackTrace();
         }
 
-        return directionsResponse;
+        return null;
     }
 
     @Override

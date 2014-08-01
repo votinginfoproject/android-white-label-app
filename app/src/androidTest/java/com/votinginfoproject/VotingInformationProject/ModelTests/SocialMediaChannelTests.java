@@ -1,11 +1,8 @@
 package com.votinginfoproject.VotingInformationProject.ModelTests;
 
-import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
 
 import junit.framework.TestCase;
-
-import java.util.ArrayList;
 
 /**
  * Created by andrew on 7/31/14.

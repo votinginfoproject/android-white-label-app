@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,9 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
-
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by kathrynkillebrew on 7/25/14.

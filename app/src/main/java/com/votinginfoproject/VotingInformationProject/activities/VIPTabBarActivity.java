@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -206,11 +205,10 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         // Callback for polling location geocode result
         pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
-            VIPTabBarActivity activity = this.activity;
 
             @Override
             public void callback(String key, double lat, double lon, double distance) {
-                if (key == "error") {
+                if (key.equals("error")) {
                     Log.e("VIPTabBarActivity", "Geocode failed!");
                     return;
                 }
@@ -229,7 +227,7 @@ public class VIPTabBarActivity extends FragmentActivity {
         homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
             @Override
             public void callback(String key, double lat, double lon, double distance) {
-                if (key == "error") {
+                if (key.equals("error")) {
                     Log.e("VIPTabBarActivity", "Failed to geocode home address!");
                     return;
                 }

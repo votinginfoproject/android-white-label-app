@@ -40,8 +40,7 @@ public class LocationsFragment extends Fragment {
     int lastSelectedListButton = R.id.locations_list_all_button;
 
     public static LocationsFragment newInstance() {
-        LocationsFragment fragment = new LocationsFragment();
-        return fragment;
+        return new LocationsFragment();
     }
     public LocationsFragment() {
         // Required empty public constructor

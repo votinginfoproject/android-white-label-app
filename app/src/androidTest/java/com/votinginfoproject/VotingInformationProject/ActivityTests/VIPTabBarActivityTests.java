@@ -1,15 +1,10 @@
 package com.votinginfoproject.VotingInformationProject.ActivityTests;
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 
 import com.votinginfoproject.VotingInformationProject.MockVIPAppContext;
-import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;

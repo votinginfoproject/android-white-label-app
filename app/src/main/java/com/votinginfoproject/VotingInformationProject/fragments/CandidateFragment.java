@@ -1,9 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
@@ -151,8 +148,7 @@ public class CandidateFragment extends Fragment {
         Log.d("CandidateFragment:onCreateView", "Hiding contest container's view");
         container.getChildAt(0).setVisibility(View.INVISIBLE);
 
-        View rootView = inflater.inflate(R.layout.fragment_candidate, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_candidate, container, false);
     }
 
     private boolean setTextView(int labelId, int containerId, String val) {
@@ -179,9 +175,8 @@ public class CandidateFragment extends Fragment {
     }
 
     private void startDetailIntent(final String type, final String value) {
-        String cleanType = type.toLowerCase().trim();
         String cleanValue = value.trim();
-        Intent intent = null;
+        Intent intent;
         switch (type) {
             case "website":
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(cleanValue));
