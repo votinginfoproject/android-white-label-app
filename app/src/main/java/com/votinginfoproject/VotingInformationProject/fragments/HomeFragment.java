@@ -26,9 +26,6 @@ import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 
 public class HomeFragment extends Fragment {
 
@@ -136,7 +133,6 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
-
     }
 
     /**
@@ -152,7 +148,6 @@ public class HomeFragment extends Fragment {
             CharSequence errorMessage = context.getResources().getText(R.string.home_error_no_internet);
             Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
             toast.show();
             getActivity().finish();
         }

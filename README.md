@@ -13,9 +13,8 @@ Dependencies:
 -------------
 
 Min SDK Version: 15 (Ice Cream Sandwich 4.0.3)
-Target SDK Version: 20 (Android L)
-Android Support Library v4 revision 20
-Java 8 (used for lambda support)
+Target SDK Version: 19 (Android KitKat)
+Android Support Library v4 revision 19.1
 
 
 Adding API keys for the app:
@@ -33,40 +32,7 @@ Building/Running the app:
 
 #### Setting up the Java Environment
 
-First, install Java 8 on your system. Once it is installed, we need to set the
-JAVA8_HOME environment variable with the installed location. To find the install dir,
-execute from a command line:
-```
-java -verbose
-```
-
-At the very end of the output you should see a line like:
-```
-[Loaded java.lang.Shutdown from /usr/lib/jvm/java-8-oracle/jre/lib/rt.jar]
-```
-
-The path you want is everything in the path before jre/lib/rt.jar,
-so in the example above the java path would be:
-```
-/usr/lib/jvm/java-8-oracle
-```
-
-We now need to set the path we found above to the JAVA8_HOME environment variable.
-To do this, open the file ~/.profile on Linux/Mac and add the following line at the end:
-```
-export JAVA8_HOME=<path we found above>
-## Example for above path:
-export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
-```
-
-Save and quit the file, then log out of your desktop and log back in to load this variable.
-To verify the path loads correctly, you can open a terminal after looging back
-in and running:
-```
-env | grep JAVA
-```
-
-One of the printed lines should have JAVA8_HOME in it.
+Install the Java SDK on your system.
 
 
 #### Installing Android SDK Dependencies
@@ -76,8 +42,8 @@ File -> Open project.
 
 Then, in Android Studio, go to Tools->Android->SDK Manager and
 install the following:
-  - Android L (API V20)-> SDK Platform
-  - Extras -> Android Support Library (Rev. 20)
+  - Android KitKat (API V19)-> SDK Platform
+  - Extras -> Android Support Library (Rev. 19.1)
   - Extras -> Google Play Services
 
 
