@@ -29,6 +29,7 @@
     <string name="home_error_no_election_for_address">We couldn\'t find any election information for the address you entered.</string>
     <string name="home_error_no_address">Please check that you\'ve got an address entered and try again.</string>
     <string name="home_error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
+    <string name="home_error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Contests</string>

@@ -3,9 +3,12 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
@@ -107,6 +111,7 @@ public class HomeFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
                     String address = view.getText().toString();
                     setAddress(address);
+                    checkInternetConnectivity(); // check for connection before querying
                     try {
                         // TODO: election ID should be in the keys file, not hard-coded
                         String apiUrl = "voterinfo?officialOnly=true" +
@@ -126,6 +131,25 @@ public class HomeFragment extends Fragment {
             }
         });
 
+    }
+
+    /**
+     * Check for Internet connectivity before querying API.  If the Internet is unavailable or
+     * disconnected, display a message and quit the app.
+     */
+    public void checkInternetConnectivity() {
+        Context context = VIPAppContext.getContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
+            CharSequence errorMessage = context.getResources().getText(R.string.home_error_no_internet);
+            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            toast.show();
+            getActivity().finish();
+        }
     }
 
     private void setupCivicAPIListeners() {

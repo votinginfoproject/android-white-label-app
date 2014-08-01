@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -140,6 +141,8 @@ public class VIPTabBarActivity extends FragmentActivity {
             // alert user
             CharSequence errorMessage = context.getResources().getText(R.string.locations_map_play_services_unavailable);
             Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
             return;
         }
 
