@@ -78,6 +78,29 @@
         android:textStyle="italic"
         />
 
+    <RelativeLayout
+        android:id="@+id/home_election_spinner_wrapper"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/home_go_button"
+        android:paddingBottom="10dip"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/home_election_spinner_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_textview_spinner_text"/>
+
+        <Spinner
+            android:id="@+id/home_election_spinner"
+            android:layout_toRightOf="@+id/home_election_spinner_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+    </RelativeLayout>
+
     <Button
         android:text="@string/homeactivity_go_button"
         android:id="@+id/home_go_button"

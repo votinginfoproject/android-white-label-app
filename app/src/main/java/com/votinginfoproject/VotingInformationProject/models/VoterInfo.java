@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,4 +17,13 @@ public class VoterInfo {
     public List<PollingLocation> earlyVoteSites;
     public List<Contest> contests;
     public List<State> state;
+
+    /**
+     * Default Constructor
+     *
+     * Ensures otherElections is never a null field
+     */
+    public VoterInfo() {
+        this.otherElections = new ArrayList<Election>();
+    }
 }

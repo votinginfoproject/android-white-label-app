@@ -21,6 +21,7 @@
     <string name="home_textview_brandname">Brand Name</string>
     <string name="home_textview_votinginfo">Voting Information</string>
     <string name="home_textview_getting_started">Get started by providing the address at which you are registered to vote.</string>
+    <string name="home_textview_spinner_text">Choose an election:</string>
     <string name="home_status_loading">Loading data…</string>
     <string name="home_error_address_not_found">Looks like we can\'t find your address. Please check that it\'s right and try again.</string>
     <string name="home_error_parsing_address">We couldn\'t read the address you entered.  Please check that it\'s right and try again</string>

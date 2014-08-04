@@ -16,14 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -34,7 +40,10 @@ public class HomeFragment extends Fragment {
     Context context;
     EditText homeEditTextAddress;
     TextView homeTextViewStatus;
+    Spinner homeElectionSpinner;
+    View homeElectionSpinnerWrapper;
 
+    Election currentElection;
     String address;
     SharedPreferences preferences;
     private OnInteractionListener mListener;
@@ -50,6 +59,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        currentElection = new Election();
     }
 
     @Override
@@ -65,6 +75,9 @@ public class HomeFragment extends Fragment {
 
         homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
         homeEditTextAddress.setText(getAddress());
+
+        homeElectionSpinner = (Spinner)rootView.findViewById(R.id.home_election_spinner);
+        homeElectionSpinnerWrapper = rootView.findViewById(R.id.home_election_spinner_wrapper);
 
         setupViewListeners();
         setupCivicAPIListeners();
@@ -108,27 +121,29 @@ public class HomeFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
                     String address = view.getText().toString();
                     setAddress(address);
-                    checkInternetConnectivity(); // check for connection before querying
-                    try {
-                        Resources res = context.getResources();
-                        Uri.Builder builder = new Uri.Builder();
-                        builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
-                        builder.appendPath(res.getString(R.string.civic_info_api_version));
-                        builder.appendPath("voterinfo").appendQueryParameter("officialOnly", "true");
-                        builder.appendQueryParameter("electionId", res.getString(R.string.election_id));
-                        builder.appendQueryParameter("address", address);
-                        builder.appendQueryParameter("key", res.getString(R.string.google_api_browser_key));
-                        String apiUrl = builder.build().toString();
-                        Log.d("HomeActivity", "searchedAddress: " + apiUrl);
-                        homeTextViewStatus.setText(R.string.home_status_loading);
-                        homeTextViewStatus.setVisibility(View.VISIBLE);
-                        new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
-                    } catch (Exception e) {
-                        Log.e("HomeActivity Exception", "searchedAddress: " + address);
-                    }
+                    constructVoterInfoQuery();
                 }
                 // Return false to close the keyboard
                 return false;
+            }
+        });
+
+        // Spinner listener
+        homeElectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected (AdapterView < ? > adapterView, View view, int index, long id){
+
+                Election selectedElection = (Election) adapterView.getItemAtPosition(index);
+                Log.d("HomeFragment", "Selected via election picker: " + selectedElection.toString());
+                // Only fire a new voterInfo query if the election changes
+                if (!selectedElection.getId().equals(currentElection.getId())) {
+                    currentElection = selectedElection;
+                    constructVoterInfoQuery();
+                }
+            }
+            @Override
+            public void onNothingSelected (AdapterView < ? > adapterView){
+                // PASS
             }
         });
     }
@@ -150,6 +165,34 @@ public class HomeFragment extends Fragment {
             getActivity().finish();
         }
     }
+    private void constructVoterInfoQuery() {
+        checkInternetConnectivity(); // check for connection before querying
+
+        String electionId = "";
+        try {
+            electionId = currentElection.getId();
+        } catch (NullPointerException e) {}
+
+        try {
+            Resources res = context.getResources();
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
+            builder.appendPath(res.getString(R.string.civic_info_api_version));
+            builder.appendPath("voterinfo").appendQueryParameter("officialOnly", "true");
+            if (!electionId.isEmpty()) {
+                builder.appendQueryParameter("electionId", electionId);
+            }
+            builder.appendQueryParameter("address", address);
+            builder.appendQueryParameter("key", res.getString(R.string.google_api_browser_key));
+            String apiUrl = builder.build().toString();
+            Log.d("HomeActivity", "searchedAddress: " + apiUrl);
+            homeTextViewStatus.setText(R.string.home_status_loading);
+            homeTextViewStatus.setVisibility(View.VISIBLE);
+            new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
+        } catch (Exception e) {
+            Log.e("HomeActivity Exception", "searchedAddress: " + address);
+        }
+    }
 
     private void setupCivicAPIListeners() {
 
@@ -159,9 +202,15 @@ public class HomeFragment extends Fragment {
             public void callback(Object result) {
                 if (result == null) { return; }
                 VoterInfo voterInfo = (VoterInfo)result;
+                currentElection = voterInfo.election;
                 homeTextViewStatus.setVisibility(View.GONE);
                 homeGoButton.setVisibility(View.VISIBLE);
                 mListener.searchedAddress(voterInfo);
+
+                // Show election picker if there are other elections
+                ArrayList<Election> elections = new ArrayList<Election>(voterInfo.otherElections);
+                elections.add(0, voterInfo.election);
+                setSpinnerElections(elections);
             }
         };
 
@@ -183,6 +232,8 @@ public class HomeFragment extends Fragment {
                         Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
                         homeTextViewStatus.setText(R.string.home_error_unknown);
                     }
+
+
                 } catch(NullPointerException e) {
                     Log.e("HomeFragment", "Null encountered in API error result");
                     homeTextViewStatus.setText(R.string.home_error_unknown);
@@ -223,4 +274,18 @@ public class HomeFragment extends Fragment {
         editor.apply();
         this.address = address;
     }
+
+    // Assumes that the currently selected election is the first in the list
+    public void setSpinnerElections(List<Election> elections) {
+        if (elections == null || elections.size() < 2) {
+            homeElectionSpinnerWrapper.setVisibility(View.GONE);
+            return;
+        } else {
+            homeElectionSpinnerWrapper.setVisibility(View.VISIBLE);
+        }
+        ArrayAdapter<Election> adapter =
+                new ArrayAdapter<Election>(getActivity(), R.layout.home_election_spinner_view, elections);
+        homeElectionSpinner.setAdapter(adapter);
+    };
+
 }
