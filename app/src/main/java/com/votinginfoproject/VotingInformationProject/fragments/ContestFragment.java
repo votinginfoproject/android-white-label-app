@@ -8,16 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.adapters.CandidatesAdapter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-
-import java.util.ArrayList;
 
 
 public class ContestFragment extends Fragment {
@@ -66,7 +64,7 @@ public class ContestFragment extends Fragment {
     *
     */
     private void setContents() {
-        final Activity myActivity = getActivity();
+        final VIPTabBarActivity myActivity = (VIPTabBarActivity)getActivity();
         TextView title = (TextView)myActivity.findViewById(R.id.contest_title);
         TextView subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
         TextView contestType = (TextView)myActivity.findViewById(R.id.contest_type);
@@ -75,7 +73,6 @@ public class ContestFragment extends Fragment {
         TextView numberVotingFor = (TextView)myActivity.findViewById(R.id.contest_number_voting_for);
         TextView ballotPlacement = (TextView)myActivity.findViewById(R.id.contest_ballot_placement);
 
-
         try {
             voterInfo = ((VIPTabBarActivity) myActivity).getVoterInfo();
             contest = voterInfo.contests.get(contestNum);
@@ -83,7 +80,6 @@ public class ContestFragment extends Fragment {
 
             // title / subtitle is referendumTitle and referendumSubtitle, if election is
             // of type 'Referendum'; else title is office and subtitle is election name
-
             if (!contest.type.equals("Referendum")) {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
@@ -125,18 +121,16 @@ public class ContestFragment extends Fragment {
                 row.setVisibility(View.GONE);
             }
 
-            // populate candidate list, using toString override on Candidate class
+            // populate candidate list
             if (contest.candidates != null && !contest.candidates.isEmpty()) {
-                ArrayList<String> candidateInfo = (ArrayList) contest.candidates;
-                ArrayAdapter adapter = new ArrayAdapter<String>(myActivity, android.R.layout.simple_selectable_list_item, candidateInfo);
+                CandidatesAdapter adapter = new CandidatesAdapter(myActivity, contest.candidates);
                 ListView candidateList = (ListView) myActivity.findViewById(R.id.contest_candidate_list);
                 candidateList.setAdapter(adapter);
                 candidateList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // TODO: launch candidate detail view here
                         Log.d("CandidateList", "clicked: " + contest.candidates.get(position).name);
-                        ((VIPTabBarActivity) myActivity).showCandidateDetails(contestNum, position);
+                        myActivity.showCandidateDetails(contestNum, position);
                     }
                 });
             } else {
@@ -176,6 +170,5 @@ public class ContestFragment extends Fragment {
     }
 
     public interface OnInteractionListener {
-        // TODO: Add methods here as necessary
     }
 }
