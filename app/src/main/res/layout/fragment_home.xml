@@ -38,6 +38,7 @@
     <TextView
         android:id="@+id/home_textview_getting_started"
         android:text="@string/home_textview_getting_started"
+        android:labelFor="@+id/home_edittext_address"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -57,6 +58,7 @@
         android:id="@+id/home_edittext_address"
         android:inputType="textPostalAddress|textCapWords"
         android:imeOptions="actionSearch"
+        android:hint="@string/home_textview_getting_started"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/home_textview_getting_started"
@@ -103,6 +105,7 @@
 
     <Button
         android:text="@string/homeactivity_go_button"
+        android:contentDescription="@string/home_go_button_accessibility_description"
         android:id="@+id/home_go_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

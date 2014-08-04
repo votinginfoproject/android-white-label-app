@@ -42,7 +42,6 @@
                 android:layout_alignEnd="@+id/details_election_title" />
 
             <include layout="@layout/state_election_body" />
-
             <include layout="@layout/local_election_body" />
 
         </RelativeLayout>
