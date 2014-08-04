@@ -202,6 +202,11 @@ public class VIPMapFragment extends SupportMapFragment {
             public void onInfoWindowClick(Marker marker) {
                 // get location key for this marker's ID
                 String key = markerIds.get(marker.getId());
+
+                if (key == null) {
+                    return;  // do nothing for taps on user address info window
+                }
+                
                 Log.d("LocationsFragment", "Clicked marker for " + key);
                 mActivity.showDirections(key);
             }
