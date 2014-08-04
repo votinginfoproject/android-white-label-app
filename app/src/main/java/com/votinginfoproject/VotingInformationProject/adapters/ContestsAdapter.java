@@ -75,32 +75,27 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
 
         // Populate the data into the template view using the data object
         if (contest.type.equals("Referendum")) {
-            if (contest.referendumTitle != null && !contest.referendumTitle.isEmpty()) {
-                viewHolder.title.setText(contest.referendumTitle);
-            } else {
-                viewHolder.title.setVisibility(View.GONE);
-            }
-
-            if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
-                viewHolder.subTitle.setText(contest.referendumSubtitle);
-            } else {
-                viewHolder.subTitle.setVisibility(View.GONE);
-            }
+            setTextView(viewHolder.title, contest.referendumTitle);
+            setTextView(viewHolder.subTitle, contest.referendumSubtitle);
         } else {
-            if (contest.office != null && !contest.office.isEmpty()) {
-                viewHolder.title.setText(contest.office);
-            } else {
-                viewHolder.title.setVisibility(View.GONE);
-            }
-
-            if (electionName != null && !electionName.isEmpty()) {
-                viewHolder.subTitle.setText(electionName);
-            } else {
-                viewHolder.subTitle.setVisibility(View.GONE);
-            }
+            setTextView(viewHolder.title, contest.office);
+            setTextView(viewHolder.subTitle, electionName);
         }
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    /**
+     * Helper function to set text in view, or hide view if text empty or missing
+     * @param view TextView to put text into
+     * @param text String to put in the TextView
+     */
+    private void setTextView(TextView view, String text) {
+        if (text != null && !text.isEmpty()) {
+            view.setText(text);
+        } else {
+            view.setVisibility(View.GONE);
+        }
     }
 }
