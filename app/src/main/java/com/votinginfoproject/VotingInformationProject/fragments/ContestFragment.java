@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
