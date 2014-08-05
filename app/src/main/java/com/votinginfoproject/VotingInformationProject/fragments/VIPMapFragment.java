@@ -292,13 +292,23 @@ public class VIPMapFragment extends SupportMapFragment {
             showTitle = location.address.locationName;
         }
 
-        String showSnippet = location.address.toGeocodeString();
-        showSnippet += "\n\nHours:\n" + location.pollingHours;
+        StringBuilder showSnippet = new StringBuilder(location.address.toGeocodeString());
+
+        if (location.pollingHours != null && !location.pollingHours.isEmpty()) {
+            showSnippet.append("\n\n");
+            showSnippet.append(mResources.getString(R.string.locations_map_polling_location_hours_label));
+            showSnippet.append("\n");
+            showSnippet.append(location.pollingHours);
+        } else {
+            // display placeholder for no hours
+            showSnippet.append("\n\n");
+            showSnippet.append(mResources.getString(R.string.locations_map_polling_location_hours_not_found));
+        }
 
         return new MarkerOptions()
                 .position(new LatLng(location.address.latitude, location.address.longitude))
                 .title(showTitle)
-                .snippet(showSnippet)
+                .snippet(showSnippet.toString())
                 .icon(BitmapDescriptorFactory.defaultMarker(color))
         ;
     }
