@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 
 import java.util.Comparator;
@@ -16,67 +17,58 @@ import java.util.List;
 /**
  * Created by kathrynkillebrew on 8/4/14.
  */
-public class ContestsAdapter extends ArrayAdapter<Contest> {
+public class CandidatesAdapter extends ArrayAdapter<Candidate> {
 
     VIPTabBarActivity myActivity;
-    Comparator<Contest> contestComparator;
-    String electionName;
+    Comparator<Candidate> candidateComparator;
 
     // View lookup cache.  Pattern from here:
     // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
     private static class ViewHolder {
-        TextView title;
-        TextView subTitle;
+        TextView name;
+        TextView party;
     }
 
     public void sortList() {
-        sort(contestComparator);
+        sort(candidateComparator);
     }
 
     /**
      *
      * @param context VIPTabBarActivity that owns the ballot view
-     * @param contests list of contests to display
-     * @param electionName voterInfo.election.name, to be used for non-referendum contest descriptions
+     * @param candidates list of contests to display
      */
-    public ContestsAdapter(VIPTabBarActivity context, List<Contest> contests, String electionName) {
-        super(context, R.layout.contest_list_item, contests);
+    public CandidatesAdapter(VIPTabBarActivity context, List<Candidate> candidates) {
+        super(context, R.layout.candidate_list_item, candidates);
         this.myActivity = context;
-        this.electionName = electionName;
 
         // sort contests by ballot placement
-        contestComparator = new Comparator<Contest>() {
+        candidateComparator = new Comparator<Candidate>() {
             @Override
-            public int compare(Contest contest1, Contest contest2) {
-                return Double.compare(contest1.ballotPlacement, contest2.ballotPlacement);
+            public int compare(Candidate candidate1, Candidate candidate2) {
+                return Double.compare(candidate1.orderOnBallot, candidate2.orderOnBallot);
             }
         };
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Contest contest = getItem(position);
+        Candidate candidate = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.contest_list_item, parent, false);
-            viewHolder.title = (TextView) convertView.findViewById(R.id.contest_list_item_title);
-            viewHolder.subTitle = (TextView) convertView.findViewById(R.id.contest_list_item_subtitle);
+            convertView = inflater.inflate(R.layout.candidate_list_item, parent, false);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.candidate_list_item_name);
+            viewHolder.party = (TextView) convertView.findViewById(R.id.candidate_list_item_party);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        // Populate the data into the template view using the data object
-        if (contest.type.equals("Referendum")) {
-            setTextView(viewHolder.title, contest.referendumTitle);
-            setTextView(viewHolder.subTitle, contest.referendumSubtitle);
-        } else {
-            setTextView(viewHolder.title, contest.office);
-            setTextView(viewHolder.subTitle, electionName);
-        }
+        setTextView(viewHolder.name, candidate.name);
+        setTextView(viewHolder.party, candidate.party);
 
         // Return the completed view to render on screen
         return convertView;

@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
@@ -159,11 +157,8 @@ public class HomeFragment extends Fragment {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
-            CharSequence errorMessage = context.getResources().getText(R.string.home_error_no_internet);
-            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            getActivity().finish();
+            homeGoButton.setVisibility(View.INVISIBLE);
+            homeTextViewStatus.setText(context.getResources().getText(R.string.home_error_no_internet));
         }
     }
     private void constructVoterInfoQuery() {
