@@ -3,4 +3,5 @@
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:label="@string/app_name"
     tools:context="com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity" />
