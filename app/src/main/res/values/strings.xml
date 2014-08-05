@@ -30,6 +30,7 @@
     <string name="home_error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
     <string name="home_error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
     <string name="home_go_button_accessibility_description">Go to search results.</string>
+    <string name="home_search_button_description">Search for results.</string>
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Contests</string>
