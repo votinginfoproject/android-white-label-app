@@ -435,8 +435,9 @@ public class VIPTabBarActivity extends FragmentActivity {
          */
         private void setTabTextStyle(int tabPosition) {
             // bold text for currently selected tab, and un-bold others
-            for (int i = 0; i < ((ViewGroup) mTabViewRoot).getChildCount(); i++) {
-                LinearLayout child = ((LinearLayout) ((ViewGroup) mTabViewRoot).getChildAt(i));
+
+            for (int i = mTabViewRoot.getChildCount(); i-->0;) {
+                LinearLayout child = ((LinearLayout) mTabViewRoot.getChildAt(i));
                 TextView actionBarTitle = (TextView) child.getChildAt(0);
                 if (i == tabPosition) {
                     actionBarTitle.setTypeface(null, Typeface.BOLD);

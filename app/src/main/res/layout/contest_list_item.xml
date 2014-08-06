@@ -3,26 +3,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/contest_list_item"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    style="@style/match_width_match_height" >
 
     <TextView
         android:id="@+id/contest_list_item_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:layout_gravity="left"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#0067ab"
-        android:layout_alignParentStart="true" />
+        style="@style/list_item_header" />
     <TextView
         android:id="@+id/contest_list_item_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
         android:layout_below="@+id/contest_list_item_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:gravity="left" />
+        style="@style/list_item_content" />
 </RelativeLayout>
