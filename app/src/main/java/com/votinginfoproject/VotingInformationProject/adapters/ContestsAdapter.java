@@ -73,6 +73,11 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
         if (contest.type.equals("Referendum")) {
             setTextView(viewHolder.title, contest.referendumTitle);
             setTextView(viewHolder.subTitle, contest.referendumSubtitle);
+
+            // deal with huge referendum names by only showing first 20 characters
+            if (contest.referendumTitle.length() > 20) {
+                viewHolder.title.setText(contest.referendumTitle.substring(0, 20) + "...");
+            }
         } else {
             setTextView(viewHolder.title, contest.office);
             setTextView(viewHolder.subTitle, electionName);

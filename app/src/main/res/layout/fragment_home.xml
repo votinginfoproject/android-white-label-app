@@ -35,7 +35,7 @@
         android:layout_below="@+id/home_textview_brandname"
         android:gravity="center"
         android:capitalize="words"
-        android:textSize="34sp" />
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/home_textview_getting_started"
@@ -141,7 +141,7 @@
         android:background="#004071"
         android:textColor="#ffffff"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
 </RelativeLayout>

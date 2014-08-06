@@ -86,8 +86,21 @@ public class ContestFragment extends Fragment {
                 contestType.setText(contest.type);
             } else if (contest.type != null) {
                 title.setText(contest.referendumTitle);
-                subtitle.setText(contest.referendumSubtitle);
+
+                if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
+                    subtitle.setText(contest.referendumSubtitle);
+                } else {
+                    subtitle.setVisibility(View.GONE);
+                }
+
                 contestType.setText(contest.type);
+
+                // deal with huge referendum descriptions by reducing font size.
+                // Cannot make fragment a ScrollView, because it already contains a
+                // scrolling list of candidates.
+                if (contest.referendumTitle.length() > 20) {
+                    title.setTextSize(18);
+                }
             } else {
                 View row = myActivity.findViewById(R.id.contest_type_row);
                 row.setVisibility(View.GONE);
