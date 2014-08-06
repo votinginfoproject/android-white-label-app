@@ -1,11 +1,14 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,11 +18,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.accessibility.AccessibilityEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -183,6 +195,9 @@ public class VIPTabBarActivity extends FragmentActivity {
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_where_to_vote_tab), LocationsFragment.class, "locations_tab", null);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_details_tab), ElectionDetailsFragment.class, "details_tab", null);
 
+        // bold text for selected tab on load
+        mTabsAdapter.setTabTextStyle(0);
+
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
@@ -334,11 +349,11 @@ public class VIPTabBarActivity extends FragmentActivity {
      */
     public static class TabsAdapter extends FragmentPagerAdapter
             implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        private final Context mContext;
         private final ActionBar mActionBar;
         private final ViewPager mViewPager;
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>(3);
         private LocationsFragment locationsFragment;
+        private ViewGroup mTabViewRoot;
 
         static final class TabInfo {
             private final Class<?> clss;
@@ -352,11 +367,16 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         public TabsAdapter(FragmentActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
-            mContext = activity;
             mActionBar = activity.getActionBar();
             mViewPager = pager;
             mViewPager.setAdapter(this);
             mViewPager.setOnPageChangeListener(this);
+
+            // get LinearLayout within ScrollContainerView that is the parent for the tab views
+            mTabViewRoot = (ViewGroup)mViewPager.getParent().getParent();
+            mTabViewRoot = (ViewGroup)mTabViewRoot.getChildAt(1);
+            mTabViewRoot = (ViewGroup)mTabViewRoot.getChildAt(2);
+            mTabViewRoot = (ViewGroup)mTabViewRoot.getChildAt(0);
         }
 
         public void addTab(ActionBar.Tab tab, Class<?> clss, String tag, Bundle args) {
@@ -411,7 +431,28 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-            mViewPager.setCurrentItem(tab.getPosition());
+            int tabPosition = tab.getPosition();
+            mViewPager.setCurrentItem(tabPosition);
+
+            // bold text on currently selected tab
+            setTabTextStyle(tabPosition);
+        }
+
+        /**
+         * Helper function to bold text in currently selected tab
+         * @param tabPosition offset of ActionBar Tab returned by getPosition()
+         */
+        private void setTabTextStyle(int tabPosition) {
+            // bold text for currently selected tab, and un-bold others
+            for (int i = 0; i < ((ViewGroup) mTabViewRoot).getChildCount(); i++) {
+                LinearLayout child = ((LinearLayout) ((ViewGroup) mTabViewRoot).getChildAt(i));
+                TextView actionBarTitle = (TextView) child.getChildAt(0);
+                if (i == tabPosition) {
+                    actionBarTitle.setTypeface(null, Typeface.BOLD);
+                } else {
+                    actionBarTitle.setTypeface(null, Typeface.NORMAL);
+                }
+            }
         }
 
         @Override

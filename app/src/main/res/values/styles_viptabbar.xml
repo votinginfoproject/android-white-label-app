@@ -64,6 +64,7 @@
 
     <style name="ActionBarTabTextStyle.Viptabbar" parent="@android:style/Widget.Holo.ActionBar.TabText">
         <item name="android:textColor">#00234b</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="DropDownNav.Viptabbar" parent="@android:style/Widget.Holo.Spinner">
