@@ -5,6 +5,7 @@
     android:id="@+id/contest_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -18,7 +19,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#00234b"
+            android:textSize="30sp"
             android:id="@+id/contest_title"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -27,7 +29,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="18sp"
+            android:textColor="#808080"
+            android:textStyle="bold"
             android:id="@+id/contest_subtitle"
             android:layout_below="@+id/contest_title"
             android:layout_alignParentLeft="true"
@@ -40,14 +44,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="#ebeef0"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_centerVertical="true"
             android:id="@+id/contest_details_section_header"
             android:layout_below="@+id/contest_subtitle"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textStyle="bold"
             android:text="@string/contest_details_header" />
 
         <RelativeLayout
@@ -61,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:padding="3dip"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#808080"
                 android:text="@string/contest_type_label"
                 android:id="@+id/contest_type_label" />
 
@@ -72,7 +79,9 @@
                 android:gravity="right"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/contest_type_label"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
                 android:id="@+id/contest_type" />
         </RelativeLayout>
 
@@ -86,7 +95,8 @@
                 android:padding="3dip"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#808080"
                 android:text="@string/contest_office_label"
                 android:id="@+id/contest_office_label" />
 
@@ -97,7 +107,9 @@
                 android:gravity="right"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/contest_office_label"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
                 android:id="@+id/contest_office" />
         </RelativeLayout>
 
@@ -111,7 +123,8 @@
                 android:padding="3dip"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#808080"
                 android:text="@string/contest_number_elected_label"
                 android:id="@+id/contest_number_elected_label" />
 
@@ -122,7 +135,9 @@
                 android:gravity="right"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/contest_number_elected_label"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
                 android:id="@+id/contest_number_elected" />
         </RelativeLayout>
 
@@ -137,7 +152,8 @@
                 android:padding="3dip"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#808080"
                 android:text="@string/contest_number_voting_for_label"
                 android:id="@+id/contest_number_voting_for_label" />
 
@@ -148,7 +164,9 @@
                 android:gravity="right"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/contest_number_voting_for_label"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
                 android:id="@+id/contest_number_voting_for" />
 
         </RelativeLayout>
@@ -163,7 +181,8 @@
                 android:padding="3dip"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#808080"
                 android:text="@string/contest_ballot_placement_label"
                 android:id="@+id/contest_ballot_placement_label" />
 
@@ -174,15 +193,20 @@
                 android:gravity="right"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/contest_ballot_placement_label"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="18sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
                 android:id="@+id/contest_ballot_placement" />
 
         </RelativeLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="#ebeef0"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_centerVertical="true"
             android:text="@string/contest_candidate_list_header"
             android:id="@+id/contest_candidate_list_header"
             android:layout_below="@+id/contest_ballot_placement_row"
@@ -192,6 +216,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/contest_candidate_list"
+            android:divider="#e6e6e6"
+            android:dividerHeight="1sp"
+            android:headerDividersEnabled="true"
+            android:footerDividersEnabled="true"
+            android:background="#ffffff"
+            android:textColor="#808080"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/contest_candidate_list_header" />
     </RelativeLayout>
 </RelativeLayout>
