@@ -73,10 +73,11 @@
             android:inputType="textPostalAddress|textCapWords"
             android:imeOptions="actionSearch"
             android:hint="@string/home_textview_getting_started"
-            style="@style/fill_width_wrap_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/home_edittext_search_button"
             android:background="#137bbb"
             android:textSize="24sp"
-            android:padding="5sp"
             android:textColor="#ffffff"
             android:layout_marginTop="10sp" />
 
@@ -89,7 +90,6 @@
             android:background="#004071"
             android:layout_alignTop="@+id/home_edittext_address"
             android:layout_alignBottom="@+id/home_edittext_address"
-            android:layout_alignRight="@+id/home_edittext_address"
             android:src="@android:drawable/ic_menu_search"
             android:layout_centerVertical="true" />
     </RelativeLayout>
@@ -108,8 +108,7 @@
         android:padding="5sp"
         android:visibility="gone"
         android:textSize="14sp"
-        android:textStyle="italic"
-        />
+        android:textStyle="italic" />
 
     <RelativeLayout
         android:id="@+id/home_election_spinner_wrapper"
