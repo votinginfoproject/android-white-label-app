@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.votinginfoproject.VotingInformationProject.fragments.HomeFragment">
@@ -64,8 +64,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_below="@+id/home_textview_getting_started"
         android:id="@+id/home_edittext"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_centerVertical="true">
 
         <EditText
@@ -74,14 +73,12 @@
             android:inputType="textPostalAddress|textCapWords"
             android:imeOptions="actionSearch"
             android:hint="@string/home_textview_getting_started"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            style="@style/fill_width_wrap_height"
             android:background="#137bbb"
             android:textSize="24sp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
+            android:padding="5sp"
+            android:textColor="#ffffff"
             android:layout_marginTop="10sp" />
-
 
         <ImageView
             android:id="@+id/home_edittext_search_button"
@@ -100,15 +97,16 @@
     <TextView
         android:id="@+id/home_textview_status"
         android:drawableLeft="@android:drawable/stat_sys_warning"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10sp"
         android:background="#042a42"
         android:layout_below="@+id/home_edittext"
+        android:drawablePadding="15sp"
+        android:gravity="left"
+        android:padding="5sp"
         android:visibility="gone"
-        android:gravity="center"
         android:textSize="14sp"
         android:textStyle="italic"
         />
@@ -116,23 +114,20 @@
     <RelativeLayout
         android:id="@+id/home_election_spinner_wrapper"
         android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_above="@+id/home_go_button"
         android:paddingBottom="10dip"
         android:gravity="center">
 
         <TextView
             android:id="@+id/home_election_spinner_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/wrap_width_wrap_height"
             android:text="@string/home_textview_spinner_text"/>
 
         <Spinner
             android:id="@+id/home_election_spinner"
             android:layout_toRightOf="@+id/home_election_spinner_text"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            style="@style/wrap_width_wrap_height" />
 
     </RelativeLayout>
 
@@ -141,7 +136,7 @@
         android:contentDescription="@string/home_go_button_accessibility_description"
         android:id="@+id/home_go_button"
         android:layout_width="fill_parent"
-        android:layout_height="40sp"
+        android:layout_height="50sp"
         android:layout_alignParentBottom="true"
         android:background="#004071"
         android:textColor="#ffffff"
