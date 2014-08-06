@@ -1,8 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo">
-        <!-- Customize your theme here. -->
+    <style name="fill_width_wrap_height">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="wrap_width_wrap_height">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="match_width_match_height">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="fragment_style" parent="@style/match_width_match_height">
+        <item name="android:background">#ffffff</item>
+    </style>
+
+    <style name="fragment_header" parent="@style/wrap_width_wrap_height">
+        <item name="android:textColor">#00234b</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingTop">5sp</item>
+        <item name="android:paddingBottom">5sp</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="fragment_subheader"  parent="@style/wrap_width_wrap_height">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#808080</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignRight">@+id/ballot_election_name</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingBottom">15sp</item>
+    </style>
+
+    <style name="listview"  parent="@style/wrap_width_wrap_height">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:divider">#e6e6e6</item>
+        <item name="android:dividerHeight">1sp</item>
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:footerDividersEnabled">true</item>
+        <item name="android:background">#ffffff</item>
+        <item name="android:textColor">#808080</item>
+    </style>
+
+    <style name="section_header" parent="@style/fill_width_wrap_height">
+        <item name="android:background">#ebeef0</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:padding">10sp</item>
+    </style>
+
+    <style name="contest_detail_label"  parent="@style/wrap_width_wrap_height">
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingTop">5sp</item>
+        <item name="android:paddingBottom">5sp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#808080</item>
+    </style>
+
+    <style name="contest_detail_item"  parent="@style/wrap_width_wrap_height">
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingTop">5sp</item>
+        <item name="android:paddingBottom">5sp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_item_header" parent="@style/wrap_width_wrap_height" >
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#0067ab</item>
+    </style>
+
+    <style name="list_item_content" parent="@style/wrap_width_wrap_height" >
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:gravity">left</item>
+    </style>
 </resources>

@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.votinginfoproject.VotingInformationProject.fragments.HomeFragment">
@@ -20,7 +20,8 @@
         android:textAllCaps="true"
         android:gravity="center"
         android:textStyle="bold"
-        android:textSize="24sp"
+        android:textSize="20sp"
+        android:textColor="#60c9f8"
         android:textIsSelectable="false" />
 
     <TextView
@@ -33,7 +34,8 @@
         android:layout_marginTop="10sp"
         android:layout_below="@+id/home_textview_brandname"
         android:gravity="center"
-        android:textSize="30sp" />
+        android:capitalize="words"
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/home_textview_getting_started"
@@ -45,6 +47,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/home_textview_votinginfo"
         android:layout_marginTop="10sp"
+        android:layout_marginBottom="40sp"
         android:gravity="center"
         android:textSize="14sp"
         android:textStyle="italic"
@@ -54,28 +57,56 @@
     <!-- Cannot preview EditText elements using API v20+
          Fix by setting the API version in the design tab for this xml file to API <= v19
          http://code.google.com/p/android/issues/detail?id=72902 -->
-    <EditText
-        android:id="@+id/home_edittext_address"
-        android:inputType="textPostalAddress|textCapWords"
-        android:imeOptions="actionSearch"
-        android:hint="@string/home_textview_getting_started"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+
+    <!-- android:drawableRight="@android:drawable/ic_menu_search" -->
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_below="@+id/home_textview_getting_started"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10sp" />
+        android:id="@+id/home_edittext"
+        style="@style/fill_width_wrap_height"
+        android:layout_centerVertical="true">
+
+        <EditText
+            android:id="@+id/home_edittext_address"
+            android:layout_centerVertical="true"
+            android:inputType="textPostalAddress|textCapWords"
+            android:imeOptions="actionSearch"
+            android:hint="@string/home_textview_getting_started"
+            style="@style/fill_width_wrap_height"
+            android:background="#137bbb"
+            android:textSize="24sp"
+            android:padding="5sp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10sp" />
+
+        <ImageView
+            android:id="@+id/home_edittext_search_button"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/home_search_button_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#004071"
+            android:layout_alignTop="@+id/home_edittext_address"
+            android:layout_alignBottom="@+id/home_edittext_address"
+            android:layout_alignRight="@+id/home_edittext_address"
+            android:src="@android:drawable/ic_menu_search"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/home_textview_status"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/stat_sys_warning"
+        style="@style/fill_width_wrap_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10sp"
-        android:layout_below="@+id/home_edittext_address"
+        android:background="#042a42"
+        android:layout_below="@+id/home_edittext"
+        android:drawablePadding="15sp"
+        android:gravity="left"
+        android:padding="5sp"
         android:visibility="gone"
-        android:gravity="center"
         android:textSize="14sp"
         android:textStyle="italic"
         />
@@ -83,23 +114,20 @@
     <RelativeLayout
         android:id="@+id/home_election_spinner_wrapper"
         android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_above="@+id/home_go_button"
         android:paddingBottom="10dip"
         android:gravity="center">
 
         <TextView
             android:id="@+id/home_election_spinner_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/wrap_width_wrap_height"
             android:text="@string/home_textview_spinner_text"/>
 
         <Spinner
             android:id="@+id/home_election_spinner"
             android:layout_toRightOf="@+id/home_election_spinner_text"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            style="@style/wrap_width_wrap_height" />
 
     </RelativeLayout>
 
@@ -108,7 +136,12 @@
         android:contentDescription="@string/home_go_button_accessibility_description"
         android:id="@+id/home_go_button"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="50sp"
+        android:layout_alignParentBottom="true"
+        android:background="#004071"
+        android:textColor="#ffffff"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -58,7 +57,6 @@ public class VIPTabBarActivity extends FragmentActivity {
     LocationsFragment locationsFragment;
     Context context;
     boolean useMetric;
-
 
     /**
      * Non-default constructor for testing, to set the application context.
@@ -170,7 +168,6 @@ public class VIPTabBarActivity extends FragmentActivity {
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Set up ViewPager
@@ -335,7 +332,6 @@ public class VIPTabBarActivity extends FragmentActivity {
      */
     public static class TabsAdapter extends FragmentPagerAdapter
             implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        private final Context mContext;
         private final ActionBar mActionBar;
         private final ViewPager mViewPager;
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>(3);
@@ -353,7 +349,6 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         public TabsAdapter(FragmentActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
-            mContext = activity;
             mActionBar = activity.getActionBar();
             mViewPager = pager;
             mViewPager.setAdapter(this);
