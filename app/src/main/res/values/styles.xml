@@ -100,4 +100,10 @@
         <item name="android:layout_gravity">left</item>
         <item name="android:gravity">left</item>
     </style>
+
+    <style name="spinner" parent="fill_width_wrap_height">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">@drawable/spinner_background_ab_viptabbar</item>
+        <item name="android:spinnerStyle">@android:style/Widget.Spinner.DropDown</item>
+    </style>
 </resources>
