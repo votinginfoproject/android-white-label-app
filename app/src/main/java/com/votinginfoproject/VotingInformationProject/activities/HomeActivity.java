@@ -52,16 +52,5 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
 
         // set VoterInfo object on app singleton
         app.setVoterInfo(voterInfo);
-
-        if (voterInfo != null) {
-            Election el = voterInfo.election;
-            String show = "Election:\n" + el.id + ": " + el.name + "\n" + el.electionDay + "\n\n";
-            State state = voterInfo.state.get(0);
-            show += "State: " + state.name + "\n";
-            show += "Sources:\n" + state.sources.get(0).name;
-            Log.d("HomeActivity", "Result: " + show);
-        } else {
-            Log.d("HomeActivity", "VoterInfo set to null");
-        }
     }
 }
