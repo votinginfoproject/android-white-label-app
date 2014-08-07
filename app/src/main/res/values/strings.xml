@@ -50,7 +50,6 @@
     <string name="candidate_no_name">No Name Available</string>
     <string name="candidate_no_party">No Listed Affiliation</string>
     <string name="candidate_details_none">No Candidate Details Available</string>
-    <string name="candidate_social_none">No Social Media Channels Available</string>
 
     <!-- Accessibility descriptions for images -->
     <string name="social_channel_youtube_description">Visit YouTube channel</string>

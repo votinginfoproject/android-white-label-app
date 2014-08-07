@@ -125,10 +125,12 @@ public class CandidateFragment extends Fragment {
                 }
             }
 
-            if (candidate.channels.size() == 0) {
-                // toggle social_none view to visible
-                View view = mActivity.findViewById(R.id.candidate_social_none_row);
-                view.setVisibility(View.VISIBLE);
+            if (candidate.channels.isEmpty()) {
+                // hide social media section if none available
+                View view = mActivity.findViewById(R.id.candidate_social_table);
+                view.setVisibility(View.GONE);
+                view = mActivity.findViewById(R.id.candidate_social_section_header);
+                view.setVisibility(View.GONE);
             }
 
 
