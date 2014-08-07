@@ -148,9 +148,6 @@ public class CandidateFragment extends Fragment {
                     Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
                     // set image bitmap in async task
                     new FetchImageQuery(candidate, photoView).execute(candidate.photoUrl);
-                } else {
-                    // TODO: remove this test image
-                    new FetchImageQuery(candidate, photoView).execute("http://www.avatarsdb.com/avatars/running_cat.gif");
                 }
             }
 

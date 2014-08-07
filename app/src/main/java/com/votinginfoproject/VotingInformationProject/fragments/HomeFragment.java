@@ -244,10 +244,6 @@ public class HomeFragment extends Fragment {
                 ArrayList<Election> elections = new ArrayList<Election>(voterInfo.otherElections);
                 elections.add(0, voterInfo.election);
 
-                //TODO: remove; for testing
-                elections.add(new Election("111", "FOO FOO", "2014-01-01"));
-                elections.add(new Election("222", "BAR BAR BAR BAR", "2014-05-01"));
-
                 setSpinnerElections(elections);
 
             }

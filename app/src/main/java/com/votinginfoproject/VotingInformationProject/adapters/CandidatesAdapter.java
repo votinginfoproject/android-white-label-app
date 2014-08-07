@@ -80,10 +80,6 @@ public class CandidatesAdapter extends ArrayAdapter<Candidate> {
         } else if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty() && !viewHolder.alreadyQueryingForPhoto) {
             viewHolder.alreadyQueryingForPhoto = true;
             new FetchImageQuery(candidate, viewHolder.photo).execute(candidate.photoUrl);
-        } else if (!viewHolder.alreadyQueryingForPhoto) {
-            viewHolder.alreadyQueryingForPhoto = true;
-            // TODO: remove this test image
-            new FetchImageQuery(candidate, viewHolder.photo).execute("http://www.avatarsdb.com/avatars/rain_cat.gif");
         }
 
         // Return the completed view to render on screen
