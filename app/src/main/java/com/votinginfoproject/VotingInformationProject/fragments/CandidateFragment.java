@@ -136,9 +136,6 @@ public class CandidateFragment extends Fragment {
             }
 
             // SET CANDIDATE PHOTO
-            // TODO: do this instead from the activity with a callback that will save the bitmap
-            // to the Candidate model object, then set the image also in the list adapter.
-
             ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
             if (candidate.photo != null) {
                 Log.d("CandidateFragment", "Already have candidate photo; using it.");

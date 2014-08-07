@@ -214,7 +214,6 @@
                         android:id="@+id/candidate_social_youtube_text"
                         android:text="@string/candidate_social_header"
                         style="@style/candidate_details_row_text" />
-
                 </TableRow>
             </TableLayout>
         </LinearLayout>
