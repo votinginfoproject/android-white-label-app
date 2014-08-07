@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -65,39 +66,56 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
     protected T doInBackground(String... urls) {
         //String url = this.baseQueryUrl + urls[0] + this.apiKey;
         String url = urls[0];
+        InputStream inputStream = null;
+        HttpGet httpGet = null;
 
         Log.d("CivicInfoApiQuery", "Url: " + url);
 
         try {
-            HttpGet httpGet = new HttpGet(url);
+            httpGet = new HttpGet(url);
             HttpResponse response = httpClient.execute(httpGet, httpContext);
             int status = response.getStatusLine().getStatusCode();
-            InputStream in = response.getEntity().getContent();
-            BufferedReader ir = new BufferedReader(new InputStreamReader(in));
+            inputStream = response.getEntity().getContent();
+            BufferedReader ir = new BufferedReader(new InputStreamReader(inputStream));
 
             Log.d("CivicInfoApiQuery", "GOT RESPONSE STATUS: " + status);
 
             Gson gson = new GsonBuilder().create();
-            if (status == 200) {
+            if (status == HttpStatus.SC_OK) {
                 T gsonObj = gson.fromJson(ir, returnClass);
                 ir.close();
-                in.close();
+                inputStream.close();
                 return gsonObj;
             } else {
                 // error
                 CivicApiErrorResponse myError = gson.fromJson(ir, CivicApiErrorResponse.class);
                 publishProgress(myError.error);
                 ir.close();
-                in.close();
+                inputStream.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    Log.e("CivicInfoApiQuery", "Error closing input stream");
+                    ex.printStackTrace();
+                }
+            }
 
+            if (httpGet != null) {
+                try {
+                    httpGet.abort();
+                } catch (Exception ex) {
+                    Log.e("CivicInfoApiQuery", "Error aborting HTTP Get");
+                    ex.printStackTrace();
+                }
+            }
         }
-
         return null;
     }
 

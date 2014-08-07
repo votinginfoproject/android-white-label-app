@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.asynctasks.FetchImageQuery;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
@@ -137,9 +138,13 @@ public class CandidateFragment extends Fragment {
             // SET CANDIDATE PHOTO
             if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
                 Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
-                ImageView photoView = (ImageView)mActivity.findViewById(R.id.candidate_photo);
-                // TODO: set image bitmap in async task
-                // http://stackoverflow.com/questions/2471935/how-to-load-an-imageview-by-url-in-android
+                ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
+                // set image bitmap in async task
+                new FetchImageQuery(photoView).execute(candidate.photoUrl);
+            } else {
+                // TODO: remove this test image
+                ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
+                new FetchImageQuery(photoView).execute("http://www.avatarsdb.com/avatars/running_cat.gif");
             }
 
         } catch (Exception ex) {
