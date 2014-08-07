@@ -32,6 +32,10 @@ public class LocationsFragment extends Fragment {
     ListView locationsList;
     ArrayList<PollingLocation> allLocations;
 
+    int selectedButtonColor;
+    int selectedButtonTextColor;
+    int unselectedButtonTextColor;
+
     Button allButton;
     Button pollingButton;
     Button earlyButton;
@@ -52,6 +56,10 @@ public class LocationsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_locations, container, false);
         final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
 
+        selectedButtonColor = Color.parseColor("#00234b");
+        selectedButtonTextColor = Color.parseColor("#ffffff");
+        unselectedButtonTextColor = Color.parseColor("#00234b");
+
         // election labels
         TextView election_name_label = (TextView)rootView.findViewById(R.id.locations_election_title);
         TextView election_date_label = (TextView)rootView.findViewById(R.id.locations_election_subtitle);
@@ -67,7 +75,8 @@ public class LocationsFragment extends Fragment {
         earlyButton = (Button)rootView.findViewById(R.id.locations_list_early_button);
 
         // highlight default button
-        allButton.setBackgroundColor(Color.LTGRAY);
+        allButton.setTextColor(selectedButtonTextColor);
+        allButton.setBackgroundColor(selectedButtonColor);
 
         setButtonInBarClickListener(R.id.locations_list_all_button);
         setButtonInBarClickListener(R.id.locations_list_polling_button);
@@ -122,25 +131,34 @@ public class LocationsFragment extends Fragment {
         rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Button btn = (Button)v;
                 if (buttonId == lastSelectedListButton) {
                     return; // ignore button click if already viewing that list
                 }
 
                 // highlight current selection (and un-highlight others)
-                v.setBackgroundColor(Color.LTGRAY);
+                btn.setBackgroundColor(selectedButtonColor);
+                btn.setTextColor(selectedButtonTextColor);
+
 
                 if (buttonId == R.id.locations_list_polling_button) {
                     setFilter(voterInfo.pollingLocations, R.string.locations_no_polling_found);
                     earlyButton.setBackgroundColor(Color.TRANSPARENT);
                     allButton.setBackgroundColor(Color.TRANSPARENT);
+                    earlyButton.setTextColor(unselectedButtonTextColor);
+                    allButton.setTextColor(unselectedButtonTextColor);
                 } else if (buttonId == R.id.locations_list_early_button) {
                     setFilter(voterInfo.earlyVoteSites, R.string.locations_no_early_voting_found);
                     pollingButton.setBackgroundColor(Color.TRANSPARENT);
                     allButton.setBackgroundColor(Color.TRANSPARENT);
+                    pollingButton.setTextColor(unselectedButtonTextColor);
+                    allButton.setTextColor(unselectedButtonTextColor);
                 } else {
                     setFilter(allLocations, R.string.locations_none_found);
                     earlyButton.setBackgroundColor(Color.TRANSPARENT);
                     pollingButton.setBackgroundColor(Color.TRANSPARENT);
+                    earlyButton.setTextColor(unselectedButtonTextColor);
+                    pollingButton.setTextColor(unselectedButtonTextColor);
                 }
 
                 lastSelectedListButton = buttonId;
