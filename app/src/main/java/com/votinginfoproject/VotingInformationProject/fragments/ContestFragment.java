@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -105,7 +104,6 @@ public class ContestFragment extends Fragment {
                 View row = myActivity.findViewById(R.id.contest_type_row);
                 row.setVisibility(View.GONE);
             }
-
 
             if (contest.office != null) {
                 office.setText(contest.office);
