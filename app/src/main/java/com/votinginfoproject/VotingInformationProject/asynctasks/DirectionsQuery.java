@@ -94,10 +94,15 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
             Gson gson = new GsonBuilder().create();
             if (status == 200) {
-                return gson.fromJson(ir, Response.class);
+                Response gsonObj = gson.fromJson(ir, Response.class);
+                ir.close();
+                in.close();
+                return gsonObj;
             } else {
                 // error
                 Log.e("DirectionsQuery", "Error with response: " + ir.readLine());
+                ir.close();
+                in.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -133,6 +134,13 @@ public class CandidateFragment extends Fragment {
                 view.setVisibility(View.GONE);
             }
 
+            // SET CANDIDATE PHOTO
+            if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
+                Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
+                ImageView photoView = (ImageView)mActivity.findViewById(R.id.candidate_photo);
+                // TODO: set image bitmap in async task
+                // http://stackoverflow.com/questions/2471935/how-to-load-an-imageview-by-url-in-android
+            }
 
         } catch (Exception ex) {
             Log.e("Candidate Fragment", "Failed to get candidate info!");

@@ -79,16 +79,23 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
             Gson gson = new GsonBuilder().create();
             if (status == 200) {
-                return gson.fromJson(ir, returnClass);
+                T gsonObj = gson.fromJson(ir, returnClass);
+                ir.close();
+                in.close();
+                return gsonObj;
             } else {
                 // error
                 CivicApiErrorResponse myError = gson.fromJson(ir, CivicApiErrorResponse.class);
                 publishProgress(myError.error);
+                ir.close();
+                in.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+
         }
 
         return null;
