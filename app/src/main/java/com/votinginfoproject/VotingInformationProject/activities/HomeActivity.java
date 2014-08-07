@@ -17,11 +17,13 @@ import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener {
+    VIPApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        app = new VIPAppContext((VIPApp) getApplicationContext()).getVIPApp();
     }
 
 
@@ -49,15 +51,17 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void searchedAddress(VoterInfo voterInfo) {
 
         // set VoterInfo object on app singleton
-        VIPAppContext appContext = new VIPAppContext((VIPApp) getApplicationContext());
-        VIPApp app = appContext.getVIPApp();
         app.setVoterInfo(voterInfo);
 
-        Election el = voterInfo.election;
-        String show = "Election:\n" + el.id + ": " + el.name + "\n" + el.electionDay + "\n\n";
-        State state = voterInfo.state.get(0);
-        show += "State: " + state.name + "\n";
-        show += "Sources:\n" + state.sources.get(0).name;
-        Log.d("HomeActivity", "Result: " + show);
+        if (voterInfo != null) {
+            Election el = voterInfo.election;
+            String show = "Election:\n" + el.id + ": " + el.name + "\n" + el.electionDay + "\n\n";
+            State state = voterInfo.state.get(0);
+            show += "State: " + state.name + "\n";
+            show += "Sources:\n" + state.sources.get(0).name;
+            Log.d("HomeActivity", "Result: " + show);
+        } else {
+            Log.d("HomeActivity", "VoterInfo set to null");
+        }
     }
 }
