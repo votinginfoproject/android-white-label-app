@@ -1,6 +1,8 @@
 package com.votinginfoproject.VotingInformationProject.adapters;
 
 import android.content.Context;
+import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import java.text.DecimalFormat;
 import java.util.Comparator;
@@ -24,6 +27,8 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
     DecimalFormat distanceFormat;
     Comparator<PollingLocation> pollingLocationComparator;
     String distanceSuffix;
+    boolean useMetric;
+    Location home;
 
     // View lookup cache.  Pattern from here:
     // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
@@ -31,6 +36,7 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         TextView name;
         TextView address;
         TextView distance;
+        boolean isQueryingDistance; // only query for distance if not already doing so
     }
 
     public void sortList() {
@@ -45,8 +51,10 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
     public LocationsAdapter(Context context, List<PollingLocation> locations) {
         super(context, R.layout.location_list_item, locations);
         myActivity = (VIPTabBarActivity)context;
+        useMetric = ((VIPTabBarActivity)context).getAppContext().useMetric();
+        home = ((VIPTabBarActivity)context).getAppContext().getHomeLocation();
         distanceFormat =  new DecimalFormat("0.00 ");
-        if (((VIPTabBarActivity)context).getAppContext().useMetric()) {
+        if (useMetric) {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_metric);
         } else {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_imperial);
@@ -73,6 +81,7 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
             viewHolder.name = (TextView) convertView.findViewById(R.id.location_list_item_name);
             viewHolder.address = (TextView) convertView.findViewById(R.id.location_list_item_address);
             viewHolder.distance = (TextView) convertView.findViewById(R.id.location_list_item_distance);
+            viewHolder.isQueryingDistance = false;
             convertView.setTag(viewHolder);
 
             // declare a final copy, for use in inner class OnClickListener
@@ -110,6 +119,15 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
         if (location.address.distance > 0) {
             viewHolder.distance.setText(distanceFormat.format(location.address.distance) + distanceSuffix);
+        } else if (home != null && !viewHolder.isQueryingDistance) {
+            /** Start async task that will set this distance TextView when it returns; happens if
+             * task started in activity hasn't returned by the time the list loads.
+             * Task started in activity will set properties on the location model object when it returns.
+             */
+            Log.d("LocationsAdapter", "Getting distance from LocationsAdapter");
+            viewHolder.isQueryingDistance = true;
+            new GeocodeQuery(myActivity, null, addr,
+                    location.address.toGeocodeString(), home, useMetric, viewHolder.distance).execute();
         }
 
         // tag distance text view so it may be updated later

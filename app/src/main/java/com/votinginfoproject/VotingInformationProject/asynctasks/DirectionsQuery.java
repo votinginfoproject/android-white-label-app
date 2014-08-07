@@ -58,8 +58,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         this.travelMode = travelMode;
         this.api_key = context.getResources().getString(R.string.google_api_browser_key);
 
-        this.directionsListViewReference = new WeakReference<ListView>(listView);
-        this.errorViewReference = new WeakReference<TextView>(errorView);
+        this.directionsListViewReference = new WeakReference(listView);
+        this.errorViewReference = new WeakReference(errorView);
 
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();

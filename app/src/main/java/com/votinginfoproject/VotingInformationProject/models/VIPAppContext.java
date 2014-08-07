@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
 import android.content.Context;
+import android.location.Location;
 
 /**
  * This class abstracts fetching the application, so that the application context
@@ -39,5 +40,13 @@ public class VIPAppContext {
 
     public boolean useMetric() {
         return app.useMetric();
+    }
+
+    public void setHomeLocation(Location location) {
+        app.setHomeLocation(location);
+    }
+
+    public Location getHomeLocation() {
+        return app.getHomeLocation();
     }
 }

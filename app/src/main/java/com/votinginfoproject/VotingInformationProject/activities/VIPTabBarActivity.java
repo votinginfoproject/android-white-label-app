@@ -216,8 +216,6 @@ public class VIPTabBarActivity extends FragmentActivity {
                 foundLoc.address.latitude = lat;
                 foundLoc.address.longitude = lon;
                 foundLoc.address.distance = distance;
-
-                locationsFragment.refreshList();
             }
         };
 
@@ -233,16 +231,17 @@ public class VIPTabBarActivity extends FragmentActivity {
                 homeLocation = new Location("home");
                 homeLocation.setLatitude(lat);
                 homeLocation.setLongitude(lon);
+                mAppContext.setHomeLocation(homeLocation);
 
                 // start background geocode tasks for polling locations
                 for (PollingLocation location : allLocations) {
                     // key by address, if location has no ID
                     if (location.id != null) {
                         new GeocodeQuery(context, pollingCallBackListener, location.id,
-                                location.address.toGeocodeString(), homeLocation, useMetric).execute();
+                                location.address.toGeocodeString(), homeLocation, useMetric, null).execute();
                     } else {
                         new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(),
-                                location.address.toGeocodeString(), homeLocation, useMetric).execute();
+                                location.address.toGeocodeString(), homeLocation, useMetric, null).execute();
                     }
                 }
             }
@@ -250,7 +249,7 @@ public class VIPTabBarActivity extends FragmentActivity {
 
         // geocode home address; once result returned, geocode polling locations
         new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
-                null, useMetric).execute();
+                null, useMetric, null).execute();
     }
 
     private void setAllLocations() {

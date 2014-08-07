@@ -6,8 +6,11 @@ import android.os.AsyncTask;
 import android.location.Geocoder;
 import android.location.Address;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,8 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
     String geocodeAddress;
     Location home;
     boolean useMetric;
+    private final WeakReference<TextView> distanceView;
+    DecimalFormat distanceFormat;
 
 
     public interface GeocodeCallBackListener {
@@ -57,7 +62,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
      * @param useMetric boolean for units of measurement; false -> imperial units, true -> metric
      */
     public GeocodeQuery(Context context, GeocodeCallBackListener callBack, String id, String address,
-                        Location home, boolean useMetric) {
+                        Location home, boolean useMetric, TextView distanceView) {
         super();
         this.geocoder = new Geocoder(context);
         this.callBackListener = callBack;
@@ -65,6 +70,12 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
         this.geocodeAddress = address;
         this.home = home;
         this.useMetric = useMetric;
+        if (distanceView != null) {
+            this.distanceView = new WeakReference(distanceView);
+            distanceFormat =  new DecimalFormat("0.00 ");
+        } else {
+            this.distanceView = null;
+        }
     }
 
     @Override
@@ -137,9 +148,31 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
         if (addressMap != null && !addressMap.isEmpty()) {
             String key = addressMap.keySet().iterator().next();
             ArrayList<Double> returnedVals = addressMap.get(key);
-            callBackListener.callback(key, returnedVals.get(0), returnedVals.get(1), returnedVals.get(2));
+
+            // set distance text view, if given one
+            double distance = returnedVals.get(2);
+            try {
+                if (distanceView != null && distance > 0) {
+                    TextView view = distanceView.get();
+                    Log.d("GeocodeQuery:onPostExecute", "Setting distance TextView");
+                    if (useMetric) {
+                        view.setText(distanceFormat.format(distance) + " km");
+                    } else {
+                        view.setText(distanceFormat.format(distance) + " mi.");
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("GeocodeQuery:onPostExecute", "Failed to set distance label");
+                e.printStackTrace();
+            }
+
+            if (callBackListener != null) {
+                callBackListener.callback(key, returnedVals.get(0), returnedVals.get(1), distance);
+            }
         } else {
-            callBackListener.callback("error", -4, -4, 0);
+            if (callBackListener != null) {
+                callBackListener.callback("error", -4, -4, 0);
+            }
         }
     }
 }

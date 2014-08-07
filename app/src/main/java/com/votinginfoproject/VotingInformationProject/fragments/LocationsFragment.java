@@ -171,8 +171,6 @@ public class LocationsFragment extends Fragment {
         if (listAdapter != null) {
             listAdapter.sortList();  // sorting the list will also refresh it
             locationsList.invalidate();
-        } else {
-            Log.e("LocationsFragment", "Cannot refresh list!");
         }
     }
 

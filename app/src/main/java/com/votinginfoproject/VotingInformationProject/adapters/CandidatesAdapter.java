@@ -4,12 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.asynctasks.FetchImageQuery;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
-import com.votinginfoproject.VotingInformationProject.models.Contest;
 
 import java.util.Comparator;
 import java.util.List;
@@ -27,6 +28,8 @@ public class CandidatesAdapter extends ArrayAdapter<Candidate> {
     private static class ViewHolder {
         TextView name;
         TextView party;
+        ImageView photo;
+        boolean alreadyQueryingForPhoto;
     }
 
     public void sortList() {
@@ -62,6 +65,8 @@ public class CandidatesAdapter extends ArrayAdapter<Candidate> {
             convertView = inflater.inflate(R.layout.candidate_list_item, parent, false);
             viewHolder.name = (TextView) convertView.findViewById(R.id.candidate_list_item_name);
             viewHolder.party = (TextView) convertView.findViewById(R.id.candidate_list_item_party);
+            viewHolder.photo = (ImageView) convertView.findViewById(R.id.candidate_list_item_picture);
+            viewHolder.alreadyQueryingForPhoto = false;
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -69,6 +74,17 @@ public class CandidatesAdapter extends ArrayAdapter<Candidate> {
 
         setTextView(viewHolder.name, candidate.name);
         setTextView(viewHolder.party, candidate.party);
+
+        if (candidate.photo != null) {
+            viewHolder.photo.setImageBitmap(candidate.photo);
+        } else if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty() && !viewHolder.alreadyQueryingForPhoto) {
+            viewHolder.alreadyQueryingForPhoto = true;
+            new FetchImageQuery(candidate, viewHolder.photo).execute(candidate.photoUrl);
+        } else if (!viewHolder.alreadyQueryingForPhoto) {
+            viewHolder.alreadyQueryingForPhoto = true;
+            // TODO: remove this test image
+            new FetchImageQuery(candidate, viewHolder.photo).execute("http://www.avatarsdb.com/avatars/rain_cat.gif");
+        }
 
         // Return the completed view to render on screen
         return convertView;

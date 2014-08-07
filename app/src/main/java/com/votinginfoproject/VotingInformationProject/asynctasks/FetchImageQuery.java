@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -31,10 +33,11 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     private final WeakReference<ImageView> imageView;
     HttpContext httpContext;
     HttpClient httpClient;
+    Candidate candidate;
 
-    public FetchImageQuery(ImageView imageView) {
-        this.imageView = new WeakReference<ImageView>(imageView);
-
+    public FetchImageQuery(Candidate candidate, ImageView imageView) {
+        this.candidate = candidate;
+        this.imageView = new WeakReference(imageView);
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
     }
@@ -94,6 +97,8 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             Log.e("FetchImageQuery:onPostExecute", "Task cancelled; not setting bitmap.");
             return;
         }
+
+        candidate.photo = bitmap;
 
         if (imageView != null) {
             // get weakly referenced image view

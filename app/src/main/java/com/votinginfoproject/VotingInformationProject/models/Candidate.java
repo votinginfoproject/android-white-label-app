@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class Candidate {
     public String email;
     public Long orderOnBallot;
     public List<SocialMediaChannel> channels;
+    public Bitmap photo;
 
     /** Default Constructor
      *

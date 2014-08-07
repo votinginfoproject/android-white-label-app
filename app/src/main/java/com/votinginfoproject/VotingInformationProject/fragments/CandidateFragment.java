@@ -136,15 +136,22 @@ public class CandidateFragment extends Fragment {
             }
 
             // SET CANDIDATE PHOTO
-            if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
-                Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
-                ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
-                // set image bitmap in async task
-                new FetchImageQuery(photoView).execute(candidate.photoUrl);
+            // TODO: do this instead from the activity with a callback that will save the bitmap
+            // to the Candidate model object, then set the image also in the list adapter.
+
+            ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
+            if (candidate.photo != null) {
+                Log.d("CandidateFragment", "Already have candidate photo; using it.");
+                photoView.setImageBitmap(candidate.photo);
             } else {
-                // TODO: remove this test image
-                ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
-                new FetchImageQuery(photoView).execute("http://www.avatarsdb.com/avatars/running_cat.gif");
+                if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
+                    Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
+                    // set image bitmap in async task
+                    new FetchImageQuery(candidate, photoView).execute(candidate.photoUrl);
+                } else {
+                    // TODO: remove this test image
+                    new FetchImageQuery(candidate, photoView).execute("http://www.avatarsdb.com/avatars/running_cat.gif");
+                }
             }
 
         } catch (Exception ex) {
