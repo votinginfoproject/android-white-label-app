@@ -9,8 +9,7 @@
 
     <RelativeLayout
         android:id="@+id/RelativeLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:padding="6dip" >
 
         <ImageView
@@ -21,30 +20,21 @@
             android:layout_marginLeft="10dip"
             android:layout_marginBottom="10dip"
             android:layout_marginRight="5dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/wrap_width_wrap_height"
             android:layout_centerVertical="true" />
 
-        <!-- For some reason, using:
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            on these TextViews crashes during onLayoutInflate
-            -->
         <TextView
             android:id="@+id/candidate_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/fragment_header"
             android:layout_toRightOf="@+id/candidate_photo"
-            android:text="@string/candidate_no_name"
-            android:textSize="30sp" />
+            android:text="@string/candidate_no_name" />
 
         <TextView
             android:id="@+id/candidate_party"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            style="@style/fragment_subheader"
             android:layout_toRightOf="@+id/candidate_photo"
             android:layout_below="@+id/candidate_name"
-            android:text="@string/candidate_no_party"
-            android:textSize="18sp" />
+            android:text="@string/candidate_no_party" />
 
     </RelativeLayout>
 
@@ -59,80 +49,82 @@
 
             <TextView
                 android:id="@+id/candidate_details_section_header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold"
+                style="@style/section_header"
                 android:text="@string/candidate_details_header" />
 
             <TableLayout
                 android:id="@+id/candidate_details_table"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:stretchColumns="1"
-                android:shrinkColumns="0">
+                style="@style/two_column_table">
 
                 <TableRow
-                    android:id="@+id/candidate_details_web_site_row">
+                    android:id="@+id/candidate_details_web_site_row"
+                    style="@style/table_row" >
 
                     <ImageView
                         android:contentDescription="@string/website_accessibility_description"
                         android:id="@+id/candidate_details_web_site_image"
-                        android:src="@drawable/ic_action_web_site"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_website"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_details_web_site_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
+                </TableRow>
 
+                <TableRow>
+                    <View style="@style/table_row_divider" />
                 </TableRow>
 
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_details_phone_row">
 
                     <ImageView
                         android:contentDescription="@string/phone_accessibility_description"
                         android:id="@+id/candidate_details_phone_image"
-                        android:src="@drawable/ic_action_call"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_phone"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_details_phone_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
 
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_details_email_row">
 
                     <ImageView
                         android:contentDescription="@string/email_accessibility_description"
                         android:id="@+id/candidate_details_email_image"
-                        android:src="@drawable/ic_action_email"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_email"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_details_email_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
 
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_details_none_row"
                     android:visibility="gone">
 
                     <TextView
                         android:id="@+id/candidate_details_none_text"
-                        android:padding="5dip"
                         android:gravity="center"
                         android:text="@string/candidate_details_none"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
 
@@ -140,84 +132,88 @@
 
             <TextView
                 android:id="@+id/candidate_social_section_header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold"
+                style="@style/section_header"
                 android:text="@string/candidate_social_header" />
 
             <TableLayout
                 android:id="@+id/candidate_social_table"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                style="@style/fill_width_wrap_height"
                 android:stretchColumns="1"
                 android:shrinkColumns="0">
 
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_social_twitter_row">
 
                     <ImageView
                         android:contentDescription="@string/social_channel_twitter_description"
                         android:id="@+id/candidate_social_twitter_image"
-                        android:src="@drawable/ic_action_web_site"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_twitter"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_twitter_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
 
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_social_facebook_row">
 
                     <ImageView
                         android:contentDescription="@string/social_channel_facebook_description"
                         android:id="@+id/candidate_social_facebook_image"
-                        android:src="@drawable/ic_action_web_site"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_facebook"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_facebook_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
 
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_social_googleplus_row">
 
                     <ImageView
                         android:contentDescription="@string/social_channel_google_plus_description"
                         android:id="@+id/candidate_social_googleplus_image"
-                        android:src="@drawable/ic_action_web_site"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_googleplus"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_googleplus_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
 
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
                 <TableRow
+                    style="@style/table_row"
                     android:id="@+id/candidate_social_youtube_row">
 
                     <ImageView
                         android:contentDescription="@string/social_channel_youtube_description"
                         android:id="@+id/candidate_social_youtube_image"
-                        android:src="@drawable/ic_action_web_site"
-                        android:scaleType="center"
-                        android:paddingLeft="10dip"/>
+                        android:src="@drawable/ic_youtube"
+                        style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_youtube_text"
-                        android:padding="5dip"
                         android:text="@string/candidate_social_header"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        style="@style/candidate_details_row_text" />
 
                 </TableRow>
             </TableLayout>

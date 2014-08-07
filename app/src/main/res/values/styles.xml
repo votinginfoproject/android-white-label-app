@@ -27,17 +27,12 @@
         <item name="android:paddingRight">15sp</item>
         <item name="android:paddingTop">5sp</item>
         <item name="android:paddingBottom">5sp</item>
-        <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_alignParentRight">true</item>
     </style>
 
     <style name="fragment_subheader"  parent="@style/wrap_width_wrap_height">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#808080</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_alignRight">@+id/ballot_election_name</item>
         <item name="android:singleLine">false</item>
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
@@ -105,5 +100,31 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:background">@drawable/spinner_background_ab_viptabbar</item>
         <item name="android:spinnerStyle">@android:style/Widget.Spinner.DropDown</item>
+    </style>
+
+    <style name="table_row_divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1sp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">#e6e6e6</item>
+    </style>
+
+    <style name="table_row">
+        <item name="android:layout_marginTop">5sp</item>
+        <item name="android:layout_marginBottom">5sp</item>
+    </style>
+
+    <style name="candidate_details_row_image">
+        <item name="android:scaleType">center</item>
+        <item name="android:paddingLeft">10dip</item>
+    </style>
+
+    <style name="candidate_details_row_text" parent="list_item_header">
+        <item name="android:padding">5dip</item>
+    </style>
+
+    <style name="two_column_table" parent="fill_width_wrap_height">
+        <item name="android:stretchColumns">1</item>
+        <item name="android:shrinkColumns">0</item>
     </style>
 </resources>
