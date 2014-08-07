@@ -17,6 +17,7 @@ import com.votinginfoproject.VotingInformationProject.models.googledirections.St
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -27,6 +28,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 
 /**
  * Asynchronously query the Google Directions API for directions from user's address to a polling
@@ -44,8 +46,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     HttpContext httpContext;
     HttpClient httpClient;
     Context context;
-    ListView directionsListView;
-    TextView errorView;
+    private final WeakReference<ListView> directionsListViewReference;
+    private final WeakReference<TextView> errorViewReference;
 
     public DirectionsQuery(ListView listView, TextView errorView, String originCoordinates,
                            String destinationCoordinates, String travelMode) {
@@ -56,8 +58,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         this.travelMode = travelMode;
         this.api_key = context.getResources().getString(R.string.google_api_browser_key);
 
-        this.directionsListView = listView;
-        this.errorView = errorView;
+        this.directionsListViewReference = new WeakReference(listView);
+        this.errorViewReference = new WeakReference(errorView);
 
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
@@ -83,28 +85,52 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         uri.append(api_key);
         Log.d("DirectionsQuery", uri.toString());
 
+        InputStream inputStream = null;
+        HttpGet httpGet = null;
+
         try {
-            HttpGet httpGet = new HttpGet(uri.toString());
+            httpGet = new HttpGet(uri.toString());
             HttpResponse response = httpClient.execute(httpGet, httpContext);
             int status = response.getStatusLine().getStatusCode();
-            InputStream in = response.getEntity().getContent();
-            BufferedReader ir = new BufferedReader(new InputStreamReader(in));
+            inputStream = response.getEntity().getContent();
+            BufferedReader ir = new BufferedReader(new InputStreamReader(inputStream));
 
             Log.d("DirectionsQuery", "GOT RESPONSE STATUS: " + status);
 
             Gson gson = new GsonBuilder().create();
-            if (status == 200) {
-                return gson.fromJson(ir, Response.class);
+            if (status == HttpStatus.SC_OK) {
+                Response gsonObj = gson.fromJson(ir, Response.class);
+                ir.close();
+                inputStream.close();
+                return gsonObj;
             } else {
                 // error
                 Log.e("DirectionsQuery", "Error with response: " + ir.readLine());
+                ir.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    Log.e("DirectionsQuery", "Error closing input stream");
+                    ex.printStackTrace();
+                }
+            }
 
+            if (httpGet != null) {
+                try {
+                    httpGet.abort();
+                } catch (Exception ex) {
+                    Log.e("DirectionsQuery", "Error aborting HTTP Get");
+                    ex.printStackTrace();
+                }
+            }
+        }
         return null;
     }
 
@@ -124,25 +150,28 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
         // did not query for alternate routes or provide waypoints, so should get one route with one leg
         Leg leg = response.routes.get(0).legs.get(0);
-
-        Log.d("DirectionsQuery", "Start at " + leg.start_address);
-        Log.d("DirectionsQuery", "End at " + leg.end_address);
-        Log.d("DirectionsQuery", "Distance / duration: " + leg.distance.text + " - " + leg.duration.text);
-        Log.d("DirectionsQuery", "Number of steps: " + leg.steps.size());
-
-        for (Step step : leg.steps) {
-            Log.d("DirectionsQuery", step.html_instructions);
-            Log.d("DirectionsQuery", step.distance.text + " - " + step.duration.text);
-        }
-
         DirectionsAdapter listAdapter = new DirectionsAdapter(leg.steps);
-        errorView.setVisibility(View.GONE);
-        directionsListView.setVisibility(View.VISIBLE);
-        directionsListView.setAdapter(listAdapter);
+        ListView directionsListView = directionsListViewReference.get();
+        TextView errorView = errorViewReference.get();
+
+        if (directionsListView != null && errorView != null) {
+            errorView.setVisibility(View.GONE);
+            directionsListView.setVisibility(View.VISIBLE);
+            directionsListView.setAdapter(listAdapter);
+        } else {
+            Log.e("DirectionsQuery:onPostExecute", "Directions ListView and/or error TextView references are null.");
+        }
     }
 
     private void showError() {
-        directionsListView.setVisibility(View.GONE);
-        errorView.setVisibility(View.VISIBLE);
+        ListView directionsListView = directionsListViewReference.get();
+        TextView errorView = errorViewReference.get();
+        if (directionsListView != null && errorView != null) {
+            directionsListView.setVisibility(View.GONE);
+            errorView.setVisibility(View.VISIBLE);
+        } else {
+            Log.e("DirectionsQuery:showError", "Directions ListView and/or error TextView references are null.");
+
+        }
     }
 }

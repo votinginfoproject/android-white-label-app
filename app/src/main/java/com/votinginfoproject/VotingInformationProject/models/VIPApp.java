@@ -2,6 +2,8 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
+
 import java.util.Locale;
 
 /**
@@ -12,6 +14,7 @@ import java.util.Locale;
 public class VIPApp extends Application {
     private VoterInfo voterInfo;
     private static Context mContext;
+    private Location homeLocation;
 
     @Override
     public void onCreate() {
@@ -29,6 +32,14 @@ public class VIPApp extends Application {
 
     public void setVoterInfo(VoterInfo info) {
         this.voterInfo = info;
+    }
+
+    public void setHomeLocation(Location location) {
+        this.homeLocation = location;
+    }
+
+    public Location getHomeLocation() {
+        return homeLocation;
     }
 
     /**

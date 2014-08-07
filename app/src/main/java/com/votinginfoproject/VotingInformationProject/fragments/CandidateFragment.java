@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.asynctasks.FetchImageQuery;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
@@ -125,12 +127,26 @@ public class CandidateFragment extends Fragment {
                 }
             }
 
-            if (candidate.channels.size() == 0) {
-                // toggle social_none view to visible
-                View view = mActivity.findViewById(R.id.candidate_social_none_row);
-                view.setVisibility(View.VISIBLE);
+            if (candidate.channels.isEmpty()) {
+                // hide social media section if none available
+                View view = mActivity.findViewById(R.id.candidate_social_table);
+                view.setVisibility(View.GONE);
+                view = mActivity.findViewById(R.id.candidate_social_section_header);
+                view.setVisibility(View.GONE);
             }
 
+            // SET CANDIDATE PHOTO
+            ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
+            if (candidate.photo != null) {
+                Log.d("CandidateFragment", "Already have candidate photo; using it.");
+                photoView.setImageBitmap(candidate.photo);
+            } else {
+                if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
+                    Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
+                    // set image bitmap in async task
+                    new FetchImageQuery(candidate, photoView).execute(candidate.photoUrl);
+                }
+            }
 
         } catch (Exception ex) {
             Log.e("Candidate Fragment", "Failed to get candidate info!");

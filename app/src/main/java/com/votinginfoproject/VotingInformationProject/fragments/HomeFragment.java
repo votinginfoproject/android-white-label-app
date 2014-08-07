@@ -108,6 +108,18 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Helper function to run query after address changed
+     */
+    private void makeElectionQuery() {
+        String address = homeEditTextAddress.getText().toString();
+        setAddress(address);
+        // clear previous election before making a query for a new address
+        mListener.searchedAddress(null);
+        currentElection = null;
+        constructVoterInfoQuery();
+    }
+
     private void setupViewListeners() {
 
         // Go Button onClick Listener
@@ -125,9 +137,7 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
-                    String address = view.getText().toString();
-                    setAddress(address);
-                    constructVoterInfoQuery();
+                    makeElectionQuery();
                 }
                 // Return false to close the keyboard
                 return false;
@@ -138,9 +148,7 @@ public class HomeFragment extends Fragment {
         homeSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = homeEditTextAddress.getText().toString();
-                setAddress(address);
-                constructVoterInfoQuery();
+                makeElectionQuery();
 
                 // hide keyboard
                 InputMethodManager imm = (InputMethodManager)myActivity.getSystemService(
@@ -218,7 +226,10 @@ public class HomeFragment extends Fragment {
         voterInfoListener = new CivicInfoApiQuery.CallBackListener() {
             @Override
             public void callback(Object result) {
-                if (result == null) { return; }
+                if (result == null) {
+                    return;
+                }
+
                 VoterInfo voterInfo = (VoterInfo)result;
                 currentElection = voterInfo.election;
                 homeTextViewStatus.setVisibility(View.GONE);
@@ -232,7 +243,9 @@ public class HomeFragment extends Fragment {
                 // Show election picker if there are other elections
                 ArrayList<Election> elections = new ArrayList<Election>(voterInfo.otherElections);
                 elections.add(0, voterInfo.election);
+
                 setSpinnerElections(elections);
+
             }
         };
 

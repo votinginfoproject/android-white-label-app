@@ -31,6 +31,7 @@
     <string name="home_error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
     <string name="home_go_button_accessibility_description">Go to search results.</string>
     <string name="home_search_button_description">Search for results.</string>
+    <string name="home_election_spinner_description">Please pick an election.</string>
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Contests</string>
@@ -50,7 +51,6 @@
     <string name="candidate_no_name">No Name Available</string>
     <string name="candidate_no_party">No Listed Affiliation</string>
     <string name="candidate_details_none">No Candidate Details Available</string>
-    <string name="candidate_social_none">No Social Media Channels Available</string>
 
     <!-- Accessibility descriptions for images -->
     <string name="social_channel_youtube_description">Visit YouTube channel</string>
