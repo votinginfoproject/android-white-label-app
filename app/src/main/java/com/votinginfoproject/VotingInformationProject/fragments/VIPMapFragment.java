@@ -53,6 +53,10 @@ public class VIPMapFragment extends SupportMapFragment {
     // track the internally-assigned ID for each marker and map it to the location's key
     HashMap<String, String> markerIds;
 
+    int selectedButtonColor;
+    int selectedButtonTextColor;
+    int unselectedButtonTextColor;
+
     Button allButton;
     Button earlyButton;
     Button pollingButton;
@@ -90,6 +94,10 @@ public class VIPMapFragment extends SupportMapFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        selectedButtonColor = Color.parseColor("#00234b");
+        selectedButtonTextColor = Color.parseColor("#ffffff");
+        unselectedButtonTextColor = Color.parseColor("#00234b");
 
         // programmatically add map view, so button bar appears on top
         mapView = super.onCreateView(inflater, container, savedInstanceState);
@@ -156,7 +164,8 @@ public class VIPMapFragment extends SupportMapFragment {
         earlyButton = (Button)rootView.findViewById(R.id.locations_map_early_button);
 
         // highlight default button
-        allButton.setBackgroundColor(Color.LTGRAY);
+        allButton.setTextColor(selectedButtonTextColor);
+        allButton.setBackgroundColor(selectedButtonColor);
 
         // set click handlers for filter buttons
         allButton.setOnClickListener(new View.OnClickListener() {
@@ -164,9 +173,12 @@ public class VIPMapFragment extends SupportMapFragment {
             public void onClick(View v) {
                 showEarly = true;
                 showPolling = true;
-                allButton.setBackgroundColor(Color.LTGRAY);
+                allButton.setBackgroundColor(selectedButtonColor);
                 earlyButton.setBackgroundColor(Color.TRANSPARENT);
                 pollingButton.setBackgroundColor(Color.TRANSPARENT);
+                allButton.setTextColor(selectedButtonTextColor);
+                earlyButton.setTextColor(unselectedButtonTextColor);
+                pollingButton.setTextColor(unselectedButtonTextColor);
                 refreshMapView();
             }
         });
@@ -176,9 +188,12 @@ public class VIPMapFragment extends SupportMapFragment {
             public void onClick(View v) {
                 showEarly = true;
                 showPolling = false;
-                earlyButton.setBackgroundColor(Color.LTGRAY);
+                earlyButton.setBackgroundColor(selectedButtonColor);
                 pollingButton.setBackgroundColor(Color.TRANSPARENT);
                 allButton.setBackgroundColor(Color.TRANSPARENT);
+                allButton.setTextColor(unselectedButtonTextColor);
+                earlyButton.setTextColor(selectedButtonTextColor);
+                pollingButton.setTextColor(unselectedButtonTextColor);
                 refreshMapView();
             }
         });
@@ -188,9 +203,12 @@ public class VIPMapFragment extends SupportMapFragment {
             public void onClick(View v) {
                 showEarly = false;
                 showPolling = true;
-                pollingButton.setBackgroundColor(Color.LTGRAY);
+                pollingButton.setBackgroundColor(selectedButtonColor);
                 earlyButton.setBackgroundColor(Color.TRANSPARENT);
                 allButton.setBackgroundColor(Color.TRANSPARENT);
+                allButton.setTextColor(unselectedButtonTextColor);
+                earlyButton.setTextColor(unselectedButtonTextColor);
+                pollingButton.setTextColor(selectedButtonTextColor);
                 refreshMapView();
             }
         });
