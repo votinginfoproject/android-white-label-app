@@ -85,7 +85,7 @@
 
 
     <!-- Locations strings -->
-    <string name="locations_list_map_button_label">Map</string>
+    <string name="locations_list_map_button_label">map</string>
     <string name="locations_list_all_button_label">All Sites</string>
     <string name="locations_list_early_voting_button_label">Early Voting</string>
     <string name="locations_list_polling_sites_button_label">Polling Sites</string>
