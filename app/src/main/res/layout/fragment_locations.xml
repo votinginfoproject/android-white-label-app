@@ -31,7 +31,7 @@
             android:textAllCaps="true"
             android:textColor="#00234b"
             android:textSize="16sp"
-            android:background="@drawable/bordered_button"
+            android:background="@drawable/map_button"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:clickable="true" />
@@ -43,7 +43,7 @@
             android:layout_marginLeft="15sp"
             android:layout_marginRight="15sp"
             android:layout_marginBottom="15sp"
-            android:background="@drawable/bordered_button"
+            android:background="@drawable/bordered_button_unselected"
             android:layout_below="@+id/locations_election_subtitle"
             android:id="@+id/locations_list_button_bar"
             android:layout_alignLeft="@+id/locations_election_subtitle"
