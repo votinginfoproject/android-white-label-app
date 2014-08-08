@@ -1,136 +1,95 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/directions_fragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/fragment_style"
     tools:context=".fragments.DirectionsFragment">
 
     <RelativeLayout
-        android:id="@+id/directions_fragment_inner_layout"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        style="@style/wrap_width_wrap_height"
+        android:id="@+id/directions_fragment_inner_layout" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/directions_title"
-            android:layout_alignParentStart="true" />
+            style="@style/fragment_header"
+            android:text="FOO FOO FOO FOO"
+            android:id="@+id/directions_title" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/directions_subtitle"
             android:layout_below="@+id/directions_title"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:singleLine="false"
-            android:paddingBottom="@dimen/activity_vertical_margin" />
+            android:text="BAR BAR BAR BAR"
+            style="@style/fragment_subheader" />
 
         <LinearLayout
-            style="@android:style/ButtonBar"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            style="@style/map_button_bar"
+            android:checkedButton="@+id/directions_walk_button"
             android:layout_below="@+id/directions_subtitle"
             android:id="@+id/directions_button_bar"
-            android:layout_alignLeft="@+id/directions_subtitle"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignLeft="@+id/directions_subtitle" >
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="?android:attr/borderlessButtonStyle"
+                style="@style/map_button_bar_button"
                 android:text="@string/directions_walk_button_label"
-                android:id="@+id/directions_walk_button"
-                android:clickable="true"
-                android:singleLine="false" />
+                android:id="@+id/directions_walk_button" />
 
-            <View android:layout_height="fill_parent"
-                android:layout_width="1dp"
-                android:background="#905e5e5e"
-                android:layout_marginBottom="2dp"
-                android:layout_gravity="center_vertical" />
+            <View style="@style/map_button_bar_separator" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="1"
-                android:text="@string/directions_bike_button_label"
                 android:id="@+id/directions_bike_button"
-                android:clickable="true"
-                android:singleLine="false" />
+                style="@style/map_button_bar_button"
+                android:text="@string/directions_bike_button_label" />
 
-            <View android:layout_height="fill_parent"
-                android:layout_width="1dp"
-                android:background="#905e5e5e"
-                android:layout_marginBottom="2dp"
-                android:layout_gravity="center_vertical" />
+            <View style="@style/map_button_bar_separator" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="1"
+                style="@style/map_button_bar_button"
                 android:text="@string/directions_transit_button_label"
-                android:id="@+id/directions_transit_button"
-                android:clickable="true"
-                android:singleLine="false" />
+                android:id="@+id/directions_transit_button" />
 
-            <View android:layout_height="fill_parent"
-                android:layout_width="1dp"
-                android:background="#905e5e5e"
-                android:layout_marginBottom="2dp"
-                android:layout_gravity="center_vertical" />
+            <View style="@style/map_button_bar_separator" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="1"
-                android:text="@string/directions_drive_button_label"
                 android:id="@+id/directions_drive_button"
-                android:clickable="true"
-                android:singleLine="false" />
+                style="@style/map_button_bar_button"
+                android:text="@string/directions_drive_button_label" />
         </LinearLayout>
 
         <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            style="@style/listview"
             android:id="@+id/directions_list"
             android:layout_below="@+id/directions_button_bar"
             android:layout_above="@+id/directions_open_in_maps_button"
             android:layout_toRightOf="@+id/directions_subtitle"
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
 
         <TextView
             android:visibility="gone"
             android:id="@+id/directions_none_found_message"
             android:text="@string/directions_error_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/fragment_subheader"
             android:layout_below="@+id/directions_button_bar"
             android:layout_toRightOf="@+id/directions_subtitle"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/directions_bottom_padding"
             android:text="@string/directions_open_in_maps_button_label"
+            android:layout_margin="15sp"
             android:id="@+id/directions_open_in_maps_button"
+            android:background="@drawable/go_to_maps_button"
+            android:textColor="@drawable/go_to_maps_button_text"
             android:clickable="true" />
+
+        <!-- this is to give the "open in maps" button something to align with and still be padded -->
+        <View
+            android:id="@+id/directions_bottom_padding"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="0sp" />
 
     </RelativeLayout>
 </RelativeLayout>

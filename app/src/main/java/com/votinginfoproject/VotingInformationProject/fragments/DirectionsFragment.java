@@ -1,7 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,14 +34,15 @@ public class DirectionsFragment extends Fragment {
     private ListView directionsList;
 
     Button walkButton;
-    Button transitButton;
-    Button driveButton;
-    Button bikeButton;
 
     HashMap<String, String> directionsFlags;
 
     // track which location filter button was last clicked, and only refresh list if it changed
-    int lastSelectedListButton = R.id.directions_walk_button;
+    int lastSelectedButtonId = R.id.directions_walk_button;
+    Button lastSelectedButton = null;
+
+    int selectedTextColor;
+    int unselectedTextColor;
 
     String directionsMode = "walking";
 
@@ -85,6 +86,10 @@ public class DirectionsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
         final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
 
+        Resources res = myActivity.getResources();
+        unselectedTextColor = res.getColor(R.color.button_blue);
+        selectedTextColor = res.getColor(R.color.white);
+
         // get selected location
         location = myActivity.getLocationForId(location_id);
 
@@ -125,14 +130,11 @@ public class DirectionsFragment extends Fragment {
             }
         });
 
-        // get buttons in bar
-        walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
-        bikeButton = (Button)rootView.findViewById(R.id.directions_bike_button);
-        driveButton = (Button)rootView.findViewById(R.id.directions_drive_button);
-        transitButton = (Button)rootView.findViewById(R.id.directions_transit_button);
-
         // highlight default button
-        walkButton.setBackgroundColor(Color.LTGRAY);
+        walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
+        walkButton.setTextColor(selectedTextColor);
+        walkButton.setBackgroundResource(R.drawable.button_bar_button_selected);
+        lastSelectedButton = walkButton;
 
         // set up directions list
         directionsList = (ListView)rootView.findViewById(R.id.directions_list);
@@ -151,41 +153,39 @@ public class DirectionsFragment extends Fragment {
         rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (buttonId == lastSelectedListButton) {
+                if (buttonId == lastSelectedButtonId) {
                     return; // ignore button click if already viewing that list
                 }
 
+                Button btn = (Button)v;
+
                 // highlight current selection (and un-highlight others)
-                v.setBackgroundColor(Color.LTGRAY);
+                btn.setTextColor(selectedTextColor);
+                btn.setBackgroundResource(R.drawable.button_bar_button_selected);
+
+                int[] states = lastSelectedButton.getDrawableState();
+
+
+                lastSelectedButton.setTextColor(unselectedTextColor);
+                lastSelectedButton.setBackgroundResource(R.drawable.button_bar_button);
 
                 // change directions mode and re-query
                 if (buttonId == R.id.directions_walk_button) {
                     directionsMode = "walking";
-                    bikeButton.setBackgroundColor(Color.TRANSPARENT);
-                    driveButton.setBackgroundColor(Color.TRANSPARENT);
-                    transitButton.setBackgroundColor(Color.TRANSPARENT);
                 } else if (buttonId == R.id.directions_bike_button) {
                     directionsMode = "bicycling";
-                    walkButton.setBackgroundColor(Color.TRANSPARENT);
-                    driveButton.setBackgroundColor(Color.TRANSPARENT);
-                    transitButton.setBackgroundColor(Color.TRANSPARENT);
                 } else if (buttonId == R.id.directions_transit_button) {
                     directionsMode = "transit";
-                    bikeButton.setBackgroundColor(Color.TRANSPARENT);
-                    driveButton.setBackgroundColor(Color.TRANSPARENT);
-                    walkButton.setBackgroundColor(Color.TRANSPARENT);
                 } else {
                     directionsMode = "driving";
-                    bikeButton.setBackgroundColor(Color.TRANSPARENT);
-                    walkButton.setBackgroundColor(Color.TRANSPARENT);
-                    transitButton.setBackgroundColor(Color.TRANSPARENT);
                 }
 
                 Log.d("DirectionsFragment", "New directions mode is " + directionsMode);
 
                 queryDirections();
 
-                lastSelectedListButton = buttonId;
+                lastSelectedButtonId = buttonId;
+                lastSelectedButton = btn;
             }
         });
     }
