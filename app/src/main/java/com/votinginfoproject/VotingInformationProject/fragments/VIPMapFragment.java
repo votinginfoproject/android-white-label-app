@@ -53,13 +53,10 @@ public class VIPMapFragment extends SupportMapFragment {
     // track the internally-assigned ID for each marker and map it to the location's key
     HashMap<String, String> markerIds;
 
-    int selectedButtonColor;
     int selectedButtonTextColor;
     int unselectedButtonTextColor;
-
-    Button allButton;
-    Button earlyButton;
-    Button pollingButton;
+    int lastSelectedButtonId;
+    Button lastSelectedButton;
 
     // track filters
     boolean showPolling = true;
@@ -95,10 +92,6 @@ public class VIPMapFragment extends SupportMapFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        selectedButtonColor = Color.parseColor("#00234b");
-        selectedButtonTextColor = Color.parseColor("#ffffff");
-        unselectedButtonTextColor = Color.parseColor("#00234b");
-
         // programmatically add map view, so button bar appears on top
         mapView = super.onCreateView(inflater, container, savedInstanceState);
         rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_map, container, false);
@@ -107,6 +100,9 @@ public class VIPMapFragment extends SupportMapFragment {
         rootView.addView(mapView, layoutParams);
 
         mActivity = (VIPTabBarActivity) this.getActivity();
+        Resources res = mActivity.getResources();
+        unselectedButtonTextColor = res.getColor(R.color.button_blue);
+        selectedButtonTextColor = res.getColor(R.color.white);
 
         voterInfo = mActivity.getVoterInfo();
         allLocations = mActivity.getAllLocations();
@@ -159,59 +155,16 @@ public class VIPMapFragment extends SupportMapFragment {
             map.clear();
         }
 
-        allButton = (Button)rootView.findViewById(R.id.locations_map_all_button);
-        pollingButton = (Button)rootView.findViewById(R.id.locations_map_polling_button);
-        earlyButton = (Button)rootView.findViewById(R.id.locations_map_early_button);
-
         // highlight default button
+        Button allButton = (Button)rootView.findViewById(R.id.locations_map_all_button);
         allButton.setTextColor(selectedButtonTextColor);
-        allButton.setBackgroundColor(selectedButtonColor);
+        allButton.setBackgroundResource(R.drawable.button_bar_button_selected);
+        lastSelectedButton = allButton;
 
         // set click handlers for filter buttons
-        allButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEarly = true;
-                showPolling = true;
-                allButton.setBackgroundColor(selectedButtonColor);
-                earlyButton.setBackgroundColor(Color.TRANSPARENT);
-                pollingButton.setBackgroundColor(Color.TRANSPARENT);
-                allButton.setTextColor(selectedButtonTextColor);
-                earlyButton.setTextColor(unselectedButtonTextColor);
-                pollingButton.setTextColor(unselectedButtonTextColor);
-                refreshMapView();
-            }
-        });
-
-        earlyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEarly = true;
-                showPolling = false;
-                earlyButton.setBackgroundColor(selectedButtonColor);
-                pollingButton.setBackgroundColor(Color.TRANSPARENT);
-                allButton.setBackgroundColor(Color.TRANSPARENT);
-                allButton.setTextColor(unselectedButtonTextColor);
-                earlyButton.setTextColor(selectedButtonTextColor);
-                pollingButton.setTextColor(unselectedButtonTextColor);
-                refreshMapView();
-            }
-        });
-
-        pollingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEarly = false;
-                showPolling = true;
-                pollingButton.setBackgroundColor(selectedButtonColor);
-                earlyButton.setBackgroundColor(Color.TRANSPARENT);
-                allButton.setBackgroundColor(Color.TRANSPARENT);
-                allButton.setTextColor(unselectedButtonTextColor);
-                earlyButton.setTextColor(unselectedButtonTextColor);
-                pollingButton.setTextColor(selectedButtonTextColor);
-                refreshMapView();
-            }
-        });
+        setButtonBarClickHandlers(R.id.locations_map_early_button);
+        setButtonBarClickHandlers(R.id.locations_map_polling_button);
+        setButtonBarClickHandlers(R.id.locations_map_all_button);
 
         // set click handler for info window (to go to directions list)
         // info window is just a bitmap, so can't listen for clicks on elements within it.
@@ -231,6 +184,42 @@ public class VIPMapFragment extends SupportMapFragment {
         });
 
         return rootView;
+    }
+
+    private void setButtonBarClickHandlers(final int buttonId) {
+        rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (buttonId == lastSelectedButtonId) {
+                    return; // ignore button click if already viewing that list
+                }
+
+                Button btn = (Button)v;
+
+                // highlight current selection (and un-highlight others)
+                btn.setBackgroundResource(R.drawable.button_bar_button_selected);
+                btn.setTextColor(selectedButtonTextColor);
+                lastSelectedButton.setTextColor(unselectedButtonTextColor);
+                lastSelectedButton.setBackgroundResource(R.drawable.button_bar_button);
+
+                if (buttonId == R.id.locations_map_early_button) {
+                    showEarly = true;
+                    showPolling = false;
+                } else if (buttonId == R.id.locations_map_polling_button) {
+                    showEarly = false;
+                    showPolling = true;
+                } else {
+                    // show all
+                    showEarly = true;
+                    showPolling = true;
+                }
+
+                lastSelectedButtonId = buttonId;
+                lastSelectedButton = btn;
+
+                refreshMapView();
+            }
+        });
     }
 
     private void refreshMapView() {

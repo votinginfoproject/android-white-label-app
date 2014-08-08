@@ -33,8 +33,6 @@ public class DirectionsFragment extends Fragment {
     private TextView noneFoundMessage;
     private ListView directionsList;
 
-    Button walkButton;
-
     HashMap<String, String> directionsFlags;
 
     // track which location filter button was last clicked, and only refresh list if it changed
@@ -131,7 +129,7 @@ public class DirectionsFragment extends Fragment {
         });
 
         // highlight default button
-        walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
+        Button walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
         walkButton.setTextColor(selectedTextColor);
         walkButton.setBackgroundResource(R.drawable.button_bar_button_selected);
         lastSelectedButton = walkButton;
@@ -159,13 +157,9 @@ public class DirectionsFragment extends Fragment {
 
                 Button btn = (Button)v;
 
-                // highlight current selection (and un-highlight others)
+                // highlight current selection (and un-highlight last button)
                 btn.setTextColor(selectedTextColor);
                 btn.setBackgroundResource(R.drawable.button_bar_button_selected);
-
-                int[] states = lastSelectedButton.getDrawableState();
-
-
                 lastSelectedButton.setTextColor(unselectedTextColor);
                 lastSelectedButton.setBackgroundResource(R.drawable.button_bar_button);
 
