@@ -2,7 +2,6 @@
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- election body section -->
-
     <TableLayout
         style="@style/two_column_table"
         android:id="@+id/details_admin_body_table" >
@@ -169,7 +168,7 @@
             <Button
                 android:id="@+id/details_hours_of_operation_section_header"
                 android:text="@string/details_hours_of_operation_label"
-                android:drawableLeft="@drawable/ic_hours_active"
+                android:drawableLeft="@drawable/ic_hours"
                 style="@style/details_accordion_button" />
         </TableRow>
 
@@ -200,7 +199,7 @@
             <Button
                 android:id="@+id/details_correspondence_address_section_header"
                 android:text="@string/details_correspondence_address_label"
-                android:drawableLeft="@drawable/ic_address_active"
+                android:drawableLeft="@drawable/ic_address"
                 style="@style/details_accordion_button" />
         </TableRow>
 
@@ -231,7 +230,7 @@
             <Button
                 android:id="@+id/details_physical_address_section_header"
                 android:text="@string/details_physical_address_label"
-                android:drawableLeft="@drawable/ic_address_active"
+                android:drawableLeft="@drawable/ic_address"
                 style="@style/details_accordion_button" />
         </TableRow>
 
@@ -262,7 +261,7 @@
             <Button
                 android:id="@+id/details_election_officials_section_header"
                 android:text="@string/details_election_officials_label"
-                android:drawableLeft="@drawable/ic_officials_active"
+                android:drawableLeft="@drawable/ic_officials"
                 style="@style/details_accordion_button" />
         </TableRow>
 

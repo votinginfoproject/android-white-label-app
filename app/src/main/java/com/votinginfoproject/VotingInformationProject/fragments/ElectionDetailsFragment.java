@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -30,9 +28,14 @@ import java.util.List;
 public class ElectionDetailsFragment extends Fragment {
 
     private Activity mActivity;
+    Resources resources;
     private MovementMethod mLinkMovementMethod;
+
     int selectedButtonTextColor;
     int unselectedButtonTextColor;
+    int selectedSectionColor;
+    int unselectedSectionColor;
+
     ElectionAdministrationBody stateAdmin;
     ElectionAdministrationBody localAdmin;
 
@@ -41,13 +44,14 @@ public class ElectionDetailsFragment extends Fragment {
     Button lastSelectedButton;
 
     // collapsible section headers, and their sub-sections
+    // 0 -> section header, 1-> section, 2-> unselected section icon, 3-> selected section icon
     static final List<List<Integer>> detailSections = new ArrayList<List<Integer>>(14) {{
-        add(Arrays.asList(R.id.details_links_section_header, R.id.details_links_section));
-        add(Arrays.asList(R.id.details_voter_services_section_header, R.id.details_voter_services_section));
-        add(Arrays.asList(R.id.details_hours_of_operation_section_header, R.id.details_hours_of_operation_section));
-        add(Arrays.asList(R.id.details_correspondence_address_section_header, R.id.details_correspondence_address_section));
-        add(Arrays.asList(R.id.details_physical_address_section_header, R.id.details_physical_address_section));
-        add(Arrays.asList(R.id.details_election_officials_section_header, R.id.details_election_officials_section));
+        add(Arrays.asList(R.id.details_links_section_header, R.id.details_links_section, R.drawable.ic_website, R.drawable.ic_website));
+        add(Arrays.asList(R.id.details_voter_services_section_header, R.id.details_voter_services_section, R.drawable.ic_action_about, R.drawable.ic_action_about));
+        add(Arrays.asList(R.id.details_hours_of_operation_section_header, R.id.details_hours_of_operation_section, R.drawable.ic_hours, R.drawable.ic_hours_active));
+        add(Arrays.asList(R.id.details_correspondence_address_section_header, R.id.details_correspondence_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
+        add(Arrays.asList(R.id.details_physical_address_section_header, R.id.details_physical_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
+        add(Arrays.asList(R.id.details_election_officials_section_header, R.id.details_election_officials_section, R.drawable.ic_officials, R.drawable.ic_officials_active));
     }};
 
     /**
@@ -75,6 +79,7 @@ public class ElectionDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.d("ElectionDetailsFragment", "In onActivityCreated");
         mActivity = getActivity();
+        resources = mActivity.getResources();
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
         // get state and local election administration bodies
@@ -115,9 +120,8 @@ public class ElectionDetailsFragment extends Fragment {
 
         // set up button bar
         if (stateAdmin != null && localAdmin != null) {
-            Resources res = mActivity.getResources();
-            unselectedButtonTextColor = res.getColor(R.color.button_blue);
-            selectedButtonTextColor = res.getColor(R.color.white);
+            unselectedButtonTextColor = resources.getColor(R.color.button_blue);
+            selectedButtonTextColor = resources.getColor(R.color.white);
 
             // highlight default button
             Button stateButton = (Button) mActivity.findViewById(R.id.details_state_button);
@@ -132,8 +136,11 @@ public class ElectionDetailsFragment extends Fragment {
         }
 
         // set expandable section header click listeners
+        selectedSectionColor = resources.getColor(R.color.section_header_gray);
+        unselectedSectionColor = resources.getColor(R.color.white);
+
         for (List<Integer>detail : detailSections) {
-            setSectionClickListener(detail.get(0), detail.get(1));
+            setSectionClickListener(detail.get(0), detail.get(1), detail.get(2), detail.get(3));
         }
     }
 
@@ -143,16 +150,24 @@ public class ElectionDetailsFragment extends Fragment {
      * @param sectionHeaderId R id of section header (button)
      * @param sectionId R id of sub-section to show/hide on click
      */
-    private void setSectionClickListener(int sectionHeaderId, final int sectionId) {
+    private void setSectionClickListener(int sectionHeaderId, final int sectionId,
+                                         final int unselectedIcon, final int selectedIcon) {
+
         mActivity.findViewById(sectionHeaderId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Button btn = (Button) view;
                 View section = mActivity.findViewById(sectionId);
+
                 if (section.getVisibility() == View.GONE) {
                     section.setVisibility(View.VISIBLE);
+                    btn.setBackgroundColor(selectedSectionColor);
+                    btn.setCompoundDrawablesWithIntrinsicBounds(selectedIcon, 0, 0, 0);
                 } else {
                     section.setVisibility(View.GONE);
+                    btn.setBackgroundColor(unselectedSectionColor);
+                    btn.setCompoundDrawablesWithIntrinsicBounds(unselectedIcon, 0, 0, 0);
                 }
             }
         });

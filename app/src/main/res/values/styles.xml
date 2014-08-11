@@ -21,7 +21,7 @@
     </style>
 
     <style name="fragment_header" parent="@style/wrap_width_wrap_height">
-        <item name="android:textColor">#00234b</item>
+        <item name="android:textColor">@color/button_blue</item>
         <item name="android:textSize">22sp</item>
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
@@ -33,7 +33,7 @@
 
     <style name="fragment_subheader"  parent="@style/wrap_width_wrap_height">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/text_gray</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">false</item>
         <item name="android:paddingLeft">15sp</item>
@@ -45,18 +45,18 @@
 
     <style name="listview"  parent="@style/wrap_width_wrap_height">
         <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:divider">#e6e6e6</item>
+        <item name="android:divider">@color/list_divider_gray</item>
         <item name="android:dividerHeight">1sp</item>
         <item name="android:headerDividersEnabled">true</item>
         <item name="android:footerDividersEnabled">true</item>
         <item name="android:background">@color/white</item>
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/text_gray</item>
     </style>
 
     <style name="section_header" parent="@style/fill_width_wrap_height">
-        <item name="android:background">#ebeef0</item>
+        <item name="android:background">@color/section_header_gray</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/detail_text_grey</item>
+        <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:padding">10sp</item>
     </style>
@@ -67,7 +67,7 @@
         <item name="android:paddingTop">5sp</item>
         <item name="android:paddingBottom">5sp</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/text_gray</item>
     </style>
 
     <style name="contest_detail_item"  parent="@style/wrap_width_wrap_height">
@@ -78,7 +78,7 @@
         <item name="android:gravity">right</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/detail_text_grey</item>
+        <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -110,7 +110,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1sp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:background">#e6e6e6</item>
+        <item name="android:background">@color/list_divider_gray</item>
     </style>
 
     <style name="table_row">
@@ -175,14 +175,14 @@
     <style name="button_bar_separator">
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_width">1dp</item>
-        <item name="android:background">#cccccc</item>
+        <item name="android:background">@color/button_gray</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
     <style name="details_accordion_button" parent="android:Widget.DeviceDefault.Button.Borderless">
-        <item name="android:background">#ebeef0</item>
+        <item name="android:background">@color/white</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/detail_text_grey</item>
+        <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:padding">10sp</item>
         <item name="android:drawablePadding">20sp</item>
