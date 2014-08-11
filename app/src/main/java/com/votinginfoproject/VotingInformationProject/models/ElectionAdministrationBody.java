@@ -41,7 +41,6 @@ public class ElectionAdministrationBody {
         return builder.toString();
     }
 
-    // TODO: officials have information such as email address and phone.  Put in their own view?
     public String getElectionOfficials() {
         if (electionOfficials == null || electionOfficials.isEmpty()) {
             return "";

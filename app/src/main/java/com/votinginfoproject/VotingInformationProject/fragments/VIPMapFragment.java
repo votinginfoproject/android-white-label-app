@@ -55,7 +55,7 @@ public class VIPMapFragment extends SupportMapFragment {
 
     int selectedButtonTextColor;
     int unselectedButtonTextColor;
-    int lastSelectedButtonId;
+    int lastSelectedButtonId = R.id.locations_map_all_button;
     Button lastSelectedButton;
 
     // track filters

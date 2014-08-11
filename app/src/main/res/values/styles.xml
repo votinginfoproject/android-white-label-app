@@ -148,7 +148,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="map_button_bar">
+    <style name="button_bar">
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -161,7 +161,7 @@
         <item name="android:gravity">top</item>
     </style>
 
-    <style name="map_button_bar_button" parent="android:Widget.DeviceDefault.Button.Borderless">
+    <style name="button_bar_button" parent="android:Widget.DeviceDefault.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
@@ -172,10 +172,39 @@
         <item name="android:singleLine">false</item>
     </style>
 
-    <style name="map_button_bar_separator">
+    <style name="button_bar_separator">
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_width">1dp</item>
         <item name="android:background">#cccccc</item>
         <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="details_accordion_button" parent="android:Widget.DeviceDefault.Button.Borderless">
+        <item name="android:background">#ebeef0</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/detail_text_grey</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:padding">10sp</item>
+        <item name="android:drawablePadding">20sp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_span">2</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="details_link_row" parent="wrap_width_wrap_height">
+        <item name="android:padding">10sp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="details_subsection_paragraph" parent="wrap_width_wrap_height">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingTop">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingBottom">15sp</item>
     </style>
 </resources>

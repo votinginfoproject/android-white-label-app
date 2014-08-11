@@ -37,7 +37,7 @@ public class DirectionsFragment extends Fragment {
 
     // track which location filter button was last clicked, and only refresh list if it changed
     int lastSelectedButtonId = R.id.directions_walk_button;
-    Button lastSelectedButton = null;
+    Button lastSelectedButton;
 
     int selectedTextColor;
     int unselectedTextColor;

@@ -29,24 +29,24 @@
             android:id="@+id/locations_list_button_bar"
             android:layout_alignLeft="@+id/locations_election_subtitle"
             android:layout_toRightOf="@+id/locations_list_map_button"
-            style="@style/map_button_bar">
+            style="@style/button_bar">
 
             <Button
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/locations_list_all_button_label"
                 android:id="@+id/locations_list_all_button" />
 
-            <View style="@style/map_button_bar_separator" />
+            <View style="@style/button_bar_separator" />
 
             <Button
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/locations_list_early_voting_button_label"
                 android:id="@+id/locations_list_early_button" />
 
-            <View style="@style/map_button_bar_separator" />
+            <View style="@style/button_bar_separator" />
 
             <Button
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/locations_list_polling_sites_button_label"
                 android:id="@+id/locations_list_polling_button" />
         </LinearLayout>

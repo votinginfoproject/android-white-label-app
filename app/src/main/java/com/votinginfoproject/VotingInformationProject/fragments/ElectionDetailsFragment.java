@@ -1,6 +1,8 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -15,7 +17,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -29,23 +31,23 @@ public class ElectionDetailsFragment extends Fragment {
 
     private Activity mActivity;
     private MovementMethod mLinkMovementMethod;
+    int selectedButtonTextColor;
+    int unselectedButtonTextColor;
+    ElectionAdministrationBody stateAdmin;
+    ElectionAdministrationBody localAdmin;
+
+    // track which location filter button was last clicked, and only refresh list if it changed
+    int lastSelectedButtonId = R.id.locations_list_all_button;
+    Button lastSelectedButton;
 
     // collapsible section headers, and their sub-sections
     static final List<List<Integer>> detailSections = new ArrayList<List<Integer>>(14) {{
-        add(Arrays.asList(R.id.details_state_admin_body_section_label, R.id.details_state_admin_body_table));
-        add(Arrays.asList(R.id.details_local_admin_body_section_label, R.id.details_local_admin_body_table));
-        add(Arrays.asList(R.id.details_state_links_section_header, R.id.details_state_links_section));
-        add(Arrays.asList(R.id.details_local_links_section_header, R.id.details_local_links_section));
-        add(Arrays.asList(R.id.details_state_voter_services_section_header, R.id.details_state_voter_services_section));
-        add(Arrays.asList(R.id.details_local_voter_services_section_header, R.id.details_local_voter_services_section));
-        add(Arrays.asList(R.id.details_state_hours_of_operation_section_header, R.id.details_state_hours_of_operation_section));
-        add(Arrays.asList(R.id.details_local_hours_of_operation_section_header, R.id.details_local_hours_of_operation_section));
-        add(Arrays.asList(R.id.details_state_correspondence_address_section_header, R.id.details_state_correspondence_address_section));
-        add(Arrays.asList(R.id.details_local_correspondence_address_section_header, R.id.details_local_correspondence_address_section));
-        add(Arrays.asList(R.id.details_state_physical_address_section_header, R.id.details_state_physical_address_section));
-        add(Arrays.asList(R.id.details_local_physical_address_section_header, R.id.details_local_physical_address_section));
-        add(Arrays.asList(R.id.details_state_election_officials_section_header, R.id.details_state_election_officials_section));
-        add(Arrays.asList(R.id.details_local_election_officials_section_header, R.id.details_local_election_officials_section));
+        add(Arrays.asList(R.id.details_links_section_header, R.id.details_links_section));
+        add(Arrays.asList(R.id.details_voter_services_section_header, R.id.details_voter_services_section));
+        add(Arrays.asList(R.id.details_hours_of_operation_section_header, R.id.details_hours_of_operation_section));
+        add(Arrays.asList(R.id.details_correspondence_address_section_header, R.id.details_correspondence_address_section));
+        add(Arrays.asList(R.id.details_physical_address_section_header, R.id.details_physical_address_section));
+        add(Arrays.asList(R.id.details_election_officials_section_header, R.id.details_election_officials_section));
     }};
 
     /**
@@ -75,13 +77,64 @@ public class ElectionDetailsFragment extends Fragment {
         mActivity = getActivity();
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
+        // get state and local election administration bodies
+        VoterInfo voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
+        // should have only one state returned for addresses in the US
+        State thisState = voterInfo.state.get(0);
+        stateAdmin = thisState.electionAdministrationBody;
+        if (thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null ) {
+            localAdmin = thisState.local_jurisdiction.electionAdministrationBody;
+            Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
+            if (stateAdmin == null) {
+                // no state admin body; hide button bar and just show local
+                setContents(localAdmin);
+                View btnBar = mActivity.findViewById(R.id.details_button_bar);
+                btnBar.setVisibility(View.GONE);
+            } else {
+                // have both; show state by default
+                setContents(stateAdmin);
+            }
+        } else {
+            // have no local admin body
+            if (stateAdmin != null) {
+                // hide button bar and just show state
+                setContents(stateAdmin);
+                View btnBar = mActivity.findViewById(R.id.details_button_bar);
+                btnBar.setVisibility(View.GONE);
+            } else {
+                // have neither admin body; hide everything else and show "no info" message
+                View btnBar = mActivity.findViewById(R.id.details_button_bar);
+                btnBar.setVisibility(View.GONE);
+                View detailsView = mActivity.findViewById(R.id.details_admin_body_table);
+                detailsView.setVisibility(View.GONE);
+                View noneMsg = mActivity.findViewById(R.id.details_none_found);
+                noneMsg.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+        // set up button bar
+        if (stateAdmin != null && localAdmin != null) {
+            Resources res = mActivity.getResources();
+            unselectedButtonTextColor = res.getColor(R.color.button_blue);
+            selectedButtonTextColor = res.getColor(R.color.white);
+
+            // highlight default button
+            Button stateButton = (Button) mActivity.findViewById(R.id.details_state_button);
+            stateButton.setTextColor(selectedButtonTextColor);
+            stateButton.setBackgroundResource(R.drawable.button_bar_button_selected);
+            lastSelectedButton = stateButton;
+            lastSelectedButtonId = R.id.details_state_button;
+
+            // add click handlers for button bar filter buttons
+            setButtonInBarClickListener(R.id.details_state_button);
+            setButtonInBarClickListener(R.id.details_local_button);
+        }
+
         // set expandable section header click listeners
         for (List<Integer>detail : detailSections) {
             setSectionClickListener(detail.get(0), detail.get(1));
         }
-
-        // populate fields with API results
-        setContents();
     }
 
     /**
@@ -98,99 +151,87 @@ public class ElectionDetailsFragment extends Fragment {
                 View section = mActivity.findViewById(sectionId);
                 if (section.getVisibility() == View.GONE) {
                     section.setVisibility(View.VISIBLE);
-                    btn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_find_previous_holo_dark, 0);
                 } else {
                     section.setVisibility(View.GONE);
-                    btn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_find_next_holo_dark, 0);
                 }
             }
         });
     }
 
-    /** Helper function to populate the view labels.
-     *
+    /**
+     * Helper function to hide all collapsible subsections when switching between election bodies
      */
-    private void setContents() {
-        TextView title = (TextView) mActivity.findViewById(R.id.details_election_title);
-        TextView subTitle = (TextView) mActivity.findViewById(R.id.details_election_subtitle);
+    private void collapseAllSubSections() {
+        for (List<Integer>detail : detailSections) {
+            View subsection = mActivity.findViewById(detail.get(1));
+            subsection.setVisibility(View.GONE);
+        }
+    }
 
+    /**
+     * Helper function to set click handlers for the election body selection buttons
+     * @param buttonId R id of the button to listen to
+     */
+    private void setButtonInBarClickListener(final int buttonId) {
+
+        mActivity.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (buttonId == lastSelectedButtonId) {
+                    return; // ignore button click if already viewing that list
+                }
+
+                Button btn = (Button)v;
+
+                // highlight current selection (and un-highlight others)
+                btn.setBackgroundResource(R.drawable.button_bar_button_selected);
+                btn.setTextColor(selectedButtonTextColor);
+                lastSelectedButton.setTextColor(unselectedButtonTextColor);
+                lastSelectedButton.setBackgroundResource(R.drawable.button_bar_button);
+
+
+                if (buttonId == R.id.details_state_button) {
+                    setContents(stateAdmin);
+                } else {
+                    // local jurisdiction
+                    setContents(localAdmin);
+                }
+
+                collapseAllSubSections();
+                lastSelectedButtonId = buttonId;
+                lastSelectedButton = btn;
+            }
+        });
+    }
+
+    /** Helper function to populate the administrative body table values.
+     *
+     * @param body Administration body to show in the view contents
+     */
+    private void setContents(ElectionAdministrationBody body) {
         try {
-            VoterInfo voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
-            Election election = voterInfo.election;
-            title.setText(election.name);
-            subTitle.setText(election.getFormattedDate());
+            // set header with administrative body name
+            setTextView(R.id.details_admin_body_name, R.id.details_admin_body_name, body.name);
 
-            // should have only one state returned for addresses in the US
-            State thisState = voterInfo.state.get(0);
-            ElectionAdministrationBody stateAdmin = thisState.electionAdministrationBody;
+            // set fields that are links
+            setLink(R.id.details_election_info_url_label, R.id.details_election_info_url_row, body.electionInfoUrl);
+            setLink(R.id.details_registration_url_label, R.id.details_registration_url_row, body.electionRegistrationUrl);
+            setLink(R.id.details_registration_confirmation_url_label, R.id.details_registration_confirmation_url_row, body.electionRegistrationConfirmationUrl);
+            setLink(R.id.details_absentee_url_label, R.id.details_absentee_url_row, body.absenteeVotingInfoUrl);
+            setLink(R.id.details_location_finder_url_label, R.id.details_location_finder_url_row, body.votingLocationFinderUrl);
+            setLink(R.id.details_ballot_info_url_label, R.id.details_ballot_info_url_row, body.ballotInfoUrl);
+            setLink(R.id.details_election_rules_url_label, R.id.details_election_rules_url_row, body.electionRulesUrl);
 
-            if (stateAdmin != null) {
-                TextView state_name = (TextView) mActivity.findViewById(R.id.details_state_admin_body_name);
-                state_name.setText(stateAdmin.name);
-
-                // set state admin body table values
-
-                // set fields that are links
-                setLink(R.id.details_state_election_info_url_label, R.id.details_state_election_info_url_row, stateAdmin.electionInfoUrl);
-                setLink(R.id.details_state_registration_url_label, R.id.details_state_registration_url_row, stateAdmin.electionRegistrationUrl);
-                setLink(R.id.details_state_registration_confirmation_url_label, R.id.details_state_registration_confirmation_url_row, stateAdmin.electionRegistrationConfirmationUrl);
-                setLink(R.id.details_state_absentee_url_label, R.id.details_state_absentee_url_row, stateAdmin.absenteeVotingInfoUrl);
-                setLink(R.id.details_state_location_finder_url_label, R.id.details_state_location_finder_url_row, stateAdmin.votingLocationFinderUrl);
-                setLink(R.id.details_state_ballot_info_url_label, R.id.details_state_ballot_info_url_row, stateAdmin.ballotInfoUrl);
-                setLink(R.id.details_state_election_rules_url_label, R.id.details_state_election_rules_url_row, stateAdmin.electionRulesUrl);
-
-                // set non-link field values
-                setTextView(R.id.details_state_voter_services, R.id.details_state_voter_services_section_header, stateAdmin.getVoterServices());
-                setTextView(R.id.details_state_hours_of_operation, R.id.details_state_hours_of_operation_section_header, stateAdmin.hoursOfOperation);
-                setTextView(R.id.details_state_correspondence_address, R.id.details_state_correspondence_address_section_header, stateAdmin.getCorrespondenceAddress());
-                setTextView(R.id.details_state_physical_address, R.id.details_state_physical_address_section_header, stateAdmin.getPhysicalAddress());
-                setTextView(R.id.details_state_election_officials, R.id.details_state_election_officials_section_header, stateAdmin.getElectionOfficials());
-
-            } else {
-                View stateTable = mActivity.findViewById(R.id.details_state_admin_body_table);
-                stateTable.setVisibility(View.GONE);
-                View stateTableHeader = mActivity.findViewById(R.id.details_state_admin_body_section_label);
-                stateTableHeader.setVisibility(View.GONE);
-            }
-
-            if (thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null ) {
-                ElectionAdministrationBody localAdmin = thisState.local_jurisdiction.electionAdministrationBody;
-                Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
-
-                TextView local_name = (TextView) mActivity.findViewById(R.id.details_local_admin_body_name);
-                local_name.setText(localAdmin.name);
-
-                // set local admin body table values
-
-                // set fields that are links
-                setLink(R.id.details_local_election_info_url_label, R.id.details_local_election_info_url_row, localAdmin.electionInfoUrl);
-                setLink(R.id.details_local_registration_url_label, R.id.details_state_registration_url_row, localAdmin.electionRegistrationUrl);
-                setLink(R.id.details_local_registration_confirmation_url_label, R.id.details_local_registration_confirmation_url_row, localAdmin.electionRegistrationConfirmationUrl);
-                setLink(R.id.details_local_absentee_url_label, R.id.details_state_absentee_url_row, localAdmin.absenteeVotingInfoUrl);
-                setLink(R.id.details_local_location_finder_url_label, R.id.details_local_location_finder_url_row, localAdmin.votingLocationFinderUrl);
-                setLink(R.id.details_local_ballot_info_url_label, R.id.details_local_ballot_info_url_row, localAdmin.ballotInfoUrl);
-                setLink(R.id.details_local_election_rules_url_label, R.id.details_local_election_rules_url_row, localAdmin.electionRulesUrl);
-
-                // set non-link field values
-                setTextView(R.id.details_local_voter_services, R.id.details_local_voter_services_section_header, localAdmin.getVoterServices());
-                setTextView(R.id.details_local_hours_of_operation, R.id.details_local_hours_of_operation_section_header, localAdmin.hoursOfOperation);
-                setTextView(R.id.details_local_correspondence_address, R.id.details_local_correspondence_address_section_header, localAdmin.getCorrespondenceAddress());
-                setTextView(R.id.details_local_physical_address, R.id.details_local_physical_address_section_header, localAdmin.getPhysicalAddress());
-                setTextView(R.id.details_local_election_officials, R.id.details_local_election_officials_section_header, localAdmin.getElectionOfficials());
-
-
-            } else {
-                View localTable = mActivity.findViewById(R.id.details_local_admin_body_table);
-                localTable.setVisibility(View.GONE);
-                View localTableHeader = mActivity.findViewById(R.id.details_local_admin_body_section_label);
-                localTableHeader.setVisibility(View.GONE);
-            }
-
+            // set non-link field values
+            setTextView(R.id.details_voter_services, R.id.details_voter_services_section_header, body.getVoterServices());
+            setTextView(R.id.details_hours_of_operation, R.id.details_hours_of_operation_section_header, body.hoursOfOperation);
+            setTextView(R.id.details_correspondence_address, R.id.details_correspondence_address_section_header, body.getCorrespondenceAddress());
+            setTextView(R.id.details_physical_address, R.id.details_physical_address_section_header, body.getPhysicalAddress());
+            setTextView(R.id.details_election_officials, R.id.details_election_officials_section_header, body.getElectionOfficials());
         } catch (Exception ex) {
             Log.e("ElectionDetailsFragment", "Failed to set election details info!");
             ex.printStackTrace();
         }
-
     }
 
     /**
@@ -202,12 +243,18 @@ public class ElectionDetailsFragment extends Fragment {
      */
     private void setLink(int labelId, int containerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(labelId);
+        View container = mActivity.findViewById(containerId);
         if (val != null && !val.isEmpty()) {
             String label = textView.getText().toString();
+            // make links look like links, in case they don't already;
+            // otherwise Android won't know what Intent type to open.
+            if (!val.startsWith("http")) {
+                val = "http://" + val;
+            }
             textView.setText(Html.fromHtml("<a href=\"" + val + "\">" + label + "</a>"));
             textView.setMovementMethod(mLinkMovementMethod);
+            container.setVisibility(View.VISIBLE);
         } else {
-            View container = mActivity.findViewById(containerId);
             container.setVisibility(View.GONE);
         }
     }
@@ -222,10 +269,11 @@ public class ElectionDetailsFragment extends Fragment {
      */
     private void setTextView(int textViewId, int containerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(textViewId);
+        View container = mActivity.findViewById(containerId);
         if (val != null && !val.isEmpty()) {
             textView.setText(val);
+            container.setVisibility(View.VISIBLE);
         } else {
-            View container = mActivity.findViewById(containerId);
             container.setVisibility(View.GONE);
         }
     }

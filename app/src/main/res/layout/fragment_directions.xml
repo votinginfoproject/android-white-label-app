@@ -20,36 +20,36 @@
             style="@style/fragment_subheader" />
 
         <LinearLayout
-            style="@style/map_button_bar"
+            style="@style/button_bar"
             android:checkedButton="@+id/directions_walk_button"
             android:layout_below="@+id/directions_subtitle"
             android:id="@+id/directions_button_bar"
             android:layout_alignLeft="@+id/directions_subtitle" >
 
             <Button
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/directions_walk_button_label"
                 android:id="@+id/directions_walk_button" />
 
-            <View style="@style/map_button_bar_separator" />
+            <View style="@style/button_bar_separator" />
 
             <Button
                 android:id="@+id/directions_bike_button"
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/directions_bike_button_label" />
 
-            <View style="@style/map_button_bar_separator" />
+            <View style="@style/button_bar_separator" />
 
             <Button
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/directions_transit_button_label"
                 android:id="@+id/directions_transit_button" />
 
-            <View style="@style/map_button_bar_separator" />
+            <View style="@style/button_bar_separator" />
 
             <Button
                 android:id="@+id/directions_drive_button"
-                style="@style/map_button_bar_button"
+                style="@style/button_bar_button"
                 android:text="@string/directions_drive_button_label" />
         </LinearLayout>
 

@@ -65,6 +65,7 @@
     <!-- Election Detail Strings -->
     <string name="details_state_administration_body_header">State Administration</string>
     <string name="details_local_administration_body_header">Local Administration</string>
+    <string name="details_none_found_message">No election administration information found for this election.</string>
 
     <!-- Election Links Strings -->
     <string name="details_links_section_header">Election Information Websites</string>
@@ -82,7 +83,6 @@
     <string name="details_physical_address_label">Physical Address</string>
     <string name="details_election_officials_label">Election Officials</string>
     <!-- End Election Detail Strings -->
-
 
     <!-- Locations strings -->
     <string name="locations_list_map_button_label">map</string>

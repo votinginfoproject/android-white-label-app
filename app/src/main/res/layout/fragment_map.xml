@@ -7,25 +7,25 @@
     <LinearLayout
         android:layout_marginTop="10sp"
         android:layout_marginBottom="10sp"
-        style="@style/map_button_bar"
+        style="@style/button_bar"
         android:id="@+id/locations_map_button_bar" >
 
         <Button
-            style="@style/map_button_bar_button"
+            style="@style/button_bar_button"
             android:text="@string/locations_list_all_button_label"
             android:id="@+id/locations_map_all_button" />
 
-        <View style="@style/map_button_bar_separator" />
+        <View style="@style/button_bar_separator" />
 
         <Button
-            style="@style/map_button_bar_button"
+            style="@style/button_bar_button"
             android:text="@string/locations_list_early_voting_button_label"
             android:id="@+id/locations_map_early_button" />
 
-        <View style="@style/map_button_bar_separator" />
+        <View style="@style/button_bar_separator" />
 
         <Button
-            style="@style/map_button_bar_button"
+            style="@style/button_bar_button"
             android:text="@string/locations_list_polling_sites_button_label"
             android:id="@+id/locations_map_polling_button" />
     </LinearLayout>
