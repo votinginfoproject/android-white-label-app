@@ -33,8 +33,8 @@ public class ElectionDetailsFragment extends Fragment {
 
     int selectedButtonTextColor;
     int unselectedButtonTextColor;
-    int selectedSectionColor;
-    int unselectedSectionColor;
+    int selectedSectionBackground;
+    int unselectedSectionBackground;
 
     ElectionAdministrationBody stateAdmin;
     ElectionAdministrationBody localAdmin;
@@ -136,8 +136,8 @@ public class ElectionDetailsFragment extends Fragment {
         }
 
         // set expandable section header click listeners
-        selectedSectionColor = resources.getColor(R.color.section_header_gray);
-        unselectedSectionColor = resources.getColor(R.color.white);
+        selectedSectionBackground = R.drawable.details_toggle_selected;
+        unselectedSectionBackground = R.drawable.details_toggle_unselected;
 
         for (List<Integer>detail : detailSections) {
             setSectionClickListener(detail.get(0), detail.get(1), detail.get(2), detail.get(3));
@@ -162,11 +162,11 @@ public class ElectionDetailsFragment extends Fragment {
 
                 if (section.getVisibility() == View.GONE) {
                     section.setVisibility(View.VISIBLE);
-                    btn.setBackgroundColor(selectedSectionColor);
+                    btn.setBackgroundResource(selectedSectionBackground);
                     btn.setCompoundDrawablesWithIntrinsicBounds(selectedIcon, 0, 0, 0);
                 } else {
                     section.setVisibility(View.GONE);
-                    btn.setBackgroundColor(unselectedSectionColor);
+                    btn.setBackgroundResource(unselectedSectionBackground);
                     btn.setCompoundDrawablesWithIntrinsicBounds(unselectedIcon, 0, 0, 0);
                 }
             }
@@ -275,7 +275,7 @@ public class ElectionDetailsFragment extends Fragment {
     }
 
     /**
-     * Helper function to set a TextView to a string, or hide the TextView's containing view.
+     * Helper function to set a TextView to a string, or hide the TextView's containing view,
      * if the string is null or empty.
      *
      * @param textViewId R id of the TextView to set

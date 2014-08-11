@@ -180,7 +180,7 @@
     </style>
 
     <style name="details_accordion_button" parent="android:Widget.DeviceDefault.Button.Borderless">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@drawable/details_toggle_unselected</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:layout_alignParentLeft">true</item>

@@ -18,6 +18,10 @@
                 style="@style/fragment_header" />
         </TableRow>
 
+        <TableRow>
+            <View style="@style/table_row_divider" />
+        </TableRow>
+
         <!-- links section -->
         <TableRow
             style="@style/fill_width_wrap_height"
@@ -282,6 +286,10 @@
             </TableRow>
         </TableLayout>
         <!-- end election officials section -->
+
+        <TableRow>
+            <View style="@style/table_row_divider" />
+        </TableRow>
 
     </TableLayout>
     <!-- end election body admin body section -->
