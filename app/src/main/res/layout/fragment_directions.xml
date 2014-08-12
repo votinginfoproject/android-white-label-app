@@ -10,13 +10,11 @@
 
         <TextView
             style="@style/fragment_header"
-            android:text="FOO FOO FOO FOO"
             android:id="@+id/directions_title" />
 
         <TextView
             android:id="@+id/directions_subtitle"
             android:layout_below="@+id/directions_title"
-            android:text="BAR BAR BAR BAR"
             style="@style/fragment_subheader" />
 
         <LinearLayout

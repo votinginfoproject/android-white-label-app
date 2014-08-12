@@ -198,4 +198,4 @@ public class DirectionsFragment extends Fragment {
         super.onDetach();
     }
 
-}
+  }
