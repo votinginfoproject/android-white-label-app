@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * Asynchronously query the Google Directions API for directions from user's address to a polling
@@ -42,8 +43,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
     String homeCoordinates;
     String destinationCoordinates;
-    String travelMode;
     String api_key;
+    String addressKey;
     HttpContext httpContext;
     HttpClient httpClient;
     Context context;
@@ -51,14 +52,15 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     private final WeakReference<ListView> directionsListViewReference;
     private final WeakReference<TextView> errorViewReference;
 
+    private static HashMap<String, Response> directionsCache = new HashMap(4);
+
     public DirectionsQuery(ListView listView, TextView errorView, String originCoordinates,
-                           String destinationCoordinates, String travelMode) {
+                           String destinationCoordinates) {
         super();
         context = VIPAppContext.getContext();
         resources = context.getResources();
         this.homeCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
-        this.travelMode = travelMode;
         this.api_key = context.getResources().getString(R.string.google_api_browser_key);
 
         this.directionsListViewReference = new WeakReference(listView);
@@ -66,19 +68,36 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
+
+        // build cache key for this instance
+        StringBuilder cacheKeyBuilder = new StringBuilder(originCoordinates);
+        cacheKeyBuilder.append("-");
+        cacheKeyBuilder.append(destinationCoordinates);
+        cacheKeyBuilder.append("-");
+        this.addressKey = cacheKeyBuilder.toString();
     }
 
     @Override
-    protected Response doInBackground(String... addresses) {
+    protected Response doInBackground(String... travelModes) {
+
+        // first check if we already have this one cached
+        String cacheKey = addressKey + travelModes[0];
+        Response cachedResponse = directionsCache.get(cacheKey);
+        if (cachedResponse != null) {
+            Log.d("DirectionsQuery", "Have response in cache.");
+            return cachedResponse;
+        }
+
+        // Response is not cached; go query for directions.
         // Uri.Builder is not safe for concurrent use, so just build a string
         StringBuilder uri = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?origin=");
         uri.append(homeCoordinates);
         uri.append("&destination=");
         uri.append(destinationCoordinates);
         uri.append("&mode=");
-        uri.append(travelMode);
+        uri.append(travelModes[0]);
 
-        if (travelMode.equals("transit")) {
+        if (travelModes[0].equals("transit")) {
             // must specify departure or arrival time
             uri.append("&departure_time=");
             uri.append(String.valueOf(System.currentTimeMillis() / 1000)); // now, as seconds since epoch
@@ -105,6 +124,12 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
                 Response gsonObj = gson.fromJson(ir, Response.class);
                 ir.close();
                 inputStream.close();
+
+                // add this response to the cache, if it's good
+                if (gsonObj != null && gsonObj.status.equals("OK")) {
+                    directionsCache.put(cacheKey, gsonObj);
+                }
+
                 return gsonObj;
             } else {
                 // error
@@ -186,6 +211,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     }
 
     private void showError() {
+        // show error message
         ListView directionsListView = directionsListViewReference.get();
         TextView errorView = errorViewReference.get();
         if (directionsListView != null && errorView != null) {

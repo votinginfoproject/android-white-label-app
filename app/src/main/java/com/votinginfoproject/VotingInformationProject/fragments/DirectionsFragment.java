@@ -137,8 +137,8 @@ public class DirectionsFragment extends Fragment {
         // set up directions list
         directionsList = (ListView)rootView.findViewById(R.id.directions_list);
         noneFoundMessage = (TextView) rootView.findViewById(R.id.directions_none_found_message);
-        queryDirections();
 
+        queryDirections();
         return rootView;
     }
 
@@ -155,7 +155,7 @@ public class DirectionsFragment extends Fragment {
                     return; // ignore button click if already viewing that list
                 }
 
-                Button btn = (Button)v;
+                Button btn = (Button) v;
 
                 // highlight current selection (and un-highlight last button)
                 btn.setTextColor(selectedTextColor);
@@ -175,7 +175,6 @@ public class DirectionsFragment extends Fragment {
                 }
 
                 Log.d("DirectionsFragment", "New directions mode is " + directionsMode);
-
                 queryDirections();
 
                 lastSelectedButtonId = buttonId;
@@ -184,10 +183,13 @@ public class DirectionsFragment extends Fragment {
         });
     }
 
+    /** Helper function to fetch directions from asynchronous query.
+     *
+     */
     private void queryDirections() {
         String homeCoords = homeLatLng.latitude + "," + homeLatLng.longitude;
         String locationCoords = location.address.latitude + "," + location.address.longitude;
-        new DirectionsQuery(directionsList, noneFoundMessage, homeCoords, locationCoords, directionsMode).execute();
+        new DirectionsQuery(directionsList, noneFoundMessage, homeCoords, locationCoords).execute(directionsMode);
     }
 
     @Override
