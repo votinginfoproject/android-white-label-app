@@ -43,15 +43,29 @@ public class ElectionDetailsFragment extends Fragment {
     int lastSelectedButtonId = R.id.locations_list_all_button;
     Button lastSelectedButton;
 
+    private static class DetailSection {
+        final int section;
+        final int header;
+        final int unselectedIcon;
+        final int selectedIcon;
+
+        DetailSection(int header, int section, int unselectedIcon, int selectedIcon) {
+            this.section = section;
+            this.header = header;
+            this.unselectedIcon = unselectedIcon;
+            this.selectedIcon = selectedIcon;
+        }
+    }
+
     // collapsible section headers, and their sub-sections
     // 0 -> section header, 1-> section, 2-> unselected section icon, 3-> selected section icon
-    static final List<List<Integer>> detailSections = new ArrayList<List<Integer>>() {{
-        add(Arrays.asList(R.id.details_links_section_header, R.id.details_links_section, R.drawable.ic_website, R.drawable.ic_website_active));
-        add(Arrays.asList(R.id.details_voter_services_section_header, R.id.details_voter_services_section, R.drawable.ic_vservices, R.drawable.ic_vservices_active));
-        add(Arrays.asList(R.id.details_hours_of_operation_section_header, R.id.details_hours_of_operation_section, R.drawable.ic_hours, R.drawable.ic_hours_active));
-        add(Arrays.asList(R.id.details_correspondence_address_section_header, R.id.details_correspondence_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
-        add(Arrays.asList(R.id.details_physical_address_section_header, R.id.details_physical_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
-        add(Arrays.asList(R.id.details_election_officials_section_header, R.id.details_election_officials_section, R.drawable.ic_officials, R.drawable.ic_officials_active));
+    static final List<DetailSection> detailSections = new ArrayList<DetailSection>() {{
+        add(new DetailSection(R.id.details_links_section_header, R.id.details_links_section, R.drawable.ic_website, R.drawable.ic_website_active));
+        add(new DetailSection(R.id.details_voter_services_section_header, R.id.details_voter_services_section, R.drawable.ic_vservices, R.drawable.ic_vservices_active));
+        add(new DetailSection(R.id.details_hours_of_operation_section_header, R.id.details_hours_of_operation_section, R.drawable.ic_hours, R.drawable.ic_hours_active));
+        add(new DetailSection(R.id.details_correspondence_address_section_header, R.id.details_correspondence_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
+        add(new DetailSection(R.id.details_physical_address_section_header, R.id.details_physical_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
+        add(new DetailSection(R.id.details_election_officials_section_header, R.id.details_election_officials_section, R.drawable.ic_officials, R.drawable.ic_officials_active));
     }};
 
     /**
@@ -139,8 +153,8 @@ public class ElectionDetailsFragment extends Fragment {
         selectedSectionBackground = R.drawable.details_toggle_selected;
         unselectedSectionBackground = R.drawable.details_toggle_unselected;
 
-        for (List<Integer>detail : detailSections) {
-            setSectionClickListener(detail.get(0), detail.get(1), detail.get(2), detail.get(3));
+        for (DetailSection detail : detailSections) {
+            setSectionClickListener(detail.header, detail.section, detail.unselectedIcon, detail.selectedIcon);
         }
     }
 
@@ -177,8 +191,8 @@ public class ElectionDetailsFragment extends Fragment {
      * Helper function to hide all collapsible subsections when switching between election bodies
      */
     private void collapseAllSubSections() {
-        for (List<Integer>detail : detailSections) {
-            View subsection = mActivity.findViewById(detail.get(1));
+        for (DetailSection detail : detailSections) {
+            View subsection = mActivity.findViewById(detail.section);
             subsection.setVisibility(View.GONE);
         }
     }
