@@ -110,6 +110,7 @@
     <string name="directions_drive_button_label">Drive</string>
     <string name="directions_open_in_maps_button_label">Open in Google Maps</string>
     <string name="directions_error_message">No directions found.</string>
+    <string name="directions_loading_message">Loading directions...</string>
 
     <!-- About App strings -->
     <string name="about_app_title">About This App</string>

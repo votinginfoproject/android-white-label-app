@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     HttpContext httpContext;
     HttpClient httpClient;
     Context context;
+    Resources resources;
     private final WeakReference<ListView> directionsListViewReference;
     private final WeakReference<TextView> errorViewReference;
 
@@ -53,6 +55,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
                            String destinationCoordinates, String travelMode) {
         super();
         context = VIPAppContext.getContext();
+        resources = context.getResources();
         this.homeCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
         this.travelMode = travelMode;
@@ -134,6 +137,25 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         return null;
     }
 
+    /** Show loading message while fetching response.
+     *
+     */
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        ListView directionsListView = directionsListViewReference.get();
+        TextView errorView = errorViewReference.get();
+
+        if (directionsListView != null && errorView != null) {
+            errorView.setText(resources.getString(R.string.directions_loading_message));
+            errorView.setVisibility(View.VISIBLE);
+            directionsListView.setVisibility(View.GONE);
+        } else {
+            Log.e("DirectionsQuery:onPreExecute", "Directions ListView and/or error TextView references are null.");
+        }
+    }
+
     @Override
     protected void onPostExecute(Response response) {
         if (response == null) {
@@ -168,6 +190,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         TextView errorView = errorViewReference.get();
         if (directionsListView != null && errorView != null) {
             directionsListView.setVisibility(View.GONE);
+            errorView.setText(resources.getString(R.string.directions_error_message));
             errorView.setVisibility(View.VISIBLE);
         } else {
             Log.e("DirectionsQuery:showError", "Directions ListView and/or error TextView references are null.");
