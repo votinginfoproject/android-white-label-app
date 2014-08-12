@@ -46,8 +46,8 @@ public class ElectionDetailsFragment extends Fragment {
     // collapsible section headers, and their sub-sections
     // 0 -> section header, 1-> section, 2-> unselected section icon, 3-> selected section icon
     static final List<List<Integer>> detailSections = new ArrayList<List<Integer>>(14) {{
-        add(Arrays.asList(R.id.details_links_section_header, R.id.details_links_section, R.drawable.ic_website, R.drawable.ic_website));
-        add(Arrays.asList(R.id.details_voter_services_section_header, R.id.details_voter_services_section, R.drawable.ic_action_about, R.drawable.ic_action_about));
+        add(Arrays.asList(R.id.details_links_section_header, R.id.details_links_section, R.drawable.ic_website, R.drawable.ic_website_active));
+        add(Arrays.asList(R.id.details_voter_services_section_header, R.id.details_voter_services_section, R.drawable.ic_vservices, R.drawable.ic_vservices_active));
         add(Arrays.asList(R.id.details_hours_of_operation_section_header, R.id.details_hours_of_operation_section, R.drawable.ic_hours, R.drawable.ic_hours_active));
         add(Arrays.asList(R.id.details_correspondence_address_section_header, R.id.details_correspondence_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
         add(Arrays.asList(R.id.details_physical_address_section_header, R.id.details_physical_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
