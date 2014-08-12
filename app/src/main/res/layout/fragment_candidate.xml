@@ -9,21 +9,19 @@
 
     <RelativeLayout
         android:id="@+id/RelativeLayout"
-        style="@style/fill_width_wrap_height"
-        android:padding="6dip" >
+        style="@style/fill_width_wrap_height" >
 
         <ImageView
             android:id="@+id/candidate_photo"
             android:contentDescription="@string/candidate_picture_description"
             android:src="@drawable/ic_avatar"
-            android:layout_marginTop="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginBottom="10dip"
-            android:layout_marginRight="5dip"
-            style="@style/wrap_width_wrap_height"
+            android:adjustViewBounds="true"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_centerVertical="true" />
 
         <TextView
+            android:layout_marginTop="5sp"
             android:id="@+id/candidate_name"
             style="@style/fragment_header"
             android:layout_toRightOf="@+id/candidate_photo"

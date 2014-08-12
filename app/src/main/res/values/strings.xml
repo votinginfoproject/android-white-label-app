@@ -65,6 +65,7 @@
     <!-- Election Detail Strings -->
     <string name="details_state_administration_body_header">State Administration</string>
     <string name="details_local_administration_body_header">Local Administration</string>
+    <string name="details_none_found_message">No election administration information found for this election.</string>
 
     <!-- Election Links Strings -->
     <string name="details_links_section_header">Election Information Websites</string>
@@ -83,9 +84,8 @@
     <string name="details_election_officials_label">Election Officials</string>
     <!-- End Election Detail Strings -->
 
-
     <!-- Locations strings -->
-    <string name="locations_list_map_button_label">Map</string>
+    <string name="locations_list_map_button_label">map</string>
     <string name="locations_list_all_button_label">All Sites</string>
     <string name="locations_list_early_voting_button_label">Early Voting</string>
     <string name="locations_list_polling_sites_button_label">Polling Sites</string>

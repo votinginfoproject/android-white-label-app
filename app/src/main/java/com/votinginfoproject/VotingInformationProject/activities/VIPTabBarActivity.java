@@ -153,7 +153,10 @@ public class VIPTabBarActivity extends FragmentActivity {
     }
 
     public LatLng getHomeLatLng() {
-        return new LatLng(homeLocation.getLatitude(), homeLocation.getLongitude());
+        if (homeLocation != null) {
+            return new LatLng(homeLocation.getLatitude(), homeLocation.getLongitude());
+        }
+        return null;
     }
 
     @Override
