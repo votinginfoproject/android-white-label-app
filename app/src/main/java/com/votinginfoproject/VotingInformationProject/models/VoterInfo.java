@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,44 @@ public class VoterInfo {
     public List<PollingLocation> earlyVoteSites;
     public List<Contest> contests;
     public List<State> state;
+
+    private String selectedParty;
+    public List<Contest> filteredContests;
+
+    public String getSelectedParty() {
+        return selectedParty;
+    }
+
+    public void setSelectedParty(String party) {
+        this.selectedParty = party;
+
+
+        Log.d("VoterInfo", "Filtering contest list for party: " + party);
+
+        // build filtered list of contests based on party
+        filteredContests = new ArrayList<Contest>(contests.size());
+        // filter contest list for primary party
+        if (!party.isEmpty()) {
+            for (Contest contest : contests) {
+                if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
+                    if (contest.primaryParty.equals(party)) {
+                        filteredContests.add(contest);
+                    }
+                } else {
+                    // this contest isn't a primary; show it
+                    filteredContests.add(contest);
+                }
+            }
+        } else {
+            // no selected party; show all
+            filteredContests.addAll(contests);
+        }
+
+        Log.d("VoterInfo", "Have filtered contests:");
+        for (Contest contest : filteredContests) {
+            Log.d("VoterInfo", "Contest of type: " + contest.type);
+        }
+    }
 
     /**
      * Default Constructor

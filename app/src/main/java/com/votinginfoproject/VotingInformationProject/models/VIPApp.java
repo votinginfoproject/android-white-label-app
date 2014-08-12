@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.models;
 import android.app.Application;
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import java.util.Locale;
 
@@ -30,8 +31,22 @@ public class VIPApp extends Application {
         return voterInfo;
     }
 
-    public void setVoterInfo(VoterInfo info) {
+    public void setVoterInfo(VoterInfo info, String party) {
         this.voterInfo = info;
+
+        if (info != null) {
+            this.voterInfo.setSelectedParty(party);
+        } else {
+            Log.d("VIPApp", "VoterInfo object is null");
+        }
+    }
+
+    public void setSelectedParty(String party) {
+        if (voterInfo != null) {
+            voterInfo.setSelectedParty(party);
+        } else {
+            Log.d("VIPApp", "Cannot set party on VoterInfo because voterInfo is null");
+        }
     }
 
     public void setHomeLocation(Location location) {

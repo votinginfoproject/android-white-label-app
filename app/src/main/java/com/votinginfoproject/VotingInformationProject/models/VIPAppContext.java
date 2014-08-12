@@ -30,6 +30,10 @@ public class VIPAppContext {
         app = vip_app;
     }
 
+    public void setSelectedParty(String party) {
+        app.setSelectedParty(party);
+    }
+
     /**
      * For testing, override this method to return a mock context
      * @return this application's context

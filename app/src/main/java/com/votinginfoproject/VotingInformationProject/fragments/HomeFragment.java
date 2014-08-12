@@ -26,10 +26,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -38,12 +41,14 @@ public class HomeFragment extends Fragment {
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
-    Activity myActivity;
+    HomeActivity myActivity;
     Context context;
     EditText homeEditTextAddress;
     TextView homeTextViewStatus;
     Spinner homeElectionSpinner;
     View homeElectionSpinnerWrapper;
+    Spinner homePartySpinner;
+    View homePartySpinnerWrapper;
     ImageView homeSearchButton;
 
     Election currentElection;
@@ -54,6 +59,7 @@ public class HomeFragment extends Fragment {
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -69,7 +75,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        myActivity = getActivity();
+        myActivity = (HomeActivity)getActivity();
         context = myActivity.getApplicationContext();
 
         homeTextViewStatus = (TextView)rootView.findViewById(R.id.home_textview_status);
@@ -82,6 +88,9 @@ public class HomeFragment extends Fragment {
 
         homeElectionSpinner = (Spinner)rootView.findViewById(R.id.home_election_spinner);
         homeElectionSpinnerWrapper = rootView.findViewById(R.id.home_election_spinner_wrapper);
+
+        homePartySpinner = (Spinner)rootView.findViewById(R.id.home_party_spinner);
+        homePartySpinnerWrapper = rootView.findViewById(R.id.home_party_spinner_wrapper);
 
         homeSearchButton = (ImageView)rootView.findViewById(R.id.home_edittext_search_button);
 
@@ -117,6 +126,7 @@ public class HomeFragment extends Fragment {
         // clear previous election before making a query for a new address
         mListener.searchedAddress(null);
         currentElection = null;
+        myActivity.setSelectedParty("");
         constructVoterInfoQuery();
     }
 
@@ -157,7 +167,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Spinner listener
+        // election spinner listener
         homeElectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected (AdapterView < ? > adapterView, View view, int index, long id){
@@ -169,6 +179,19 @@ public class HomeFragment extends Fragment {
                     currentElection = selectedElection;
                     constructVoterInfoQuery();
                 }
+            }
+            @Override
+            public void onNothingSelected (AdapterView < ? > adapterView){
+                // PASS
+            }
+        });
+
+        // party spinner listener
+        homePartySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected (AdapterView < ? > adapterView, View view, int index, long id){
+                myActivity.setSelectedParty((String)adapterView.getItemAtPosition(index));
+                Log.d("HomeFragment", "Selected via party picker: " + myActivity.getSelectedParty());
             }
             @Override
             public void onNothingSelected (AdapterView < ? > adapterView){
@@ -245,6 +268,7 @@ public class HomeFragment extends Fragment {
                 elections.add(0, voterInfo.election);
 
                 setSpinnerElections(elections);
+                setSpinnerParty(voterInfo.contests);
 
             }
         };
@@ -320,8 +344,29 @@ public class HomeFragment extends Fragment {
             homeElectionSpinnerWrapper.setVisibility(View.VISIBLE);
         }
         ArrayAdapter<Election> adapter =
-                new ArrayAdapter<Election>(getActivity(), R.layout.home_election_spinner_view, elections);
+                new ArrayAdapter<Election>(getActivity(), R.layout.home_spinner_view, elections);
         homeElectionSpinner.setAdapter(adapter);
-    };
+    }
 
+    public void setSpinnerParty(List<Contest> contests) {
+        HashSet<String> parties = new HashSet(5);
+        for (Contest contest : contests) {
+            // if contest has a primary party listed, it must be for a primary election
+            if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
+                parties.add(contest.primaryParty);
+            }
+        }
+
+        if (!parties.isEmpty()) {
+            // convert set to list for adapter
+            List<String> partiesList = new ArrayList<String>(parties);
+            // sort list alphabetically
+            Collections.sort(partiesList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.home_spinner_view, partiesList);
+            homePartySpinner.setAdapter(adapter);
+            homePartySpinnerWrapper.setVisibility(View.VISIBLE);
+        } else {
+            homePartySpinnerWrapper.setVisibility(View.GONE);
+        }
+    }
 }
