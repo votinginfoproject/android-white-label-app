@@ -95,8 +95,6 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
     private void setTextView(TextView view, String text) {
         if (text != null && !text.isEmpty()) {
             view.setText(text);
-        } else {
-            view.setVisibility(View.GONE);
         }
     }
 }

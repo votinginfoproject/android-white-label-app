@@ -21,7 +21,23 @@ public class VoterInfo {
     public List<State> state;
 
     private String selectedParty;
-    public List<Contest> filteredContests;
+
+    public List<Contest> getFilteredContests() {
+        return filteredContests;
+    }
+
+    /**
+     * Find a contest at a particular offset in the party-filtered list.  For use with list item
+     * found in ContestsAdapter list.
+     *
+     * @param position Index in the filteredContest list
+     * @return Contest at the given index
+     */
+    public Contest getContestAt(int position) {
+        return filteredContests.get(position);
+    }
+
+    private List<Contest> filteredContests;
 
     public String getSelectedParty() {
         return selectedParty;

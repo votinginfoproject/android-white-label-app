@@ -74,7 +74,7 @@ public class ContestFragment extends Fragment {
 
         try {
             voterInfo = ((VIPTabBarActivity) myActivity).getVoterInfo();
-            contest = voterInfo.filteredContests.get(contestNum);
+            contest = voterInfo.getContestAt(contestNum);
             Log.d("ContestFragment", "Got contest for office: " + contest.office);
 
             // title / subtitle is referendumTitle and referendumSubtitle, if election is

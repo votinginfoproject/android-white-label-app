@@ -40,21 +40,16 @@ public class BallotFragment extends Fragment {
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // fill list of contests
-        if (voterInfo.filteredContests != null) {
-            ContestsAdapter adapter = new ContestsAdapter(myActivity, voterInfo.filteredContests, voterInfo.election.name);
-            adapter.sortList();
-            ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
-            contestList.setAdapter(adapter);
-            contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    myActivity.showContestDetails(position);
-                }
-            });
-        } else {
-            // TODO: should never happen
-            Log.e("BallotFragment", "No filtered contests found!");
-        }
+        ContestsAdapter adapter = new ContestsAdapter(myActivity, voterInfo.getFilteredContests(), voterInfo.election.name);
+        adapter.sortList();
+        ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
+        contestList.setAdapter(adapter);
+        contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                myActivity.showContestDetails(position);
+            }
+        });
 
         return rootView;
     }
