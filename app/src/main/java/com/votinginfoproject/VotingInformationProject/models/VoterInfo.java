@@ -46,7 +46,6 @@ public class VoterInfo {
     public void setSelectedParty(String party) {
         this.selectedParty = party;
 
-
         Log.d("VoterInfo", "Filtering contest list for party: " + party);
 
         // build filtered list of contests based on party
