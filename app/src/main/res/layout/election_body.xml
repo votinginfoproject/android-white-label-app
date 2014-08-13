@@ -143,7 +143,7 @@
             <Button
                 android:id="@+id/details_voter_services_section_header"
                 android:text="@string/details_voter_services_label"
-                android:drawableLeft="@drawable/ic_action_about"
+                android:drawableLeft="@drawable/ic_vservices"
                 style="@style/details_accordion_button" />
         </TableRow>
 
