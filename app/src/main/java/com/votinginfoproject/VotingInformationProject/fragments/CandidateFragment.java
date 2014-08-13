@@ -86,7 +86,7 @@ public class CandidateFragment extends Fragment {
         TextView partyView = (TextView)mActivity.findViewById(R.id.candidate_party);
         try {
             voterInfo = mActivity.getVoterInfo();
-            contest = voterInfo.contests.get(contestNum);
+            contest = voterInfo.getContestAt(contestNum);
             candidate = contest.candidates.get(candidateNum);
 
             String name = (candidate.name != null) ? candidate.name : getString(R.string.candidate_no_name);
