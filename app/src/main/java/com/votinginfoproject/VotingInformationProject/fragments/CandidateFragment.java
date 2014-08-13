@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -137,9 +138,10 @@ public class CandidateFragment extends Fragment {
 
             // SET CANDIDATE PHOTO
             ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
-            if (candidate.photo != null) {
+            Bitmap havePhoto = candidate.getCandidatePhoto();
+            if (havePhoto != null) {
                 Log.d("CandidateFragment", "Already have candidate photo; using it.");
-                photoView.setImageBitmap(candidate.photo);
+                photoView.setImageBitmap(havePhoto);
             } else {
                 if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
                     Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);

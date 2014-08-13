@@ -1,9 +1,11 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
@@ -20,6 +22,7 @@ public class VoterInfo {
     public List<Contest> contests;
     public List<State> state;
 
+    private CandidatePhotoCache candidatePhotoCache;
     private String selectedParty;
 
     public List<Contest> getFilteredContests() {
@@ -76,9 +79,18 @@ public class VoterInfo {
     /**
      * Default Constructor
      *
-     * Ensures otherElections is never a null field
+     * Ensures otherElections is never a null field, and create photo cache for candidate images
      */
     public VoterInfo() {
         this.otherElections = new ArrayList<Election>();
+        candidatePhotoCache = new CandidatePhotoCache();
+    }
+
+    public Bitmap getImageFromCache(UUID key) {
+        return candidatePhotoCache.getBitmapFromMemCache(key);
+    }
+
+    public UUID addImageToCache(Bitmap bitmap) {
+        return candidatePhotoCache.addBitmapToMemoryCache(bitmap);
     }
 }

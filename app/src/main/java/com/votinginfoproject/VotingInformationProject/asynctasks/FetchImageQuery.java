@@ -148,7 +148,8 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             return;
         }
 
-        candidate.photo = bitmap;
+        // store image in LRU cache
+        candidate.setCandidatePhoto(bitmap);
 
         if (imageView != null) {
             // get weakly referenced image view
