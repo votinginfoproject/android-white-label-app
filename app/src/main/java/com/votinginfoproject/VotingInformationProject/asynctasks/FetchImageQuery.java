@@ -34,12 +34,18 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     HttpContext httpContext;
     HttpClient httpClient;
     Candidate candidate;
+    final BitmapFactory.Options justGetBoundsOptions;
+
 
     public FetchImageQuery(Candidate candidate, ImageView imageView) {
         this.candidate = candidate;
         this.imageView = new WeakReference(imageView);
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
+        justGetBoundsOptions = new BitmapFactory.Options();
+        justGetBoundsOptions.inJustDecodeBounds = true;
+        justGetBoundsOptions.inPurgeable = true;
+        justGetBoundsOptions.inInputShareable = true;
     }
 
     protected Bitmap doInBackground(String... urls) {
@@ -57,18 +63,50 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
                 return null;
             }
 
-            final BufferedHttpEntity entity = new BufferedHttpEntity(response.getEntity());
+            // scale down image to fit candidate detail view thumbnail
+
+            // first query for image size, to scale it
+            BufferedHttpEntity entity = new BufferedHttpEntity(response.getEntity());
             if (entity != null) {
                 inputStream = entity.getContent();
-                return BitmapFactory.decodeStream(inputStream);
+                BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
+            }
+
+            // Calculate inSampleSize
+            justGetBoundsOptions.inSampleSize = calculateInSampleSize(justGetBoundsOptions);
+
+            // Decode bitmap with inSampleSize set
+            justGetBoundsOptions.inJustDecodeBounds = false;
+
+            // re-query, now to actually get the image
+            inputStream.close();
+            httpGet = new HttpGet(photoUrl);
+            response = httpClient.execute(httpGet, httpContext);
+            status = response.getStatusLine().getStatusCode();
+
+            if (status != HttpStatus.SC_OK) {
+                Log.e("FetchImageQuery", "Error " + status + " while fetching image at URL " + photoUrl);
+                return null;
+            }
+
+            entity = new BufferedHttpEntity(response.getEntity());
+            if (entity != null) {
+                inputStream = entity.getContent();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
+                return bitmap;
             }
 
         } catch (IOException e) {
             Log.e("FetchImageQuery", "IOException downloading image at URL " + photoUrl);
             e.printStackTrace();
+            cancel(true);
+        } catch (OutOfMemoryError err) {
+            Log.e("FetchImageQuery", "Ran out of memory dowloading image at URL " + photoUrl);
+            cancel(true);
         } catch (Exception ex) {
             Log.e("FetchImageQuery", "Exception downloading image at URL " + photoUrl);
             ex.printStackTrace();
+            cancel(true);
         } finally {
             if (inputStream != null) {
                 try {
@@ -92,9 +130,21 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     }
 
     @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        Log.e("FetchImageQuery", "Image fetch got cancelled!");
+    }
+
+    @Override
     protected void onPostExecute(Bitmap bitmap) {
         if (isCancelled()) {
             Log.e("FetchImageQuery:onPostExecute", "Task cancelled; not setting bitmap.");
+            bitmap = null;
+            return;
+        }
+
+        if (bitmap == null) {
+            Log.e("FetchImageQuery:onPostExecute", "Bitmap is null; not setting bitmap.");
             return;
         }
 
@@ -110,5 +160,41 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
         } else {
             Log.e("FetchImageQuery:onPostExecute", "No ImageView found to give the bitmap.");
         }
+    }
+
+    /**
+     * Calculate sample size for scaling down huge images to fit in the view, without overloading
+     * app memory.  From here:
+     * http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
+     *
+     * @param options BitmapFactory options used to pre-query for the image dimensions
+     * @return
+     */
+    public static int calculateInSampleSize(BitmapFactory.Options options) {
+        // Size to scale to
+        int reqWidth = 80;
+        int reqHeight = 80;
+
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            Log.d("FetchImageQuery", "Scaling image down from " + height + " " + width);
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }
