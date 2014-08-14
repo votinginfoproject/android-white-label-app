@@ -242,7 +242,7 @@ public class HomeFragment extends Fragment {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
             builder.appendPath(resources.getString(R.string.civic_info_api_version));
-            String officialOnly = res.getBoolean(R.bool.civic_info_official_only) ? "true" : "false";
+            String officialOnly = resources.getBoolean(R.bool.civic_info_official_only) ? "true" : "false";
             builder.appendPath("voterinfo").appendQueryParameter("officialOnly", officialOnly);
             if (!electionId.isEmpty()) {
                 builder.appendQueryParameter("electionId", electionId);
