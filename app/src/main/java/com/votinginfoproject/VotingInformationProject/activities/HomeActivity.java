@@ -5,6 +5,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -15,19 +16,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.asynctasks.ReverseGeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 
-public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener,
+        LoaderManager.LoaderCallbacks<Cursor>,GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener {
 
     static final int PICK_CONTACT_REQUEST = 1;
     VIPApp app;
     Uri contactUri;
+    EditText addressView;
     LoaderManager loaderManager;
+    LocationClient mLocationClient;
+    ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
 
     public String getSelectedParty() {
         return selectedParty;
@@ -48,6 +58,21 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         loaderManager = getLoaderManager();
         selectedParty = "";
         contactUri = null;
+        mLocationClient = new LocationClient(this, this, this);
+        addressView = (EditText)findViewById(R.id.home_edittext_address);
+
+        // set up callback listener for reverse-geocode address result
+        reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
+            @Override
+            public void callback(String address) {
+                Log.d("HomeActivity", "Got reverse-geocoded address " + address);
+                if (address != null || !address.isEmpty()) {
+                    addressView.setText(address);
+                } else {
+                    Log.e("HomeActivity", "Got empty address result!");
+                }
+            }
+        };
     }
 
     @Override
@@ -69,6 +94,21 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void onGoButtonPressed(View view) {
         Intent intent = new Intent(this, VIPTabBarActivity.class);
         startActivity(intent);
+    }
+
+    public void onUseLocationButtonPressed(View view) {
+        // TODO: check for Google Play services availability here (instead of in VIPTabBarActivity)
+        Location currentLocation = mLocationClient.getLastLocation();
+        if (currentLocation != null) {
+            Log.d("HomeActivity", "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+            // now go reverse-geocode to find address for current location
+            new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
+        } else {
+            Log.e("HomeActivity", "Current location not found!  Are Location services enabled?");
+
+            // TODO: user has probably diabled Location services
+            // prompt them to go turn it on?
+        }
     }
 
     public void onSelectContactButtonPressed(View view) {
@@ -123,15 +163,48 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             Log.d("HomeActivity", "Got cursor result: " + address);
 
             // set address found in view
-            EditText addressView = (EditText)findViewById(R.id.home_edittext_address);
             addressView.setText(address);
         } else {
             Log.e("HomeActivity", "Cursor got no results!");
         }
     }
 
+    /**
+     * Called when Activity becomes visible
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // connect to location service
+        mLocationClient.connect();
+    }
+
+    /**
+     * Disconnect location client when app is no longer going to be visible
+     */
+    @Override
+    protected void onStop() {
+        mLocationClient.disconnect();
+        super.onStop();
+    }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d("HomeActivity", "Location services connected.");
+    }
+
+    @Override
+    public void onDisconnected() {
+        Log.d("HomeActivity", "Location services disconnected.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e("HomeActivity", "Location services failed.");
     }
 }

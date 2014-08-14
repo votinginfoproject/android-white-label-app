@@ -10,4 +10,6 @@
     <color name="list_divider_gray">#e6e6e6</color>
     <color name="home_button_background">#004071</color>
     <color name="home_edittext_background">#137bbb</color>
+    <color name="home_warning_background">#042a42</color>
+    <color name="brand_name_text">#60c9f8</color>
 </resources>

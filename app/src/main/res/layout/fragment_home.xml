@@ -12,8 +12,7 @@
     <TextView
         android:id="@+id/home_textview_brandname"
         android:text="@string/home_textview_brandname"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -22,14 +21,13 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:textColor="#60c9f8"
+        android:textColor="@color/brand_name_text"
         android:textIsSelectable="false" />
 
     <TextView
         android:id="@+id/home_textview_votinginfo"
         android:text="@string/home_textview_votinginfo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="5sp"
@@ -41,8 +39,7 @@
         android:id="@+id/home_textview_getting_started"
         android:text="@string/home_textview_getting_started"
         android:labelFor="@+id/home_edittext_address"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/fill_width_wrap_height"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/home_textview_votinginfo"
@@ -101,7 +98,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10sp"
-        android:background="#042a42"
+        android:background="@color/home_warning_background"
         android:layout_below="@+id/home_edittext"
         android:drawablePadding="15sp"
         android:gravity="left"
@@ -110,19 +107,42 @@
         android:textSize="14sp"
         android:textStyle="italic" />
 
-    <Button
-        android:text="@string/homeactivity_select_contact_button"
-        android:contentDescription="@string/home_select_contact_button_description"
-        android:id="@+id/home_select_contact_button"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/home_select_buttons_row"
         android:layout_below="@+id/home_textview_status"
-        style="@style/home_view_button"
-        android:layout_marginTop="10sp" />
+        style="@style/fill_width_wrap_height" >
+
+        <Button
+            android:text="@string/homeactivity_select_contact_button"
+            android:drawableLeft="@drawable/ic_officials"
+            android:paddingLeft="5sp"
+            android:contentDescription="@string/home_select_contact_button_description"
+            android:id="@+id/home_select_contact_button"
+            android:layout_weight="1"
+            style="@style/home_view_button"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"
+            android:layout_marginRight="5sp" />
+
+        <Button
+            android:text="@string/homeactivity_select_location_button"
+            android:drawableLeft="@android:drawable/ic_menu_mylocation"
+            android:paddingLeft="5sp"
+            android:contentDescription="@string/home_select_location_button_description"
+            android:id="@+id/home_use_location_button"
+            android:layout_weight="1"
+            style="@style/home_view_button"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"
+            android:layout_marginLeft="5sp" />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/home_election_spinner_wrapper"
         style="@style/fill_width_wrap_height"
         android:visibility="gone"
-        android:layout_below="@+id/home_select_contact_button"
+        android:layout_below="@+id/home_select_buttons_row"
         android:gravity="center"
         android:paddingBottom="5sp"
         android:paddingTop="5sp">

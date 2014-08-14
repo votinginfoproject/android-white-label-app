@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
 
     Button homeGoButton;
     Button homeSelectContactButton;
+    Button homeUseLocationButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
     HomeActivity myActivity;
@@ -84,8 +85,8 @@ public class HomeFragment extends Fragment {
         homeTextViewStatus = (TextView)rootView.findViewById(R.id.home_textview_status);
 
         homeGoButton = (Button)rootView.findViewById(R.id.home_go_button);
-
         homeSelectContactButton = (Button)rootView.findViewById(R.id.home_select_contact_button);
+        homeUseLocationButton = (Button)rootView.findViewById(R.id.home_use_location_button);
 
         homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
         homeEditTextAddress.setText(getAddress());
@@ -154,6 +155,16 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 if (mListener != null) {
                     mListener.onSelectContactButtonPressed(view);
+                }
+            }
+        });
+
+        // button to use current location onClick listener
+        homeUseLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onUseLocationButtonPressed(view);
                 }
             }
         });
@@ -341,6 +352,7 @@ public class HomeFragment extends Fragment {
     public interface OnInteractionListener {
         public void onGoButtonPressed(View view);
         public void onSelectContactButtonPressed(View view);
+        public void onUseLocationButtonPressed(View view);
         public void searchedAddress(VoterInfo voterInfo);
     }
 
