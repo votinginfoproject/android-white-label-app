@@ -39,10 +39,12 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     Button homeGoButton;
+    Button homeSelectContactButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
     HomeActivity myActivity;
     Context context;
+    Resources resources;
     EditText homeEditTextAddress;
     TextView homeTextViewStatus;
     Spinner homeElectionSpinner;
@@ -77,11 +79,13 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         myActivity = (HomeActivity)getActivity();
         context = myActivity.getApplicationContext();
+        resources = context.getResources();
 
         homeTextViewStatus = (TextView)rootView.findViewById(R.id.home_textview_status);
 
         homeGoButton = (Button)rootView.findViewById(R.id.home_go_button);
-        homeGoButton.setVisibility(View.INVISIBLE);
+
+        homeSelectContactButton = (Button)rootView.findViewById(R.id.home_select_contact_button);
 
         homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
         homeEditTextAddress.setText(getAddress());
@@ -127,6 +131,8 @@ public class HomeFragment extends Fragment {
         mListener.searchedAddress(null);
         currentElection = null;
         myActivity.setSelectedParty("");
+        // only hide election picker when searching with a new address
+        homeElectionSpinnerWrapper.setVisibility(View.GONE);
         constructVoterInfoQuery();
     }
 
@@ -138,6 +144,16 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 if (mListener != null) {
                     mListener.onGoButtonPressed(view);
+                }
+            }
+        });
+
+        // select contact onClick listener
+        homeSelectContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onSelectContactButtonPressed(view);
                 }
             }
         });
@@ -223,20 +239,27 @@ public class HomeFragment extends Fragment {
         } catch (NullPointerException e) {}
 
         try {
-            Resources res = context.getResources();
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
-            builder.appendPath(res.getString(R.string.civic_info_api_version));
+            builder.appendPath(resources.getString(R.string.civic_info_api_version));
             builder.appendPath("voterinfo").appendQueryParameter("officialOnly", "true");
             if (!electionId.isEmpty()) {
                 builder.appendQueryParameter("electionId", electionId);
             }
             builder.appendQueryParameter("address", address);
-            builder.appendQueryParameter("key", res.getString(R.string.google_api_browser_key));
+            builder.appendQueryParameter("key", resources.getString(R.string.google_api_browser_key));
             String apiUrl = builder.build().toString();
             Log.d("HomeActivity", "searchedAddress: " + apiUrl);
+
+            // hide views dependent upon result
+            homeSelectContactButton.setVisibility(View.GONE);
+            homePartySpinnerWrapper.setVisibility(View.GONE);
+
+            // show loading text
             homeTextViewStatus.setText(R.string.home_status_loading);
             homeTextViewStatus.setVisibility(View.VISIBLE);
+
+            // make query
             new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
         } catch (Exception e) {
             Log.e("HomeActivity Exception", "searchedAddress: " + address);
@@ -256,6 +279,7 @@ public class HomeFragment extends Fragment {
                 VoterInfo voterInfo = (VoterInfo)result;
                 currentElection = voterInfo.election;
                 homeTextViewStatus.setVisibility(View.GONE);
+                homeSelectContactButton.setVisibility(View.VISIBLE);
                 homeGoButton.setVisibility(View.VISIBLE);
 
                 // read Go button to user, if TalkBack enabled
@@ -279,6 +303,7 @@ public class HomeFragment extends Fragment {
             public void callback(Object result) {
                 try {
                     homeGoButton.setVisibility(View.INVISIBLE);
+                    homeSelectContactButton.setVisibility(View.VISIBLE);
                     CivicApiError error = (CivicApiError) result;
                     Log.d("HomeFragment", "Civic API returned error");
                     Log.d("HomeFragment", error.code + ": " + error.message);
@@ -314,6 +339,7 @@ public class HomeFragment extends Fragment {
      */
     public interface OnInteractionListener {
         public void onGoButtonPressed(View view);
+        public void onSelectContactButtonPressed(View view);
         public void searchedAddress(VoterInfo voterInfo);
     }
 

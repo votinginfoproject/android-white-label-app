@@ -2,5 +2,5 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="false" android:color="@color/white" />
-    <item android:state_pressed="true" android:color="@color/button_blue" />
+    <item android:state_pressed="true" android:color="@color/home_button_background" />
 </selector>
