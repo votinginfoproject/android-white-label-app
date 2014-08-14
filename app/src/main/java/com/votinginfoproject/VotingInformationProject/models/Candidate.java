@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 
 /**
  * Created by kathrynkillebrew on 7/15/14.
@@ -17,7 +19,10 @@ public class Candidate {
     public String email;
     public Long orderOnBallot;
     public List<SocialMediaChannel> channels;
-    public Bitmap photo;
+    public UUID photoCacheKey;
+
+    // keep reference to VoterInfo to put photos in its cache
+    private VoterInfo voterInfo;
 
     /** Default Constructor
      *
@@ -52,5 +57,29 @@ public class Candidate {
     @Override
     public String toString() {
         return name + "\n" + party;
+    }
+
+    /**
+     * Get photo for this candidate from LRU cache
+     *
+     * @return bitmap from cache (or null if not in cache)
+     */
+    public Bitmap getCandidatePhoto() {
+        if (photoCacheKey != null) {
+            return voterInfo.getImageFromCache(photoCacheKey);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Add candidate photo to LRU cache
+     * @param bitmap image to cache
+     */
+    public void setCandidatePhoto(Bitmap bitmap) {
+        if (voterInfo == null) {
+            voterInfo = ((VIPApp)VIPApp.getContext()).getVoterInfo();
+        }
+        photoCacheKey = voterInfo.addImageToCache(bitmap);
     }
 }

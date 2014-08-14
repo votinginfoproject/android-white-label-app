@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.adapters;
 
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +76,9 @@ public class CandidatesAdapter extends ArrayAdapter<Candidate> {
         setTextView(viewHolder.name, candidate.name);
         setTextView(viewHolder.party, candidate.party);
 
-        if (candidate.photo != null) {
-            viewHolder.photo.setImageBitmap(candidate.photo);
+        Bitmap havePhoto = candidate.getCandidatePhoto();
+        if (havePhoto != null) {
+            viewHolder.photo.setImageBitmap(havePhoto);
         } else if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty() && !viewHolder.alreadyQueryingForPhoto) {
             viewHolder.alreadyQueryingForPhoto = true;
             new FetchImageQuery(candidate, viewHolder.photo).execute(candidate.photoUrl);

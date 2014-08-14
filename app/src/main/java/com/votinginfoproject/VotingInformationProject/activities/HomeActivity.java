@@ -10,8 +10,6 @@ import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
-import com.votinginfoproject.VotingInformationProject.models.Election;
-import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -19,11 +17,23 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener {
     VIPApp app;
 
+    public String getSelectedParty() {
+        return selectedParty;
+    }
+
+    public void setSelectedParty(String selectedParty) {
+        this.selectedParty = selectedParty;
+        app.setSelectedParty(selectedParty);
+    }
+
+    String selectedParty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         app = new VIPAppContext((VIPApp) getApplicationContext()).getVIPApp();
+        selectedParty = "";
     }
 
 
@@ -49,8 +59,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     }
 
     public void searchedAddress(VoterInfo voterInfo) {
-
         // set VoterInfo object on app singleton
-        app.setVoterInfo(voterInfo);
+        app.setVoterInfo(voterInfo, selectedParty);
     }
 }

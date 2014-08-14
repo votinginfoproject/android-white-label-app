@@ -8,16 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.ContestsAdapter;
-import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
-import java.util.ArrayList;
 
 public class BallotFragment extends Fragment {
 
@@ -26,6 +23,7 @@ public class BallotFragment extends Fragment {
     public static BallotFragment newInstance() {
         return new BallotFragment();
     }
+
     public BallotFragment() {
         // Required empty public constructor
     }
@@ -42,14 +40,13 @@ public class BallotFragment extends Fragment {
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // fill list of contests
-        ContestsAdapter adapter = new ContestsAdapter(myActivity, voterInfo.contests, voterInfo.election.name);
+        ContestsAdapter adapter = new ContestsAdapter(myActivity, voterInfo.getFilteredContests(), voterInfo.election.name);
         adapter.sortList();
-        ListView contestList = (ListView)rootView.findViewById(R.id.ballot_contests_list);
+        ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
         contestList.setAdapter(adapter);
         contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("ContestsList", "clicked: " + voterInfo.contests.get(position).office);
                 myActivity.showContestDetails(position);
             }
         });

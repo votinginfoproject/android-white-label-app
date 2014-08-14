@@ -24,8 +24,10 @@ public class MockVIPAppContext extends VIPAppContext {
 
         VoterInfo testInfo = new VoterInfo();
         Election testElection = new Election();
-        Contest testContest = new Contest();
-        Candidate testCandidate = new Candidate();
+        Contest testContestOne = new Contest();
+        Contest testContestTwo = new Contest();
+        Candidate testCandidateOne = new Candidate();
+        Candidate testCandidateTwo = new Candidate();
         Source testSource = new Source();
         District testDistrict = new District();
         State testState = new State();
@@ -34,22 +36,37 @@ public class MockVIPAppContext extends VIPAppContext {
         testElection.electionDay = "2014-01-01";
         testInfo.election = testElection;
 
-        testContest.type = "general";
-        testContest.office = "Benevolent Dictator";
+        testContestOne.type = "general";
+        testContestOne.office = "Benevolent Dictator";
+        testContestOne.primaryParty = "Yes please";
 
-        testCandidate.name = "Test Candidate";
-        testCandidate.party = "Yes please";
+        testContestTwo.type = "general";
+        testContestTwo.office = "Benevolent Dictator";
+        testContestTwo.primaryParty = "LAN";
 
-        testContest.candidates = new ArrayList<Candidate>(1);
-        testContest.candidates.add(testCandidate);
+        testCandidateOne.name = "Test Candidate One";
+        testCandidateOne.party = "Yes please";
 
-        testContest.sources = new ArrayList<Source>(1);
-        testContest.sources.add(testSource);
+        testCandidateTwo.name = "Test Candidate Two";
+        testCandidateTwo.party = "LAN";
 
-        testInfo.contests = new ArrayList<Contest>(1);
-        testInfo.contests.add(testContest);
+        testContestOne.candidates = new ArrayList<Candidate>(1);
+        testContestOne.candidates.add(testCandidateOne);
 
-        app.setVoterInfo(testInfo);
+        testContestTwo.candidates = new ArrayList<Candidate>(1);
+        testContestTwo.candidates.add(testCandidateTwo);
+
+        testContestOne.sources = new ArrayList<Source>(1);
+        testContestOne.sources.add(testSource);
+
+        testContestTwo.sources = new ArrayList<Source>(1);
+        testContestTwo.sources.add(testSource);
+
+        testInfo.contests = new ArrayList<Contest>(2);
+        testInfo.contests.add(testContestOne);
+        testInfo.contests.add(testContestTwo);
+
+        app.setVoterInfo(testInfo, "");
     }
 
     public VIPApp getVIPApp() {
