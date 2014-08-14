@@ -1,15 +1,19 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
@@ -17,10 +21,13 @@ import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
-public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener {
+
+public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     static final int PICK_CONTACT_REQUEST = 1;
     VIPApp app;
+    Uri contactUri;
+    LoaderManager loaderManager;
 
     public String getSelectedParty() {
         return selectedParty;
@@ -38,9 +45,10 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         app = new VIPAppContext((VIPApp) getApplicationContext()).getVIPApp();
+        loaderManager = getLoaderManager();
         selectedParty = "";
+        contactUri = null;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,31 +85,14 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-
-                // TODO: stuff
-
                 // Get the URI that points to the selected contact
-                Uri contactUri = data.getData();
+                contactUri = data.getData();
 
-                Log.d("HomeActivity", "Got contact: " + contactUri);
+                // restart loader, if a contact was already selected
+                loaderManager.destroyLoader(PICK_CONTACT_REQUEST);
 
-                /*
-                String[] projection = {ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS };
-
-                // Perform the query on the contact to get the NUMBER column
-                // We don't need a selection or sort order (there's only one result for the given URI)
-                // CAUTION: The query() method should be called from a separate thread to avoid blocking
-                // your app's UI thread. (For simplicity of the sample, this code doesn't do that.)
-                // Consider using CursorLoader to perform the query.
-                Cursor cursor = getContentResolver()
-                        .query(contactUri, projection, null, null, null);
-                cursor.moveToFirst();
-
-                // Retrieve the phone number from the NUMBER column
-                int column = cursor.getColumnIndex(Phone.NUMBER);
-                String number = cursor.getString(column);
-                */
-
+                // start async query to get contact info
+                loaderManager.initLoader(PICK_CONTACT_REQUEST, null, this);
             } else {
                 // PASS (user didn't pick an address)
             }
@@ -111,5 +102,36 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void searchedAddress(VoterInfo voterInfo) {
         // set VoterInfo object on app singleton
         app.setVoterInfo(voterInfo, selectedParty);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (contactUri == null) {
+            return null;
+        }
+
+        String[] projection = { ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS };
+        return new CursorLoader(this, contactUri, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data.getCount() > 0) {
+            data.moveToFirst();
+            // get result with single column, named data1
+            String address = data.getString(0);
+            Log.d("HomeActivity", "Got cursor result: " + address);
+
+            // set address found in view
+            EditText addressView = (EditText)findViewById(R.id.home_edittext_address);
+            addressView.setText(address);
+        } else {
+            Log.e("HomeActivity", "Cursor got no results!");
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

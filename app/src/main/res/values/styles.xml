@@ -210,7 +210,7 @@
 
     <style name="home_view_button">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">50sp</item>
+        <item name="android:layout_height">40sp</item>
         <item name="android:background">@drawable/home_view_button</item>
         <item name="android:textColor">@drawable/home_view_button_text</item>
         <item name="android:textSize">20sp</item>

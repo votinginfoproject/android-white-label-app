@@ -131,6 +131,8 @@ public class HomeFragment extends Fragment {
         mListener.searchedAddress(null);
         currentElection = null;
         myActivity.setSelectedParty("");
+        // only hide election picker when searching with a new address
+        homeElectionSpinnerWrapper.setVisibility(View.GONE);
         constructVoterInfoQuery();
     }
 
@@ -248,9 +250,16 @@ public class HomeFragment extends Fragment {
             builder.appendQueryParameter("key", resources.getString(R.string.google_api_browser_key));
             String apiUrl = builder.build().toString();
             Log.d("HomeActivity", "searchedAddress: " + apiUrl);
-            homeTextViewStatus.setText(R.string.home_status_loading);
+
+            // hide views dependent upon result
             homeSelectContactButton.setVisibility(View.GONE);
+            homePartySpinnerWrapper.setVisibility(View.GONE);
+
+            // show loading text
+            homeTextViewStatus.setText(R.string.home_status_loading);
             homeTextViewStatus.setVisibility(View.VISIBLE);
+
+            // make query
             new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
         } catch (Exception e) {
             Log.e("HomeActivity Exception", "searchedAddress: " + address);
@@ -294,6 +303,7 @@ public class HomeFragment extends Fragment {
             public void callback(Object result) {
                 try {
                     homeGoButton.setVisibility(View.INVISIBLE);
+                    homeSelectContactButton.setVisibility(View.VISIBLE);
                     CivicApiError error = (CivicApiError) result;
                     Log.d("HomeFragment", "Civic API returned error");
                     Log.d("HomeFragment", error.code + ": " + error.message);
