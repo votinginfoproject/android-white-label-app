@@ -22,10 +22,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.asynctasks.ReverseGeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
@@ -39,7 +42,8 @@ import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
-public class VIPTabBarActivity extends FragmentActivity {
+public class VIPTabBarActivity extends FragmentActivity implements GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener  {
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -57,6 +61,8 @@ public class VIPTabBarActivity extends FragmentActivity {
     LocationsFragment locationsFragment;
     Context context;
     boolean useMetric;
+    LocationClient mLocationClient;
+    ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
 
     /**
      * Non-default constructor for testing, to set the application context.
@@ -120,6 +126,9 @@ public class VIPTabBarActivity extends FragmentActivity {
     }
 
     public void showDirections(String item) {
+        // TODO: prompt
+        // first ask user where to get directions from:  entered address, or current location?
+
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         Fragment directionsFragment = DirectionsFragment.newInstance(item);
         // have to hide/reshow parent within DirectionsFragment, as replace doesn't actually replace
@@ -128,9 +137,10 @@ public class VIPTabBarActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
 
-    public void showMap(String item) {
+    private boolean playServicesAvailable() {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
-            Log.d("VIPTabBarActivity", "Google Play services is available!");
+            Log.d("VIPTabBarActivity", "Google Play services are available!");
+            return true;
         } else {
             Log.e("VIPTabBarActivity", "Google Play services are unavailable!");
             // alert user
@@ -138,8 +148,15 @@ public class VIPTabBarActivity extends FragmentActivity {
             Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-            return;
+            return false;
         }
+    }
+
+    public void showMap(String item) {
+        // make sure Google Play services are available first
+        if (!playServicesAvailable()) {
+            return;
+        };
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         SupportMapFragment mapFragment = VIPMapFragment.newInstance(item);
@@ -189,6 +206,8 @@ public class VIPTabBarActivity extends FragmentActivity {
         }
 
         setUpGeocodings();
+
+        mLocationClient = new LocationClient(this, this, this);
     }
 
     /**
@@ -203,6 +222,19 @@ public class VIPTabBarActivity extends FragmentActivity {
         setLocationIds();
 
         useMetric = mAppContext.useMetric();
+
+        // set up callback listener for reverse-geocode address result
+        reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
+            @Override
+            public void callback(String address) {
+                Log.d("HomeActivity", "Got reverse-geocoded address " + address);
+                if (address != null || !address.isEmpty()) {
+                    // TODO: what now?
+                } else {
+                    Log.e("HomeActivity", "Got empty address result!");
+                }
+            }
+        };
 
         // Callback for polling location geocode result
         pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
@@ -285,6 +317,59 @@ public class VIPTabBarActivity extends FragmentActivity {
                 locationIds.put(location.address.toGeocodeString(), i);
             }
         }
+    }
+
+    private void getCurrentLocation() {
+        // check for play services first
+        if (!playServicesAvailable()) {
+            return;
+        }
+
+        Location currentLocation = mLocationClient.getLastLocation();
+        if (currentLocation != null) {
+            Log.d("HomeActivity", "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+            // now go reverse-geocode to find address for current location
+            new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
+        } else {
+            Log.e("HomeActivity", "Current location not found!  Are Location services enabled?");
+
+            // TODO: user has probably diabled Location services
+            // prompt them to go turn it on?
+        }
+    }
+
+    /**
+     * Called when Activity becomes visible
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // connect to location service
+        mLocationClient.connect();
+    }
+
+    /**
+     * Disconnect location client when app is no longer going to be visible
+     */
+    @Override
+    protected void onStop() {
+        mLocationClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d("VIPTabBarActivity", "Location services connected.");
+    }
+
+    @Override
+    public void onDisconnected() {
+        Log.d("VIPTabBarActivity", "Location services disconnected.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e("VIPTabBarActivity", "Location services failed.");
     }
 
     @Override

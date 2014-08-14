@@ -95,6 +95,8 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
             formattedAddress.append(" ");
         }
 
+        // strip trailing space
+        formattedAddress.deleteCharAt(formattedAddress.length() -1);
         return formattedAddress.toString();
     }
 

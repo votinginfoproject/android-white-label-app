@@ -79,15 +79,15 @@
             android:paddingBottom="5sp" />
 
         <ImageView
-            android:id="@+id/home_edittext_search_button"
+            android:id="@+id/home_select_contact_button"
             android:layout_alignParentRight="true"
-            android:contentDescription="@string/home_search_button_description"
+            android:contentDescription="@string/home_select_contact_button_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/home_view_button"
             android:layout_alignTop="@+id/home_edittext_address"
             android:layout_alignBottom="@+id/home_edittext_address"
-            android:src="@android:drawable/ic_menu_search"
+            android:src="@drawable/ic_officials"
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
@@ -107,42 +107,11 @@
         android:textSize="14sp"
         android:textStyle="italic" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/home_select_buttons_row"
-        android:layout_below="@+id/home_textview_status"
-        style="@style/fill_width_wrap_height" >
-
-        <Button
-            android:text="@string/homeactivity_select_contact_button"
-            android:drawableLeft="@drawable/ic_officials"
-            android:paddingLeft="5sp"
-            android:contentDescription="@string/home_select_contact_button_description"
-            android:id="@+id/home_select_contact_button"
-            android:layout_weight="1"
-            style="@style/home_view_button"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_marginRight="5sp" />
-
-        <Button
-            android:text="@string/homeactivity_select_location_button"
-            android:drawableLeft="@android:drawable/ic_menu_mylocation"
-            android:paddingLeft="5sp"
-            android:contentDescription="@string/home_select_location_button_description"
-            android:id="@+id/home_use_location_button"
-            android:layout_weight="1"
-            style="@style/home_view_button"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_marginLeft="5sp" />
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/home_election_spinner_wrapper"
         style="@style/fill_width_wrap_height"
         android:visibility="gone"
-        android:layout_below="@+id/home_select_buttons_row"
+        android:layout_below="@+id/home_edittext"
         android:gravity="center"
         android:paddingBottom="5sp"
         android:paddingTop="5sp">
