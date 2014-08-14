@@ -94,6 +94,14 @@
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
+    <Button
+        android:text="@string/homeactivity_select_contact_button"
+        android:contentDescription="@string/home_select_contact_button_description"
+        android:id="@+id/home_select_contact_button"
+        android:layout_below="@+id/home_edittext"
+        style="@style/home_view_button"
+        android:layout_marginTop="15sp" />
+
     <TextView
         android:id="@+id/home_textview_status"
         android:drawableLeft="@android:drawable/stat_sys_warning"
@@ -114,7 +122,7 @@
         android:id="@+id/home_election_spinner_wrapper"
         style="@style/fill_width_wrap_height"
         android:visibility="gone"
-        android:layout_below="@+id/home_textview_status"
+        android:layout_below="@+id/home_select_contact_button"
         android:gravity="center"
         android:paddingBottom="5sp"
         android:paddingTop="20sp">
@@ -162,13 +170,8 @@
         android:text="@string/homeactivity_go_button"
         android:contentDescription="@string/home_go_button_accessibility_description"
         android:id="@+id/home_go_button"
-        android:layout_width="fill_parent"
-        android:layout_height="50sp"
         android:layout_alignParentBottom="true"
-        android:background="#004071"
-        android:textColor="#ffffff"
-
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:visibility="gone"
+        style="@style/home_view_button" />
 
 </RelativeLayout>
