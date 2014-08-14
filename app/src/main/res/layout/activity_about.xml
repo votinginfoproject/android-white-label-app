@@ -1,63 +1,34 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/fragment_style"
     tools:context="com.votinginfoproject.VotingInformationProject.activities.AboutActivity">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/wrap_width_wrap_height"
         android:orientation="vertical">
 
         <TextView
             android:text="@string/about_app_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:padding="5sp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/fragment_header" />
 
         <TextView
             android:text="@string/about_app"
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"
-            android:paddingTop="5sp"
-            android:paddingBottom="15sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/fragment_subheader" />
 
         <TextView
             android:text="@string/about_terms_title"
-            android:padding="5sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/fragment_header" />
 
         <TextView
             android:text="@string/about_terms"
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"
-            android:paddingTop="5sp"
-            android:paddingBottom="15sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/fragment_subheader" />
 
         <TextView
             android:text="@string/about_privacy_title"
-            android:padding="5sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/fragment_header" />
 
         <TextView
             android:text="@string/about_privacy"
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"
-            android:paddingTop="5sp"
-            android:paddingBottom="15sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/fragment_subheader" />
     </LinearLayout>
 </ScrollView>
