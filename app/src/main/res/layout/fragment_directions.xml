@@ -9,13 +9,20 @@
         android:id="@+id/directions_fragment_inner_layout" >
 
         <TextView
-            style="@style/fragment_header"
+            style="@style/map_header"
+            android:layout_toLeftOf="@+id/directions_map_button"
             android:id="@+id/directions_title" />
 
         <TextView
             android:id="@+id/directions_subtitle"
+            android:layout_toLeftOf="@+id/directions_map_button"
             android:layout_below="@+id/directions_title"
             style="@style/fragment_subheader" />
+
+        <Button
+            style="@style/map_button"
+            android:id="@+id/directions_map_button"
+            android:text="@string/locations_list_map_button_label" />
 
         <LinearLayout
             style="@style/button_bar"

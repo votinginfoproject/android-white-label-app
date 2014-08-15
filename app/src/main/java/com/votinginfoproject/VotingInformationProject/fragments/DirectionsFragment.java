@@ -33,6 +33,7 @@ public class DirectionsFragment extends Fragment {
     private PollingLocation location;
     private LatLng homeLatLng;
     private ViewGroup mContainer;
+    VIPTabBarActivity myActivity;
     private View rootView;
     private TextView noneFoundMessage;
     private ListView directionsList;
@@ -95,7 +96,7 @@ public class DirectionsFragment extends Fragment {
         container.getChildAt(0).setVisibility(View.INVISIBLE);
 
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
-        final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
+        myActivity = (VIPTabBarActivity)this.getActivity();
 
         Resources res = myActivity.getResources();
         unselectedTextColor = res.getColor(R.color.button_blue);
@@ -158,6 +159,8 @@ public class DirectionsFragment extends Fragment {
             noneFoundMessage.setText(R.string.directions_no_origin_message);
             noneFoundMessage.setVisibility(View.VISIBLE);
             openInMapsButton.setVisibility(View.GONE);
+            // clear last directions polyline
+            myActivity.polylineCallback("", null);
             return;
         }
 
@@ -180,6 +183,14 @@ public class DirectionsFragment extends Fragment {
                 uri += "&dirflg=" + directionsFlags.get(directionsMode);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(intent);
+            }
+        });
+
+        // click handler for map button
+        rootView.findViewById(R.id.directions_map_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myActivity.showMap(location_id);
             }
         });
 
@@ -232,9 +243,11 @@ public class DirectionsFragment extends Fragment {
      *
      */
     private void queryDirections() {
+        // clear last directions polyline
+        myActivity.polylineCallback("", null);
         String homeCoords = homeLatLng.latitude + "," + homeLatLng.longitude;
         String locationCoords = location.address.latitude + "," + location.address.longitude;
-        new DirectionsQuery(directionsList, noneFoundMessage, homeCoords, locationCoords).execute(directionsMode);
+        new DirectionsQuery(directionsList, noneFoundMessage, homeCoords, locationCoords, myActivity).execute(directionsMode);
     }
 
     @Override
@@ -244,5 +257,4 @@ public class DirectionsFragment extends Fragment {
 
         super.onDetach();
     }
-
-  }
+}

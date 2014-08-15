@@ -77,6 +77,9 @@ public class LocationsFragment extends Fragment {
         setButtonInBarClickListener(R.id.locations_list_polling_button);
         setButtonInBarClickListener(R.id.locations_list_early_button);
 
+        // clear directions polyline, if set from directions view
+        myActivity.polylineCallback("", null);
+
         // click handler for map button
         rootView.findViewById(R.id.locations_list_map_button).setOnClickListener(new View.OnClickListener() {
             @Override

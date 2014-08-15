@@ -121,14 +121,14 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
     /**
      *
-     * @param thing Object of type of class passed to constructor; returned to callback method
+     * @param thing Object of type of class passed to constructor; returned to polylineCallback method
      */
     protected void onPostExecute(T thing) {
         callbackListener.callback(thing);
     }
 
     /**
-     * When an error response is received, invoke error handler callback with error object,
+     * When an error response is received, invoke error handler polylineCallback with error object,
      * and return null for expected response object in onPostExecute.
      * (There are no true progress updates.  This is being done to return the error object.)
      *
