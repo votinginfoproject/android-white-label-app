@@ -21,10 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
-import com.google.maps.android.geometry.Bounds;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationInfoWindow;
@@ -165,6 +163,7 @@ public class VIPMapFragment extends SupportMapFragment {
                                         .position(homeLocation)
                                         .title(mResources.getString(R.string.locations_map_user_address_label))
                                         .snippet(homeAddress)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
                         );
                     }
 
@@ -174,6 +173,7 @@ public class VIPMapFragment extends SupportMapFragment {
                                         .position(currentLocation)
                                         .title(mResources.getString(R.string.locations_map_user_location_label))
                                         .snippet(currentAddress)
+                                        .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
                         );
                     }
 
@@ -277,6 +277,7 @@ public class VIPMapFragment extends SupportMapFragment {
             map.addMarker(new MarkerOptions()
                             .position(homeLocation)
                             .title(mResources.getString(R.string.locations_map_user_address_label))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
             );
         }
 
@@ -286,6 +287,7 @@ public class VIPMapFragment extends SupportMapFragment {
                             .position(currentLocation)
                             .title(mResources.getString(R.string.locations_map_user_location_label))
                             .snippet(currentAddress)
+                            .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
             );
         }
 
@@ -320,14 +322,14 @@ public class VIPMapFragment extends SupportMapFragment {
             markers = new HashMap<String, MarkerOptions>(allLocations.size());
             markerIds = new HashMap<String, String>(allLocations.size());
 
-            // use green markers for early voting sites
+            // use red markers for early voting sites
             if (voterInfo.earlyVoteSites != null && showEarly) {
                 for (PollingLocation location : voterInfo.earlyVoteSites) {
                     if (location.address.latitude == 0) {
                         Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
                         continue;
                     }
-                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_GREEN));
+                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_RED));
                 }
             }
 
