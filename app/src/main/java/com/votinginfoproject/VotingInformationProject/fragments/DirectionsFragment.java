@@ -25,13 +25,18 @@ import java.util.HashMap;
 public class DirectionsFragment extends Fragment {
 
     private static final String LOCATION_ID = "location_id";
+    private static final String USE_CURRENT_LOCATION = "use_location";
+
     private String location_id;
+    private boolean use_location;
+
     private PollingLocation location;
     private LatLng homeLatLng;
     private ViewGroup mContainer;
     private View rootView;
     private TextView noneFoundMessage;
     private ListView directionsList;
+    private Button openInMapsButton;
 
     HashMap<String, String> directionsFlags;
 
@@ -47,16 +52,24 @@ public class DirectionsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
         if (getArguments() != null) {
-            location_id = getArguments().getString(LOCATION_ID);
+            location_id = args.getString(LOCATION_ID);
             Log.d("DirectionsFragment", "Got location " + location_id);
+            use_location = args.getBoolean(USE_CURRENT_LOCATION);
+            if (use_location) {
+                Log.d("DirectionsFragment", "Showing directiosn from current location");
+            } else {
+                Log.d("DirectionsFragment", "Showing directions from entered address");
+            }
         }
     }
 
-    public static DirectionsFragment newInstance(String key) {
+    public static DirectionsFragment newInstance(String key, boolean use_location) {
         DirectionsFragment fragment = new DirectionsFragment();
         Bundle args = new Bundle();
         args.putString(LOCATION_ID, key);
+        args.putBoolean(USE_CURRENT_LOCATION, use_location);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,8 +104,13 @@ public class DirectionsFragment extends Fragment {
         // get selected location
         location = myActivity.getLocationForId(location_id);
 
-        // get user entered address' location
-        homeLatLng = myActivity.getHomeLatLng();
+        if (!use_location) {
+            // get user entered address' location
+            homeLatLng = myActivity.getHomeLatLng();
+        } else {
+            // get user's current location
+            homeLatLng = myActivity.getUserLocation(true);
+        }
 
         // location labels
         TextView directions_title_label = (TextView)rootView.findViewById(R.id.directions_title);
@@ -109,6 +127,42 @@ public class DirectionsFragment extends Fragment {
             directions_subtitle_label.setVisibility(View.GONE);
         }
 
+        directionsList = (ListView)rootView.findViewById(R.id.directions_list);
+        noneFoundMessage = (TextView)rootView.findViewById(R.id.directions_none_found_message);
+        openInMapsButton = (Button)rootView.findViewById(R.id.directions_open_in_maps_button);
+
+        setUpWithOrigin(homeLatLng);
+
+        // highlight default button
+        Button walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
+        walkButton.setTextColor(selectedTextColor);
+        walkButton.setBackgroundResource(R.drawable.button_bar_button_selected);
+        lastSelectedButton = walkButton;
+
+        return rootView;
+    }
+
+    /**
+     * Helper function to set origin location for directions list; public so activity can call it
+     * in case user location found after view shown.
+     *
+     * @param newLocation origin co-ordinates to set
+     */
+    public void setUpWithOrigin(LatLng newLocation) {
+        homeLatLng = newLocation;
+
+        // check for missing origin
+        if (homeLatLng == null) {
+            Log.d("DirectionsFragment", "Got null origin location");
+            directionsList.setVisibility(View.GONE);
+            noneFoundMessage.setText(R.string.directions_no_origin_message);
+            noneFoundMessage.setVisibility(View.VISIBLE);
+            openInMapsButton.setVisibility(View.GONE);
+            return;
+        }
+
+        Log.d("DirectionsFragment", "Got origin location; setting up directions list");
+
         // add click handlers for button bar buttons
         setButtonInBarClickListener(R.id.directions_bike_button);
         setButtonInBarClickListener(R.id.directions_transit_button);
@@ -116,7 +170,8 @@ public class DirectionsFragment extends Fragment {
         setButtonInBarClickListener(R.id.directions_drive_button);
 
         // click handler for view-in-maps button
-        rootView.findViewById(R.id.directions_open_in_maps_button).setOnClickListener(new View.OnClickListener() {
+        openInMapsButton.setVisibility(View.VISIBLE);
+        openInMapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // open Maps intent (or Maps in browser)
@@ -128,18 +183,8 @@ public class DirectionsFragment extends Fragment {
             }
         });
 
-        // highlight default button
-        Button walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
-        walkButton.setTextColor(selectedTextColor);
-        walkButton.setBackgroundResource(R.drawable.button_bar_button_selected);
-        lastSelectedButton = walkButton;
-
         // set up directions list
-        directionsList = (ListView)rootView.findViewById(R.id.directions_list);
-        noneFoundMessage = (TextView) rootView.findViewById(R.id.directions_none_found_message);
-
         queryDirections();
-        return rootView;
     }
 
     /**

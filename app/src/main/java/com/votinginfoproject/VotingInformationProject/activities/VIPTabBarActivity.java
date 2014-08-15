@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -59,10 +62,16 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     HashMap<String, Integer> locationIds;
     Location homeLocation;
     LocationsFragment locationsFragment;
+    DirectionsFragment directionsFragment;
     Context context;
     boolean useMetric;
     LocationClient mLocationClient;
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
+    int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
+    String userOriginAddress;
+
+    // activity identifier
+    static final int PROMPT_ENABLE_LOCATION_SERVICES = 1;
 
     /**
      * Non-default constructor for testing, to set the application context.
@@ -126,15 +135,56 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     }
 
     public void showDirections(String item) {
-        // TODO: prompt
         // first ask user where to get directions from:  entered address, or current location?
+        promptForDirectionsOrigin(item);
+    }
 
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        Fragment directionsFragment = DirectionsFragment.newInstance(item);
-        // have to hide/reshow parent within DirectionsFragment, as replace doesn't actually replace
-        fragmentTransaction.replace(R.id.locations_list_fragment, directionsFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    private void promptForDirectionsOrigin(final String item) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.tabbar_directions_origin_prompt);
+
+        // persist user's last choice in list by passing selectedOriginItem as the selected index
+        builder.setSingleChoiceItems(R.array.tabbar_directions_origin_options, selectedOriginItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("VIPTabBarActivity", "You selected: " + which);
+                selectedOriginItem = which;
+            }
+        });
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // user clicked ok
+                Log.d("VIPTabBarActivity", "Final selection: " + selectedOriginItem);
+
+                // flag to tell directions which origin to use
+                boolean use_location = false;
+                if (selectedOriginItem > 0) {
+                    use_location = true;
+                }
+
+                dialog.dismiss();
+
+                // show directions fragment now we have an answer
+                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+                directionsFragment = DirectionsFragment.newInstance(item, use_location);
+                // have to hide/reshow parent within DirectionsFragment, as replace doesn't actually replace
+                fragmentTransaction.replace(R.id.locations_list_fragment, directionsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // user cancelled; do not show directions
+                Log.d("VIPTabBarActivity", "User cancelled dialog.");
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private boolean playServicesAvailable() {
@@ -156,7 +206,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // make sure Google Play services are available first
         if (!playServicesAvailable()) {
             return;
-        };
+        }
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         SupportMapFragment mapFragment = VIPMapFragment.newInstance(item);
@@ -228,10 +278,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             @Override
             public void callback(String address) {
                 Log.d("HomeActivity", "Got reverse-geocoded address " + address);
-                if (address != null || !address.isEmpty()) {
-                    // TODO: what now?
+                if (address != null && !address.isEmpty()) {
+                    userOriginAddress = address;
                 } else {
                     Log.e("HomeActivity", "Got empty address result!");
+                    userOriginAddress = "";
                 }
             }
         };
@@ -319,22 +370,93 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         }
     }
 
-    private void getCurrentLocation() {
+    public LatLng getUserLocation(boolean showPrompt) {
         // check for play services first
         if (!playServicesAvailable()) {
-            return;
+            return null;
+        }
+
+        if (!mLocationClient.isConnected()) {
+            // location services aren't ready yet (maybe just turned on)
+            // wait for onConnected() to be called, then try again
+            if (!mLocationClient.isConnecting()) {
+                Log.d("VIPTabBarActivity", "Location client not connected; try connecting...");
+                mLocationClient.disconnect(); // call connect from disconnect
+                return null;
+            } else {
+                Log.d("VIPTabBarActivity", "Location client is connecting...");
+                return null;
+            }
         }
 
         Location currentLocation = mLocationClient.getLastLocation();
         if (currentLocation != null) {
             Log.d("HomeActivity", "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+            // TODO: use reverse geocoder maybe for a marker popup when showing directions line on map?
             // now go reverse-geocode to find address for current location
-            new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
+            //new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
+            return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         } else {
             Log.e("HomeActivity", "Current location not found!  Are Location services enabled?");
 
-            // TODO: user has probably diabled Location services
-            // prompt them to go turn it on?
+            if (showPrompt) {
+                // user has probably disabled Location services; prompt them to go turn it on
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.tabbar_enable_location_services_prompt);
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, PROMPT_ENABLE_LOCATION_SERVICES);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.create().show();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper function to retry location services check.  Calls back to directions fragment if found.
+     */
+    private void retryGetDirections() {
+        if (selectedOriginItem == 0) {
+            Log.e("VIPTabBarActivity", "No longer using current location for directions!  Ignoring.");
+            return;
+        }
+
+        LatLng location = getUserLocation(false);
+        if (location != null) {
+            // have successfully gotten location after prompting to enable location services
+            // call back to directions fragment to try getting directions now
+
+            if (directionsFragment != null) {
+                directionsFragment.setUpWithOrigin(location);
+            } else {
+                Log.e("VIPTabBarActivity", "Could not find directions fragment!");
+            }
+        } else {
+            Log.d("VIPTabBarActivity", "Location is still null");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PROMPT_ENABLE_LOCATION_SERVICES) {
+            // User got back from location services screen; try to get their location again.
+            // Do not prompt them again to enable location services.
+           retryGetDirections();
+        } else {
+            Log.e("VIPTabBarActivity", "Got result for unrecognized activity!");
         }
     }
 
@@ -360,11 +482,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     @Override
     public void onConnected(Bundle bundle) {
         Log.d("VIPTabBarActivity", "Location services connected.");
+        retryGetDirections(); // try to get found location to directions fragment
     }
 
     @Override
     public void onDisconnected() {
-        Log.d("VIPTabBarActivity", "Location services disconnected.");
+        Log.d("VIPTabBarActivity", "Location services disconnected; try connecting.");
+        mLocationClient.connect();
     }
 
     @Override
