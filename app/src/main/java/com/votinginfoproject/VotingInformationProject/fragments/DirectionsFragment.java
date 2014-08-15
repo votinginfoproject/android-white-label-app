@@ -58,7 +58,7 @@ public class DirectionsFragment extends Fragment {
             Log.d("DirectionsFragment", "Got location " + location_id);
             use_location = args.getBoolean(USE_CURRENT_LOCATION);
             if (use_location) {
-                Log.d("DirectionsFragment", "Showing directiosn from current location");
+                Log.d("DirectionsFragment", "Showing directions from current location");
             } else {
                 Log.d("DirectionsFragment", "Showing directions from entered address");
             }
@@ -104,12 +104,12 @@ public class DirectionsFragment extends Fragment {
         // get selected location
         location = myActivity.getLocationForId(location_id);
 
-        if (!use_location) {
-            // get user entered address' location
-            homeLatLng = myActivity.getHomeLatLng();
-        } else {
+        if (use_location) {
             // get user's current location
             homeLatLng = myActivity.getUserLocation(true);
+        } else {
+            // get user entered address' location
+            homeLatLng = myActivity.getHomeLatLng();
         }
 
         // location labels
