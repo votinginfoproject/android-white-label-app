@@ -87,7 +87,7 @@
             android:background="@drawable/home_view_button"
             android:layout_alignTop="@+id/home_edittext_address"
             android:layout_alignBottom="@+id/home_edittext_address"
-            android:src="@drawable/ic_officials"
+            android:src="@drawable/ic_contacts"
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
