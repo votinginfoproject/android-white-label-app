@@ -120,6 +120,7 @@ public class VIPMapFragment extends SupportMapFragment {
         // check if already instantiated
         if (map == null) {
             map = getMap();
+            map.setMyLocationEnabled(true);
             map.setInfoWindowAdapter(new LocationInfoWindow(layoutInflater));
 
             // start asynchronous task to add markers to map

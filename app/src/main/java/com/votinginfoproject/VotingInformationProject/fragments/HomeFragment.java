@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,7 +38,6 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     Button homeGoButton;
-    Button homeSelectContactButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
     HomeActivity myActivity;
@@ -51,7 +49,7 @@ public class HomeFragment extends Fragment {
     View homeElectionSpinnerWrapper;
     Spinner homePartySpinner;
     View homePartySpinnerWrapper;
-    ImageView homeSearchButton;
+    ImageView homeSelectContactButton;
 
     Election currentElection;
     String address;
@@ -85,7 +83,7 @@ public class HomeFragment extends Fragment {
 
         homeGoButton = (Button)rootView.findViewById(R.id.home_go_button);
 
-        homeSelectContactButton = (Button)rootView.findViewById(R.id.home_select_contact_button);
+        homeSelectContactButton = (ImageView)rootView.findViewById(R.id.home_select_contact_button);
 
         homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
         homeEditTextAddress.setText(getAddress());
@@ -95,8 +93,6 @@ public class HomeFragment extends Fragment {
 
         homePartySpinner = (Spinner)rootView.findViewById(R.id.home_party_spinner);
         homePartySpinnerWrapper = rootView.findViewById(R.id.home_party_spinner_wrapper);
-
-        homeSearchButton = (ImageView)rootView.findViewById(R.id.home_edittext_search_button);
 
         setupViewListeners();
         setupCivicAPIListeners();
@@ -124,7 +120,7 @@ public class HomeFragment extends Fragment {
     /**
      * Helper function to run query after address changed
      */
-    private void makeElectionQuery() {
+     public void makeElectionQuery() {
         String address = homeEditTextAddress.getText().toString();
         setAddress(address);
         // clear previous election before making a query for a new address
@@ -148,7 +144,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // select contact onClick listener
+        // EditText image button onClick listener
         homeSelectContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,19 +163,6 @@ public class HomeFragment extends Fragment {
                 }
                 // Return false to close the keyboard
                 return false;
-            }
-        });
-
-        // EditText image button onSearch listener
-        homeSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makeElectionQuery();
-
-                // hide keyboard
-                InputMethodManager imm = (InputMethodManager)myActivity.getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(homeEditTextAddress.getWindowToken(), 0);
             }
         });
 
@@ -252,8 +235,6 @@ public class HomeFragment extends Fragment {
             String apiUrl = builder.build().toString();
             Log.d("HomeActivity", "searchedAddress: " + apiUrl);
 
-            // hide views dependent upon result
-            homeSelectContactButton.setVisibility(View.GONE);
             homePartySpinnerWrapper.setVisibility(View.GONE);
 
             // show loading text
@@ -280,7 +261,6 @@ public class HomeFragment extends Fragment {
                 VoterInfo voterInfo = (VoterInfo)result;
                 currentElection = voterInfo.election;
                 homeTextViewStatus.setVisibility(View.GONE);
-                homeSelectContactButton.setVisibility(View.VISIBLE);
                 homeGoButton.setVisibility(View.VISIBLE);
 
                 // read Go button to user, if TalkBack enabled
@@ -304,7 +284,6 @@ public class HomeFragment extends Fragment {
             public void callback(Object result) {
                 try {
                     homeGoButton.setVisibility(View.INVISIBLE);
-                    homeSelectContactButton.setVisibility(View.VISIBLE);
                     CivicApiError error = (CivicApiError) result;
                     Log.d("HomeFragment", "Civic API returned error");
                     Log.d("HomeFragment", error.code + ": " + error.message);

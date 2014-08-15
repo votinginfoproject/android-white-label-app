@@ -22,11 +22,13 @@ import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 
-public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     static final int PICK_CONTACT_REQUEST = 1;
     VIPApp app;
     Uri contactUri;
+    EditText addressView;
     LoaderManager loaderManager;
 
     public String getSelectedParty() {
@@ -48,6 +50,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         loaderManager = getLoaderManager();
         selectedParty = "";
         contactUri = null;
+        addressView = (EditText)findViewById(R.id.home_edittext_address);
     }
 
     @Override
@@ -123,8 +126,11 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             Log.d("HomeActivity", "Got cursor result: " + address);
 
             // set address found in view
-            EditText addressView = (EditText)findViewById(R.id.home_edittext_address);
             addressView.setText(address);
+
+            // initate search with new address
+            HomeFragment myFragment = (HomeFragment)getSupportFragmentManager().findFragmentById(R.id.home_fragment);
+            myFragment.makeElectionQuery();
         } else {
             Log.e("HomeActivity", "Cursor got no results!");
         }
@@ -132,6 +138,6 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        // PASS
     }
 }
