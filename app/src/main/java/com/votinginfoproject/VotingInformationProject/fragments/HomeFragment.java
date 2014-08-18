@@ -67,7 +67,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        myActivity = (HomeActivity)getActivity();
+        preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
     }
 
@@ -75,7 +76,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        myActivity = (HomeActivity)getActivity();
         context = myActivity.getApplicationContext();
         resources = context.getResources();
 
@@ -349,8 +349,7 @@ public class HomeFragment extends Fragment {
         } else {
             homeElectionSpinnerWrapper.setVisibility(View.VISIBLE);
         }
-        ArrayAdapter<Election> adapter =
-                new ArrayAdapter<Election>(getActivity(), R.layout.home_spinner_view, elections);
+        ArrayAdapter<Election> adapter = new ArrayAdapter<Election>(myActivity, R.layout.home_spinner_view, elections);
         homeElectionSpinner.setAdapter(adapter);
     }
 
@@ -368,7 +367,7 @@ public class HomeFragment extends Fragment {
             List<String> partiesList = new ArrayList<String>(parties);
             // sort list alphabetically
             Collections.sort(partiesList);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.home_spinner_view, partiesList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(myActivity, R.layout.home_spinner_view, partiesList);
             homePartySpinner.setAdapter(adapter);
             homePartySpinnerWrapper.setVisibility(View.VISIBLE);
         } else {
