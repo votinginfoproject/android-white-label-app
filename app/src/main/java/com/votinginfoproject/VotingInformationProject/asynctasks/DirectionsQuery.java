@@ -12,9 +12,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.adapters.DirectionsAdapter;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Bounds;
 import com.votinginfoproject.VotingInformationProject.models.googledirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.googledirections.Response;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Step;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import org.apache.http.HttpResponse;
@@ -49,13 +50,22 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     HttpClient httpClient;
     Context context;
     Resources resources;
+    PolylineCallBackListener listener;
+
     private final WeakReference<ListView> directionsListViewReference;
     private final WeakReference<TextView> errorViewReference;
 
     private static HashMap<String, Response> directionsCache = new HashMap(4);
 
+    public interface PolylineCallBackListener {
+        /**
+         * Callback for returning encoded overview polyline and its bounds for map display
+         */
+        public void polylineCallback(String polyline, Bounds bounds);
+    }
+
     public DirectionsQuery(ListView listView, TextView errorView, String originCoordinates,
-                           String destinationCoordinates) {
+                           String destinationCoordinates, PolylineCallBackListener listener) {
         super();
         context = VIPAppContext.getContext();
         resources = context.getResources();
@@ -68,6 +78,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
+        this.listener = listener;
 
         // build cache key for this instance
         StringBuilder cacheKeyBuilder = new StringBuilder(originCoordinates);
@@ -196,7 +207,17 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         }
 
         // did not query for alternate routes or provide waypoints, so should get one route with one leg
-        Leg leg = response.routes.get(0).legs.get(0);
+        Route foundRoute = response.routes.get(0);
+
+        // get overview polyline to display on map
+        String encodedPolyline = foundRoute.overview_polyline.points;
+        Bounds polylineBounds = foundRoute.bounds;
+
+        if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
+            listener.polylineCallback(encodedPolyline, polylineBounds);
+        }
+
+        Leg leg = foundRoute.legs.get(0);
         DirectionsAdapter listAdapter = new DirectionsAdapter(leg.steps);
         ListView directionsListView = directionsListViewReference.get();
         TextView errorView = errorViewReference.get();
@@ -220,7 +241,6 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             errorView.setVisibility(View.VISIBLE);
         } else {
             Log.e("DirectionsQuery:showError", "Directions ListView and/or error TextView references are null.");
-
         }
     }
 }

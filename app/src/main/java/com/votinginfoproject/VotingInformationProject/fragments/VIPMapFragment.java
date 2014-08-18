@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,8 +18,11 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationInfoWindow;
@@ -31,11 +33,14 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class VIPMapFragment extends SupportMapFragment {
 
     private static final String LOCATION_ID = "location_id";
+    private static final String POLYLINE = "polyline";
+
     VoterInfo voterInfo;
     VIPTabBarActivity mActivity;
     static final Resources mResources = VIPAppContext.getContext().getResources();
@@ -48,6 +53,11 @@ public class VIPMapFragment extends SupportMapFragment {
     PollingLocation selectedLocation;
     LatLng thisLocation;
     LatLng homeLocation;
+    LatLng currentLocation;
+    String homeAddress;
+    String currentAddress;
+    String encodedPolyline;
+    LatLngBounds polylineBounds;
 
     HashMap<String, MarkerOptions> markers;
     // track the internally-assigned ID for each marker and map it to the location's key
@@ -63,13 +73,14 @@ public class VIPMapFragment extends SupportMapFragment {
     boolean showEarly = true;
 
 
-    public static VIPMapFragment newInstance(String tag) {
+    public static VIPMapFragment newInstance(String tag, String polyline) {
         // instantiate with map options
         GoogleMapOptions options = new GoogleMapOptions();
         VIPMapFragment fragment = VIPMapFragment.newInstance(options);
 
         Bundle args = new Bundle();
         args.putString(LOCATION_ID, tag);
+        args.putString(POLYLINE, polyline);
         fragment.setArguments(args);
 
         return fragment;
@@ -107,11 +118,15 @@ public class VIPMapFragment extends SupportMapFragment {
         voterInfo = mActivity.getVoterInfo();
         allLocations = mActivity.getAllLocations();
         homeLocation = mActivity.getHomeLatLng();
+        currentLocation = mActivity.getUserLocation();
+        currentAddress = mActivity.getUserLocationAddress();
+        homeAddress = mActivity.getHomeAddress();
 
         // set selected location to zoom to
         if (locationId.equals("home")) {
             thisLocation = homeLocation;
         } else {
+            Log.d("VIPMapFragment", "Have location ID: " + locationId);
             selectedLocation = mActivity.getLocationForId(locationId);
             CivicApiAddress address = selectedLocation.address;
             thisLocation = new LatLng(address.latitude, address.longitude);
@@ -147,7 +162,37 @@ public class VIPMapFragment extends SupportMapFragment {
                         map.addMarker(new MarkerOptions()
                                         .position(homeLocation)
                                         .title(mResources.getString(R.string.locations_map_user_address_label))
+                                        .snippet(homeAddress)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
                         );
+                    }
+
+                    if (currentLocation != null) {
+                        // add marker for current user location (used for directions)
+                        map.addMarker(new MarkerOptions()
+                                        .position(currentLocation)
+                                        .title(mResources.getString(R.string.locations_map_user_location_label))
+                                        .snippet(currentAddress)
+                                        .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
+                        );
+                    }
+
+                    if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
+                        // show directions line on map
+                        PolylineOptions polylineOptions = new PolylineOptions();
+                        List<LatLng> pts = PolyUtil.decode(encodedPolyline);
+                        polylineOptions.addAll(pts);
+                        polylineOptions.color(R.color.brand_name_text);
+                        map.addPolyline(polylineOptions);
+
+                        polylineBounds = mActivity.getPolylineBounds();
+                    }
+
+                    // zoom to fit polyline, with padding in pixels
+                    if (polylineBounds != null) {
+                        map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 40));
+                    } else {
+                        // zoom to selected location
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
                     }
                 }
@@ -232,7 +277,27 @@ public class VIPMapFragment extends SupportMapFragment {
             map.addMarker(new MarkerOptions()
                             .position(homeLocation)
                             .title(mResources.getString(R.string.locations_map_user_address_label))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
             );
+        }
+
+        if (currentLocation != null) {
+            // add marker for current user location (used for directions)
+            map.addMarker(new MarkerOptions()
+                            .position(currentLocation)
+                            .title(mResources.getString(R.string.locations_map_user_location_label))
+                            .snippet(currentAddress)
+                            .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
+            );
+        }
+
+        if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
+            // show directions line on map
+            PolylineOptions polylineOptions = new PolylineOptions();
+            List<LatLng> pts = PolyUtil.decode(encodedPolyline);
+            polylineOptions.addAll(pts);
+            polylineOptions.color(R.color.button_blue);
+            map.addPolyline(polylineOptions);
         }
     }
 
@@ -243,8 +308,10 @@ public class VIPMapFragment extends SupportMapFragment {
 
         layoutInflater = getLayoutInflater(savedInstanceState);
 
-        if (getArguments() != null) {
-            locationId = getArguments().getString(LOCATION_ID);
+        Bundle args = getArguments();
+        if (args != null) {
+            locationId = args.getString(LOCATION_ID);
+            encodedPolyline = args.getString(POLYLINE);
         }
     }
 
@@ -255,14 +322,14 @@ public class VIPMapFragment extends SupportMapFragment {
             markers = new HashMap<String, MarkerOptions>(allLocations.size());
             markerIds = new HashMap<String, String>(allLocations.size());
 
-            // use green markers for early voting sites
+            // use red markers for early voting sites
             if (voterInfo.earlyVoteSites != null && showEarly) {
                 for (PollingLocation location : voterInfo.earlyVoteSites) {
                     if (location.address.latitude == 0) {
                         Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
                         continue;
                     }
-                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_GREEN));
+                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_RED));
                 }
             }
 

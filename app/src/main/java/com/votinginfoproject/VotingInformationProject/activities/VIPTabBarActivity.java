@@ -30,7 +30,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
 import com.votinginfoproject.VotingInformationProject.asynctasks.ReverseGeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment;
@@ -44,9 +46,10 @@ import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.googledirections.Bounds;
 
 public class VIPTabBarActivity extends FragmentActivity implements GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener  {
+        GooglePlayServicesClient.OnConnectionFailedListener, DirectionsQuery.PolylineCallBackListener  {
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -68,7 +71,25 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     LocationClient mLocationClient;
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
     int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
-    String userOriginAddress;
+
+    public String getUserLocationAddress() {
+        return userLocationAddress;
+    }
+
+    String userLocationAddress;
+
+    public LatLng getUserLocation() {
+        return userLocation;
+    }
+
+    LatLng userLocation;
+    String encodedDirectionsPolyline = "";
+
+    public LatLngBounds getPolylineBounds() {
+        return polylineBounds;
+    }
+
+    LatLngBounds polylineBounds;
 
     // activity identifier
     static final int PROMPT_ENABLE_LOCATION_SERVICES = 1;
@@ -96,6 +117,27 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         } else {
             Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
             return null;
+        }
+    }
+
+    public String getHomeAddress() {
+        return voterInfo.normalizedInput.toGeocodeString();
+    }
+
+    @Override
+    public void polylineCallback(String polyline, Bounds bounds) {
+        // got encoded polyline for the directions overview; set it on the Activity for the map to find
+        Log.d("DirectionsFragment", "Got encoded directions polyline");
+        encodedDirectionsPolyline = polyline;
+
+        // get polyline bounds in format map can use
+        if (bounds != null) {
+            LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+            boundsBuilder.include(new LatLng(bounds.northeast.lat, bounds.northeast.lng));
+            boundsBuilder.include(new LatLng(bounds.southwest.lat, bounds.southwest.lng));
+            polylineBounds = boundsBuilder.build();
+        } else {
+            polylineBounds = null;
         }
     }
 
@@ -202,14 +244,14 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         }
     }
 
-    public void showMap(String item) {
+    public void showMap(String destinationLocationIndex) {
         // make sure Google Play services are available first
         if (!playServicesAvailable()) {
             return;
         }
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        SupportMapFragment mapFragment = VIPMapFragment.newInstance(item);
+        SupportMapFragment mapFragment = VIPMapFragment.newInstance(destinationLocationIndex, encodedDirectionsPolyline);
         fragmentTransaction.replace(R.id.locations_list_fragment, mapFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -273,16 +315,16 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
         useMetric = mAppContext.useMetric();
 
-        // set up callback listener for reverse-geocode address result
+        // set up polylineCallback listener for reverse-geocode address result
         reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
             @Override
             public void callback(String address) {
                 Log.d("HomeActivity", "Got reverse-geocoded address " + address);
                 if (address != null && !address.isEmpty()) {
-                    userOriginAddress = address;
+                    userLocationAddress = address;
                 } else {
                     Log.e("HomeActivity", "Got empty address result!");
-                    userOriginAddress = "";
+                    userLocationAddress = "";
                 }
             }
         };
@@ -305,7 +347,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             }
         };
 
-        // callback for home address geocode result
+        // polylineCallback for home address geocode result
         homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
             @Override
             public void callback(String key, double lat, double lon, double distance) {
@@ -391,13 +433,15 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
         Location currentLocation = mLocationClient.getLastLocation();
         if (currentLocation != null) {
+            userLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             Log.d("HomeActivity", "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
-            // TODO: use reverse geocoder maybe for a marker popup when showing directions line on map?
             // now go reverse-geocode to find address for current location
-            //new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
+            userLocationAddress = "";
+            new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
             return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         } else {
             Log.e("HomeActivity", "Current location not found!  Are Location services enabled?");
+            userLocation = null;
 
             if (showPrompt) {
                 // user has probably disabled Location services; prompt them to go turn it on
