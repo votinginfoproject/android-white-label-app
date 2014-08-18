@@ -46,7 +46,7 @@ public class Election {
     /*
      * @return True if election day is earlier than today.
      */
-    public boolean electionHasPassed() {
+    public boolean isElectionOver() {
         Date electionDay = getElectionDay();
         // set time for current date object to midnight, to compare only date part
         Calendar calendar = Calendar.getInstance();
@@ -57,13 +57,7 @@ public class Election {
         Log.d("Election", "Current date is " + calendar.getTime().toString());
         Log.d("Election", "Election date is " + electionDay.toString());
 
-        if (calendar.getTime().after(electionDay)) {
-            Log.d("Election", "This election is over.");
-            return true;
-        } else {
-            Log.d("Election", "This election is ongoing.");
-            return false;
-        }
+        return calendar.getTime().after(electionDay);
     }
 
     public String getFormattedDate() {

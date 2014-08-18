@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -33,9 +32,7 @@ import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQue
 import com.votinginfoproject.VotingInformationProject.models.*;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -159,7 +156,7 @@ public class HomeFragment extends Fragment {
             VoterInfo voterInfo = gson.fromJson(lastElection, VoterInfo.class);
             Log.d("HomeFragment", "Got voter info result from shared preferences.");
             // check if stored election has passed yet
-            if (voterInfo.election.electionHasPassed()) {
+            if (voterInfo.election.isElectionOver()) {
                 Log.d("HomeFragment", "Election in shared preferences is over; re-querying.");
                 queryWithNewAddress(address);
             } else {
@@ -227,7 +224,7 @@ public class HomeFragment extends Fragment {
         // election spinner listener
         homeElectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected (AdapterView < ? > adapterView, View view, int index, long id){
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
 
                 Election selectedElection = (Election) adapterView.getItemAtPosition(index);
                 Log.d("HomeFragment", "Selected via election picker: " + selectedElection.toString());
@@ -237,8 +234,9 @@ public class HomeFragment extends Fragment {
                     constructVoterInfoQuery();
                 }
             }
+
             @Override
-            public void onNothingSelected (AdapterView < ? > adapterView){
+            public void onNothingSelected(AdapterView<?> adapterView) {
                 // PASS
             }
         });
@@ -246,12 +244,13 @@ public class HomeFragment extends Fragment {
         // party spinner listener
         homePartySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected (AdapterView < ? > adapterView, View view, int index, long id){
-                myActivity.setSelectedParty((String)adapterView.getItemAtPosition(index));
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
+                myActivity.setSelectedParty((String) adapterView.getItemAtPosition(index));
                 Log.d("HomeFragment", "Selected via party picker: " + myActivity.getSelectedParty());
             }
+
             @Override
-            public void onNothingSelected (AdapterView < ? > adapterView){
+            public void onNothingSelected(AdapterView<?> adapterView) {
                 // PASS
             }
         });

@@ -42,7 +42,7 @@ public class ElectionTests extends TestCase {
         election.electionDay = election_date_api_format.format(electionDay);
 
         // if election day is today, it should still be current
-        assertFalse(election.electionHasPassed());
+        assertFalse(election.isElectionOver());
 
         // set election to yesterday
         calendar.add(Calendar.DAY_OF_YEAR, -1);
@@ -50,7 +50,7 @@ public class ElectionTests extends TestCase {
         election.electionDay = election_date_api_format.format(electionDay);
 
         // if election was yesterday, it should be over
-        assertTrue(election.electionHasPassed());
+        assertTrue(election.isElectionOver());
 
         // set election to tomorrow
         calendar.add(Calendar.DAY_OF_YEAR, 2);
@@ -58,6 +58,6 @@ public class ElectionTests extends TestCase {
         election.electionDay = election_date_api_format.format(electionDay);
 
         // if election is tomorrow, it should still be current
-        assertFalse(election.electionHasPassed());
+        assertFalse(election.isElectionOver());
     }
 }
