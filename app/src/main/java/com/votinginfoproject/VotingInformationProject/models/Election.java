@@ -15,8 +15,8 @@ public class Election {
     public String name;
     public String electionDay;
 
-    private SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+    private SimpleDateFormat election_date_api_format;
+    private SimpleDateFormat election_date_display_format;
 
     public Election() {
         this(null, null, null);
@@ -48,7 +48,7 @@ public class Election {
      */
     public boolean electionHasPassed() {
         Date electionDay = getElectionDay();
-        // set time for current date object to midnight, in case today is election day
+        // set time for current date object to midnight, to compare only date part
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
