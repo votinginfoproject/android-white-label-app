@@ -59,12 +59,11 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
     /**
      *
-     * @param urls  method/parameter portion of query url, ending with "key=" (API key will be added here)
+     * @param urls  query url
      * @return returns object of type of the class passed into the constructor
      */
     @Override
     protected T doInBackground(String... urls) {
-        //String url = this.baseQueryUrl + urls[0] + this.apiKey;
         String url = urls[0];
         InputStream inputStream = null;
         HttpGet httpGet = null;
@@ -121,7 +120,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
     /**
      *
-     * @param thing Object of type of class passed to constructor; returned to polylineCallback method
+     * @param thing Object of type of class passed to constructor; returned to callback method
      */
     protected void onPostExecute(T thing) {
         callbackListener.callback(thing);

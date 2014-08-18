@@ -19,9 +19,9 @@ import java.util.List;
 
 /**
  * Asynchronously query the geocoding service with a location (must not be done on the UI thread!)
- * Returns first address found to polylineCallback function passed to constructor.
+ * Returns first address found to callback function passed to constructor.
  *
- * The polylineCallback returns the address, or null for no result.
+ * The callback returns the address, or null for no result.
  *
  * Created by kathrynkillebrew on 8/14/14.
  */
