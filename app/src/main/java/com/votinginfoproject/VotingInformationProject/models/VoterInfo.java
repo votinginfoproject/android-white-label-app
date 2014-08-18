@@ -69,11 +69,6 @@ public class VoterInfo {
             // no selected party; show all
             filteredContests.addAll(contests);
         }
-
-        Log.d("VoterInfo", "Have filtered contests:");
-        for (Contest contest : filteredContests) {
-            Log.d("VoterInfo", "Contest of type: " + contest.type);
-        }
     }
 
     /**

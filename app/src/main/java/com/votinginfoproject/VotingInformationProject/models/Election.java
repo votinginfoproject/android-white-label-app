@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,8 +15,8 @@ public class Election {
     public String name;
     public String electionDay;
 
-    private SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+    private SimpleDateFormat election_date_api_format;
+    private SimpleDateFormat election_date_display_format;
 
     public Election() {
         this(null, null, null);
@@ -27,6 +28,36 @@ public class Election {
         this.electionDay = electionDay;
         election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
         election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+    }
+
+    public Date getElectionDay() {
+        if (electionDay == null || electionDay.isEmpty()) {
+            return null;
+        }
+        try {
+            Date election_date = election_date_api_format.parse(electionDay);
+            return election_date;
+        } catch (ParseException e) {
+            Log.e("ElectionModel", "Failed to parse election date " + electionDay);
+            return null;
+        }
+    }
+
+    /*
+     * @return True if election day is earlier than today.
+     */
+    public boolean isElectionOver() {
+        Date electionDay = getElectionDay();
+        // set time for current date object to midnight, to compare only date part
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Log.d("Election", "Current date is " + calendar.getTime().toString());
+        Log.d("Election", "Election date is " + electionDay.toString());
+
+        return calendar.getTime().after(electionDay);
     }
 
     public String getFormattedDate() {

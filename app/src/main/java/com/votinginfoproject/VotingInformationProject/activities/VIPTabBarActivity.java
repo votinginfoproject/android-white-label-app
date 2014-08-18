@@ -237,7 +237,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             Log.e("VIPTabBarActivity", "Google Play services are unavailable!");
             // alert user
             CharSequence errorMessage = context.getResources().getText(R.string.locations_map_play_services_unavailable);
-            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             return false;
@@ -375,9 +375,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             }
         };
 
-        // geocode home address; once result returned, geocode polling locations
-        new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
-                null, useMetric, null).execute();
+        if (playServicesAvailable()) {
+            // geocode home address; once result returned, geocode polling locations
+            new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
+                    null, useMetric, null).execute();
+        }
     }
 
     private void setAllLocations() {
