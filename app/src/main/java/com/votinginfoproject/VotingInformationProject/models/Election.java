@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -27,6 +28,42 @@ public class Election {
         this.electionDay = electionDay;
         election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
         election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+    }
+
+    public Date getElectionDay() {
+        if (electionDay == null || electionDay.isEmpty()) {
+            return null;
+        }
+        try {
+            Date election_date = election_date_api_format.parse(electionDay);
+            return election_date;
+        } catch (ParseException e) {
+            Log.e("ElectionModel", "Failed to parse election date " + electionDay);
+            return null;
+        }
+    }
+
+    /*
+     * @return True if election day is earlier than today.
+     */
+    public boolean electionHasPassed() {
+        Date electionDay = getElectionDay();
+        // set time for current date object to midnight, in case today is election day
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Log.d("Election", "Current date is " + calendar.getTime().toString());
+        Log.d("Election", "Election date is " + electionDay.toString());
+
+        if (calendar.getTime().after(electionDay)) {
+            Log.d("Election", "This election is over.");
+            return true;
+        } else {
+            Log.d("Election", "This election is ongoing.");
+            return false;
+        }
     }
 
     public String getFormattedDate() {

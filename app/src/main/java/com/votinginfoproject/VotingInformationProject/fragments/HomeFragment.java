@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,13 +25,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -118,11 +123,65 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Helper function to run query after address changed
+     * Helper function to check if address has changed, and either re-query if it has changed,
+     * or fetch the last election from shared preferences if it hasn't.
      */
-     public void makeElectionQuery() {
-        String address = homeEditTextAddress.getText().toString();
-        setAddress(address);
+    public void makeElectionQuery() {
+        String new_address = homeEditTextAddress.getText().toString();
+        if (new_address.equals(address)) {
+            Log.d("HomeFragment", "Address has not changed.");
+            getElectionFromPreferences();
+        } else {
+            Log.d("HomeFragment", "Searching with changed address.");
+            queryWithNewAddress(new_address);
+        }
+    }
+
+    /**
+     * Fetch the last election from shared preferences if a search performed without a change in
+     * the entered address.
+     */
+    private void getElectionFromPreferences() {
+        // show loading text
+        homeTextViewStatus.setText(R.string.home_status_loading);
+        homeTextViewStatus.setVisibility(View.VISIBLE);
+
+        String lastElection = preferences.getString(resources.getString(R.string.LAST_ELECTION_KEY), "");
+        if (lastElection.isEmpty()) {
+            Log.e("HomeFragment", "Could not find last election in preferences!");
+            queryWithNewAddress(address);
+            return;
+        }
+
+        // have last election in preferences; re-hydrate it
+        try {
+            Gson gson = new GsonBuilder().create();
+            VoterInfo voterInfo = gson.fromJson(lastElection, VoterInfo.class);
+            Log.d("HomeFragment", "Got voter info result from shared preferences.");
+            // check if stored election has passed yet
+            if (voterInfo.election.electionHasPassed()) {
+                Log.d("HomeFragment", "Election in shared preferences is over; re-querying.");
+                queryWithNewAddress(address);
+            } else {
+                Log.d("HomeFragment", "Election in shared preferences is still valid; using it.");
+                presentVoterInfoResult(voterInfo);
+            }
+        } catch (Exception ex) {
+            Log.e("HomeFragment", "Failed to re-hydrate last election!");
+            ex.printStackTrace();
+            queryWithNewAddress(address);
+        }
+
+    }
+
+    /** Query the Civic Info API after the entered address has changed, and store the address
+     * and election result to shared preferences.
+     *
+     * @param new_address New address entered
+     */
+    private void queryWithNewAddress(String new_address) {
+        Log.d("HomeFragment", "queryWithNewAddress");
+        setAddress(new_address);
         // clear previous election before making a query for a new address
         mListener.searchedAddress(null);
         currentElection = null;
@@ -133,7 +192,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupViewListeners() {
-
         // Go Button onClick Listener
         homeGoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,15 +299,33 @@ public class HomeFragment extends Fragment {
             homeTextViewStatus.setText(R.string.home_status_loading);
             homeTextViewStatus.setVisibility(View.VISIBLE);
 
-            // make query
-            new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener).execute(apiUrl);
+            // Make query
+            new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener,
+                    preferences, resources.getString(R.string.LAST_ELECTION_KEY)).execute(apiUrl);
         } catch (Exception e) {
             Log.e("HomeActivity Exception", "searchedAddress: " + address);
         }
     }
 
-    private void setupCivicAPIListeners() {
+    private void presentVoterInfoResult(VoterInfo voterInfo) {
+        currentElection = voterInfo.election;
+        homeTextViewStatus.setVisibility(View.GONE);
+        homeGoButton.setVisibility(View.VISIBLE);
 
+        // read Go button to user, if TalkBack enabled
+        homeGoButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+
+        mListener.searchedAddress(voterInfo);
+
+        // Show election picker if there are other elections
+        ArrayList<Election> elections = new ArrayList<Election>(voterInfo.otherElections);
+        elections.add(0, voterInfo.election);
+
+        setSpinnerElections(elections);
+        setSpinnerParty(voterInfo.contests);
+    }
+
+    private void setupCivicAPIListeners() {
         // Callback for voterInfoQuery result
         voterInfoListener = new CivicInfoApiQuery.CallBackListener() {
             @Override
@@ -259,22 +335,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 VoterInfo voterInfo = (VoterInfo)result;
-                currentElection = voterInfo.election;
-                homeTextViewStatus.setVisibility(View.GONE);
-                homeGoButton.setVisibility(View.VISIBLE);
-
-                // read Go button to user, if TalkBack enabled
-                homeGoButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-
-                mListener.searchedAddress(voterInfo);
-
-                // Show election picker if there are other elections
-                ArrayList<Election> elections = new ArrayList<Election>(voterInfo.otherElections);
-                elections.add(0, voterInfo.election);
-
-                setSpinnerElections(elections);
-                setSpinnerParty(voterInfo.contests);
-
+                presentVoterInfoResult(voterInfo);
             }
         };
 
@@ -333,8 +394,14 @@ public class HomeFragment extends Fragment {
         return address;
     }
 
+    /**
+     * Store a new address into shared preferences, and clear out last saved election.
+     * @param address Address string to store
+     */
     public void setAddress(String address) {
+        Log.d("HomeFragment", "Storing a new address into shared preferences.");
         SharedPreferences.Editor editor = preferences.edit();
+        editor.clear(); // clears last saved election, if there is one
         String addressKey = getString(R.string.LAST_ADDRESS_KEY);
         editor.putString(addressKey, address);
         editor.apply();
