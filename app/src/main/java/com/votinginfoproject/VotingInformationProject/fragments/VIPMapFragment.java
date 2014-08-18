@@ -182,9 +182,8 @@ public class VIPMapFragment extends SupportMapFragment {
                         PolylineOptions polylineOptions = new PolylineOptions();
                         List<LatLng> pts = PolyUtil.decode(encodedPolyline);
                         polylineOptions.addAll(pts);
-                        polylineOptions.color(R.color.brand_name_text);
+                        polylineOptions.color(mResources.getColor(R.color.brand_name_text));
                         map.addPolyline(polylineOptions);
-
                         polylineBounds = mActivity.getPolylineBounds();
                     }
 
@@ -296,7 +295,7 @@ public class VIPMapFragment extends SupportMapFragment {
             PolylineOptions polylineOptions = new PolylineOptions();
             List<LatLng> pts = PolyUtil.decode(encodedPolyline);
             polylineOptions.addAll(pts);
-            polylineOptions.color(R.color.button_blue);
+            polylineOptions.color(mResources.getColor(R.color.brand_name_text));
             map.addPolyline(polylineOptions);
         }
     }
