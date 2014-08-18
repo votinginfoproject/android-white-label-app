@@ -19,7 +19,7 @@
 
     <!-- Tab Bar Strings -->
     <string name="tabbar_ballot_tab">Ballot</string>
-    <string name="tabbar_where_to_vote_tab">Where Do I Vote</string>
+    <string name="tabbar_where_to_vote_tab">Locations</string>
     <string name="tabbar_details_tab">Details</string>
 
     <!-- Directions origin dialog -->
