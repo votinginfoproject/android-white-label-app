@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.v4.app.FragmentManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
@@ -19,6 +20,11 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 
 public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActivity> {
@@ -77,13 +83,46 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         assertEquals(homeFragment.getAddress(), testPullAddress);
     }
 
-    public void testHomeActivityQueriesAPI() {
+    public void testHomeActivityLoadsResponse() {
 
+        Resources resources = homeActivity.getResources();
+        Instrumentation instrumentation = getInstrumentation();
+
+        // read test result from file
+        InputStream is = resources.openRawResource(R.raw.test_response);
+        BufferedReader ir = new BufferedReader(new InputStreamReader(is));
+        try {
+            StringBuilder builder = new StringBuilder();
+            String line;
+            while ((line = ir.readLine()) != null) {
+                builder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertFalse("IOException reading test file", true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            assertFalse("Failed to read test file", true);
+        } finally {
+            try {
+                ir.close();
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String responseStr = ir.toString();
+
+        // save test result to shared preferences
         String testAddress = "123 Main St, Richmond, VA";
+        SharedPreferences preferences = homeActivity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(resources.getString(R.string.LAST_ELECTION_KEY), responseStr);
+        homeFragment.setAddress(testAddress);
+        editor.commit();
 
         final EditText homeEditTextAddress = (EditText)homeActivity.findViewById(R.id.home_edittext_address);
-
-        Instrumentation instrumentation = getInstrumentation();
 
         instrumentation.runOnMainSync(new Runnable() {
             @Override
@@ -101,7 +140,8 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
             public void run() {
                 // use test election
                 homeFragment.doTestRun();
-                homeFragment.makeElectionQuery();
+                // load result from shared preferences
+                homeFragment.getElectionFromPreferences();
             }
         });
 
@@ -123,15 +163,14 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
                     }
                 }
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        // should be seeing "loading..." message now
-        assertEquals(View.VISIBLE, statusView.getVisibility());
+        instrumentation.waitForIdleSync();
 
         // wait for 'GO' button to show up
         final Button go = (Button)homeActivity.findViewById(R.id.home_go_button);
@@ -148,7 +187,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
                     }
                 }
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

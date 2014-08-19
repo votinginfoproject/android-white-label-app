@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment {
      * Fetch the last election from shared preferences if a search performed without a change in
      * the entered address.
      */
-    private void getElectionFromPreferences() {
+    public void getElectionFromPreferences() {
         // show loading text
         homeTextViewStatus.setText(R.string.home_status_loading);
         homeTextViewStatus.setVisibility(View.VISIBLE);
@@ -367,7 +367,6 @@ public class HomeFragment extends Fragment {
                     if (CivicApiError.errorMessages.get(error1.reason) != null) {
                         homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                     } else {
-                        // TODO: catch this with exception handler below once we've identified them all
                         Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
                         homeTextViewStatus.setText(R.string.home_error_unknown);
                     }
