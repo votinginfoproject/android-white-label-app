@@ -23,9 +23,9 @@ android:
     - '.*intel.+'
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_39d3f1050b2f_key -iv $encrypted_39d3f1050b2f_iv -in xmltemplates/api_keys.xml.travis.enc -out xmltemplates/api_keys.xml.travis -d
+  - openssl aes-256-cbc -K $encrypted_39d3f1050b2f_key -iv $encrypted_39d3f1050b2f_iv -in api_keys.xml.travis.enc -out api_keys.xml.travis -d
   - export "JAVA8_HOME=/usr/lib/jvm/java-8-oracle"
-  - cp xmltemplates/api_keys.xml.travis  app/src/main/res/values/api_keys.xml
+  - cp api_keys.xml.travis app/src/main/res/values/api_keys.xml
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - sleep 5
   - emulator -avd test -no-skin -no-audio -no-window -gpu on &
