@@ -48,6 +48,11 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
         contestComparator = new Comparator<Contest>() {
             @Override
             public int compare(Contest contest1, Contest contest2) {
+                if (contest1.ballotPlacement == null) {
+                    return -1;
+                } else if (contest2.ballotPlacement == null) {
+                    return 1;
+                }
                 return Double.compare(contest1.ballotPlacement, contest2.ballotPlacement);
             }
         };
