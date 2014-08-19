@@ -91,8 +91,8 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         // read test result from file
         InputStream is = resources.openRawResource(R.raw.test_response);
         BufferedReader ir = new BufferedReader(new InputStreamReader(is));
+        StringBuilder builder = new StringBuilder();
         try {
-            StringBuilder builder = new StringBuilder();
             String line;
             while ((line = ir.readLine()) != null) {
                 builder.append(line);
@@ -110,9 +110,12 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            ir = null;
+            is = null;
         }
 
-        String responseStr = ir.toString();
+        String responseStr = builder.toString();
+        builder = null;
 
         // save test result to shared preferences
         String testAddress = "123 Main St, Richmond, VA";
@@ -121,6 +124,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         editor.putString(resources.getString(R.string.LAST_ELECTION_KEY), responseStr);
         homeFragment.setAddress(testAddress);
         editor.commit();
+        responseStr = null;
 
         final EditText homeEditTextAddress = (EditText)homeActivity.findViewById(R.id.home_edittext_address);
 
