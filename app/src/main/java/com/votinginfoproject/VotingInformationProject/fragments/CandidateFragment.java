@@ -194,6 +194,10 @@ public class CandidateFragment extends Fragment {
         Intent intent;
         switch (type) {
             case "website":
+                // check for protocol; if none found, try adding http://
+                if (!cleanValue.startsWith("http")) {
+                    cleanValue = "http://" + cleanValue;
+                }
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(cleanValue));
                 try {
                     startActivity(intent);

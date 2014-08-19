@@ -1,0 +1,335 @@
+{
+ "kind": "civicinfo#voterInfoResponse",
+ "election": {
+  "id": "2000",
+  "name": "VIP Test Election",
+  "electionDay": "2015-06-06"
+ },
+ "normalizedInput": {
+  "line1": "123 e main st",
+  "city": "richmond",
+  "state": "VA",
+  "zip": "23219"
+ },
+ "pollingLocations": [
+  {
+   "address": {
+    "locationName": "MAIN LIBRARY",
+    "line1": "101 East Franklin Street",
+    "city": "Richmond",
+    "state": "VA",
+    "zip": "232192107"
+   },
+   "notes": "",
+   "pollingHours": "6:00 AM - 7:00 PM",
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  }
+ ],
+ "contests": [
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Governor",
+   "district": {
+    "name": "Statewide",
+    "scope": "statewide"
+   },
+   "ballotPlacement": "4",
+   "candidates": [
+    {
+     "name": "Ken T. Cuccinelli II",
+     "party": "Republican",
+     "candidateUrl": "http://www.cuccinelli.com",
+     "phone": "8047863808",
+     "email": "ken@cuccinelli.com"
+    },
+    {
+     "name": "Robert C. Sarvis",
+     "party": "Libertarian",
+     "candidateUrl": "http://www.robertsarvis.com",
+     "email": "info@robertsarvis.com"
+    },
+    {
+     "name": "Terry R. McAuliffe",
+     "party": "Democrat",
+     "candidateUrl": "http://www.terrymcauliffe.com",
+     "phone": "7038227604",
+     "email": "info@terrymcauliffe.com"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  },
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Lieutenant Governor",
+   "district": {
+    "name": "Statewide",
+    "scope": "statewide"
+   },
+   "ballotPlacement": "5",
+   "candidates": [
+    {
+     "name": "Ralph S. Northam",
+     "party": "Democrat",
+     "candidateUrl": "http://www.northamforlg.com",
+     "phone": "7576954188",
+     "email": "ralph@ralphnortham.com"
+    },
+    {
+     "name": "E. W. Jackson",
+     "party": "Republican",
+     "candidateUrl": "http://www.jacksonforlg.com",
+     "phone": "7578024246",
+     "email": "jackson@jacksonforlg.com"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  },
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Attorney General",
+   "district": {
+    "name": "Statewide",
+    "scope": "statewide"
+   },
+   "ballotPlacement": "6",
+   "candidates": [
+    {
+     "name": "Mark D. Obenshain",
+     "party": "Republican",
+     "candidateUrl": "http://www.markobenshain.com",
+     "phone": "5404371451",
+     "email": "campaign@markobenshain.com"
+    },
+    {
+     "name": "Mark R. Herring",
+     "party": "Democrat",
+     "candidateUrl": "http://www.herringforag.com",
+     "phone": "7036699090",
+     "email": "kevin@herringforag.com"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  },
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Member House of Delegates",
+   "district": {
+    "name": "071",
+    "scope": "stateLower",
+    "id": "71"
+   },
+   "ballotPlacement": "8",
+   "candidates": [
+    {
+     "name": "Jennifer L. McClellan",
+     "party": "Democrat",
+     "candidateUrl": "http://www.jennifermcclellan.com",
+     "phone": "8048783126",
+     "email": "info@jennifermcclellan.com"
+    },
+    {
+     "name": "Matthew W. Fitch",
+     "party": "Republican",
+     "candidateUrl": "http://www.fitchfordelegate.com",
+     "phone": "8047310728",
+     "email": "matt@fitchfordelegate.com"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  },
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Commonwealth's Attorney",
+   "district": {
+    "name": "RICHMOND CITY"
+   },
+   "ballotPlacement": "10",
+   "candidates": [
+    {
+     "name": "Michael N. Herring",
+     "party": "Democrat",
+     "candidateUrl": "None",
+     "phone": "8046463532",
+     "email": "mikeherring2013@gmail.com"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  },
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Sheriff",
+   "district": {
+    "name": "RICHMOND CITY"
+   },
+   "ballotPlacement": "11",
+   "candidates": [
+    {
+     "name": "Lamont Kizzie",
+     "party": "Independent",
+     "candidateUrl": "None",
+     "phone": "8049011349",
+     "email": "lkizzie@gmail.com"
+    },
+    {
+     "name": "Antionette V. Irving",
+     "party": "Independent",
+     "candidateUrl": "http://www.irivingforsheriff.com",
+     "phone": "8043502554",
+     "email": "avirving@irvingforsheriff.com"
+    },
+    {
+     "name": "Christopher Leon Dorsey",
+     "party": "Independent",
+     "candidateUrl": "None",
+     "phone": "8049387776",
+     "email": "rva4peace@gmail.com"
+    },
+    {
+     "name": "C. T. Woody, Jr.",
+     "party": "Democrat",
+     "candidateUrl": "http://ctwoodyforsheriff.org",
+     "phone": "8046460930",
+     "email": "winnerwoody@comcast.net"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  },
+  {
+   "type": "general",
+   "special": "no",
+   "office": "Treasurer",
+   "district": {
+    "name": "RICHMOND CITY"
+   },
+   "ballotPlacement": "13",
+   "candidates": [
+    {
+     "name": "Eunice M. Wilder",
+     "party": "Democrat",
+     "candidateUrl": "None",
+     "phone": "8046466474",
+     "email": "ewilder@ci.richmond.va.us"
+    },
+    {
+     "name": "L. Shirley Harvey",
+     "party": "Independent",
+     "candidateUrl": "http://lshirleyharvey.com",
+     "phone": "8042324832",
+     "email": "lshirleyharvey@hotmail.com"
+    }
+   ],
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  }
+ ],
+ "state": [
+  {
+   "name": "Virginia",
+   "electionAdministrationBody": {
+    "name": "State Board of Elections",
+    "electionInfoUrl": "http://www.sbe.virginia.gov/",
+    "electionRegistrationUrl": "https://www.vote.virginia.gov/",
+    "electionRegistrationConfirmationUrl": "https://www.vote.virginia.gov/",
+    "absenteeVotingInfoUrl": "http://www.sbe.virginia.gov/absenteevoting.html",
+    "votingLocationFinderUrl": "https://www.vote.virginia.gov/",
+    "ballotInfoUrl": "https://www.vote.virginia.gov/",
+    "electionRulesUrl": "http://www.sbe.virginia.gov/",
+    "physicalAddress": {
+     "locationName": "State Board of Elections",
+     "line1": "Washington Building First Floor",
+     "line2": "1100 Bank Street",
+     "city": "Richmond",
+     "state": "VA",
+     "zip": "23219"
+    }
+   },
+   "local_jurisdiction": {
+    "name": "RICHMOND CITY",
+    "electionAdministrationBody": {
+     "name": "OFFICE OF THE GENERAL REGISTRAR",
+     "electionInfoUrl": "http://www.richmondgov.com/departments/registrar/",
+     "electionRegistrationUrl": "http://www.vote.virginia.gov",
+     "electionRegistrationConfirmationUrl": "http://www.vote.virginia.gov",
+     "absenteeVotingInfoUrl": "http://www.vote.virginia.gov",
+     "votingLocationFinderUrl": "http://www.vote.virginia.gov",
+     "ballotInfoUrl": "http://www.vote.virginia.gov",
+     "electionRulesUrl": "http://www.vote.virginia.gov",
+     "hoursOfOperation": "8:00 AM to 5:00 PM",
+     "physicalAddress": {
+      "locationName": "OFFICE OF THE GENERAL REGISTRAR",
+      "line1": "CITY HALL, 900 EAST BROAD STREET, ROOM 105,",
+      "line2": "PO BOX 61037",
+      "city": "RICHMOND",
+      "state": "VA",
+      "zip": "23261-1037"
+     },
+     "electionOfficials": [
+      {
+       "name": "J. KIRK DE COURCEY SHOWALTER",
+       "title": "General Registrar Physical",
+       "officePhoneNumber": "8046465950",
+       "emailAddress": "showalkj@ci.richmond.va.us"
+      }
+     ]
+    },
+    "sources": [
+     {
+      "name": "Voting Information Project",
+      "official": true
+     }
+    ]
+   },
+   "sources": [
+    {
+     "name": "Voting Information Project",
+     "official": true
+    }
+   ]
+  }
+ ]
+}

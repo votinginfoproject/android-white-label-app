@@ -38,6 +38,7 @@ public class ElectionDetailsFragment extends Fragment {
 
     ElectionAdministrationBody stateAdmin;
     ElectionAdministrationBody localAdmin;
+    boolean haveLink;
 
     // track which location filter button was last clicked, and only refresh list if it changed
     int lastSelectedButtonId = R.id.locations_list_all_button;
@@ -192,6 +193,12 @@ public class ElectionDetailsFragment extends Fragment {
      */
     private void collapseAllSubSections() {
         for (DetailSection detail : detailSections) {
+            // un-highlight section header
+            Button btn = (Button)mActivity.findViewById(detail.header);
+            btn.setBackgroundResource(unselectedSectionBackground);
+            btn.setCompoundDrawablesWithIntrinsicBounds(detail.unselectedIcon, 0, 0, 0);
+
+            // collapse sub-section
             View subsection = mActivity.findViewById(detail.section);
             subsection.setVisibility(View.GONE);
         }
@@ -243,13 +250,27 @@ public class ElectionDetailsFragment extends Fragment {
             setTextView(R.id.details_admin_body_name, R.id.details_admin_body_name, body.name);
 
             // set fields that are links
-            setLink(R.id.details_election_info_url_label, R.id.details_election_info_url_row, body.electionInfoUrl);
-            setLink(R.id.details_registration_url_label, R.id.details_registration_url_row, body.electionRegistrationUrl);
-            setLink(R.id.details_registration_confirmation_url_label, R.id.details_registration_confirmation_url_row, body.electionRegistrationConfirmationUrl);
-            setLink(R.id.details_absentee_url_label, R.id.details_absentee_url_row, body.absenteeVotingInfoUrl);
-            setLink(R.id.details_location_finder_url_label, R.id.details_location_finder_url_row, body.votingLocationFinderUrl);
-            setLink(R.id.details_ballot_info_url_label, R.id.details_ballot_info_url_row, body.ballotInfoUrl);
-            setLink(R.id.details_election_rules_url_label, R.id.details_election_rules_url_row, body.electionRulesUrl);
+            haveLink = false; // set to true if there are any links to show
+            setLink(R.id.details_election_info_url_label, R.id.details_election_info_url_row,
+                    R.id.details_election_info_url_divider, body.electionInfoUrl);
+            setLink(R.id.details_registration_url_label, R.id.details_registration_url_row,
+                    R.id.details_registration_url_divider, body.electionRegistrationUrl);
+            setLink(R.id.details_registration_confirmation_url_label, R.id.details_registration_confirmation_url_row,
+                    R.id.details_registration_confirmation_url_divider, body.electionRegistrationConfirmationUrl);
+            setLink(R.id.details_absentee_url_label, R.id.details_absentee_url_row,
+                    R.id.details_absentee_url_divider, body.absenteeVotingInfoUrl);
+            setLink(R.id.details_location_finder_url_label, R.id.details_location_finder_url_row,
+                    R.id.details_location_finder_url_divider, body.votingLocationFinderUrl);
+            setLink(R.id.details_ballot_info_url_label, R.id.details_ballot_info_url_row,
+                    R.id.details_ballot_info_url_divider, body.ballotInfoUrl);
+            setLink(R.id.details_election_rules_url_label, R.id.details_election_rules_url_row,
+                    -1, body.electionRulesUrl);
+
+            // hide section if no links to show in it
+            if (!haveLink) {
+                mActivity.findViewById(R.id.details_links_section).setVisibility(View.GONE);
+                mActivity.findViewById(R.id.details_links_section_header).setVisibility(View.GONE);
+            }
 
             // set non-link field values
             setTextView(R.id.details_voter_services, R.id.details_voter_services_section_header, body.getVoterServices());
@@ -268,11 +289,17 @@ public class ElectionDetailsFragment extends Fragment {
      *
      * @param labelId R id of the label to link-ify
      * @param containerId R id of the label's parent view (to hide it if there's no link found)
+     * @param dividerId R id of divider line below row (to hide if there's no link found)
      * @param val String containing the URL
      */
-    private void setLink(int labelId, int containerId, String val) {
+    private void setLink(int labelId, int containerId, int dividerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(labelId);
         View container = mActivity.findViewById(containerId);
+        View divider = null;
+        if (dividerId > 0) {
+            divider = mActivity.findViewById(dividerId);
+        }
+
         if (val != null && !val.isEmpty()) {
             String label = textView.getText().toString();
             // make links look like links, in case they don't already;
@@ -283,8 +310,15 @@ public class ElectionDetailsFragment extends Fragment {
             textView.setText(Html.fromHtml("<a href=\"" + val + "\">" + label + "</a>"));
             textView.setMovementMethod(mLinkMovementMethod);
             container.setVisibility(View.VISIBLE);
+            if (divider != null) {
+                divider.setVisibility(View.VISIBLE);
+            }
+            haveLink = true; // note that at least one link in section exists
         } else {
             container.setVisibility(View.GONE);
+            if (divider != null) {
+                divider.setVisibility(View.GONE);
+            }
         }
     }
 

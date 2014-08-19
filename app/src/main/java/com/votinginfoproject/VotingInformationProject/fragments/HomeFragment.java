@@ -56,7 +56,16 @@ public class HomeFragment extends Fragment {
     Election currentElection;
     String address;
     SharedPreferences preferences;
-    private OnInteractionListener mListener;
+    OnInteractionListener mListener;
+    boolean isTest;
+
+    /**
+     * For use when testing only.  Sets flag to indicate that we're testing the app, so it will
+     * use the special test election ID for the query.
+     */
+    public void doTestRun() {
+        isTest = true;
+    }
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -69,6 +78,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isTest = false;
         myActivity = (HomeActivity)getActivity();
         preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
@@ -138,7 +148,7 @@ public class HomeFragment extends Fragment {
      * Fetch the last election from shared preferences if a search performed without a change in
      * the entered address.
      */
-    private void getElectionFromPreferences() {
+    public void getElectionFromPreferences() {
         // show loading text
         homeTextViewStatus.setText(R.string.home_status_loading);
         homeTextViewStatus.setVisibility(View.VISIBLE);
@@ -274,6 +284,11 @@ public class HomeFragment extends Fragment {
         checkInternetConnectivity(); // check for connection before querying
 
         String electionId = "";
+
+        if (isTest) {
+            electionId = "2000"; // test election ID (for use only in testing)
+        }
+
         try {
             electionId = currentElection.getId();
         } catch (NullPointerException e) {}
@@ -352,7 +367,6 @@ public class HomeFragment extends Fragment {
                     if (CivicApiError.errorMessages.get(error1.reason) != null) {
                         homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                     } else {
-                        // TODO: catch this with exception handler below once we've identified them all
                         Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
                         homeTextViewStatus.setText(R.string.home_error_unknown);
                     }
