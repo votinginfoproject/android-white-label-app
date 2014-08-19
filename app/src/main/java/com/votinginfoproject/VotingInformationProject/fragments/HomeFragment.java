@@ -56,7 +56,16 @@ public class HomeFragment extends Fragment {
     Election currentElection;
     String address;
     SharedPreferences preferences;
-    private OnInteractionListener mListener;
+    OnInteractionListener mListener;
+    boolean isTest;
+
+    /**
+     * For use when testing only.  Sets flag to indicate that we're testing the app, so it will
+     * use the special test election ID for the query.
+     */
+    public void doTestRun() {
+        isTest = true;
+    }
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -69,6 +78,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isTest = false;
         myActivity = (HomeActivity)getActivity();
         preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
@@ -274,6 +284,11 @@ public class HomeFragment extends Fragment {
         checkInternetConnectivity(); // check for connection before querying
 
         String electionId = "";
+
+        if (isTest) {
+            electionId = "2000"; // test election ID (for use only in testing)
+        }
+
         try {
             electionId = currentElection.getId();
         } catch (NullPointerException e) {}
