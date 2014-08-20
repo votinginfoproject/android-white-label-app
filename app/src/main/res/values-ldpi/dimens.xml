@@ -14,4 +14,5 @@
     <dimen name="home_large_padding">4sp</dimen>
     <dimen name="home_xlarge_padding">8sp</dimen>
     <dimen name="home_edittext_size">16sp</dimen>
+    <dimen name="home_button_height">34sp</dimen>
 </resources>
