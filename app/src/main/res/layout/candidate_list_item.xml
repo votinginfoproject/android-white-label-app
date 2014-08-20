@@ -7,6 +7,7 @@
     android:layout_height="wrap_content" >
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/candidate_list_item_picture"
         android:src="@drawable/ic_avatar"
         android:adjustViewBounds="true"

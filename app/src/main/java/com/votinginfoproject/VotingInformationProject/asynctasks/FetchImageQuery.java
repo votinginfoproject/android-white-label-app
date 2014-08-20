@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
@@ -157,6 +158,7 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             if (view != null) {
                 Log.d("FetchImageQuery:onPostExecute", "Setting image bitmap.");
                 view.setImageBitmap(bitmap);
+                view.setVisibility(View.VISIBLE);
             }
         } else {
             Log.e("FetchImageQuery:onPostExecute", "No ImageView found to give the bitmap.");

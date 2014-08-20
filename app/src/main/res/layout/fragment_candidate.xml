@@ -13,6 +13,7 @@
 
         <ImageView
             android:id="@+id/candidate_photo"
+            android:visibility="gone"
             android:contentDescription="@string/candidate_picture_description"
             android:src="@drawable/ic_avatar"
             android:adjustViewBounds="true"
@@ -114,8 +115,9 @@
                 </TableRow>
 
                 <TableRow
-                    style="@style/table_row"
+                    style="@style/list_item_header"
                     android:id="@+id/candidate_details_none_row"
+                    android:paddingLeft="5sp"
                     android:visibility="gone">
 
                     <TextView
