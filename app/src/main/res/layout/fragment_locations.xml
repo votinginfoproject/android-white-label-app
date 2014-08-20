@@ -58,6 +58,7 @@
             android:layout_below="@+id/locations_list_button_bar"
             android:layout_toRightOf="@+id/locations_election_subtitle"
             android:focusable="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <TextView
@@ -66,6 +67,7 @@
             android:layout_below="@+id/locations_list_button_bar"
             android:layout_toRightOf="@+id/locations_election_subtitle"
             style="@style/fragment_subheader"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
     </RelativeLayout>

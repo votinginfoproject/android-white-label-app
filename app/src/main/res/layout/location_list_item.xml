@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:id="@+id/location_list_item"
     android:descendantFocusability="blocksDescendants"
-    style="@style/match_width_match_height" >
+    style="@style/fill_width_wrap_height" >
 
     <TextView
         android:id="@+id/location_list_item_name"
@@ -26,12 +26,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:id="@+id/location_list_item_distance"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:paddingRight="15sp"
+        android:paddingLeft="2sp"
         android:textStyle="italic" />
 
     <Button
@@ -41,13 +42,14 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_below="@+id/location_list_item_distance"
         android:text="@string/locations_list_map_button_label"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textColor="#0067ab"
         android:textStyle="bold"
         android:id="@+id/location_list_item_open_map_button"
         android:clickable="true"
         android:focusable="false"
         android:paddingRight="15sp"
+        android:paddingLeft="2sp"
         android:paddingTop="10sp"
         android:focusableInTouchMode="false"
         android:layout_alignBaseline="@+id/location_list_item_address"
