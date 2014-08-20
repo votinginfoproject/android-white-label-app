@@ -142,6 +142,7 @@ public class CandidateFragment extends Fragment {
             if (havePhoto != null) {
                 Log.d("CandidateFragment", "Already have candidate photo; using it.");
                 photoView.setImageBitmap(havePhoto);
+                photoView.setVisibility(View.VISIBLE);
             } else {
                 if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
                     Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);

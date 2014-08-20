@@ -79,6 +79,7 @@ public class CandidatesAdapter extends ArrayAdapter<Candidate> {
         Bitmap havePhoto = candidate.getCandidatePhoto();
         if (havePhoto != null) {
             viewHolder.photo.setImageBitmap(havePhoto);
+            viewHolder.photo.setVisibility(View.VISIBLE);
         } else if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty() && !viewHolder.alreadyQueryingForPhoto) {
             viewHolder.alreadyQueryingForPhoto = true;
             new FetchImageQuery(candidate, viewHolder.photo).execute(candidate.photoUrl);
