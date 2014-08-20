@@ -46,7 +46,7 @@ install the following:
 
   -  Tools -> Android SDK Build-tools 19.1
   -  Android 4.4.2K (API V19) -> SDK Platform and Google APIs
-       - For running in an emulator, install one or both system images.  The Intel x86 system image will run much faster than ARM, especially if hardware accelleration is enabled.
+       - For running in an emulator, install one or both system images.  The Intel x86 system image will run much faster than ARM, especially if hardware acceleration is enabled.
   -  Extras -> Android Support Library
   -  Extras -> Android Support Repository
   -  Extras -> Google Play Services (v.19)
@@ -65,7 +65,7 @@ install the following:
 
 The app will run on an Android emulator.  However, the map, directions, and distances to polling locations will not be available within the emulator, as these features depend on Google Play services, which are not available from within the emulator.
 
-The emulator will run much faster with hardware acceleration enabled.  Please see the [directions on using the Android emulator and enabling hardware acceleration](http://developer.android.com/tools/devices/emulator.html).  For Windows, this uses the HAXM emulator accellerator package available under 'Extras' in the SDK Manager.
+The emulator will run much faster with hardware acceleration enabled.  Please see the [directions on using the Android emulator and enabling hardware acceleration](http://developer.android.com/tools/devices/emulator.html).  For Windows, this uses the HAXM emulator accelerator package available under 'Extras' in the SDK Manager.
 
 #### Adding API keys for the app
 
