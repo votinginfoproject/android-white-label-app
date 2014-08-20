@@ -22,24 +22,24 @@
 
     <style name="fragment_header" parent="@style/wrap_width_wrap_height">
         <item name="android:textColor">@color/button_blue</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/text_xlarge</item>
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
-        <item name="android:paddingTop">5sp</item>
-        <item name="android:paddingBottom">5sp</item>
+        <item name="android:paddingTop">@dimen/home_small_padding</item>
+        <item name="android:paddingBottom">@dimen/home_small_padding</item>
         <item name="android:gravity">left</item>
         <item name="android:layout_gravity">left</item>
         <item name="android:layout_alignParentLeft">true</item>
     </style>
 
     <style name="fragment_subheader"  parent="@style/wrap_width_wrap_height">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textColor">@color/text_gray</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">false</item>
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
-        <item name="android:paddingBottom">15sp</item>
+        <item name="android:paddingBottom">@dimen/home_xlarge_padding</item>
         <item name="android:gravity">left</item>
         <item name="android:layout_gravity">left</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -57,7 +57,7 @@
 
     <style name="section_header" parent="@style/fill_width_wrap_height">
         <item name="android:background">@color/section_header_gray</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:padding">10sp</item>
@@ -68,7 +68,7 @@
         <item name="android:paddingRight">15sp</item>
         <item name="android:paddingTop">5sp</item>
         <item name="android:paddingBottom">5sp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textColor">@color/text_gray</item>
     </style>
 
@@ -79,7 +79,7 @@
         <item name="android:paddingBottom">5sp</item>
         <item name="android:gravity">right</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -89,7 +89,7 @@
         <item name="android:paddingRight">15sp</item>
         <item name="android:gravity">left</item>
         <item name="android:layout_gravity">left</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/item_header_blue</item>
     </style>
@@ -97,7 +97,7 @@
     <style name="list_item_content" parent="@style/wrap_width_wrap_height" >
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:layout_gravity">left</item>
         <item name="android:gravity">left</item>
     </style>
@@ -143,7 +143,7 @@
         <item name="android:layout_marginRight">15sp</item>
         <item name="android:layout_marginTop">10sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:background">@drawable/map_button</item>
         <item name="android:textColor">@drawable/map_button_text</item>
         <item name="android:layout_alignParentRight">true</item>
@@ -169,7 +169,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/button_bar_button</item>
         <item name="android:textColor">@color/button_blue</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:clickable">true</item>
         <item name="android:singleLine">false</item>
     </style>
@@ -183,7 +183,7 @@
 
     <style name="details_accordion_button" parent="android:Widget.DeviceDefault.Button.Borderless">
         <item name="android:background">@drawable/details_toggle_unselected</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textColor">@color/detail_text_gray</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:padding">10sp</item>
@@ -197,17 +197,17 @@
 
     <style name="details_link_row" parent="wrap_width_wrap_height">
         <item name="android:padding">10sp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:clickable">true</item>
     </style>
 
     <style name="details_subsection_paragraph" parent="wrap_width_wrap_height">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:textIsSelectable">true</item>
         <item name="android:paddingLeft">15sp</item>
-        <item name="android:paddingTop">15sp</item>
+        <item name="android:paddingTop">@dimen/home_xlarge_padding</item>
         <item name="android:paddingRight">15sp</item>
-        <item name="android:paddingBottom">15sp</item>
+        <item name="android:paddingBottom">@dimen/home_xlarge_padding</item>
     </style>
 
     <style name="home_view_button">
@@ -215,7 +215,7 @@
         <item name="android:layout_height">40sp</item>
         <item name="android:background">@drawable/home_view_button</item>
         <item name="android:textColor">@drawable/home_view_button_text</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
