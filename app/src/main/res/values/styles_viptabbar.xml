@@ -55,11 +55,13 @@
     <style name="ActionBarTabStyle.Viptabbar" parent="@android:style/Widget.Holo.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_viptabbar</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Viptabbar</item>
+        <item name="android:paddingLeft">1sp</item>
+        <item name="android:paddingRight">1sp</item>
     </style>
 
     <style name="ActionBarTitleTextStyle.Viptabbar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">@dimen/text_medium</item>
     </style>
 
     <style name="ActionBarTabTextStyle.Viptabbar" parent="@android:style/Widget.Holo.ActionBar.TabText">

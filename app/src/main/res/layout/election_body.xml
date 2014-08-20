@@ -14,6 +14,7 @@
                 android:id="@+id/details_admin_body_name"
                 android:text="@string/details_state_administration_body_header"
                 android:paddingLeft="0sp"
+                android:paddingRight="15sp"
                 android:layout_span="2"
                 style="@style/fragment_header" />
         </TableRow>

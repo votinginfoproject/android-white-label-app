@@ -190,7 +190,7 @@ public class VIPMapFragment extends SupportMapFragment {
                     // zoom to fit polyline, with padding in pixels
                     if (polylineBounds != null) {
                         map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 40));
-                    } else {
+                    } else if (thisLocation != null) {
                         // zoom to selected location
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
                     }
