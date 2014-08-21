@@ -5,16 +5,16 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
     <dimen name="activity_vertical_margin">64dp</dimen>
 
-    <dimen name="text_small">22sp</dimen>
-    <dimen name="text_medium">24sp</dimen>
-    <dimen name="text_large">26sp</dimen>
-    <dimen name="text_xlarge">28sp</dimen>
-    <dimen name="text_xxlarge">32sp</dimen>
+    <dimen name="text_small">26sp</dimen>
+    <dimen name="text_medium">28sp</dimen>
+    <dimen name="text_large">30sp</dimen>
+    <dimen name="text_xlarge">32sp</dimen>
+    <dimen name="text_xxlarge">34sp</dimen>
 
-    <dimen name="home_top_margin">80sp</dimen>
-    <dimen name="home_small_padding">10sp</dimen>
-    <dimen name="home_large_padding">15sp</dimen>
-    <dimen name="home_xlarge_padding">20sp</dimen>
-    <dimen name="home_edittext_size">28sp</dimen>
+    <dimen name="home_top_margin">110sp</dimen>
+    <dimen name="home_small_padding">15sp</dimen>
+    <dimen name="home_large_padding">20sp</dimen>
+    <dimen name="home_xlarge_padding">30sp</dimen>
+    <dimen name="home_edittext_size">30sp</dimen>
     <dimen name="home_button_height">80sp</dimen>
 </resources>
