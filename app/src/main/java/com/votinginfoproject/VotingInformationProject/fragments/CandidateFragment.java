@@ -245,7 +245,7 @@ public class CandidateFragment extends Fragment {
     }
 
     private void showErrorAlert(String message) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mActivity);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mActivity, AlertDialog.THEME_HOLO_LIGHT);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton(getString(R.string.ok), null);
