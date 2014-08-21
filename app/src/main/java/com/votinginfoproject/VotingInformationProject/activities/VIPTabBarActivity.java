@@ -182,7 +182,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     }
 
     private void promptForDirectionsOrigin(final String item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle(R.string.tabbar_directions_origin_prompt);
 
         // persist user's last choice in list by passing selectedOriginItem as the selected index
@@ -447,7 +447,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
             if (showPrompt) {
                 // user has probably disabled Location services; prompt them to go turn it on
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT);
                 builder.setMessage(R.string.tabbar_enable_location_services_prompt);
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
