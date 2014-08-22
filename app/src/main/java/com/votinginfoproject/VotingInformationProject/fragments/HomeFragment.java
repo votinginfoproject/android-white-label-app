@@ -435,11 +435,15 @@ public class HomeFragment extends Fragment {
 
     public void setSpinnerParty(List<Contest> contests) {
         HashSet<String> parties = new HashSet(5);
-        for (Contest contest : contests) {
-            // if contest has a primary party listed, it must be for a primary election
-            if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
-                parties.add(contest.primaryParty);
+        if (contests != null) {
+            for (Contest contest : contests) {
+                // if contest has a primary party listed, it must be for a primary election
+                if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
+                    parties.add(contest.primaryParty);
+                }
             }
+        } else {
+            Log.d("HomeFragment", "No contests for election");
         }
 
         if (!parties.isEmpty()) {

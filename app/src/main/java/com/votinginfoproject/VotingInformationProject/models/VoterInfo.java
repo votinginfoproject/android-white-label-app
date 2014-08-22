@@ -52,22 +52,27 @@ public class VoterInfo {
         Log.d("VoterInfo", "Filtering contest list for party: " + party);
 
         // build filtered list of contests based on party
-        filteredContests = new ArrayList<Contest>(contests.size());
-        // filter contest list for primary party
-        if (!party.isEmpty()) {
-            for (Contest contest : contests) {
-                if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
-                    if (contest.primaryParty.equals(party)) {
+        if (contests != null) {
+            filteredContests = new ArrayList<Contest>(contests.size());
+            // filter contest list for primary party
+            if (!party.isEmpty()) {
+                for (Contest contest : contests) {
+                    if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
+                        if (contest.primaryParty.equals(party)) {
+                            filteredContests.add(contest);
+                        }
+                    } else {
+                        // this contest isn't a primary; show it
                         filteredContests.add(contest);
                     }
-                } else {
-                    // this contest isn't a primary; show it
-                    filteredContests.add(contest);
                 }
+            } else {
+                // no selected party; show all
+                filteredContests.addAll(contests);
             }
         } else {
-            // no selected party; show all
-            filteredContests.addAll(contests);
+            Log.d("VoterInfo", "No contests for this election!");
+            filteredContests = new ArrayList<Contest>();
         }
     }
 
