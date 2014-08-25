@@ -201,7 +201,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="details_subsection_paragraph" parent="wrap_width_wrap_height">
+    <style name="details_subsection_paragraph" parent="fill_width_wrap_height">
         <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textIsSelectable">true</item>
         <item name="android:paddingLeft">15sp</item>

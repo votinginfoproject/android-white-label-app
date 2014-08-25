@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
-import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 
 import java.util.HashMap;
 
@@ -30,7 +30,7 @@ public class DirectionsFragment extends Fragment {
     private String location_id;
     private boolean use_location;
 
-    private PollingLocation location;
+    private CivicApiAddress locationAddress;
     private LatLng homeLatLng;
     private ViewGroup mContainer;
     VIPTabBarActivity myActivity;
@@ -103,7 +103,7 @@ public class DirectionsFragment extends Fragment {
         selectedTextColor = res.getColor(R.color.white);
 
         // get selected location
-        location = myActivity.getLocationForId(location_id);
+        locationAddress = myActivity.getAddressForId(location_id);
 
         if (use_location) {
             // get user's current location
@@ -117,14 +117,15 @@ public class DirectionsFragment extends Fragment {
         TextView directions_title_label = (TextView)rootView.findViewById(R.id.directions_title);
         TextView directions_subtitle_label = (TextView)rootView.findViewById(R.id.directions_subtitle);
 
-        if (location.name != null && !location.name.isEmpty()) {
-            directions_title_label.setText(location.name);
-            directions_subtitle_label.setText(location.address.toGeocodeString());
-        } else if (location.address.locationName != null && !location.address.locationName.isEmpty()) {
-            directions_title_label.setText(location.address.locationName);
-            directions_subtitle_label.setText(location.address.toGeocodeString());
+        String locationName = myActivity.getDescriptionForId(location_id);
+        if (!locationName.isEmpty()) {
+            directions_title_label.setText(locationName);
+            directions_subtitle_label.setText(locationAddress.toGeocodeString());
+        } else if (locationAddress.locationName != null && !locationAddress.locationName.isEmpty()) {
+            directions_title_label.setText(locationAddress.locationName);
+            directions_subtitle_label.setText(locationAddress.toGeocodeString());
         } else {
-            directions_title_label.setText(location.address.toString());
+            directions_title_label.setText(locationAddress.toString());
             directions_subtitle_label.setVisibility(View.GONE);
         }
 
@@ -179,7 +180,7 @@ public class DirectionsFragment extends Fragment {
             public void onClick(View v) {
                 // open Maps intent (or Maps in browser)
                 String uri = "https://maps.google.com/maps?saddr=" + homeLatLng.latitude + "," + homeLatLng.longitude;
-                uri += "&daddr=" + location.address.latitude + "," + location.address.longitude;
+                uri += "&daddr=" + locationAddress.latitude + "," + locationAddress.longitude;
                 uri += "&dirflg=" + directionsFlags.get(directionsMode);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(intent);
@@ -246,7 +247,7 @@ public class DirectionsFragment extends Fragment {
         // clear last directions polyline
         myActivity.polylineCallback("", null);
         String homeCoords = homeLatLng.latitude + "," + homeLatLng.longitude;
-        String locationCoords = location.address.latitude + "," + location.address.longitude;
+        String locationCoords = locationAddress.latitude + "," + locationAddress.longitude;
         new DirectionsQuery(directionsList, noneFoundMessage, homeCoords, locationCoords, myActivity).execute(directionsMode);
     }
 

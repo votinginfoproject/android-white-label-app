@@ -125,6 +125,9 @@ public class VIPMapFragment extends SupportMapFragment {
         // set selected location to zoom to
         if (locationId.equals("home")) {
             thisLocation = homeLocation;
+        } else if (locationId.endsWith("eab")) {
+            thisLocation = mActivity.getAdminBodyLatLng(locationId);
+
         } else {
             Log.d("VIPMapFragment", "Have location ID: " + locationId);
             selectedLocation = mActivity.getLocationForId(locationId);
@@ -177,6 +180,16 @@ public class VIPMapFragment extends SupportMapFragment {
                         );
                     }
 
+                    if (locationId.endsWith("eab")) {
+                        // add marker for state or local election administration body
+                        map.addMarker(new MarkerOptions()
+                                        .position(thisLocation)
+                                        .title(mResources.getString(R.string.locations_map_election_administration_body_label))
+                                        .snippet(mActivity.getAdminBodyAddress(locationId))
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        ).showInfoWindow();
+                    }
+
                     if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
                         // show directions line on map
                         PolylineOptions polylineOptions = new PolylineOptions();
@@ -220,7 +233,12 @@ public class VIPMapFragment extends SupportMapFragment {
                 String key = markerIds.get(marker.getId());
 
                 if (key == null) {
-                    return;  // do nothing for taps on user address info window
+                    // allow for getting directions from election admin body location
+                    if (locationId.endsWith("eab")) {
+                        key = locationId;
+                    } else {
+                        return;  // do nothing for taps on user address info window
+                    }
                 }
                 
                 Log.d("LocationsFragment", "Clicked marker for " + key);
@@ -287,6 +305,16 @@ public class VIPMapFragment extends SupportMapFragment {
                             .title(mResources.getString(R.string.locations_map_user_location_label))
                             .snippet(currentAddress)
                             .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
+            );
+        }
+
+        if (locationId.endsWith("eab")) {
+            // add marker for state or local election administration body
+            map.addMarker(new MarkerOptions()
+                            .position(thisLocation)
+                            .title(mResources.getString(R.string.locations_map_election_administration_body_label))
+                            .snippet(mActivity.getAdminBodyAddress(locationId))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             );
         }
 

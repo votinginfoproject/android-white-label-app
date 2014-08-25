@@ -253,6 +253,8 @@
 
             <TableRow
                 android:layout_width="fill_parent"
+                android:clickable="true"
+                android:background="@android:drawable/list_selector_background"
                 android:id="@+id/details_physical_address_row"
                 android:layout_height="wrap_content">
 

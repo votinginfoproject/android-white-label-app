@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class ElectionDetailsFragment extends Fragment {
 
-    private Activity mActivity;
+    private VIPTabBarActivity mActivity;
     Resources resources;
     private MovementMethod mLinkMovementMethod;
 
@@ -93,7 +94,7 @@ public class ElectionDetailsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("ElectionDetailsFragment", "In onActivityCreated");
-        mActivity = getActivity();
+        mActivity = (VIPTabBarActivity)getActivity();
         resources = mActivity.getResources();
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
@@ -107,18 +108,18 @@ public class ElectionDetailsFragment extends Fragment {
             Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
             if (stateAdmin == null) {
                 // no state admin body; hide button bar and just show local
-                setContents(localAdmin);
+                setContents(localAdmin, "local_eab");
                 View btnBar = mActivity.findViewById(R.id.details_button_bar);
                 btnBar.setVisibility(View.GONE);
             } else {
                 // have both; show state by default
-                setContents(stateAdmin);
+                setContents(stateAdmin, "state_eab");
             }
         } else {
             // have no local admin body
             if (stateAdmin != null) {
                 // hide button bar and just show state
-                setContents(stateAdmin);
+                setContents(stateAdmin, "state_eab");
                 View btnBar = mActivity.findViewById(R.id.details_button_bar);
                 btnBar.setVisibility(View.GONE);
             } else {
@@ -227,10 +228,10 @@ public class ElectionDetailsFragment extends Fragment {
 
 
                 if (buttonId == R.id.details_state_button) {
-                    setContents(stateAdmin);
+                    setContents(stateAdmin, "state_eab");
                 } else {
                     // local jurisdiction
-                    setContents(localAdmin);
+                    setContents(localAdmin, "local_eab");
                 }
 
                 collapseAllSubSections();
@@ -243,8 +244,9 @@ public class ElectionDetailsFragment extends Fragment {
     /** Helper function to populate the administrative body table values.
      *
      * @param body Administration body to show in the view contents
+     * @param eab_type String describing which admin body this is (either "state_eab" or "local_eab")
      */
-    private void setContents(ElectionAdministrationBody body) {
+    private void setContents(ElectionAdministrationBody body, String eab_type) {
         try {
             // set header with administrative body name
             setTextView(R.id.details_admin_body_name, R.id.details_admin_body_name, body.name);
@@ -276,7 +278,7 @@ public class ElectionDetailsFragment extends Fragment {
             setTextView(R.id.details_voter_services, R.id.details_voter_services_section_header, body.getVoterServices());
             setTextView(R.id.details_hours_of_operation, R.id.details_hours_of_operation_section_header, body.hoursOfOperation);
             setTextView(R.id.details_correspondence_address, R.id.details_correspondence_address_section_header, body.getCorrespondenceAddress());
-            setTextView(R.id.details_physical_address, R.id.details_physical_address_section_header, body.getPhysicalAddress());
+            setPhysicalAddressView(body.getPhysicalAddress(), eab_type);
             setTextView(R.id.details_election_officials, R.id.details_election_officials_section_header, body.getElectionOfficials());
         } catch (Exception ex) {
             Log.e("ElectionDetailsFragment", "Failed to set election details info!");
@@ -336,6 +338,31 @@ public class ElectionDetailsFragment extends Fragment {
         if (val != null && !val.isEmpty()) {
             textView.setText(val);
             container.setVisibility(View.VISIBLE);
+        } else {
+            container.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Helper function to set a TextView for physical address that links to map.
+     *
+     * @param val String to put in the TextView
+     * @param eab_type String for which admin body this is (either "state_eab" or "local_eab")
+     */
+    private void setPhysicalAddressView(String val, final String eab_type) {
+        TextView textView = (TextView) mActivity.findViewById(R.id.details_physical_address);
+        View container = mActivity.findViewById(R.id.details_physical_address_section_header);
+        TableRow tableRow = (TableRow) mActivity.findViewById(R.id.details_physical_address_row);
+        if (val != null && !val.isEmpty()) {
+            textView.setText(val);
+            container.setVisibility(View.VISIBLE);
+            tableRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("ElectionDetailsFragment", "Clicked physical address; going to show map.");
+                    mActivity.showMap(eab_type);
+                }
+            });
         } else {
             container.setVisibility(View.GONE);
         }
