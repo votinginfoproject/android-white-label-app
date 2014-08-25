@@ -260,7 +260,9 @@
 
                 <TextView
                     android:id="@+id/details_physical_address"
-                    style="@style/details_subsection_paragraph" />
+                    style="@style/details_subsection_paragraph"
+                    android:clickable="false"
+                    android:textIsSelectable="false"/>
             </TableRow>
         </TableLayout>
         <!-- end physical address section -->

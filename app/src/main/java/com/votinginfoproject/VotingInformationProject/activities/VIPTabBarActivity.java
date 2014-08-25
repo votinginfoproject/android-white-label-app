@@ -128,30 +128,26 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
     /**
      * Helper function to return address object for either polling location or election admin body.
-     * @param location_id Key for polling location, or "state_eab" or "local_eab" for admin body
+     * @param location_id Key for polling location, or which admin body
      * @return Address object for key
      */
     public CivicApiAddress getAddressForId(String location_id) {
         if (locationIds.get(location_id) != null) {
             PollingLocation location = allLocations.get(locationIds.get(location_id));
             return location.address;
-        } else if (location_id.endsWith("eab")) {
-            if (location_id.equals("state_eab") && stateAdmin != null) {
-                return stateAdmin.physicalAddress;
-            } else if (location_id.equals("local_eab") && localAdmin != null) {
-                return localAdmin.physicalAddress;
-            }
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE) && stateAdmin != null) {
+            return stateAdmin.physicalAddress;
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL) && localAdmin != null) {
+            return localAdmin.physicalAddress;
         } else {
             Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
             return null;
         }
-
-        return null;
     }
 
     /**
      * Helper function to return descriptor for either polling location or election admin body.
-     * @param location_id Key for polling location, or "state_eab" or "local_eab" for admin body
+     * @param location_id Key for polling location, or which admin body
      * @return String descriptor for key
      */
     public String getDescriptionForId(String location_id) {
@@ -160,16 +156,15 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             if (location.name != null) {
                 return location.name;
             }
-        } else if (location_id.endsWith("eab")) {
-            if (location_id.equals("state_eab")) {
-                if (stateAdmin!= null && stateAdmin.name != null) {
-                    return stateAdmin.name;
-                }
-            } else if (location_id.equals("local_eab")) {
-                if (localAdmin != null && localAdmin.name != null) {
-                    return localAdmin.name;
-                }
+        if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE)) {
+            if (stateAdmin!= null && stateAdmin.name != null) {
+                return stateAdmin.name;
             }
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
+            if (localAdmin != null && localAdmin.name != null) {
+                return localAdmin.name;
+            }
+        }
         }
 
         return "";
@@ -182,7 +177,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     @Override
     public void polylineCallback(String polyline, Bounds bounds) {
         // got encoded polyline for the directions overview; set it on the Activity for the map to find
-        Log.d("DirectionsFragment", "Got encoded directions polyline");
         encodedDirectionsPolyline = polyline;
 
         // get polyline bounds in format map can use
@@ -267,7 +261,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
                 directionsFragment = DirectionsFragment.newInstance(item, use_location);
                 // have to hide/reshow parent within DirectionsFragment, as replace doesn't actually replace
-                if (item.endsWith("eab")) {
+                if (item.equals(ElectionAdministrationBody.AdminBody.STATE) || item.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
                     // got here from details tab
                     fragmentTransaction.replace(R.id.election_details_fragment, directionsFragment);
                 } else {
@@ -314,7 +308,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         SupportMapFragment mapFragment = VIPMapFragment.newInstance(destinationLocationIndex, encodedDirectionsPolyline);
-        if (destinationLocationIndex.endsWith("eab")) {
+        if (destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.STATE) ||
+                destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
             // got here from details tab
             fragmentTransaction.replace(R.id.election_details_fragment, mapFragment);
         } else {
@@ -337,11 +332,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     }
 
     public LatLng getAdminBodyLatLng(String body) {
-        if (body.equals("state_eab")) {
+        if (body.equals(ElectionAdministrationBody.AdminBody.STATE)) {
             if (stateAdmin != null) {
                 return new LatLng(stateAdmin.physicalAddress.latitude, stateAdmin.physicalAddress.longitude);
             }
-        } else if (body.equals("local_eab")) {
+        } else if (body.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
             if (localAdmin != null) {
                 return new LatLng(localAdmin.physicalAddress.latitude, localAdmin.physicalAddress.longitude);
             }
@@ -351,11 +346,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     }
 
     public String getAdminBodyAddress(String body) {
-        if (body.equals("state_eab")) {
+        if (body.equals(ElectionAdministrationBody.AdminBody.STATE)) {
             if (stateAdmin != null) {
                 return stateAdmin.getPhysicalAddress();
             }
-        } else if (body.equals("local_eab")) {
+        } else if (body.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
             return localAdmin.getPhysicalAddress();
         }
 
@@ -409,7 +404,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
         useMetric = mAppContext.useMetric();
 
-        // set up polylineCallback listener for reverse-geocode address result
+        // set up callback listener for reverse-geocode address result
         reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
             @Override
             public void callback(String address) {
@@ -441,7 +436,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             }
         };
 
-        // polylineCallback for home address geocode result
+        // callback for home address geocode result
         homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
             @Override
             public void callback(String key, double lat, double lon, double distance) {
@@ -472,7 +467,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 stateAdmin = state.electionAdministrationBody;
                 if (stateAdmin != null) {
                     if (!stateAdmin.getPhysicalAddress().isEmpty()) {
-                        new GeocodeQuery(context, adminBodyCallBackListener, "state_eab",
+                        new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.STATE,
                                 stateAdmin.physicalAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                     }
                 }
@@ -480,7 +475,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 if (state.local_jurisdiction != null && state.local_jurisdiction.electionAdministrationBody != null) {
                     localAdmin = state.local_jurisdiction.electionAdministrationBody;
                     if (!localAdmin.getPhysicalAddress().isEmpty()) {
-                        new GeocodeQuery(context, adminBodyCallBackListener, "local_eab",
+                        new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.LOCAL,
                                 localAdmin.physicalAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                     }
                 }
@@ -498,9 +493,9 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
                 try {
                     CivicApiAddress address = null;
-                    if (key.equals("state_eab")) {
+                    if (key.equals(ElectionAdministrationBody.AdminBody.STATE)) {
                         address = stateAdmin.physicalAddress;
-                    } else if (key.equals("local_eab")) {
+                    } else if (key.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
                         address = localAdmin.physicalAddress;
                     }
 

@@ -94,6 +94,7 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
                 public void onClick(View v) {
                     String itemTag = finalConvertView.findViewById(R.id.location_list_item_distance).getTag().toString();
                     // open map view on item button tap
+                    myActivity.polylineCallback(null, null);
                     myActivity.showMap(itemTag);
                 }
             });

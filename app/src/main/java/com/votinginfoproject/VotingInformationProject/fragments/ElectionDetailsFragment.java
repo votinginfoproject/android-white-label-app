@@ -108,18 +108,18 @@ public class ElectionDetailsFragment extends Fragment {
             Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
             if (stateAdmin == null) {
                 // no state admin body; hide button bar and just show local
-                setContents(localAdmin, "local_eab");
+                setContents(localAdmin, ElectionAdministrationBody.AdminBody.LOCAL);
                 View btnBar = mActivity.findViewById(R.id.details_button_bar);
                 btnBar.setVisibility(View.GONE);
             } else {
                 // have both; show state by default
-                setContents(stateAdmin, "state_eab");
+                setContents(stateAdmin, ElectionAdministrationBody.AdminBody.STATE);
             }
         } else {
             // have no local admin body
             if (stateAdmin != null) {
                 // hide button bar and just show state
-                setContents(stateAdmin, "state_eab");
+                setContents(stateAdmin, ElectionAdministrationBody.AdminBody.STATE);
                 View btnBar = mActivity.findViewById(R.id.details_button_bar);
                 btnBar.setVisibility(View.GONE);
             } else {
@@ -228,10 +228,10 @@ public class ElectionDetailsFragment extends Fragment {
 
 
                 if (buttonId == R.id.details_state_button) {
-                    setContents(stateAdmin, "state_eab");
+                    setContents(stateAdmin, ElectionAdministrationBody.AdminBody.STATE);
                 } else {
                     // local jurisdiction
-                    setContents(localAdmin, "local_eab");
+                    setContents(localAdmin, ElectionAdministrationBody.AdminBody.LOCAL);
                 }
 
                 collapseAllSubSections();
@@ -244,7 +244,7 @@ public class ElectionDetailsFragment extends Fragment {
     /** Helper function to populate the administrative body table values.
      *
      * @param body Administration body to show in the view contents
-     * @param eab_type String describing which admin body this is (either "state_eab" or "local_eab")
+     * @param eab_type String describing which admin body this is
      */
     private void setContents(ElectionAdministrationBody body, String eab_type) {
         try {
@@ -347,7 +347,7 @@ public class ElectionDetailsFragment extends Fragment {
      * Helper function to set a TextView for physical address that links to map.
      *
      * @param val String to put in the TextView
-     * @param eab_type String for which admin body this is (either "state_eab" or "local_eab")
+     * @param eab_type String for which admin body this is
      */
     private void setPhysicalAddressView(String val, final String eab_type) {
         TextView textView = (TextView) mActivity.findViewById(R.id.details_physical_address);
@@ -360,6 +360,7 @@ public class ElectionDetailsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Log.d("ElectionDetailsFragment", "Clicked physical address; going to show map.");
+                    mActivity.polylineCallback(null, null);
                     mActivity.showMap(eab_type);
                 }
             });

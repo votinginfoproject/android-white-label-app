@@ -84,6 +84,7 @@ public class LocationsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // zoom to user address
+                myActivity.polylineCallback(null, null);
                 myActivity.showMap("home");
             }
         });

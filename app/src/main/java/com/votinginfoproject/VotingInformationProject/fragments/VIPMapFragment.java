@@ -27,6 +27,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationInfoWindow;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -58,6 +59,7 @@ public class VIPMapFragment extends SupportMapFragment {
     String currentAddress;
     String encodedPolyline;
     LatLngBounds polylineBounds;
+    boolean haveElectionAdminBody;
 
     HashMap<String, MarkerOptions> markers;
     // track the internally-assigned ID for each marker and map it to the location's key
@@ -122,10 +124,18 @@ public class VIPMapFragment extends SupportMapFragment {
         currentAddress = mActivity.getUserLocationAddress();
         homeAddress = mActivity.getHomeAddress();
 
+        // check if this map view is for an election administration body
+        if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE) ||
+                locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
+            haveElectionAdminBody = true;
+        } else {
+            haveElectionAdminBody = false;
+        }
+
         // set selected location to zoom to
         if (locationId.equals("home")) {
             thisLocation = homeLocation;
-        } else if (locationId.endsWith("eab")) {
+        } else if (haveElectionAdminBody) {
             thisLocation = mActivity.getAdminBodyLatLng(locationId);
 
         } else {
@@ -180,7 +190,7 @@ public class VIPMapFragment extends SupportMapFragment {
                         );
                     }
 
-                    if (locationId.endsWith("eab")) {
+                    if (haveElectionAdminBody) {
                         // add marker for state or local election administration body
                         map.addMarker(new MarkerOptions()
                                         .position(thisLocation)
@@ -234,7 +244,7 @@ public class VIPMapFragment extends SupportMapFragment {
 
                 if (key == null) {
                     // allow for getting directions from election admin body location
-                    if (locationId.endsWith("eab")) {
+                    if (haveElectionAdminBody) {
                         key = locationId;
                     } else {
                         return;  // do nothing for taps on user address info window
@@ -308,7 +318,7 @@ public class VIPMapFragment extends SupportMapFragment {
             );
         }
 
-        if (locationId.endsWith("eab")) {
+        if (haveElectionAdminBody) {
             // add marker for state or local election administration body
             map.addMarker(new MarkerOptions()
                             .position(thisLocation)
