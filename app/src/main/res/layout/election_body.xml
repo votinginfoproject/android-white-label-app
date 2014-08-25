@@ -253,12 +253,16 @@
 
             <TableRow
                 android:layout_width="fill_parent"
+                android:clickable="true"
+                android:background="@android:drawable/list_selector_background"
                 android:id="@+id/details_physical_address_row"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/details_physical_address"
-                    style="@style/details_subsection_paragraph" />
+                    style="@style/details_subsection_paragraph"
+                    android:clickable="false"
+                    android:textIsSelectable="false"/>
             </TableRow>
         </TableLayout>
         <!-- end physical address section -->

@@ -195,6 +195,7 @@ public class HomeFragment extends Fragment {
         myActivity.setSelectedParty("");
         // only hide election picker when searching with a new address
         homeElectionSpinnerWrapper.setVisibility(View.GONE);
+        homeGoButton.setVisibility(View.GONE);
         constructVoterInfoQuery();
     }
 

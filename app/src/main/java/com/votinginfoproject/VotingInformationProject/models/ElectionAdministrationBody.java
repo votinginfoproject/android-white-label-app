@@ -21,6 +21,11 @@ public class ElectionAdministrationBody {
     public CivicApiAddress physicalAddress;
     public List<ElectionOfficial> electionOfficials;
 
+    public interface AdminBody {
+        String STATE = "state_eab";
+        String LOCAL = "local_eab";
+    }
+
     /**
      * Helper function to return pretty-printed list of voter services
      * @return String with each service separated by a newline (or empty string if none)
