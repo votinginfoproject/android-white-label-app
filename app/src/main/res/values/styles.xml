@@ -197,12 +197,12 @@
 
     <style name="details_link_row" parent="wrap_width_wrap_height">
         <item name="android:padding">10sp</item>
-        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:clickable">true</item>
     </style>
 
     <style name="details_subsection_paragraph" parent="wrap_width_wrap_height">
-        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:textIsSelectable">true</item>
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingTop">@dimen/home_xlarge_padding</item>
