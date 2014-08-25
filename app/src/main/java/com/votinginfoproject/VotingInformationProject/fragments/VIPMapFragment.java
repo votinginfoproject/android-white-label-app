@@ -196,7 +196,7 @@ public class VIPMapFragment extends SupportMapFragment {
                                         .position(thisLocation)
                                         .title(mResources.getString(R.string.locations_map_election_administration_body_label))
                                         .snippet(mActivity.getAdminBodyAddress(locationId))
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
                         ).showInfoWindow();
                     }
 
@@ -324,7 +324,7 @@ public class VIPMapFragment extends SupportMapFragment {
                             .position(thisLocation)
                             .title(mResources.getString(R.string.locations_map_election_administration_body_label))
                             .snippet(mActivity.getAdminBodyAddress(locationId))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
             );
         }
 

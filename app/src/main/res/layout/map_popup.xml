@@ -23,7 +23,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_small"
             android:textStyle="bold"
             android:textColor="@android:color/holo_blue_dark" />
 
@@ -31,7 +31,7 @@
             android:id="@+id/snippet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"/>
+            android:textSize="@dimen/text_xsmall"/>
     </LinearLayout>
 
 </LinearLayout>
