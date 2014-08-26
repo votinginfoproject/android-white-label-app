@@ -728,6 +728,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         private final ViewPager mViewPager;
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>(3);
         private LocationsFragment locationsFragment;
+        private FragmentManager tabsFragmentManager;
 
         static final class TabInfo {
             private final Class<?> clss;
@@ -804,7 +805,9 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
         @Override
         public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-
+            // Clear back stack on tab change.  Otherwise stack will keep history for all tabs,
+            // which can result in inconsistent state and/or unexpected behavior.
+            tabsFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         /**
