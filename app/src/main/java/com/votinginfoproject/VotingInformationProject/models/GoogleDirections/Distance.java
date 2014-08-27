@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.models.googledirections;
+package com.votinginfoproject.VotingInformationProject.models.GoogleDirections;
 
 /**
  * Created by kathrynkillebrew on 7/31/14.

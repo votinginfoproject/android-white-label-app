@@ -103,7 +103,7 @@ public class LocationsFragment extends Fragment {
         });
 
         // initialize list adapter with all locations
-        allLocations = myActivity.getAllLocations();
+        allLocations = voterInfo.getAllLocations();
         // copy the list, so the original isn't destroyed by the adapter construction
         //noinspection unchecked
         listAdapter = new LocationsAdapter(myActivity, (ArrayList<PollingLocation>) allLocations.clone());

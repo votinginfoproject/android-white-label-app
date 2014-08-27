@@ -12,8 +12,8 @@ public class CandidatePhotoCache {
     private LruCache<UUID, Bitmap> mMemoryCache;
 
     public CandidatePhotoCache() {
-        // Get max available VM memory, exceeding this amount will throw an
-        // OutOfMemory exception. Stored in kilobytes as LruCache takes an
+        // Get max available VM memory; exceeding this amount will throw an
+        // OutOfMemory exception. Stored in kilobytes, as LruCache takes an
         // int in its constructor.
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
@@ -23,8 +23,7 @@ public class CandidatePhotoCache {
         mMemoryCache = new LruCache<UUID, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(UUID key, Bitmap bitmap) {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
+                // The cache size will be measured in kilobytes rather than number of items.
                 return bitmap.getByteCount() / 1024;
             }
         };
@@ -37,7 +36,7 @@ public class CandidatePhotoCache {
         return uuid;
     }
 
-    public Bitmap getBitmapFromMemCache(UUID key) {
+    public Bitmap getBitmapFromMemoryCache(UUID key) {
         return mMemoryCache.get(key);
     }
 }
