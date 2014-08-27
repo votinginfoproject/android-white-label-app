@@ -243,8 +243,21 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         }
 
         // first check if location to show actually has a successful geocode result
-        CivicApiAddress address = voterInfo.getAddressForId(destinationLocationIndex);
-        if (address.longitude == 0 && address.latitude == 0) {
+        boolean haveLocation = false;
+
+        if (destinationLocationIndex == "home") {
+            // check for user-entered address geocode result
+            if (homeLocation != null && (homeLocation.getLongitude() != 0 || homeLocation.getLongitude() != 0)) {
+                haveLocation = true;
+            }
+        } else {
+            // have either PollingLocation or ElectionAdministrationBody location
+            CivicApiAddress address = voterInfo.getAddressForId(destinationLocationIndex);
+            if (address != null && (address.longitude != 0 || address.latitude != 0)) {
+                haveLocation = true;
+            }
+        }
+        if (!haveLocation) {
             // alert user if no location to show on map
             CharSequence errorMessage = context.getResources().getText(R.string.locations_map_not_geocoded);
             Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
