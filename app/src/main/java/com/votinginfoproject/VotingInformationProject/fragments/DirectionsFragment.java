@@ -18,6 +18,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.HashMap;
 
@@ -97,13 +98,14 @@ public class DirectionsFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
         myActivity = (VIPTabBarActivity)this.getActivity();
+        VoterInfo voterInfo = myActivity.getVoterInfo();
 
         Resources res = myActivity.getResources();
         unselectedTextColor = res.getColor(R.color.button_blue);
         selectedTextColor = res.getColor(R.color.white);
 
         // get selected location
-        locationAddress = myActivity.getAddressForId(location_id);
+        locationAddress = voterInfo.getAddressForId(location_id);
 
         if (use_location) {
             // get user's current location
@@ -117,7 +119,7 @@ public class DirectionsFragment extends Fragment {
         TextView directions_title_label = (TextView)rootView.findViewById(R.id.directions_title);
         TextView directions_subtitle_label = (TextView)rootView.findViewById(R.id.directions_subtitle);
 
-        String locationName = myActivity.getDescriptionForId(location_id);
+        String locationName = voterInfo.getDescriptionForId(location_id);
         if (!locationName.isEmpty()) {
             directions_title_label.setText(locationName);
             directions_subtitle_label.setText(locationAddress.toGeocodeString());

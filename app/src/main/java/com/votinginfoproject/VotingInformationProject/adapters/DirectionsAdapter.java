@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Step;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import java.util.List;

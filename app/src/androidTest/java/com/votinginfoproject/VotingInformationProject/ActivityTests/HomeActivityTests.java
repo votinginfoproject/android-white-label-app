@@ -218,8 +218,8 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(VIPTabBarActivity.class.getName(), null, false);
         TouchUtils.clickView(this, go);
 
-        // wait up to 6 seconds for the tab bar activity to start before timing out
-        Activity startedActivity = monitor.waitForActivityWithTimeout(6000);
+        // wait up to 8 seconds for the tab bar activity to start before timing out
+        Activity startedActivity = monitor.waitForActivityWithTimeout(8000);
         assertNotNull("Tab bar activity is null", startedActivity);
         assertEquals("Monitor for tab bar activity has not been called", 1, monitor.getHits());
         assertEquals("Tab bar activity is of wrong type", VIPTabBarActivity.class, startedActivity.getClass());

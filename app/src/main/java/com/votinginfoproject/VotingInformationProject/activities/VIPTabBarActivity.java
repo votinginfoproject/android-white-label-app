@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
@@ -45,11 +43,10 @@ import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Bounds;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
 
 public class VIPTabBarActivity extends FragmentActivity implements GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, DirectionsQuery.PolylineCallBackListener  {
@@ -58,17 +55,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    TabsAdapter mTabsAdapter;
+    static TabsAdapter mTabsAdapter;
     FragmentManager mFragmentManager;
     VIPAppContext mAppContext;
     GeocodeQuery.GeocodeCallBackListener pollingCallBackListener;
     GeocodeQuery.GeocodeCallBackListener homeCallBackListener;
     GeocodeQuery.GeocodeCallBackListener adminBodyCallBackListener;
-    ElectionAdministrationBody stateAdmin;
-    ElectionAdministrationBody localAdmin;
-    ArrayList<PollingLocation> allLocations;
     VoterInfo voterInfo;
-    HashMap<String, Integer> locationIds;
     Location homeLocation;
     LocationsFragment locationsFragment;
     DirectionsFragment directionsFragment;
@@ -115,63 +108,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
     public VIPAppContext getAppContext() {
         return mAppContext;
-    }
-
-    public PollingLocation getLocationForId(String location_id) {
-        if (locationIds.get(location_id) != null) {
-            return allLocations.get(locationIds.get(location_id));
-        } else {
-            Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
-            return null;
-        }
-    }
-
-    /**
-     * Helper function to return address object for either polling location or election admin body.
-     * @param location_id Key for polling location, or which admin body
-     * @return Address object for key
-     */
-    public CivicApiAddress getAddressForId(String location_id) {
-        if (locationIds.get(location_id) != null) {
-            PollingLocation location = allLocations.get(locationIds.get(location_id));
-            return location.address;
-        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE) && stateAdmin != null) {
-            return stateAdmin.physicalAddress;
-        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL) && localAdmin != null) {
-            return localAdmin.physicalAddress;
-        } else {
-            Log.e("VIPTabBarActivity", "Did not find ID in hash: " + location_id);
-            return null;
-        }
-    }
-
-    /**
-     * Helper function to return descriptor for either polling location or election admin body.
-     * @param location_id Key for polling location, or which admin body
-     * @return String descriptor for key
-     */
-    public String getDescriptionForId(String location_id) {
-        if (locationIds.get(location_id) != null) {
-            PollingLocation location = allLocations.get(locationIds.get(location_id));
-            if (location.name != null) {
-                return location.name;
-            }
-        if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE)) {
-            if (stateAdmin!= null && stateAdmin.name != null) {
-                return stateAdmin.name;
-            }
-        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            if (localAdmin != null && localAdmin.name != null) {
-                return localAdmin.name;
-            }
-        }
-        }
-
-        return "";
-    }
-
-    public String getHomeAddress() {
-        return voterInfo.normalizedInput.toGeocodeString();
     }
 
     @Override
@@ -306,6 +242,17 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             return;
         }
 
+        // first check if location to show actually has a successful geocode result
+        CivicApiAddress address = voterInfo.getAddressForId(destinationLocationIndex);
+        if (address.longitude == 0 && address.latitude == 0) {
+            // alert user if no location to show on map
+            CharSequence errorMessage = context.getResources().getText(R.string.locations_map_not_geocoded);
+            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
+        }
+
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         SupportMapFragment mapFragment = VIPMapFragment.newInstance(destinationLocationIndex, encodedDirectionsPolyline);
         if (destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.STATE) ||
@@ -329,32 +276,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             return new LatLng(homeLocation.getLatitude(), homeLocation.getLongitude());
         }
         return null;
-    }
-
-    public LatLng getAdminBodyLatLng(String body) {
-        if (body.equals(ElectionAdministrationBody.AdminBody.STATE)) {
-            if (stateAdmin != null) {
-                return new LatLng(stateAdmin.physicalAddress.latitude, stateAdmin.physicalAddress.longitude);
-            }
-        } else if (body.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            if (localAdmin != null) {
-                return new LatLng(localAdmin.physicalAddress.latitude, localAdmin.physicalAddress.longitude);
-            }
-        }
-
-        return null;
-    }
-
-    public String getAdminBodyAddress(String body) {
-        if (body.equals(ElectionAdministrationBody.AdminBody.STATE)) {
-            if (stateAdmin != null) {
-                return stateAdmin.getPhysicalAddress();
-            }
-        } else if (body.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            return localAdmin.getPhysicalAddress();
-        }
-
-        return "";
     }
 
     @Override
@@ -386,6 +307,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
 
+        // start geocoding addresses when activity launches
         setUpGeocodings();
 
         mLocationClient = new LocationClient(this, this, this);
@@ -399,8 +321,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // get LocationsFragment's root view
         locationsFragment = (LocationsFragment)mTabsAdapter.getItem(1);
         voterInfo = getVoterInfo();
-        setAllLocations();
-        setLocationIds();
+        voterInfo.setUpLocations();
 
         useMetric = mAppContext.useMetric();
 
@@ -429,10 +350,14 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 }
 
                 // find object and set values on it
-                PollingLocation foundLoc = allLocations.get(locationIds.get(key));
-                foundLoc.address.latitude = lat;
-                foundLoc.address.longitude = lon;
-                foundLoc.address.distance = distance;
+                PollingLocation foundLoc = voterInfo.getLocationForId(key);
+                if (foundLoc != null) {
+                    foundLoc.address.latitude = lat;
+                    foundLoc.address.longitude = lon;
+                    foundLoc.address.distance = distance;
+                } else {
+                    Log.e("VIPTabBarActivity", "Could not find location " + key + " to set geocoding result!");
+                }
             }
         };
 
@@ -451,6 +376,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 mAppContext.setHomeLocation(homeLocation);
 
                 // start background geocode tasks for polling locations
+                ArrayList<PollingLocation> allLocations = voterInfo.getAllLocations();
                 for (PollingLocation location : allLocations) {
                     // key by address, if location has no ID
                     if (location.id != null) {
@@ -463,21 +389,19 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 }
 
                 // start background geocode tasks for election admin bodies' physical addresses
-                State state = voterInfo.state.get(0);
-                stateAdmin = state.electionAdministrationBody;
-                if (stateAdmin != null) {
-                    if (!stateAdmin.getPhysicalAddress().isEmpty()) {
-                        new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.STATE,
-                                stateAdmin.physicalAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
-                    }
+
+                // state
+                CivicApiAddress stateAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
+                if (stateAdminAddress != null) {
+                    new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.STATE,
+                            stateAdminAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                 }
 
-                if (state.local_jurisdiction != null && state.local_jurisdiction.electionAdministrationBody != null) {
-                    localAdmin = state.local_jurisdiction.electionAdministrationBody;
-                    if (!localAdmin.getPhysicalAddress().isEmpty()) {
-                        new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.LOCAL,
-                                localAdmin.physicalAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
-                    }
+                // local
+                CivicApiAddress localAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
+                if (localAdminAddress != null) {
+                    new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.LOCAL,
+                            localAdminAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                 }
             }
         };
@@ -491,22 +415,15 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                     return;
                 }
 
-                try {
-                    CivicApiAddress address = null;
-                    if (key.equals(ElectionAdministrationBody.AdminBody.STATE)) {
-                        address = stateAdmin.physicalAddress;
-                    } else if (key.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-                        address = localAdmin.physicalAddress;
-                    }
-
+                CivicApiAddress address = voterInfo.getAdminAddress(key);
+                if (address != null) {
                     address.latitude = lat;
                     address.longitude = lon;
                     address.distance = distance;
-
-                } catch (Exception ex) {
+                } else {
                     Log.e("VIPTabBarActivity", "Failed to set geocode result on election admin body!");
-                    ex.printStackTrace();
                 }
+
             }
         };
 
@@ -514,38 +431,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             // geocode home address; once result returned, geocode polling and admin body locations
             new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
                     null, useMetric, null).execute();
-        }
-    }
-
-    private void setAllLocations() {
-        // get all locations (both polling and early voting)
-        allLocations = new ArrayList<PollingLocation>();
-        if (voterInfo.pollingLocations != null) {
-            allLocations.addAll(voterInfo.pollingLocations);
-        }
-
-        if (voterInfo.earlyVoteSites != null) {
-            allLocations.addAll(voterInfo.earlyVoteSites);
-        }
-    }
-
-    public ArrayList<PollingLocation> getAllLocations() {
-        return allLocations;
-    }
-
-    /**
-     * Build map of PollingLocation id to its offset in the list of all locations,
-     * to find it later when the distance calculation comes back.
-     */
-    private void setLocationIds() {
-        locationIds = new HashMap<String, Integer>(allLocations.size());
-        for (int i = allLocations.size(); i--> 0;) {
-            PollingLocation location = allLocations.get(i);
-            if (location.id != null) {
-                locationIds.put(location.id, i);
-            } else {
-                locationIds.put(location.address.toGeocodeString(), i);
-            }
         }
     }
 
@@ -705,121 +590,5 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    /**
-     * This is a helper class that implements the management of tabs and all
-     * details of connecting a ViewPager with associated TabHost.  It relies on a
-     * trick.  Normally a tab host has a simple API for supplying a View or
-     * Intent that each tab will show.  This is not sufficient for switching
-     * between pages.  So instead we make the content part of the tab host
-     * 0dp high (it is not shown) and the TabsAdapter supplies its own dummy
-     * view to show as the tab content.  It listens to changes in tabs, and takes
-     * care of switch to the correct paged in the ViewPager whenever the selected
-     * tab changes.
-     *
-     * NOTE: This class is lifted directly from the ViewPager class docs:
-     *       http://developer.android.com/reference/android/support/v4/view/ViewPager.html
-     */
-    public static class TabsAdapter extends FragmentPagerAdapter
-            implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        private final ActionBar mActionBar;
-        private final ViewPager mViewPager;
-        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>(3);
-        private LocationsFragment locationsFragment;
-        private FragmentManager tabsFragmentManager;
-
-        static final class TabInfo {
-            private final Class<?> clss;
-            private final Bundle args;
-
-            TabInfo(Class<?> _class, Bundle _args) {
-                clss = _class;
-                args = _args;
-            }
-        }
-
-        public TabsAdapter(FragmentActivity activity, ViewPager pager) {
-            super(activity.getSupportFragmentManager());
-            mActionBar = activity.getActionBar();
-            mViewPager = pager;
-            mViewPager.setAdapter(this);
-            mViewPager.setOnPageChangeListener(this);
-        }
-
-        public void addTab(ActionBar.Tab tab, Class<?> clss, String tag, Bundle args) {
-            TabInfo info = new TabInfo(clss, args);
-            tab.setTag(tag);
-            tab.setTabListener(this);
-            mTabs.add(info);
-            mActionBar.addTab(tab);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return mTabs.size();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // return the proper Fragment type given the tab
-            switch (position) {
-                case 0: {
-                    return BallotFragment.newInstance();
-                }
-                case 1: {
-                    locationsFragment = LocationsFragment.newInstance();
-                    return locationsFragment;
-                }
-                case 2: {
-                    return ElectionDetailsFragment.newInstance();
-                }
-                default: {
-                    Log.e("VIPTabBarActivity", "GETTING DEFAULT FRAGMENT FOR POSITION " + position);
-                    return LocationsFragment.newInstance();
-                }
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            mActionBar.setSelectedNavigationItem(position);
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-
-        @Override
-        public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-            mViewPager.setCurrentItem(tab.getPosition());
-        }
-
-        @Override
-        public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-            // Clear back stack on tab change.  Otherwise stack will keep history for all tabs,
-            // which can result in inconsistent state and/or unexpected behavior.
-            tabsFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
-
-        /**
-         * tell polling locations list to refresh when switching to that tab, to get the
-         * geocoding results have returned since its fragment was created
-         * (re-select is always triggered on select)
-         */
-        @Override
-        public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-            if (tab.getTag() == "locations_tab") {
-                locationsFragment.refreshList();
-            }
-        }
     }
 }

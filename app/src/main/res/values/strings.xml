@@ -119,6 +119,7 @@
     <string name="locations_map_user_location_label">Current Location</string>
     <string name="locations_map_election_administration_body_label">Election Administration Body Location</string>
     <string name="locations_map_play_services_unavailable">Google Play services are unavailable.  Cannot show locations map, distances, or directions.</string>
+    <string name="locations_map_not_geocoded">Unable to find location for that address.</string>
     <string name="locations_map_polling_location_hours_label">Hours:</string>
     <string name="locations_map_polling_location_hours_not_found">Hours of operation not found for this location.</string>
 

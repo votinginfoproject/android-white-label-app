@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.models.googledirections;
+package com.votinginfoproject.VotingInformationProject.models.GoogleDirections;
 
 import java.util.List;
 

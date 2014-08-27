@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +17,9 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
-import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -37,6 +34,7 @@ public class ElectionDetailsFragment extends Fragment {
     int selectedSectionBackground;
     int unselectedSectionBackground;
 
+    VoterInfo voterInfo;
     ElectionAdministrationBody stateAdmin;
     ElectionAdministrationBody localAdmin;
     boolean haveLink;
@@ -99,12 +97,10 @@ public class ElectionDetailsFragment extends Fragment {
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
         // get state and local election administration bodies
-        VoterInfo voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
-        // should have only one state returned for addresses in the US
-        State thisState = voterInfo.state.get(0);
-        stateAdmin = thisState.electionAdministrationBody;
-        if (thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null ) {
-            localAdmin = thisState.local_jurisdiction.electionAdministrationBody;
+        voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
+        stateAdmin = voterInfo.getStateAdmin();
+        localAdmin = voterInfo.getLocalAdmin();
+        if (localAdmin != null ) {
             Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
             if (stateAdmin == null) {
                 // no state admin body; hide button bar and just show local

@@ -12,10 +12,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.adapters.DirectionsAdapter;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Bounds;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Leg;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Response;
-import com.votinginfoproject.VotingInformationProject.models.googledirections.Route;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Response;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import org.apache.http.HttpResponse;

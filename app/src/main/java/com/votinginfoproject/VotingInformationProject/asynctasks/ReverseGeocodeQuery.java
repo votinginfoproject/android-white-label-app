@@ -1,20 +1,14 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

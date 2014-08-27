@@ -118,11 +118,11 @@ public class VIPMapFragment extends SupportMapFragment {
         selectedButtonTextColor = res.getColor(R.color.white);
 
         voterInfo = mActivity.getVoterInfo();
-        allLocations = mActivity.getAllLocations();
+        allLocations = voterInfo.getAllLocations();
         homeLocation = mActivity.getHomeLatLng();
         currentLocation = mActivity.getUserLocation();
         currentAddress = mActivity.getUserLocationAddress();
-        homeAddress = mActivity.getHomeAddress();
+        homeAddress = voterInfo.normalizedInput.toGeocodeString();
 
         // check if this map view is for an election administration body
         if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE) ||
@@ -136,11 +136,11 @@ public class VIPMapFragment extends SupportMapFragment {
         if (locationId.equals("home")) {
             thisLocation = homeLocation;
         } else if (haveElectionAdminBody) {
-            thisLocation = mActivity.getAdminBodyLatLng(locationId);
+            thisLocation = voterInfo.getAdminBodyLatLng(locationId);
 
         } else {
             Log.d("VIPMapFragment", "Have location ID: " + locationId);
-            selectedLocation = mActivity.getLocationForId(locationId);
+            selectedLocation = voterInfo.getLocationForId(locationId);
             CivicApiAddress address = selectedLocation.address;
             thisLocation = new LatLng(address.latitude, address.longitude);
         }
@@ -195,7 +195,7 @@ public class VIPMapFragment extends SupportMapFragment {
                         map.addMarker(new MarkerOptions()
                                         .position(thisLocation)
                                         .title(mResources.getString(R.string.locations_map_election_administration_body_label))
-                                        .snippet(mActivity.getAdminBodyAddress(locationId))
+                                        .snippet(voterInfo.getAdminAddress(locationId).toString())
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
                         ).showInfoWindow();
                     }
@@ -323,7 +323,7 @@ public class VIPMapFragment extends SupportMapFragment {
             map.addMarker(new MarkerOptions()
                             .position(thisLocation)
                             .title(mResources.getString(R.string.locations_map_election_administration_body_label))
-                            .snippet(mActivity.getAdminBodyAddress(locationId))
+                            .snippet(voterInfo.getAdminAddress(locationId).toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
             );
         }
