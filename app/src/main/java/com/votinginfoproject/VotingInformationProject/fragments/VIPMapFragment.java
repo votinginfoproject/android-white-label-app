@@ -41,6 +41,8 @@ public class VIPMapFragment extends SupportMapFragment {
 
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
+    private static final String HOME = "home";
+    private static final String CURRENT_LOCATION = "current";
 
     VoterInfo voterInfo;
     VIPTabBarActivity mActivity;
@@ -124,6 +126,8 @@ public class VIPMapFragment extends SupportMapFragment {
         currentAddress = mActivity.getUserLocationAddress();
         homeAddress = voterInfo.normalizedInput.toGeocodeString();
 
+        polylineBounds = mActivity.getPolylineBounds();
+
         // check if this map view is for an election administration body
         if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE) ||
                 locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
@@ -133,7 +137,7 @@ public class VIPMapFragment extends SupportMapFragment {
         }
 
         // set selected location to zoom to
-        if (locationId.equals("home")) {
+        if (locationId.equals(HOME)) {
             thisLocation = homeLocation;
         } else if (haveElectionAdminBody) {
             thisLocation = voterInfo.getAdminBodyLatLng(locationId);
@@ -170,52 +174,13 @@ public class VIPMapFragment extends SupportMapFragment {
                         }
                     }
 
-                    if (homeLocation != null) {
-                        // add marker for user-entered address
-                        map.addMarker(new MarkerOptions()
-                                        .position(homeLocation)
-                                        .title(mResources.getString(R.string.locations_map_user_address_label))
-                                        .snippet(homeAddress)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
-                        );
-                    }
+                    addNonPollingToMap();
 
-                    if (currentLocation != null) {
-                        // add marker for current user location (used for directions)
-                        map.addMarker(new MarkerOptions()
-                                        .position(currentLocation)
-                                        .title(mResources.getString(R.string.locations_map_user_location_label))
-                                        .snippet(currentAddress)
-                                        .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
-                        );
-                    }
-
-                    if (haveElectionAdminBody) {
-                        // add marker for state or local election administration body
-                        map.addMarker(new MarkerOptions()
-                                        .position(thisLocation)
-                                        .title(mResources.getString(R.string.locations_map_election_administration_body_label))
-                                        .snippet(voterInfo.getAdminAddress(locationId).toString())
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
-                        ).showInfoWindow();
-                    }
-
-                    if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
-                        // show directions line on map
-                        PolylineOptions polylineOptions = new PolylineOptions();
-                        List<LatLng> pts = PolyUtil.decode(encodedPolyline);
-                        polylineOptions.addAll(pts);
-                        polylineOptions.color(mResources.getColor(R.color.brand_name_text));
-                        map.addPolyline(polylineOptions);
-                        polylineBounds = mActivity.getPolylineBounds();
-                    }
-
-                    // zoom to fit polyline, with padding in pixels
                     if (polylineBounds != null) {
-                        map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 40));
+                        map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 60));
                     } else if (thisLocation != null) {
                         // zoom to selected location
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 20));
                     }
                 }
             });
@@ -242,13 +207,9 @@ public class VIPMapFragment extends SupportMapFragment {
                 // get location key for this marker's ID
                 String key = markerIds.get(marker.getId());
 
-                if (key == null) {
-                    // allow for getting directions from election admin body location
-                    if (haveElectionAdminBody) {
-                        key = locationId;
-                    } else {
-                        return;  // do nothing for taps on user address info window
-                    }
+                // do nothing for taps on user address or current location info window
+                if (key.equals(HOME) || key.equals((CURRENT_LOCATION))) {
+                    return;
                 }
                 
                 Log.d("LocationsFragment", "Clicked marker for " + key);
@@ -298,34 +259,45 @@ public class VIPMapFragment extends SupportMapFragment {
     private void refreshMapView() {
         map.clear();
         new AddMarkersTask().execute(locationId);
+        addNonPollingToMap();
+    }
 
+    /**
+     * Helper function to add everything that isn't a polling site to the map
+     */
+    private void addNonPollingToMap() {
         // add marker for user-entered address
         if (homeLocation != null) {
-            map.addMarker(new MarkerOptions()
+            Marker marker = map.addMarker(new MarkerOptions()
                             .position(homeLocation)
                             .title(mResources.getString(R.string.locations_map_user_address_label))
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
             );
+            markerIds.put(marker.getId(), HOME);
         }
 
         if (currentLocation != null) {
             // add marker for current user location (used for directions)
-            map.addMarker(new MarkerOptions()
+            Marker marker = map.addMarker(new MarkerOptions()
                             .position(currentLocation)
                             .title(mResources.getString(R.string.locations_map_user_location_label))
                             .snippet(currentAddress)
                             .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
             );
+            markerIds.put(marker.getId(), CURRENT_LOCATION);
         }
 
         if (haveElectionAdminBody) {
             // add marker for state or local election administration body
-            map.addMarker(new MarkerOptions()
+            Marker marker = map.addMarker(new MarkerOptions()
                             .position(thisLocation)
                             .title(mResources.getString(R.string.locations_map_election_administration_body_label))
                             .snippet(voterInfo.getAdminAddress(locationId).toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
             );
+            marker.showInfoWindow();
+            // allow for getting directions from election admin body location
+            markerIds.put(marker.getId(), locationId);
         }
 
         if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
