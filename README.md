@@ -79,6 +79,11 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 
         cp xmltemplates/api_keys.xml.template app/src/main/res/values/api_keys.xml
 
+*  In the [Google Developer Console](https://console.developers.google.com), under the project APIs, enable:
+    -  Directions API
+    -  Google Civic Information API
+    -  Google Maps Android API v2
+
 *  Edit api_keys.xml to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
 
     -  Note that the Google Maps API key is the Anroid key, and the Civic Info API key is the browser key.

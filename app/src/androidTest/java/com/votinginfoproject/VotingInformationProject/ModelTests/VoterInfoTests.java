@@ -1,8 +1,10 @@
 package com.votinginfoproject.VotingInformationProject.ModelTests;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.MockVIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -112,5 +114,30 @@ public class VoterInfoTests extends TestCase {
         // should be able to get address by key
         CivicApiAddress foundAddress = info.getAddressForId(loc3.address.toGeocodeString());
         assertEquals("Three", foundAddress.locationName);
+
+        // should be able to get description for location by key
+        assertEquals("location one", info.getDescriptionForId(loc1.id));
+    }
+
+    public void testGetAdministrativeBodies() {
+        MockVIPAppContext mockContext = new MockVIPAppContext();
+        VIPApp app = mockContext.getVIPApp();
+        VoterInfo info = app.getVoterInfo();
+        info.setUpLocations();
+
+        // should be able to get admin body address
+        CivicApiAddress gotAddress = info.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
+        assertEquals("test location", gotAddress.locationName);
+
+        // should get null for admin body without physical address
+        gotAddress = info.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
+        assertNull(gotAddress);
+
+        // should be able to get description for admin body
+        assertEquals("State Admin", info.getDescriptionForId(ElectionAdministrationBody.AdminBody.STATE));
+
+        // should be able to get location for admin body
+        LatLng stateLoc = info.getAdminBodyLatLng(ElectionAdministrationBody.AdminBody.STATE);
+        assertEquals(40.1, stateLoc.latitude);
     }
 }

@@ -1,9 +1,12 @@
 package com.votinginfoproject.VotingInformationProject;
 
+import com.votinginfoproject.VotingInformationProject.models.AdministrationRegion;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.District;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.Source;
 import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
@@ -29,8 +32,10 @@ public class MockVIPAppContext extends VIPAppContext {
         Candidate testCandidateOne = new Candidate();
         Candidate testCandidateTwo = new Candidate();
         Source testSource = new Source();
-        District testDistrict = new District();
         State testState = new State();
+        ElectionAdministrationBody stateAdmin = new ElectionAdministrationBody();
+        ElectionAdministrationBody localAdmin = new ElectionAdministrationBody();
+        CivicApiAddress address = new CivicApiAddress();
 
         testElection.name = "Test Election";
         testElection.electionDay = "2014-01-01";
@@ -65,6 +70,26 @@ public class MockVIPAppContext extends VIPAppContext {
         testInfo.contests = new ArrayList<Contest>(2);
         testInfo.contests.add(testContestOne);
         testInfo.contests.add(testContestTwo);
+
+        address.line1 = "123 Foo St";
+        address.city = "Springfield";
+        address.state = "IL";
+        address.locationName = "test location";
+        address.latitude = 40.1;
+        address.longitude = -75.5;
+
+        stateAdmin.name = "State Admin";
+        stateAdmin.physicalAddress = address;
+        localAdmin.name = "Local Admin";
+        localAdmin.correspondenceAddress = address;
+
+        testState.electionAdministrationBody = stateAdmin;
+        testState.local_jurisdiction = new AdministrationRegion();
+        testState.local_jurisdiction.electionAdministrationBody = localAdmin;
+
+        testInfo.state = new ArrayList();
+        testInfo.state.add(testState);
+
 
         app.setVoterInfo(testInfo, "");
     }
