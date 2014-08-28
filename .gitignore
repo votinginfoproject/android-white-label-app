@@ -1,8 +1,13 @@
-.gradle
-/local.properties
-/.idea/workspace.xml
-.DS_Store
-/build
+# Gitignore based on:
+# http://stackoverflow.com/questions/16736856/what-should-be-in-my-gitignore-for-an-android-studio-project
+# https://github.com/github/gitignore/blob/master/Android.gitignore
+
+# Gradle Files
+.gradle/
+build/
+
+# Local Config File
+local.properties
 
 # Built app files
 *.apk
@@ -17,4 +22,35 @@
 # Generated files
 bin/
 gen/
+
+# Built native files
+*.o
+*.so
+
+# Temp files
+*~
+
+# Log files
+*.log
+
+# Android Studio user-specific files
+# See: https://intellij-support.jetbrains.com/entries/23393067
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/libraries/*.xml
+.idea/datasources.xml
+.idea/dataSources.ids
+.idea/misc.xml
+.idea/inspectionProfiles
+
+# Eclipse Stuff, if someone wanted to use that
+proguard/
+.metadata/
+
+# Key files
+api_keys.xml
+
+# OS Clutter
+.DS_Store
+Thumbs.db
 

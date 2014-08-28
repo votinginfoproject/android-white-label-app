@@ -1,0 +1,34 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fragment_style"
+    tools:context="com.votinginfoproject.VotingInformationProject.activities.AboutActivity">
+
+    <LinearLayout
+        style="@style/wrap_width_wrap_height"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@string/about_app_title"
+            style="@style/fragment_header" />
+
+        <TextView
+            android:text="@string/about_app"
+            style="@style/fragment_subheader" />
+
+        <TextView
+            android:text="@string/about_terms_title"
+            style="@style/fragment_header" />
+
+        <TextView
+            android:text="@string/about_terms"
+            style="@style/fragment_subheader" />
+
+        <TextView
+            android:text="@string/about_privacy_title"
+            style="@style/fragment_header" />
+
+        <TextView
+            android:text="@string/about_privacy"
+            style="@style/fragment_subheader" />
+    </LinearLayout>
+</ScrollView>

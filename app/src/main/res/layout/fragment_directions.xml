@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/directions_fragment"
+    style="@style/fragment_style"
+    tools:context=".fragments.DirectionsFragment">
+
+    <RelativeLayout
+        style="@style/wrap_width_wrap_height"
+        android:id="@+id/directions_fragment_inner_layout" >
+
+        <TextView
+            style="@style/map_header"
+            android:layout_toLeftOf="@+id/directions_map_button"
+            android:id="@+id/directions_title" />
+
+        <TextView
+            android:id="@+id/directions_subtitle"
+            android:layout_toLeftOf="@+id/directions_map_button"
+            android:layout_below="@+id/directions_title"
+            style="@style/fragment_subheader" />
+
+        <Button
+            style="@style/map_button"
+            android:id="@+id/directions_map_button"
+            android:text="@string/locations_list_map_button_label" />
+
+        <LinearLayout
+            style="@style/button_bar"
+            android:checkedButton="@+id/directions_walk_button"
+            android:layout_below="@+id/directions_subtitle"
+            android:id="@+id/directions_button_bar"
+            android:layout_alignLeft="@+id/directions_subtitle" >
+
+            <Button
+                style="@style/button_bar_button"
+                android:text="@string/directions_walk_button_label"
+                android:id="@+id/directions_walk_button" />
+
+            <View style="@style/button_bar_separator" />
+
+            <Button
+                android:id="@+id/directions_bike_button"
+                style="@style/button_bar_button"
+                android:text="@string/directions_bike_button_label" />
+
+            <View style="@style/button_bar_separator" />
+
+            <Button
+                style="@style/button_bar_button"
+                android:text="@string/directions_transit_button_label"
+                android:id="@+id/directions_transit_button" />
+
+            <View style="@style/button_bar_separator" />
+
+            <Button
+                android:id="@+id/directions_drive_button"
+                style="@style/button_bar_button"
+                android:text="@string/directions_drive_button_label" />
+        </LinearLayout>
+
+        <ListView
+            style="@style/listview"
+            android:id="@+id/directions_list"
+            android:layout_below="@+id/directions_button_bar"
+            android:layout_above="@+id/directions_open_in_maps_button"
+            android:layout_toRightOf="@+id/directions_subtitle"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/directions_none_found_message"
+            android:text="@string/directions_error_message"
+            style="@style/fragment_subheader"
+            android:layout_below="@+id/directions_button_bar"
+            android:layout_toRightOf="@+id/directions_subtitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/directions_bottom_padding"
+            android:text="@string/directions_open_in_maps_button_label"
+            android:layout_margin="15sp"
+            android:id="@+id/directions_open_in_maps_button"
+            android:background="@drawable/go_to_maps_button"
+            android:textColor="@drawable/go_to_maps_button_text"
+            android:clickable="true" />
+
+        <!-- this is to give the "open in maps" button something to align with and still be padded -->
+        <View
+            android:id="@+id/directions_bottom_padding"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="0sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

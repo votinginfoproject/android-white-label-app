@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/contest_list_item"
+    style="@style/match_width_match_height" >
+
+    <TextView
+        android:id="@+id/contest_list_item_title"
+        style="@style/list_item_header" />
+    <TextView
+        android:id="@+id/contest_list_item_subtitle"
+        android:layout_below="@+id/contest_list_item_title"
+        style="@style/list_item_content" />
+</RelativeLayout>

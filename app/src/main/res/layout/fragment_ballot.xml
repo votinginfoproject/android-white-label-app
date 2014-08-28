@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ballot_fragment"
+    tools:context="com.votinginfoproject.VotingInformationProject.fragments.BallotFragment"
+    style="@style/fragment_style" >
+
+    <RelativeLayout
+        android:id="@+id/ballot_fragment_inner_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/ballot_election_name"
+            style="@style/fragment_header" />
+
+        <TextView
+            android:id="@+id/ballot_election_date"
+            android:layout_below="@+id/ballot_election_name"
+            style="@style/fragment_subheader" />
+
+        <ListView
+            android:id="@+id/ballot_contests_list"
+            android:contentDescription="@string/ballot_contests_list_header"
+            android:layout_below="@+id/ballot_contests_header"
+            style="@style/listview" />
+
+        <TextView
+            android:text="@string/ballot_contests_list_header"
+            android:id="@+id/ballot_contests_header"
+            android:layout_below="@+id/ballot_election_date"
+            style="@style/section_header" />
+    </RelativeLayout>
+</RelativeLayout>

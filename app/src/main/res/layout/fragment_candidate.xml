@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/candidate_fragment"
+    android:orientation="vertical"
+    style="@style/fragment_style"
+    tools:context="com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment">
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout"
+        style="@style/fill_width_wrap_height" >
+
+        <ImageView
+            android:id="@+id/candidate_photo"
+            android:visibility="gone"
+            android:contentDescription="@string/candidate_picture_description"
+            android:src="@drawable/ic_avatar"
+            android:adjustViewBounds="true"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:layout_marginTop="5sp"
+            android:id="@+id/candidate_name"
+            style="@style/fragment_header"
+            android:layout_toRightOf="@+id/candidate_photo"
+            android:text="@string/candidate_no_name" />
+
+        <TextView
+            android:id="@+id/candidate_party"
+            style="@style/fragment_subheader"
+            android:layout_toRightOf="@+id/candidate_photo"
+            android:layout_below="@+id/candidate_name"
+            android:text="@string/candidate_no_party" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/candidate_details_section_header"
+                style="@style/section_header"
+                android:text="@string/candidate_details_header" />
+
+            <TableLayout
+                android:id="@+id/candidate_details_table"
+                style="@style/two_column_table">
+
+                <TableRow
+                    android:id="@+id/candidate_details_web_site_row"
+                    style="@style/table_row" >
+
+                    <ImageView
+                        android:contentDescription="@string/website_accessibility_description"
+                        android:id="@+id/candidate_details_web_site_image"
+                        android:src="@drawable/ic_website"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_details_web_site_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+                </TableRow>
+
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/table_row"
+                    android:id="@+id/candidate_details_phone_row">
+
+                    <ImageView
+                        android:contentDescription="@string/phone_accessibility_description"
+                        android:id="@+id/candidate_details_phone_image"
+                        android:src="@drawable/ic_phone"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_details_phone_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+
+                </TableRow>
+
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/table_row"
+                    android:id="@+id/candidate_details_email_row">
+
+                    <ImageView
+                        android:contentDescription="@string/email_accessibility_description"
+                        android:id="@+id/candidate_details_email_image"
+                        android:src="@drawable/ic_email"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_details_email_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+
+                </TableRow>
+
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/list_item_header"
+                    android:id="@+id/candidate_details_none_row"
+                    android:paddingLeft="5sp"
+                    android:paddingRight="5sp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/candidate_details_none_text"
+                        android:gravity="center"
+                        android:text="@string/candidate_details_none"
+                        style="@style/candidate_details_row_text" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/candidate_social_section_header"
+                style="@style/section_header"
+                android:text="@string/candidate_social_header" />
+
+            <TableLayout
+                android:id="@+id/candidate_social_table"
+                style="@style/fill_width_wrap_height"
+                android:stretchColumns="1"
+                android:shrinkColumns="0">
+
+                <TableRow
+                    style="@style/table_row"
+                    android:id="@+id/candidate_social_twitter_row">
+
+                    <ImageView
+                        android:contentDescription="@string/social_channel_twitter_description"
+                        android:id="@+id/candidate_social_twitter_image"
+                        android:src="@drawable/ic_twitter"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_social_twitter_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+
+                </TableRow>
+
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/table_row"
+                    android:id="@+id/candidate_social_facebook_row">
+
+                    <ImageView
+                        android:contentDescription="@string/social_channel_facebook_description"
+                        android:id="@+id/candidate_social_facebook_image"
+                        android:src="@drawable/ic_facebook"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_social_facebook_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+
+                </TableRow>
+
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/table_row"
+                    android:id="@+id/candidate_social_googleplus_row">
+
+                    <ImageView
+                        android:contentDescription="@string/social_channel_google_plus_description"
+                        android:id="@+id/candidate_social_googleplus_image"
+                        android:src="@drawable/ic_googleplus"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_social_googleplus_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+
+                </TableRow>
+
+                <TableRow>
+                    <View style="@style/table_row_divider" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/table_row"
+                    android:id="@+id/candidate_social_youtube_row">
+
+                    <ImageView
+                        android:contentDescription="@string/social_channel_youtube_description"
+                        android:id="@+id/candidate_social_youtube_image"
+                        android:src="@drawable/ic_youtube"
+                        style="@style/candidate_details_row_image" />
+                    <TextView
+                        android:id="@+id/candidate_social_youtube_text"
+                        android:text="@string/candidate_social_header"
+                        style="@style/candidate_details_row_text" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

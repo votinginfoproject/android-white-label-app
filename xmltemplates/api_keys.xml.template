@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_api_android_key"></string>
+    <string name="google_api_browser_key"></string>
+    <string name="civic_info_api_version">v1</string>
+    <bool name="civic_info_official_only">true</bool>
+</resources>

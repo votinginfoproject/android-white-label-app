@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/directions_list_item"
+    android:orientation="vertical"
+    style="@style/wrap_width_wrap_height" >
+
+    <TextView
+        android:id="@+id/directions_list_item_instructions"
+        style="@style/list_item_header" />
+    <TextView
+        android:id="@+id/directions_list_item_distance_duration"
+        style="@style/list_item_content"
+        android:layout_below="@+id/directions_list_item_instructions" />
+</RelativeLayout>

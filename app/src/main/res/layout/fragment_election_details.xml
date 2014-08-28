@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/election_details_fragment"
+    style="@style/fragment_style"
+    tools:context=".fragments.ElectionDetailsFragment">
+
+    <LinearLayout
+        android:layout_marginTop="10sp"
+        style="@style/button_bar"
+        android:id="@+id/details_button_bar" >
+
+        <Button
+            style="@style/button_bar_button"
+            android:text="@string/details_state_administration_body_header"
+            android:id="@+id/details_state_button" />
+
+        <View style="@style/button_bar_separator" />
+
+        <Button
+            style="@style/button_bar_button"
+            android:text="@string/details_local_administration_body_header"
+            android:id="@+id/details_local_button" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_below="@+id/details_button_bar"
+        style="@style/fill_width_wrap_height"
+        android:id="@+id/election_details_scroll_view" >
+
+        <RelativeLayout
+            style="@style/fill_width_wrap_height" >
+            <include layout="@layout/election_body" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/details_none_found"
+        android:text="@string/details_none_found_message"
+        android:visibility="gone"
+        style="@style/fragment_header" />
+
+</RelativeLayout>

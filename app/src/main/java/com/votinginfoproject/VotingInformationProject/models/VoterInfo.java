@@ -1,0 +1,246 @@
+package com.votinginfoproject.VotingInformationProject.models;
+
+import android.graphics.Bitmap;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Created by kathrynkillebrew on 7/14/14.
+ * Response object for voterInfoQuery:
+ * https://developers.google.com/civic-information/docs/v1/voterinfo/voterInfoQuery
+ */
+public class VoterInfo {
+    public String kind;
+    public Election election;
+    public List<Election> otherElections;
+    public CivicApiAddress normalizedInput;
+    public List<PollingLocation> pollingLocations;
+    public List<PollingLocation> earlyVoteSites;
+    public List<Contest> contests;
+    public List<State> state;
+
+    private CandidatePhotoCache candidatePhotoCache;
+    private String selectedParty;
+
+    public List<Contest> getFilteredContests() {
+        return filteredContests;
+    }
+
+    private HashMap<String, Integer> locationIds;
+    private ArrayList<PollingLocation> allLocations;
+
+    /**
+     * Find a contest at a particular offset in the party-filtered list.  For use with list item
+     * found in ContestsAdapter list.
+     *
+     * @param position Index in the filteredContest list
+     * @return Contest at the given index
+     */
+    public Contest getContestAt(int position) {
+        return filteredContests.get(position);
+    }
+
+    private List<Contest> filteredContests;
+
+    public String getSelectedParty() {
+        return selectedParty;
+    }
+
+    public void setSelectedParty(String party) {
+        this.selectedParty = party;
+
+        Log.d("VoterInfo", "Filtering contest list for party: " + party);
+
+        // build filtered list of contests based on party
+        if (contests != null) {
+            filteredContests = new ArrayList(contests.size());
+            // filter contest list for primary party
+            if (!party.isEmpty()) {
+                for (Contest contest : contests) {
+                    if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
+                        if (contest.primaryParty.equals(party)) {
+                            filteredContests.add(contest);
+                        }
+                    } else {
+                        // this contest isn't a primary; show it
+                        filteredContests.add(contest);
+                    }
+                }
+            } else {
+                // no selected party; show all
+                filteredContests.addAll(contests);
+            }
+        } else {
+            Log.d("VoterInfo", "No contests for this election!");
+            filteredContests = new ArrayList();
+        }
+    }
+
+    /**
+     * Default Constructor
+     *
+     * Ensures otherElections is never a null field, and create photo cache for candidate images
+     */
+    public VoterInfo() {
+        this.otherElections = new ArrayList();
+        candidatePhotoCache = new CandidatePhotoCache();
+    }
+
+    public Bitmap getImageFromCache(UUID key) {
+        return candidatePhotoCache.getBitmapFromMemoryCache(key);
+    }
+
+    public UUID addImageToCache(Bitmap bitmap) {
+        return candidatePhotoCache.addBitmapToMemoryCache(bitmap);
+    }
+
+    /**
+     * Helper function to be called by main activity once VoterInfo contents have been populated;
+     * this will build map of polling/early voting locations by key.
+     */
+    public void setUpLocations() {
+        // get all locations (both polling and early voting)
+        allLocations = new ArrayList<PollingLocation>();
+        if (pollingLocations != null) {
+            allLocations.addAll(pollingLocations);
+        }
+
+        if (earlyVoteSites != null) {
+            allLocations.addAll(earlyVoteSites);
+        }
+
+        // Build map of PollingLocation id to its offset in the list of all locations,
+        // to find it later when the distance calculation comes back.
+        locationIds = new HashMap<String, Integer>(allLocations.size());
+        for (int i = allLocations.size(); i--> 0;) {
+            PollingLocation location = allLocations.get(i);
+            if (location.id != null) {
+                locationIds.put(location.id, i);
+            } else {
+                // key by address if location has no ID
+                locationIds.put(location.address.toGeocodeString(), i);
+            }
+        }
+    }
+
+    /**
+     * Helper function to find the state administrative body.  For elections in the US, there is
+     * only one state.
+     *
+     * @return state election administration body (or null if there is none)
+     */
+    public ElectionAdministrationBody getStateAdmin() {
+        return state.get(0).electionAdministrationBody;
+    }
+
+    /**
+     * Helper function to find the local administrative body.  For elections in the US, there is
+     * only one state.
+     *
+     * @return local election administration body (or null if not found)
+     */
+    public ElectionAdministrationBody getLocalAdmin() {
+        State thisState = state.get(0);
+        if (thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null) {
+            return thisState.local_jurisdiction.electionAdministrationBody;
+        }
+        return null;
+    }
+
+    /**
+     * Helper function to get the physical address for state or local administration body
+     * @param admin_type ElectionAdministrationBody.AdminBody string constant for state or local
+     * @return CivicApiAddress that is the physical address for the admin body (or null if not found)
+     */
+    public CivicApiAddress getAdminAddress(String admin_type) {
+        ElectionAdministrationBody admin = null;
+        if (admin_type.equals(ElectionAdministrationBody.AdminBody.STATE)) {
+            admin = getStateAdmin();
+        } else if (admin_type.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
+            admin = getLocalAdmin();
+        }
+        if (admin != null) {
+            return admin.physicalAddress;
+        }
+        return null;
+    }
+
+    public ArrayList<PollingLocation> getAllLocations() {
+        return allLocations;
+    }
+
+    /**
+     * Find polling/early voting location in the map of all locations
+     * @param location_id Key for location (either its ID or address, if no ID)
+     * @return PollingLocation in the map (or null if not found)
+     */
+    public PollingLocation getLocationForId(String location_id) {
+        if (locationIds.get(location_id) != null) {
+            return allLocations.get(locationIds.get(location_id));
+        } else {
+            Log.e("VoterInfo", "Did not find location ID in hash: " + location_id);
+            return null;
+        }
+    }
+
+    /**
+     * Helper function to return address object for either polling location or election admin body.
+     * @param location_id Key for polling location, or which admin body
+     * @return Address object for key
+     */
+    public CivicApiAddress getAddressForId(String location_id) {
+        if (locationIds.get(location_id) != null) {
+            PollingLocation location = allLocations.get(locationIds.get(location_id));
+            return location.address;
+        } else {
+            // get address for election administration body key (state or local)
+            return getAdminAddress(location_id);
+        }
+    }
+
+    /**
+     * Helper function to return descriptor for either polling location or election admin body.
+     * @param location_id Key for polling location, or which admin body
+     * @return String descriptor for key
+     */
+    public String getDescriptionForId(String location_id) {
+        if (locationIds.get(location_id) != null) {
+            PollingLocation location = allLocations.get(locationIds.get(location_id));
+            if (location.name != null) {
+                return location.name;
+            }
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE)) {
+            ElectionAdministrationBody stateAdmin = getStateAdmin();
+            if (stateAdmin != null && stateAdmin.name != null) {
+                return stateAdmin.name;
+            }
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
+            ElectionAdministrationBody localAdmin = getLocalAdmin();
+            if (localAdmin != null && localAdmin.name != null) {
+                return localAdmin.name;
+            }
+        }
+
+    return "";
+    }
+
+    /**
+     * Get the co-ordinates of an election administration body. (Call after it's been geocoded.)
+     * @param body ElectionAdministrationBody.AdminBody string constant for type (state or local)
+     * @return LatLng for admin body's physical address, if it has one
+     */
+    public LatLng getAdminBodyLatLng(String body) {
+        CivicApiAddress address = getAdminAddress(body);
+        if (address != null) {
+            return new LatLng(address.latitude, address.longitude);
+        }
+
+        return null;
+    }
+}

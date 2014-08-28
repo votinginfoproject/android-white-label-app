@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/candidate_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/candidate_list_item_picture"
+        android:src="@drawable/ic_avatar"
+        android:adjustViewBounds="true"
+        android:layout_centerVertical="true"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+
+        android:contentDescription="@string/candidate_picture_description"/>
+    <TextView
+        android:id="@+id/candidate_list_item_name"
+        android:layout_toRightOf="@+id/candidate_list_item_picture"
+        style="@style/list_item_header" />
+    <TextView
+        android:id="@+id/candidate_list_item_party"
+        android:layout_below="@+id/candidate_list_item_name"
+        android:layout_toRightOf="@+id/candidate_list_item_picture"
+        style="@style/list_item_content" />
+</RelativeLayout>
