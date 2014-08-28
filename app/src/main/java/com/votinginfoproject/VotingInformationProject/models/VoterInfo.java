@@ -215,20 +215,19 @@ public class VoterInfo {
             if (location.name != null) {
                 return location.name;
             }
-            if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE)) {
-                ElectionAdministrationBody stateAdmin = getStateAdmin();
-                if (stateAdmin!= null && stateAdmin.name != null) {
-                    return stateAdmin.name;
-                }
-            } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-                ElectionAdministrationBody localAdmin = getLocalAdmin();
-                if (localAdmin != null && localAdmin.name != null) {
-                    return localAdmin.name;
-                }
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.STATE)) {
+            ElectionAdministrationBody stateAdmin = getStateAdmin();
+            if (stateAdmin != null && stateAdmin.name != null) {
+                return stateAdmin.name;
+            }
+        } else if (location_id.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
+            ElectionAdministrationBody localAdmin = getLocalAdmin();
+            if (localAdmin != null && localAdmin.name != null) {
+                return localAdmin.name;
             }
         }
 
-        return "";
+    return "";
     }
 
     /**
