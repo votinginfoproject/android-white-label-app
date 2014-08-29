@@ -30,5 +30,13 @@
         <TextView
             android:text="@string/about_privacy"
             style="@style/fragment_subheader" />
+
+        <TextView
+            android:text="@string/about_legal_notices_title"
+            style="@style/fragment_header" />
+
+        <TextView
+            android:id="@+id/about_legal_notices"
+            style="@style/fragment_subheader" />
     </LinearLayout>
 </ScrollView>
