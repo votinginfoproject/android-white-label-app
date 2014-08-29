@@ -78,7 +78,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isTest = false;
         myActivity = (HomeActivity)getActivity();
         preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
@@ -90,6 +89,9 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         context = myActivity.getApplicationContext();
         resources = context.getResources();
+
+        // read flag from api_keys file for whether to use test election or not
+        isTest = resources.getBoolean(R.bool.use_test_election);
 
         homeTextViewStatus = (TextView)rootView.findViewById(R.id.home_textview_status);
 
