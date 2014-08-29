@@ -84,9 +84,32 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
     -  Google Civic Information API
     -  Google Maps Android API v2
 
-*  Edit api_keys.xml to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
+*  Add your certificate fingerprint as an allowed Android application in the Google Developer Console
 
-    -  Note that the Google Maps API key is the Anroid key, and the Civic Info API key is the browser key.
+    -  [Get the SHA1 certificate fingerprint for your Android Studio installation.](https://developers.google.com/maps/documentation/android/start)  On Windows:
+    
+         -  Find the directory where Java is installed under Android Studio -> File -> Project Structure -> SDK location
+         
+         -  Open the command prompt and go into the Java bin directory:
+            `cd <JDK directory>\bin`
+            
+         -  Use the Android keytool.exe program to get the SHA1 fingerprint for the debug key used to sign the app:
+         
+            ```
+            keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+            ```
+            
+         -  Copy the SH1 fingerprint output by the above command.
+
+    -  Go to Apis & auth -> Credentials -> Key for Android applications in the Google Developer Console.
+    
+    -  Add the following line under **Edit allowed Android applications**:
+    
+        -  `<SHA1 fingerprint>`;com.votinginfoproject.VotingInformationProject`
+    
+*  Edit `app/src/main/res/values/api_keys.xml` in the project to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
+
+    -  Note that the Google Maps API uses the Android key, and the Google Directions and Civic Info APIs use the browser key.
 
 
 #### Running the app
