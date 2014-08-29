@@ -14,10 +14,11 @@ public class AboutActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        // add required attribution for Google Maps
+        // add required attribution for Google Maps, prepended with app license
         TextView legalNoticesView = (TextView)this.findViewById(R.id.about_legal_notices);
         String legalNotice = GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(this);
-        legalNoticesView.setText(legalNotice);
+        String license = this.getResources().getString(R.string.about_license);
+        legalNoticesView.setText(license + legalNotice);
     }
 
 }
