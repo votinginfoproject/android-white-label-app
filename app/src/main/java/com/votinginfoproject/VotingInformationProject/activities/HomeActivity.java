@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
@@ -51,6 +52,9 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         selectedParty = "";
         contactUri = null;
         addressView = (EditText)findViewById(R.id.home_edittext_address);
+
+        // Get analytics tracker (should auto-report)
+        app.getTracker(VIPApp.TrackerName.APP_TRACKER);
     }
 
     @Override
@@ -58,6 +62,22 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //Stop analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Get an Analytics tracker to report app starts, uncaught exceptions, etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override

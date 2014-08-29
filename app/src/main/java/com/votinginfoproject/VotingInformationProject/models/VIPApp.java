@@ -5,6 +5,11 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.votinginfoproject.VotingInformationProject.R;
+
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -17,10 +22,34 @@ public class VIPApp extends Application {
     private static Context mContext;
     private Location homeLocation;
 
+    /**
+     * Enum used to identify the Google Analytics tracker.
+     *
+     * A single tracker is usually enough for most purposes. In case you do need multiple trackers,
+     * storing them all in Application object helps ensure that they are created only once per
+     * application instance.
+     */
+    public enum TrackerName {
+        APP_TRACKER, // Tracker for this app.  To add other trackers, name them in this enum.
+    }
+
+    HashMap<TrackerName, Tracker> mTrackers = new HashMap();
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+    }
+
+    public synchronized Tracker getTracker(TrackerName trackerId) {
+        if (!mTrackers.containsKey(trackerId)) {
+
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            Tracker t = analytics.newTracker(R.xml.app_tracker);
+            mTrackers.put(trackerId, t);
+
+        }
+        return mTrackers.get(trackerId);
     }
 
     public static Context getContext(){

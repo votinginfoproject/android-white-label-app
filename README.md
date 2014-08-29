@@ -83,6 +83,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
     -  Directions API
     -  Google Civic Information API
     -  Google Maps Android API v2
+    -  Google Analytics App Tracking SDK
 
 *  Add your certificate fingerprint as an allowed Android application in the Google Developer Console
 
@@ -111,6 +112,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 
     -  Note that the Google Maps API uses the Android key, and the Google Directions and Civic Info APIs use the browser key.
 
+*  Edit `app/src/main/res/values/api_keys.xml` in the project to add in your [Google Analytics](http://www.google.com/analytics) tracking ID, if you have one.
 
 #### Running the app
 

@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -300,6 +301,9 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         mAppContext = new VIPAppContext((VIPApp) getApplicationContext());
         context = VIPApp.getContext();
 
+        // Get analytics tracker (should auto-report)
+        mAppContext.getVIPApp().getTracker(VIPApp.TrackerName.APP_TRACKER);
+
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -547,6 +551,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         super.onStart();
         // connect to location service
         mLocationClient.connect();
+        //Get an Analytics tracker to report app starts, uncaught exceptions, etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     /**
@@ -556,6 +562,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     protected void onStop() {
         mLocationClient.disconnect();
         super.onStop();
+        //Stop analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override
