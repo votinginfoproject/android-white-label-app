@@ -4,11 +4,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="text_xsmall">14sp</dimen>
-    <dimen name="text_small">18sp</dimen>
-    <dimen name="text_medium">20sp</dimen>
-    <dimen name="text_large">22sp</dimen>
-    <dimen name="text_xlarge">26sp</dimen>
-    <dimen name="text_xxlarge">28sp</dimen>
+    <dimen name="text_small">16sp</dimen>
+    <dimen name="text_medium">18sp</dimen>
+    <dimen name="text_large">20sp</dimen>
+    <dimen name="text_xlarge">24sp</dimen>
+    <dimen name="text_xxlarge">26sp</dimen>
 
     <dimen name="home_top_margin">63sp</dimen>
     <dimen name="home_small_padding">5sp</dimen>

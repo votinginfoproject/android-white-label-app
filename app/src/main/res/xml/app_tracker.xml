@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+    <!-- Google Analytics configuration.  Available parameters here:
+        https://developers.google.com/analytics/devguides/collection/android/v4/parameters -->
+<resources>
+
+    <!-- Seconds app can stay in background before session ends -->
+    <integer name="ga_sessionTimeout">60</integer>
+
+    <!-- Whether to enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- Readable names for the Activities to report -->
+    <screenName name="com.votinginfoproject.VotingInformationProject.activities.HomeActivity">
+        VotingInfoProject HomeActivity
+    </screenName>
+
+    <screenName name="com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity">
+        VotingInfoProject TabBarActivity
+    </screenName>
+
+    <!-- default is warning log level -->
+    <ga_logLevel>error</ga_logLevel>
+
+    <ga_reportUncaughtExceptions>true</ga_reportUncaughtExceptions>
+
+    <!-- Whether to remove last octet of IP address to anonymize it in reporting -->
+    <ga_anonymizeIp>true</ga_anonymizeIp>
+
+    <string name="ga_trackingId">@string/google_analytics_tracking_id</string>
+
+    <!-- For testing, set to true to not send hits to the Analytics servers -->
+    <ga_dryRun>false</ga_dryRun>
+
+    <!-- Percentage of events to report (defaults to 100%) -->
+    <ga_sampleFrequency>100</ga_sampleFrequency>
+</resources>
