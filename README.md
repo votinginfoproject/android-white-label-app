@@ -117,11 +117,13 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 
     - On Windows, in the project directory at the command prompt, enter:
     
+        mkdir app\src\main\res\xml
         copy xmltemplates\app_tracker.xml.template /A app\src\main\res\xml\app_tracker.xml /A
 
     - For Mac or Linux, in the project directory in the console, enter:
 
-        cp xmltemplates/app_tracker.xml.template app/src/main/res/values/app_tracker.xml
+        mkdir app/src/main/res/xml
+        cp xmltemplates/app_tracker.xml.template app/src/main/res/xml/app_tracker.xml
 
 *  Edit `app/src/main/res/xml/app_tracker.xml` in the project to add in your [Google Analytics](http://www.google.com/analytics) tracking ID to the `ga_trackingId` field, if you have one.
 
