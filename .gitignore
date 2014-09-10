@@ -49,6 +49,7 @@ proguard/
 
 # Key files
 api_keys.xml
+app_tracker.xml
 
 # OS Clutter
 .DS_Store

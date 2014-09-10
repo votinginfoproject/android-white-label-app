@@ -246,7 +246,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // first check if location to show actually has a successful geocode result
         boolean haveLocation = false;
 
-        if (destinationLocationIndex == "home") {
+        if (destinationLocationIndex.equals("home")) {
             // check for user-entered address geocode result
             if (homeLocation != null && (homeLocation.getLongitude() != 0 || homeLocation.getLongitude() != 0)) {
                 haveLocation = true;

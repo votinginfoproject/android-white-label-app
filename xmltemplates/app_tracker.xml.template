@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
     <!-- Google Analytics configuration.  Available parameters here:
         https://developers.google.com/analytics/devguides/collection/android/v4/parameters -->
-<resources>
+
+<resources  xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyDashes">
+    
+    <!-- Put your Google Analytics tracking ID here (should look like UA-XXXXXXXX-X) -->
+    <string name="ga_trackingId"></string>
 
     <!-- Seconds app can stay in background before session ends -->
     <integer name="ga_sessionTimeout">60</integer>
@@ -20,14 +24,12 @@
     </screenName>
 
     <!-- default is warning log level -->
-    <ga_logLevel>error</ga_logLevel>
+    <ga_logLevel>debug</ga_logLevel>
 
     <ga_reportUncaughtExceptions>true</ga_reportUncaughtExceptions>
 
     <!-- Whether to remove last octet of IP address to anonymize it in reporting -->
     <ga_anonymizeIp>true</ga_anonymizeIp>
-
-    <string name="ga_trackingId">@string/google_analytics_tracking_id</string>
 
     <!-- For testing, set to true to not send hits to the Analytics servers -->
     <ga_dryRun>false</ga_dryRun>
