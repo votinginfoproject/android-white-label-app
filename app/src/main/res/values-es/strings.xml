@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VotingInfo</string>
+    <string name="action_settings">Configuraciones</string>
+    <string name="action_about">Acerca de</string>
+    <string name="homeactivity_go_button">IR</string>
+    <string name="homeactivity_select_contact_button">Contactos</string>
+    <string name="homeactivity_select_location_button">Ubicación</string>
+    <string name="title_activity_viptab_bar">The Voting Information Project</string>
+    <string name="title_activity_about">Acerca de esta aplicación</string>
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="yes">Sí</string>
+    <string name ="no">No</string>
+    <string name="no_phone">Teléfono no instalado</string>
+    <string name="no_email">Correo electrónico del cliente no instalado</string>
+    <string name="no_browser">Navegador no instalado</string>
+
+    <!-- Tab Bar Strings -->
+    <string name="tabbar_ballot_tab">Votación</string>
+    <string name="tabbar_where_to_vote_tab">Dónde votar</string>
+    <string name="tabbar_details_tab">Detalles</string>
+
+    <!-- Directions origin dialog -->
+    <string name="tabbar_directions_origin_prompt">¿De dónde quiere direcciones?</string>
+    <array name="tabbar_directions_origin_options">
+        <item>Dirección ingresada</item>
+        <item>Ubicación actual</item>
+    </array>
+
+    <!-- Prompt to enable location services -->
+    <string name="tabbar_enable_location_services_prompt">No se puede encontrar la ubicación actual.  ¿Desea activar los servicios de localización ahora?</string>
+
+    <!-- Home View Strings -->
+    <string name="home_textview_brandname">The Voting Information Project</string>
+    <string name="home_textview_votinginfo">Voting Info</string>
+    <string name="home_textview_getting_started">Comience a suministrar la dirección en la que está registrado para votar.</string>
+    <string name="home_textview_election_spinner_text">Tome una elección:</string>
+    <string name="home_textview_party_spinner_text">Elija un partido para la elección primaria:</string>
+    <string name="home_status_loading">Cargando información…</string>
+    <string name="home_error_address_not_found">Parece como si no fuese posible encontrar su dirección. Revise si es correcta e intente nuevamente.</string>
+    <string name="home_error_parsing_address">No es posible leer la dirección que ingresó. Revise si es correcta e intente nuevamente.</string>
+    <string name="home_error_no_election_for_address">No es posible encontrar ninguna información sobre la elección para la dirección que ingresó.</string>
+    <string name="home_error_no_address">Revise que ingresó una dirección e intente nuevamente.</string>
+    <string name="home_error_unknown">No fue posible obtener resultados para la dirección que ingresó. Intente nuevamente más tarde.</string>
+    <string name="home_error_no_internet">No se puede conectar a Internet. Revise su conexión.</string>
+    <string name="home_go_button_accessibility_description">Ir a buscar resultados.</string>
+    <string name="home_select_contact_button_description">Abrir contactos para seleccionar la dirección de un contacto.</string>
+    <string name="home_select_location_button_description">Use la ubicación actual para buscar elecciones.</string>
+    <string name="home_search_button_description">Buscar resultados.</string>
+    <string name="home_election_spinner_description">Tome una elección:</string>
+    <string name="home_party_spinner_description">Elija un partido:</string>
+
+    <!-- Election View Strings -->
+    <string name="ballot_contests_list_header">Competencias</string>
+
+    <!-- Contest Detail Strings -->
+    <string name="contest_details_header">Detalles de la competencia</string>
+    <string name="contest_type_label">Tipo</string>
+    <string name="contest_office_label">Oficina</string>
+    <string name="contest_number_elected_label">Cantidad elegida</string>
+    <string name="contest_number_voting_for_label">Cantidad  de votos para</string>
+    <string name="contest_ballot_placement_label">Ubicación de la votación</string>
+    <string name="contest_candidate_list_header">Candidatos</string>
+
+    <!-- Candidate Details Strings -->
+    <string name="candidate_details_header">Detalles de los candidatos</string>
+    <string name="candidate_social_header">Canales de medios sociales</string>
+    <string name="candidate_no_name">Ningún nombre disponible</string>
+    <string name="candidate_no_party">No hay afiliaciones enumeradas</string>
+    <string name="candidate_details_none">Los detalles del candidato no están disponibles</string>
+
+    <!-- Accessibility descriptions for images -->
+    <string name="social_channel_youtube_description">Visite el canal de YouTube</string>
+    <string name="social_channel_twitter_description">Visite el enlace de Twitter</string>
+    <string name="social_channel_facebook_description">Visite la página de FaceBook</string>
+    <string name="social_channel_google_plus_description">Visite la página de Google Plus</string>
+    <string name="email_accessibility_description">Envíe un correo electrónico</string>
+    <string name="phone_accessibility_description">Llame al número telefónico</string>
+    <string name="website_accessibility_description">Visite la página Web</string>
+    <string name="candidate_picture_description">Foto del candidato</string>
+
+    <!-- Election Detail Strings -->
+    <string name="details_state_administration_body_header">Administración estatal</string>
+    <string name="details_local_administration_body_header">Administración local</string>
+    <string name="details_none_found_message">No se pudo encontrar información de la administración electoral para esta elección.</string>
+
+    <!-- Election Links Strings -->
+    <string name="details_links_section_header">Páginas web de información electoral</string>
+    <string name="details_election_info_url_label">Información electoral</string>
+    <string name="details_voter_registration_url_label">Información de registro de los votantes</string>
+    <string name="details_voter_registration_confirmation_url_label">Confirmación de registro de votantes</string>
+    <string name="details_absentee_voting_url_label">Información de los votantes ausentes</string>
+    <string name="details_voting_location_finder_url_label">Buscador de información de la ubicación de la votación</string>
+    <string name="details_ballot_info_url_label">Información de la votación</string>
+    <string name="details_election_rules_url_label">Leyes electorales</string>
+
+    <string name="details_voter_services_label">Servicios para votantes</string>
+    <string name="details_hours_of_operation_label">Horarios de atención</string>
+    <string name="details_correspondence_address_label">Dirección de correspondencia</string>
+    <string name="details_physical_address_label">Dirección real</string>
+    <string name="details_election_officials_label">Funcionarios electorales</string>
+    <!-- End Election Detail Strings -->
+
+    <!-- Locations strings -->
+    <string name="locations_list_map_button_label">Mapa</string>
+    <string name="locations_list_all_button_label">Todos los sitios</string>
+    <string name="locations_list_early_voting_button_label">Voto anticipado</string>
+    <string name="locations_list_polling_sites_button_label">Lugares de votación</string>
+    <string name="locations_none_found">No se pueden encontrar las ubicaciones</string>
+    <string name="locations_no_early_voting_found">No se pueden encontrar las ubicaciones para las votaciones anticipadas</string>
+    <string name="locations_no_polling_found">No se pueden encontrar las ubicaciones de los lugares de votación.</string>
+    <string name="locations_distance_suffix_imperial">mi.</string>
+    <string name="locations_distance_suffix_metric">km</string>
+
+	<!-- Locations map strings -->
+    <string name="locations_map_user_address_label">Dirección del usuario</string>
+    <string name="locations_map_user_location_label">Ubicación actual</string>
+    <string name="locations_map_election_administration_body_label">Ubicación del órgano administrativo de la elección</string>
+    <string name="locations_map_play_services_unavailable">Los servicios de Google Play no están disponibles. No se pueden mostrar mapas de ubicación, distancias o direcciones.</string>
+    <string name="locations_map_not_geocoded">No se puede encontrar la ubicación para esa dirección.</string>
+    <string name="locations_map_polling_location_hours_label">Horarios:</string>
+    <string name="locations_map_polling_location_hours_not_found">No se pueden encontrar los horarios de atención para esta ubicación.</string>
+
+    <!-- Directions list strings -->
+    <string name="directions_walk_button_label">Caminar</string>
+    <string name="directions_bike_button_label">Bicicleta</string>
+    <string name="directions_transit_button_label">Tránsito</string>
+    <string name="directions_drive_button_label">Conducir</string>
+    <string name="directions_open_in_maps_button_label">Abrir en Google Maps</string>
+    <string name="directions_error_message">No se puede encontrar direcciones.</string>
+    <string name="directions_no_origin_message">No se puede encontrar el punto de origen para las direcciones.</string>
+    <string name="directions_loading_message">Cargando direcciones...</string>
+
+    <!-- About App strings -->
+    <string name="about_app_title">Acerca de</string>
+    <string name="about_app"></string>
+    <string name="about_terms_title">Términos de uso del Proyecto de Información Electoral\n\nFecha de efectividad: 11/06/2014</string>
+    <string name="about_terms"></string>
+    <string name="about_privacy_title">Política de privacidad del proyecto de información electoral\n\nFecha de efectividad: 11/06/2014</string>
+    <string name="about_privacy"></string>
+
+</resources>
