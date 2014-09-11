@@ -25,7 +25,7 @@ android:
 before_install:
   - export "JAVA8_HOME=/usr/lib/jvm/java-8-oracle"
   - cp xmltemplates/api_keys.xml.template app/src/main/res/values/api_keys.xml
-  - mkdir app/src/main/res/xml
+  - mkdir -p app/src/main/res/xml
   - cp xmltemplates/app_tracker.xml.template app/src/main/res/xml/app_tracker.xml
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - sleep 5

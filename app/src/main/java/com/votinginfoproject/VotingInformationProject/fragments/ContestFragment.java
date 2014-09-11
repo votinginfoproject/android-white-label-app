@@ -66,11 +66,6 @@ public class ContestFragment extends Fragment {
         final VIPTabBarActivity myActivity = (VIPTabBarActivity)getActivity();
         TextView title = (TextView)myActivity.findViewById(R.id.contest_title);
         TextView subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
-        TextView contestType = (TextView)myActivity.findViewById(R.id.contest_type);
-        TextView office = (TextView)myActivity.findViewById(R.id.contest_office);
-        TextView numberElected = (TextView)myActivity.findViewById(R.id.contest_number_elected);
-        TextView numberVotingFor = (TextView)myActivity.findViewById(R.id.contest_number_voting_for);
-        TextView ballotPlacement = (TextView)myActivity.findViewById(R.id.contest_ballot_placement);
 
         try {
             voterInfo = ((VIPTabBarActivity) myActivity).getVoterInfo();
@@ -82,7 +77,6 @@ public class ContestFragment extends Fragment {
             if (!contest.type.equals("Referendum")) {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
-                contestType.setText(contest.type);
             } else if (contest.type != null) {
                 title.setText(contest.referendumTitle);
 
@@ -92,44 +86,12 @@ public class ContestFragment extends Fragment {
                     subtitle.setVisibility(View.GONE);
                 }
 
-                contestType.setText(contest.type);
-
                 // deal with huge referendum descriptions by reducing font size.
                 // Cannot make fragment a ScrollView, because it already contains a
                 // scrolling list of candidates.
                 if (contest.referendumTitle.length() > 20) {
                     title.setTextSize(18);
                 }
-            } else {
-                View row = myActivity.findViewById(R.id.contest_type_row);
-                row.setVisibility(View.GONE);
-            }
-
-            if (contest.office != null) {
-                office.setText(contest.office);
-            } else {
-                View row = myActivity.findViewById(R.id.contest_office_row);
-                row.setVisibility(View.GONE);
-            }
-
-            if (contest.numberElected != null) {
-                numberElected.setText(contest.numberElected.toString());
-            } else {
-                View row = myActivity.findViewById(R.id.contest_number_elected_row);
-                row.setVisibility(View.GONE);
-            }
-            if (contest.numberVotingFor != null) {
-                numberVotingFor.setText(contest.numberVotingFor.toString());
-            } else {
-                View row = myActivity.findViewById(R.id.contest_number_voting_for_row);
-                row.setVisibility(View.GONE);
-            }
-
-            if (contest.ballotPlacement != null) {
-                ballotPlacement.setText(contest.ballotPlacement.toString());
-            } else {
-                View row = myActivity.findViewById(R.id.contest_ballot_placement_row);
-                row.setVisibility(View.GONE);
             }
 
             // populate candidate list
