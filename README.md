@@ -7,7 +7,7 @@ Requires: Android Studio v0.8.0+
 
 
 ##Build Status
-![Build Status](https://travis-ci.org/votinginfoproject/android-white-label-app.svg?branch=develop)
+[![](https://travis-ci.org/votinginfoproject/android-white-label-app.svg?branch=develop)](https://travis-ci.org/votinginfoproject/android-white-label-app)
 
 Dependencies:
 -------------
