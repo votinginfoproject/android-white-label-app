@@ -157,3 +157,13 @@ just to the right of the run configuration dropdown.
 *  Android Studio will display a green "Tests Succeeded" or a red "Tests Failed" popup 
 in the bottom center of the IDE on test completion.
 
+
+Troubleshooting Steps
+---------------------
+
+If the project won't build, here are a few steps to try:
+
+1.  Shelve any changes:  VCS -> Shelve Changes
+2.  Sync the gradle files:  Tools -> Android -> Sync Project with Gradle Files
+3.  Clean the project build:  Build -> Clean project
+
