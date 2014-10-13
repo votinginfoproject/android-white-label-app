@@ -348,6 +348,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void callback(Object result) {
                 if (result == null) {
+                    // if query returns null, then CivicInfoApiQuery had an exception
+                    Log.e("HomeFragment", "Got null result from voterInfoQuery!");
+                    homeTextViewStatus.setText(R.string.home_error_unknown);
+                    // read error result, if TalkBack enabled
+                    homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
                     return;
                 }
 
