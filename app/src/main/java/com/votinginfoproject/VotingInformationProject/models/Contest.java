@@ -13,7 +13,8 @@ public class Contest {
     public String electorateSpecifications;
     public String special;
     public String office;
-    public String level;
+    public List <String> level;
+    public List <String> roles;
     public District district;
     public Long numberElected;
     public Long numberVotingFor;

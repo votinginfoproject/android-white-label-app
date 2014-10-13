@@ -136,7 +136,13 @@ public class VoterInfo {
      * @return state election administration body (or null if there is none)
      */
     public ElectionAdministrationBody getStateAdmin() {
-        return state.get(0).electionAdministrationBody;
+        if (state == null) {
+            Log.d("getStateAdmin", "there is no state!");
+            return null;
+        } else {
+            Log.d("getStateAdmin", "state is: " + state.size());
+            return state.get(0).electionAdministrationBody;
+        }
     }
 
     /**
@@ -146,8 +152,11 @@ public class VoterInfo {
      * @return local election administration body (or null if not found)
      */
     public ElectionAdministrationBody getLocalAdmin() {
+        if (state == null) {
+            return null;
+        }
         State thisState = state.get(0);
-        if (thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null) {
+        if (thisState != null && thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null) {
             return thisState.local_jurisdiction.electionAdministrationBody;
         }
         return null;
