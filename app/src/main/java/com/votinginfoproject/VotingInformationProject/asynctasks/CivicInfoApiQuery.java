@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 
@@ -115,6 +116,10 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
                 publishProgress(myError.error);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+            clearLastElection();
+        } catch (JsonSyntaxException e) {
+            Log.e("CivicInfoApiQuery", "Could not parse JSON response!");
             e.printStackTrace();
             clearLastElection();
         } catch (Exception e) {
