@@ -73,16 +73,6 @@ public class CivicApiAddress {
             builder.append(" ");
         }
 
-        if (line2 != null && !line2.isEmpty()) {
-            builder.append(line2);
-            builder.append(" ");
-        }
-
-        if (line3 != null && !line3.isEmpty()) {
-            builder.append(line3);
-            builder.append(" ");
-        }
-
         if (city != null && !city.isEmpty()) {
             builder.append(city);
             builder.append(", ");
