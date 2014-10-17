@@ -106,7 +106,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
     
     -  Add the following line under **Edit allowed Android applications**:
     
-        -  `<SHA1 fingerprint>`;com.votinginfoproject.VotingInformationProject`
+        -  `<SHA1 fingerprint>`;com.votinginfoproject.VotingInformationProject
     
 *  Edit `app/src/main/res/values/api_keys.xml` in the project to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
 
@@ -167,3 +167,41 @@ If the project won't build, here are a few steps to try:
 2.  Sync the gradle files:  Tools -> Android -> Sync Project with Gradle Files
 3.  Clean the project build:  Build -> Clean project
 
+Note that if maps aren't displaying in the app, that's usually due to an issue with setting the applowed Android applications in the Google Developer Console.
+
+
+Deploying to the Play Store
+---------------------------
+
+#### Rename the package
+To publish the app in the Android Play Store, first rename the package so it will not conflict with other apps in the Play Store.
+
+1.  Right-click on the package folder in Android Studio, in the project tool window on the left.
+      - app -> src -> main -> java -> com.votinginfoproject.VotingInformationProject
+
+2.  Select Refactor -> Rename from the context menu that opens.
+
+3.  A prompt will ask if you really want to rename the package, or just the directory.  Select the blue default button to rename the package.
+
+4.  In the dialog that opens, check the box to 'Search for text occurrences', and enter the new package name.
+
+5.  Rebuild the app.
+
+6.  Sign into the Google Developer Console and update the package name listed for the allowed Android application entries to use the new package name.
+
+#### Generate signed APK with release key
+
+1.  In Android Studio, go to Build -> Generate Signed APK in the menu.
+2.  Select to create a new key.  Note that the key store password and alias password should match.
+3.  In the 'Build Type' drop-down on the last screen of the wizard, select 'release'.  Note the APK destination folder.
+4.  Click 'Finish' to generate the signed APK, which you may find in the APK destination folder to upload to the Play Store.
+
+#### Update API settings for new package name and signing key
+The new key generated to sign the app for release will need its SHA1 added to the Google Developer Console as an allowed Android application, as for the debug key above.
+Follow the steps above for adding an allowed Android application, but now run the `keytool` command for the new signing key:
+
+```
+keytool -list -v -keystore "%USERPROFILE%\.android\<your_key.jks>" -alias <your_alias> -storepass <your_password> -keypass <your_password>
+```
+
+When adding the SHA1 to the Google Developer Console, note that the package name used should be the new name set above, and that the package name for the debug key will need to be changed to the new package name as well.
