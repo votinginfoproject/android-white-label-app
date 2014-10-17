@@ -332,8 +332,8 @@ public class VIPMapFragment extends SupportMapFragment {
             markerIds = new HashMap<String, String>(allLocations.size());
 
             // use red markers for early voting sites
-            if (voterInfo.earlyVoteSites != null && showEarly) {
-                for (PollingLocation location : voterInfo.earlyVoteSites) {
+            if (showEarly) {
+                for (PollingLocation location : voterInfo.getOpenEarlyVoteSites()) {
                     if (location.address.latitude == 0) {
                         Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
                         continue;
@@ -377,6 +377,16 @@ public class VIPMapFragment extends SupportMapFragment {
         }
 
         StringBuilder showSnippet = new StringBuilder(location.address.toGeocodeString());
+
+        // show date range for when early vote sites are open
+        if (location.startDate != null && !location.startDate.isEmpty()
+                && location.endDate != null && !location.endDate.isEmpty()) {
+
+            showSnippet.append("\n\n");
+            showSnippet.append(location.startDate);
+            showSnippet.append(" - ");
+            showSnippet.append(location.endDate);
+        }
 
         if (location.pollingHours != null && !location.pollingHours.isEmpty()) {
             showSnippet.append("\n\n");

@@ -37,11 +37,13 @@ public class VIPTabBarActivityTests extends ActivityInstrumentationTestCase2<VIP
         tabBarActivity.finish();
     }
 
+    @UiThreadTest
     public void testVIPTabBarHasVoterInfo() {
         VoterInfo voterInfo = tabBarActivity.getVoterInfo();
         assertEquals(voterInfo.election.name, "Test Election");
     }
 
+    @UiThreadTest
     public void testVIPTabBarActivityExists() {
         assertNotNull(tabBarActivity);
     }

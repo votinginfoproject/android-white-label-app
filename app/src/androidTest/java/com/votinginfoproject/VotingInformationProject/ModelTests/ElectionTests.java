@@ -1,9 +1,8 @@
 package com.votinginfoproject.VotingInformationProject.ModelTests;
 
+import android.test.AndroidTestCase;
+
 import com.votinginfoproject.VotingInformationProject.models.Election;
-
-import junit.framework.TestCase;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +10,7 @@ import java.util.Date;
 /**
  * Created by andrew on 8/1/14.
  */
-public class ElectionTests extends TestCase {
+public class ElectionTests extends AndroidTestCase {
 
     public void testEmptyContstructorCreatesNullProperties() {
         Election election = new Election();
