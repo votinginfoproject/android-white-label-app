@@ -180,7 +180,7 @@ public class VIPMapFragment extends SupportMapFragment {
                         map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 60));
                     } else if (thisLocation != null) {
                         // zoom to selected location
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 20));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
                     }
                 }
             });
