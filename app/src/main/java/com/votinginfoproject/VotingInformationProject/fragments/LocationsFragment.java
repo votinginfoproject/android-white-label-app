@@ -145,7 +145,7 @@ public class LocationsFragment extends Fragment {
                 if (buttonId == R.id.locations_list_polling_button) {
                     setFilter(voterInfo.pollingLocations, R.string.locations_no_polling_found);
                 } else if (buttonId == R.id.locations_list_early_button) {
-                    setFilter(voterInfo.earlyVoteSites, R.string.locations_no_early_voting_found);
+                    setFilter(voterInfo.getOpenEarlyVoteSites(), R.string.locations_no_early_voting_found);
                 } else {
                     setFilter(allLocations, R.string.locations_none_found);
                 }

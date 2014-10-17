@@ -15,8 +15,10 @@ public class Election {
     public String name;
     public String electionDay;
 
-    private SimpleDateFormat election_date_api_format;
-    private SimpleDateFormat election_date_display_format;
+    private SimpleDateFormat api_date_format;
+    private SimpleDateFormat api_date_display_format;
+
+    private Date currentDay;
 
     public Election() {
         this(null, null, null);
@@ -26,38 +28,47 @@ public class Election {
         this.id = id;
         this.name = name;
         this.electionDay = electionDay;
-        election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
-        election_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
+        api_date_format = new SimpleDateFormat("yyyy-MM-dd");
+        api_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
     }
 
-    public Date getElectionDay() {
-        if (electionDay == null || electionDay.isEmpty()) {
+    /* Helper function to convert date from API string to Date object
+     */
+    public Date getDayFromString(String str_date) {
+        if (str_date == null || str_date.isEmpty()) {
             return null;
         }
         try {
-            Date election_date = election_date_api_format.parse(electionDay);
-            return election_date;
+            return api_date_format.parse(str_date);
         } catch (ParseException e) {
-            Log.e("ElectionModel", "Failed to parse election date " + electionDay);
+            Log.e("ElectionModel", "Failed to parse API date string " + str_date);
             return null;
         }
+    }
+
+    /* Helper function to get current date object, for comparison
+     */
+    public Date getCurrentDay() {
+        if (currentDay == null) {
+            // set time for current date object to midnight, to compare only date part
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            currentDay = calendar.getTime();
+        }
+        Log.d("Election", "Current date is " + currentDay.toString());
+        return currentDay;
     }
 
     /*
      * @return True if election day is earlier than today.
      */
     public boolean isElectionOver() {
-        Date electionDay = getElectionDay();
-        // set time for current date object to midnight, to compare only date part
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Log.d("Election", "Current date is " + calendar.getTime().toString());
-        Log.d("Election", "Election date is " + electionDay.toString());
-
-        return calendar.getTime().after(electionDay);
+        Date election_day = getDayFromString(electionDay);
+        Log.d("Election", "Election date is " + election_day.toString());
+        return getCurrentDay().after(election_day);
     }
 
     public String getFormattedDate() {
@@ -65,8 +76,8 @@ public class Election {
             return "";
         }
         try {
-            Date election_date = election_date_api_format.parse(electionDay);
-            return election_date_display_format.format(election_date);
+            Date election_date = api_date_format.parse(electionDay);
+            return api_date_display_format.format(election_date);
         } catch (ParseException e) {
             Log.e("ElectionModel", "Failed to parse election date " + electionDay);
             return electionDay;

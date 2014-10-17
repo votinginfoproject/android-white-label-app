@@ -1,13 +1,13 @@
 package com.votinginfoproject.VotingInformationProject.ModelTests;
 
-import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
+import android.test.AndroidTestCase;
 
-import junit.framework.TestCase;
+import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
 
 /**
  * Created by andrew on 7/31/14.
  */
-public class SocialMediaChannelTests extends TestCase {
+public class SocialMediaChannelTests extends AndroidTestCase {
 
     public void testConstructorCreatesNullPropertiesForInvalidTypes() {
         SocialMediaChannel channel = new SocialMediaChannel("testOther", "Other");

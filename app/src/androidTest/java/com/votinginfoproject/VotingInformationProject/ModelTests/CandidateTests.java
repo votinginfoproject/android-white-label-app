@@ -1,14 +1,14 @@
 package com.votinginfoproject.VotingInformationProject.ModelTests;
 
+import android.test.AndroidTestCase;
+
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
-
-import junit.framework.TestCase;
 
 /**
  * Created by andrew on 7/31/14.
  */
-public class CandidateTests extends TestCase {
+public class CandidateTests extends AndroidTestCase {
 
     public void testConstructorCreatesNonNullArrayListForChannels() {
         Candidate candidate = new Candidate();

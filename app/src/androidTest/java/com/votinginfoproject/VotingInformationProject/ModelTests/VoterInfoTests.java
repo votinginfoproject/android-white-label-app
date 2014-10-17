@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.ModelTests;
 
+import android.test.AndroidTestCase;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.MockVIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
@@ -9,15 +11,16 @@ import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
-import junit.framework.TestCase;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by andrew on 8/1/14.
  */
-public class VoterInfoTests extends TestCase {
+public class VoterInfoTests extends AndroidTestCase {
 
     public void testOtherElectionsNotNull() {
         VoterInfo voterInfo = new VoterInfo();
@@ -47,6 +50,15 @@ public class VoterInfoTests extends TestCase {
         MockVIPAppContext mockContext = new MockVIPAppContext();
         VIPApp app = mockContext.getVIPApp();
         VoterInfo info = app.getVoterInfo();
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat api_date_format = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        Date yesterday = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, 2);
+        Date tomorrow = calendar.getTime();
+
 
         ArrayList<PollingLocation> earlyLocations = new ArrayList();
         ArrayList<PollingLocation> pollingLocations = new ArrayList();
@@ -97,7 +109,34 @@ public class VoterInfoTests extends TestCase {
         locThreeAddr.state = "PA";
         loc3.address = locThreeAddr;
 
+        // location 3 is available today only (should use it)
+        loc3.startDate = api_date_format.format(today);
+        loc3.endDate = loc3.startDate;
+
         earlyLocations.add(loc3);
+
+        // test date filter for early vote sites
+
+        // location 4 already closed (should not use it)
+        PollingLocation loc4 = new PollingLocation();
+        loc4.id = "4";
+        loc4.name = "location four";
+        loc4.address = locThreeAddr;
+        loc4.startDate = api_date_format.format(yesterday);
+        loc4.endDate = loc4.startDate;
+
+        earlyLocations.add(loc4);
+
+        // location 5 hasn't opened yet (should not use it)
+        PollingLocation loc5 = new PollingLocation();
+        loc5.id = "5";
+        loc5.name = "location five";
+        loc5.address = locThreeAddr;
+
+        loc5.startDate = api_date_format.format(tomorrow);
+        loc5.endDate = loc5.startDate;
+
+        earlyLocations.add(loc5);
 
         info.pollingLocations = pollingLocations;
         info.earlyVoteSites = earlyLocations;
@@ -111,12 +150,16 @@ public class VoterInfoTests extends TestCase {
         assertNotNull(foundLocation);
         assertEquals("location two", foundLocation.name);
 
-        // should be able to get address by key
+        // should be able to get address by key for currently open early voting site
         CivicApiAddress foundAddress = info.getAddressForId(loc3.address.toGeocodeString());
         assertEquals("Three", foundAddress.locationName);
 
         // should be able to get description for location by key
         assertEquals("location one", info.getDescriptionForId(loc1.id));
+
+        // should not have early vote sites that aren't currently open
+        assertNull(info.getLocationForId("4"));
+        assertNull(info.getLocationForId("5"));
     }
 
     public void testGetAdministrativeBodies() {

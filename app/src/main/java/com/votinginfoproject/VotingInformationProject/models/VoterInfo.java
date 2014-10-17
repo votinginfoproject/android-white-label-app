@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,7 @@ public class VoterInfo {
 
     private HashMap<String, Integer> locationIds;
     private ArrayList<PollingLocation> allLocations;
+    private ArrayList<PollingLocation> openEarlyVoteSites;
 
     /**
      * Find a contest at a particular offset in the party-filtered list.  For use with list item
@@ -106,18 +108,35 @@ public class VoterInfo {
      */
     public void setUpLocations() {
         // get all locations (both polling and early voting)
-        allLocations = new ArrayList<PollingLocation>();
+        allLocations = new ArrayList();
+
         if (pollingLocations != null) {
             allLocations.addAll(pollingLocations);
         }
 
+        // only display early voting sites that are currently open
+        openEarlyVoteSites = new ArrayList();
         if (earlyVoteSites != null) {
-            allLocations.addAll(earlyVoteSites);
+            Date today = election.getCurrentDay();
+            for (PollingLocation early : earlyVoteSites) {
+                Date start = election.getDayFromString(early.startDate);
+                Date end = election.getDayFromString(early.endDate);
+                if (start == null || end == null) {
+                    // missing early voting site start/date, so just display it
+                    openEarlyVoteSites.add(early);
+                } else if (!start.after(today) && !end.before(today)) {
+                    // show if site opened today or earlier, and closes today or later
+                    openEarlyVoteSites.add(early);
+                }
+            }
         }
+
+        Log.d("VoterInfo", "Found " + openEarlyVoteSites.size() + " open early voting sites");
+        allLocations.addAll(openEarlyVoteSites);
 
         // Build map of PollingLocation id to its offset in the list of all locations,
         // to find it later when the distance calculation comes back.
-        locationIds = new HashMap<String, Integer>(allLocations.size());
+        locationIds = new HashMap(allLocations.size());
         for (int i = allLocations.size(); i--> 0;) {
             PollingLocation location = allLocations.get(i);
             if (location.id != null) {
@@ -127,6 +146,10 @@ public class VoterInfo {
                 locationIds.put(location.address.toGeocodeString(), i);
             }
         }
+    }
+
+    public List<PollingLocation> getOpenEarlyVoteSites() {
+        return openEarlyVoteSites;
     }
 
     /**
