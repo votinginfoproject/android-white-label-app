@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -71,6 +72,35 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     LocationClient mLocationClient;
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
     int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
+
+    // track the labels used in the filter drop-down
+    public static class FilterLabels {
+        public final String ALL;
+        public final String EARLY;
+        public final String POLLING;
+        public final String DROPBOX;
+
+        FilterLabels(String all, String early, String polling, String dropbox) {
+            this.ALL = all;
+            this.EARLY = early;
+            this.POLLING = polling;
+            this.DROPBOX = dropbox;
+        }
+    }
+
+    // track filters
+    FilterLabels filterLabels = null;
+
+    public FilterLabels getFilterLabels() {
+        if (filterLabels == null) {
+            Resources res = context.getResources();
+            filterLabels = new FilterLabels(res.getString(R.string.locations_list_all_label),
+                    res.getString(R.string.locations_list_early_voting_label),
+                    res.getString(R.string.locations_list_polling_sites_label),
+                    res.getString(R.string.locations_list_dropoff_label));
+        }
+        return filterLabels;
+    }
 
     public String getUserLocationAddress() {
         return userLocationAddress;

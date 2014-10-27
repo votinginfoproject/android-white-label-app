@@ -62,6 +62,7 @@ public class VoterInfoTests extends AndroidTestCase {
 
         ArrayList<PollingLocation> earlyLocations = new ArrayList();
         ArrayList<PollingLocation> pollingLocations = new ArrayList();
+        ArrayList<PollingLocation> dropOffLocations = new ArrayList();
 
         PollingLocation loc1 = new PollingLocation();
         loc1.name = "location one";
@@ -127,7 +128,7 @@ public class VoterInfoTests extends AndroidTestCase {
 
         earlyLocations.add(loc4);
 
-        // location 5 hasn't opened yet (should not use it)
+        // location 5 hasn't opened yet--still use it anyway
         PollingLocation loc5 = new PollingLocation();
         loc5.id = "5";
         loc5.name = "location five";
@@ -138,12 +139,24 @@ public class VoterInfoTests extends AndroidTestCase {
 
         earlyLocations.add(loc5);
 
+        // location 6 is a drop-off box that hasn't closed yet
+        PollingLocation loc6 = new PollingLocation();
+        loc6.id = "6";
+        loc6.name = "location six";
+        loc6.address = locThreeAddr;
+
+        loc6.startDate = api_date_format.format(today);
+        loc6.endDate = loc6.startDate;
+
+        dropOffLocations.add(loc6);
+
         info.pollingLocations = pollingLocations;
         info.earlyVoteSites = earlyLocations;
+        info.dropOffLocations = dropOffLocations;
         info.setUpLocations();
 
-        // should have three total locations now
-        assertEquals(3, info.getAllLocations().size());
+        // should have five total locations now
+        assertEquals(5, info.getAllLocations().size());
 
         // should be able to get location keyed on address
         foundLocation = info.getLocationForId(loc2.address.toGeocodeString());
@@ -154,12 +167,19 @@ public class VoterInfoTests extends AndroidTestCase {
         CivicApiAddress foundAddress = info.getAddressForId(loc3.address.toGeocodeString());
         assertEquals("Three", foundAddress.locationName);
 
+        // should be able to get early vote site not open yet by ID
+        foundLocation = info.getLocationForId(loc5.id);
+        assertEquals("location five", foundLocation.name);
+
         // should be able to get description for location by key
         assertEquals("location one", info.getDescriptionForId(loc1.id));
 
-        // should not have early vote sites that aren't currently open
+        // should not have early vote site that isn't currently open
         assertNull(info.getLocationForId("4"));
-        assertNull(info.getLocationForId("5"));
+
+        // should have a drop-box location
+        foundLocation = info.getLocationForId(loc6.id);
+        assertEquals("location six", foundLocation.name);
     }
 
     public void testGetAdministrativeBodies() {

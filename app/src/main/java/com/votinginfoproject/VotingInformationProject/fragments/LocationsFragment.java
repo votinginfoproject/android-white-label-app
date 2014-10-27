@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LocationsFragment extends Fragment {
+public class LocationsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     VoterInfo voterInfo;
     LocationsAdapter listAdapter;
@@ -31,13 +32,10 @@ public class LocationsFragment extends Fragment {
     TextView noneFoundMessage;
     ListView locationsList;
     ArrayList<PollingLocation> allLocations;
+    VIPTabBarActivity.FilterLabels filterLabels;
 
-    int selectedButtonTextColor;
-    int unselectedButtonTextColor;
-
-    // track which location filter button was last clicked, and only refresh list if it changed
-    int lastSelectedButtonId = R.id.locations_list_all_button;
-    Button lastSelectedButton;
+    // track which location filter was last selected, and only refresh list if it changed
+    long lastSelectedFilterItem = 0; // default to all items, which is first in list
 
     public static LocationsFragment newInstance() {
         return new LocationsFragment();
@@ -53,28 +51,12 @@ public class LocationsFragment extends Fragment {
         final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
 
         Resources res = myActivity.getResources();
-        unselectedButtonTextColor = res.getColor(R.color.button_blue);
-        selectedButtonTextColor = res.getColor(R.color.white);
 
         // election labels
         TextView election_name_label = (TextView)rootView.findViewById(R.id.locations_election_title);
         TextView election_date_label = (TextView)rootView.findViewById(R.id.locations_election_subtitle);
         election_name_label.setText(voterInfo.election.name);
         election_date_label.setText(voterInfo.election.getFormattedDate());
-
-        // find label for empty results
-        noneFoundMessage = (TextView) rootView.findViewById(R.id.locations_none_found_message);
-
-        // highlight default button
-        Button allButton = (Button)rootView.findViewById(R.id.locations_list_all_button);
-        allButton.setTextColor(selectedButtonTextColor);
-        allButton.setBackgroundResource(R.drawable.button_bar_button_selected);
-        lastSelectedButton = allButton;
-
-        // add click handlers for button bar filter buttons
-        setButtonInBarClickListener(R.id.locations_list_all_button);
-        setButtonInBarClickListener(R.id.locations_list_polling_button);
-        setButtonInBarClickListener(R.id.locations_list_early_button);
 
         // clear directions polyline, if set from directions view
         myActivity.polylineCallback("", null);
@@ -102,6 +84,35 @@ public class LocationsFragment extends Fragment {
             }
         });
 
+        // get labels for dropdown
+        filterLabels = myActivity.getFilterLabels();
+
+        // build filter dropdown list, and initialize with all locations
+        ArrayList<String> filterOptions = new ArrayList<>(4);
+        // always show 'all sites' option
+        filterOptions.add(filterLabels.ALL);
+        // show the other three options if there are any
+        if (!voterInfo.getOpenEarlyVoteSites().isEmpty()) {
+            filterOptions.add(filterLabels.EARLY);
+        }
+        if (voterInfo.pollingLocations != null && !voterInfo.pollingLocations.isEmpty()) {
+            filterOptions.add(filterLabels.POLLING);
+        }
+        if(!voterInfo.getOpenDropOffLocations().isEmpty()) {
+            filterOptions.add(filterLabels.DROPBOX);
+        }
+
+        Spinner filterSpinner = (Spinner) rootView.findViewById(R.id.locations_list_spinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(myActivity,
+                R.layout.location_spinner_item, filterOptions);
+        spinnerAdapter.setDropDownViewResource(R.layout.locations_spinner_view);
+        filterSpinner.setAdapter(spinnerAdapter);
+        filterSpinner.setOnItemSelectedListener(this);
+        filterSpinner.setSelection(0); // all locations by default
+
+        // find label for empty results
+        noneFoundMessage = (TextView) rootView.findViewById(R.id.locations_none_found_message);
+
         // initialize list adapter with all locations
         allLocations = voterInfo.getAllLocations();
         // copy the list, so the original isn't destroyed by the adapter construction
@@ -121,47 +132,10 @@ public class LocationsFragment extends Fragment {
     }
 
     /**
-     * Helper function to set click handlers for the list filter buttons
-     * @param buttonId R id of the button to listen to
-     */
-    private void setButtonInBarClickListener(final int buttonId) {
-
-        rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (buttonId == lastSelectedButtonId) {
-                    return; // ignore button click if already viewing that list
-                }
-
-                Button btn = (Button)v;
-
-                // highlight current selection (and un-highlight others)
-                btn.setBackgroundResource(R.drawable.button_bar_button_selected);
-                btn.setTextColor(selectedButtonTextColor);
-                lastSelectedButton.setTextColor(unselectedButtonTextColor);
-                lastSelectedButton.setBackgroundResource(R.drawable.button_bar_button);
-
-
-                if (buttonId == R.id.locations_list_polling_button) {
-                    setFilter(voterInfo.pollingLocations, R.string.locations_no_polling_found);
-                } else if (buttonId == R.id.locations_list_early_button) {
-                    setFilter(voterInfo.getOpenEarlyVoteSites(), R.string.locations_no_early_voting_found);
-                } else {
-                    setFilter(allLocations, R.string.locations_none_found);
-                }
-
-                lastSelectedButtonId = buttonId;
-                lastSelectedButton = btn;
-            }
-        });
-    }
-
-    /**
      * Helper function to set locations list when filter button clicked
      * @param locations PollingLocation objects to put in the list
-     * @param empty_message String message to show if there are no locations to display
      */
-    private void setFilter(List<PollingLocation> locations, int empty_message) {
+    private void setFilter(List<PollingLocation> locations) {
         if (locations != null && !locations.isEmpty()) {
             listAdapter.clear();
             listAdapter.addAll(locations);
@@ -170,7 +144,8 @@ public class LocationsFragment extends Fragment {
             noneFoundMessage.setVisibility(View.GONE);
         } else {
             locationsList.setVisibility(View.GONE);
-            noneFoundMessage.setText(empty_message);
+            // should only be able to select 'all' filter with no results
+            noneFoundMessage.setText(R.string.locations_none_found);
             noneFoundMessage.setVisibility(View.VISIBLE);
         }
     }
@@ -189,4 +164,32 @@ public class LocationsFragment extends Fragment {
         voterInfo = ((VIPTabBarActivity) activity).getVoterInfo();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // do nothing if selected filter item is unchanged
+        if (id == lastSelectedFilterItem) {
+            return;
+        }
+
+        lastSelectedFilterItem = id;
+
+        String selection = (String) parent.getItemAtPosition(position);
+        if (selection == filterLabels.ALL) {
+            setFilter(allLocations);
+        } else if (selection == filterLabels.EARLY) {
+            setFilter(voterInfo.getOpenEarlyVoteSites());
+        } else if (selection == filterLabels.POLLING) {
+            setFilter(voterInfo.pollingLocations);
+        } else if (selection == filterLabels.DROPBOX) {
+            setFilter(voterInfo.getOpenDropOffLocations());
+        } else {
+            Log.e("LocationsFragment", "Selected item " + selection + "isn't recognized!");
+            setFilter(allLocations);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // required method implementation
+    }
 }

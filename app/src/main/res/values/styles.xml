@@ -102,10 +102,17 @@
         <item name="android:gravity">left</item>
     </style>
 
-    <style name="spinner" parent="fill_width_wrap_height">
+    <style name="spinner_home" parent="fill_width_wrap_height">
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:background">@drawable/spinner_background_ab_viptabbar</item>
         <item name="android:spinnerStyle">@android:style/Widget.Spinner.DropDown</item>
+    </style>
+
+    <style name="spinner_locations" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">@drawable/spinner_background_ab_viptabbar</item>
     </style>
 
     <style name="table_row_divider">
