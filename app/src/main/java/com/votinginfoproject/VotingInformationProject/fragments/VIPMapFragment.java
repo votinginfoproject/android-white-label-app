@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class VIPMapFragment extends SupportMapFragment {
+public class VIPMapFragment extends SupportMapFragment implements AdapterView.OnItemSelectedListener {
 
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
@@ -67,15 +69,44 @@ public class VIPMapFragment extends SupportMapFragment {
     // track the internally-assigned ID for each marker and map it to the location's key
     HashMap<String, String> markerIds;
 
-    int selectedButtonTextColor;
-    int unselectedButtonTextColor;
-    int lastSelectedButtonId = R.id.locations_map_all_button;
-    Button lastSelectedButton;
+    // track which location filter was last selected, and only refresh list if it changed
+    long lastSelectedFilterItem = 0; // default to all items, which is first in list
 
-    // track filters
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (id == lastSelectedFilterItem) {
+            return;
+        }
+
+        lastSelectedFilterItem = id;
+
+        String selection = (String) parent.getItemAtPosition(position);
+        if (selection == filterLabels.ALL) {
+            showEarly = showPolling = showDropBox = true;
+        } else if (selection == filterLabels.EARLY) {
+            showEarly = true;
+            showPolling = showDropBox = false;
+        } else if (selection == filterLabels.POLLING) {
+            showPolling = true;
+            showEarly = showDropBox = false;
+        } else if (selection == filterLabels.DROPBOX) {
+            showDropBox = true;
+            showEarly = showPolling = false;
+        } else {
+            Log.e("VIPMapFragment", "Selected item " + selection + "isn't recognized!");
+            showEarly = showPolling = showDropBox = true;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // required method implementation
+    }
+
+    VIPTabBarActivity.FilterLabels filterLabels = null;
     boolean showPolling = true;
     boolean showEarly = true;
-
+    boolean showDropBox = true;
 
     public static VIPMapFragment newInstance(String tag, String polyline) {
         // instantiate with map options
@@ -107,17 +138,15 @@ public class VIPMapFragment extends SupportMapFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // programmatically add map view, so button bar appears on top
+        // programmatically add map view, so filter drop-down appears on top
         mapView = super.onCreateView(inflater, container, savedInstanceState);
         rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_map, container, false);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.BELOW, R.id.locations_map_button_bar);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.locations_map_spinner);
         rootView.addView(mapView, layoutParams);
 
         mActivity = (VIPTabBarActivity) this.getActivity();
         Resources res = mActivity.getResources();
-        unselectedButtonTextColor = res.getColor(R.color.button_blue);
-        selectedButtonTextColor = res.getColor(R.color.white);
 
         voterInfo = mActivity.getVoterInfo();
         allLocations = voterInfo.getAllLocations();
@@ -188,16 +217,31 @@ public class VIPMapFragment extends SupportMapFragment {
             map.clear();
         }
 
-        // highlight default button
-        Button allButton = (Button)rootView.findViewById(R.id.locations_map_all_button);
-        allButton.setTextColor(selectedButtonTextColor);
-        allButton.setBackgroundResource(R.drawable.button_bar_button_selected);
-        lastSelectedButton = allButton;
+        // get labels for dropdown
+        filterLabels = mActivity.getFilterLabels();
 
-        // set click handlers for filter buttons
-        setButtonBarClickHandlers(R.id.locations_map_early_button);
-        setButtonBarClickHandlers(R.id.locations_map_polling_button);
-        setButtonBarClickHandlers(R.id.locations_map_all_button);
+        // build filter dropdown list, and initialize with all locations
+        ArrayList<String> filterOptions = new ArrayList<>(4);
+        // always show 'all sites' option
+        filterOptions.add(filterLabels.ALL);
+        // show the other three options if there are any
+        if (!voterInfo.getOpenEarlyVoteSites().isEmpty()) {
+            filterOptions.add(filterLabels.EARLY);
+        }
+        if (voterInfo.pollingLocations != null && !voterInfo.pollingLocations.isEmpty()) {
+            filterOptions.add(filterLabels.POLLING);
+        }
+        if(!voterInfo.getOpenDropOffLocations().isEmpty()) {
+            filterOptions.add(filterLabels.DROPBOX);
+        }
+
+        Spinner filterSpinner = (Spinner) rootView.findViewById(R.id.locations_map_spinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(mActivity,
+                R.layout.location_spinner_item, filterOptions);
+        spinnerAdapter.setDropDownViewResource(R.layout.locations_spinner_view);
+        filterSpinner.setAdapter(spinnerAdapter);
+        filterSpinner.setOnItemSelectedListener(this);
+        filterSpinner.setSelection(0); // all locations by default
 
         // set click handler for info window (to go to directions list)
         // info window is just a bitmap, so can't listen for clicks on elements within it.
@@ -218,42 +262,6 @@ public class VIPMapFragment extends SupportMapFragment {
         });
 
         return rootView;
-    }
-
-    private void setButtonBarClickHandlers(final int buttonId) {
-        rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (buttonId == lastSelectedButtonId) {
-                    return; // ignore button click if already viewing that list
-                }
-
-                Button btn = (Button)v;
-
-                // highlight current selection (and un-highlight others)
-                btn.setBackgroundResource(R.drawable.button_bar_button_selected);
-                btn.setTextColor(selectedButtonTextColor);
-                lastSelectedButton.setTextColor(unselectedButtonTextColor);
-                lastSelectedButton.setBackgroundResource(R.drawable.button_bar_button);
-
-                if (buttonId == R.id.locations_map_early_button) {
-                    showEarly = true;
-                    showPolling = false;
-                } else if (buttonId == R.id.locations_map_polling_button) {
-                    showEarly = false;
-                    showPolling = true;
-                } else {
-                    // show all
-                    showEarly = true;
-                    showPolling = true;
-                }
-
-                lastSelectedButtonId = buttonId;
-                lastSelectedButton = btn;
-
-                refreshMapView();
-            }
-        });
     }
 
     private void refreshMapView() {
@@ -326,31 +334,39 @@ public class VIPMapFragment extends SupportMapFragment {
 
     private class AddMarkersTask extends AsyncTask<String, Integer, String> {
 
+        /** Helper function to add collection of polling locations to map.
+         *
+         * @param locations list of PollingLocations to add
+         * @param bitmapDescriptor BitmapDescriptorFactory value for marker color
+         */
+        private void addLocationsToMap(List<PollingLocation> locations, float bitmapDescriptor) {
+            for (PollingLocation location : locations) {
+                if (location.address.latitude == 0) {
+                    Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
+                    continue;
+                }
+                markers.put(location.address.toGeocodeString(), createMarkerOptions(location, bitmapDescriptor));
+            }
+        }
+
         @Override
         protected String doInBackground(String... select_locations) {
-            markers = new HashMap<String, MarkerOptions>(allLocations.size());
-            markerIds = new HashMap<String, String>(allLocations.size());
+            markers = new HashMap(allLocations.size());
+            markerIds = new HashMap(allLocations.size());
 
             // use red markers for early voting sites
             if (showEarly) {
-                for (PollingLocation location : voterInfo.getOpenEarlyVoteSites()) {
-                    if (location.address.latitude == 0) {
-                        Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
-                        continue;
-                    }
-                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_RED));
-                }
+                addLocationsToMap(voterInfo.getOpenEarlyVoteSites(), BitmapDescriptorFactory.HUE_RED);
             }
 
             // use blue markers for polling locations
             if (voterInfo.pollingLocations != null && showPolling) {
-                for (PollingLocation location : voterInfo.pollingLocations) {
-                    if (location.address.latitude == 0) {
-                        Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
-                        continue;
-                    }
-                    markers.put(location.address.toGeocodeString(), createMarkerOptions(location, BitmapDescriptorFactory.HUE_AZURE));
-                }
+                addLocationsToMap(voterInfo.pollingLocations, BitmapDescriptorFactory.HUE_AZURE);
+            }
+
+            // use green markers for drop boxes
+            if (showDropBox) {
+                addLocationsToMap(voterInfo.getOpenDropOffLocations(), BitmapDescriptorFactory.HUE_GREEN);
             }
 
             return locationId;

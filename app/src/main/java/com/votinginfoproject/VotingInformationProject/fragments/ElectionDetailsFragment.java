@@ -40,7 +40,7 @@ public class ElectionDetailsFragment extends Fragment {
     boolean haveLink;
 
     // track which location filter button was last clicked, and only refresh list if it changed
-    int lastSelectedButtonId = R.id.locations_list_all_button;
+    int lastSelectedButtonId = R.id.details_state_button;
     Button lastSelectedButton;
 
     private static class DetailSection {

@@ -4,30 +4,11 @@
     android:id="@+id/map_fragment"
     style="@style/fragment_style" >
 
-    <LinearLayout
-        android:layout_marginTop="10sp"
-        android:layout_marginBottom="10sp"
-        style="@style/button_bar"
-        android:id="@+id/locations_map_button_bar" >
-
-        <Button
-            style="@style/button_bar_button"
-            android:text="@string/locations_list_all_button_label"
-            android:id="@+id/locations_map_all_button" />
-
-        <View style="@style/button_bar_separator" />
-
-        <Button
-            style="@style/button_bar_button"
-            android:text="@string/locations_list_early_voting_button_label"
-            android:id="@+id/locations_map_early_button" />
-
-        <View style="@style/button_bar_separator" />
-
-        <Button
-            style="@style/button_bar_button"
-            android:text="@string/locations_list_polling_sites_button_label"
-            android:id="@+id/locations_map_polling_button" />
-    </LinearLayout>
+    <Spinner
+        android:id="@+id/locations_map_spinner"
+        android:layout_below="@+id/locations_election_subtitle"
+        android:layout_alignLeft="@+id/locations_election_subtitle"
+        android:layout_toRightOf="@+id/locations_list_map_button"
+        style="@style/spinner_locations" />
 
 </RelativeLayout>

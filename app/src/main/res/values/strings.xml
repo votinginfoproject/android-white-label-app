@@ -105,12 +105,11 @@
 
     <!-- Locations strings -->
     <string name="locations_list_map_button_label">map</string>
-    <string name="locations_list_all_button_label">All Sites</string>
-    <string name="locations_list_early_voting_button_label">Early Voting</string>
-    <string name="locations_list_polling_sites_button_label">Polling Sites</string>
+    <string name="locations_list_all_label">All Sites</string>
+    <string name="locations_list_early_voting_label">Early Voting</string>
+    <string name="locations_list_polling_sites_label">Polling Sites</string>
+    <string name="locations_list_dropoff_label">Drop Off</string>
     <string name="locations_none_found">No locations found.</string>
-    <string name="locations_no_early_voting_found">No early voting locations found.</string>
-    <string name="locations_no_polling_found">No polling locations found.</string>
     <string name="locations_distance_suffix_imperial">mi.</string>
     <string name="locations_distance_suffix_metric">km</string>
 

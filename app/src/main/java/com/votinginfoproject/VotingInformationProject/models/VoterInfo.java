@@ -23,6 +23,7 @@ public class VoterInfo {
     public CivicApiAddress normalizedInput;
     public List<PollingLocation> pollingLocations;
     public List<PollingLocation> earlyVoteSites;
+    public List<PollingLocation> dropOffLocations;
     public List<Contest> contests;
     public List<State> state;
 
@@ -36,6 +37,7 @@ public class VoterInfo {
     private HashMap<String, Integer> locationIds;
     private ArrayList<PollingLocation> allLocations;
     private ArrayList<PollingLocation> openEarlyVoteSites;
+    private ArrayList<PollingLocation> openDropOffLocations;
 
     /**
      * Find a contest at a particular offset in the party-filtered list.  For use with list item
@@ -114,25 +116,15 @@ public class VoterInfo {
             allLocations.addAll(pollingLocations);
         }
 
-        // only display early voting sites that are currently open
-        openEarlyVoteSites = new ArrayList();
-        if (earlyVoteSites != null) {
-            Date today = election.getCurrentDay();
-            for (PollingLocation early : earlyVoteSites) {
-                Date start = election.getDayFromString(early.startDate);
-                Date end = election.getDayFromString(early.endDate);
-                if (start == null || end == null) {
-                    // missing early voting site start/date, so just display it
-                    openEarlyVoteSites.add(early);
-                } else if (!start.after(today) && !end.before(today)) {
-                    // show if site opened today or earlier, and closes today or later
-                    openEarlyVoteSites.add(early);
-                }
-            }
-        }
+        // only display early voting sites and drop-off locations that haven't closed yet
+        openEarlyVoteSites = buildOpenSitesList(earlyVoteSites);
+        openDropOffLocations = buildOpenSitesList(dropOffLocations);
 
         Log.d("VoterInfo", "Found " + openEarlyVoteSites.size() + " open early voting sites");
+        Log.d("VoterInfo", "Found " + openDropOffLocations.size() + " open drop-off locations");
+
         allLocations.addAll(openEarlyVoteSites);
+        allLocations.addAll(openDropOffLocations);
 
         // Build map of PollingLocation id to its offset in the list of all locations,
         // to find it later when the distance calculation comes back.
@@ -146,6 +138,34 @@ public class VoterInfo {
                 locationIds.put(location.address.toGeocodeString(), i);
             }
         }
+    }
+
+    /** Helper function to build a list of open polling locations from a given list
+     *
+     * @param fromList List of early voting or drop-off locations to check
+     * @return List of locations found that have not closed yet
+     */
+    private ArrayList<PollingLocation> buildOpenSitesList(List<PollingLocation> fromList) {
+        ArrayList<PollingLocation> returnList = new ArrayList();
+        if (fromList != null) {
+            Date today = election.getCurrentDay();
+            for (PollingLocation loc : fromList) {
+                Date start = election.getDayFromString(loc.startDate);
+                Date end = election.getDayFromString(loc.endDate);
+                if (start == null || end == null) {
+                    // missing site start/date, so just display it
+                    returnList.add(loc);
+                } else if (!end.before(today)) {
+                    //  closes today or later
+                    returnList.add(loc);
+                }
+            }
+        }
+        return returnList;
+    }
+
+    public List<PollingLocation> getOpenDropOffLocations() {
+        return openDropOffLocations;
     }
 
     public List<PollingLocation> getOpenEarlyVoteSites() {

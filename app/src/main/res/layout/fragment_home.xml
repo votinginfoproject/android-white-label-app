@@ -124,7 +124,7 @@
             android:text="@string/home_textview_election_spinner_text"/>
 
         <Spinner
-            style="@style/spinner"
+            style="@style/spinner_home"
             android:id="@+id/home_election_spinner"
             android:layout_below="@+id/home_election_spinner_text"
             android:contentDescription="@string/home_election_spinner_description"
@@ -148,7 +148,7 @@
             android:text="@string/home_textview_party_spinner_text"/>
 
         <Spinner
-            style="@style/spinner"
+            style="@style/spinner_home"
             android:id="@+id/home_party_spinner"
             android:layout_below="@+id/home_party_spinner_text"
             android:contentDescription="@string/home_party_spinner_description"
