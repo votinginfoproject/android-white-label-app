@@ -92,6 +92,10 @@ public class ContestFragment extends Fragment {
                 if (contest.referendumTitle.length() > 20) {
                     title.setTextSize(18);
                 }
+
+                if (contest.referendumSubtitle.length() > 20) {
+                    subtitle.setTextSize(16);
+                }
             }
 
             // populate candidate list

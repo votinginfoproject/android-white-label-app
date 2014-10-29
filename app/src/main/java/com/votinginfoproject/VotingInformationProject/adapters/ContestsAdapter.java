@@ -77,12 +77,7 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
         // Populate the data into the template view using the data object
         if (contest.type.equals("Referendum")) {
             setTextView(viewHolder.subTitle, contest.referendumSubtitle);
-            // deal with huge referendum names by only showing first 20 characters
-            if (contest.referendumTitle.length() > 20) {
-                viewHolder.title.setText(contest.referendumTitle.substring(0, 20) + "...");
-            } else {
-                setTextView(viewHolder.title, contest.referendumTitle);
-            }
+            setTextView(viewHolder.title, contest.referendumTitle);
         } else {
             setTextView(viewHolder.title, contest.office);
             setTextView(viewHolder.subTitle, electionName);
@@ -99,7 +94,12 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
      */
     private void setTextView(TextView view, String text) {
         if (text != null && !text.isEmpty()) {
-            view.setText(text);
+            // deal with huge referendum descriptions by only showing first 20 characters
+            if (text.length() > 20) {
+                view.setText(text.substring(0, 20) + "...");
+            } else {
+                view.setText(text);
+            }
         }
     }
 }
