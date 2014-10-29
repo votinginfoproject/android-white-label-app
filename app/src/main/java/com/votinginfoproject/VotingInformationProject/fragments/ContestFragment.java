@@ -1,8 +1,10 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ public class ContestFragment extends Fragment {
     VoterInfo voterInfo;
     Contest contest;
     private ViewGroup mContainer;
+    Resources res;
 
     /**
      * Use this factory method to create a new instance of
@@ -56,6 +59,7 @@ public class ContestFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("ContestFragment", "In onActivityCreated");
+        res = getResources();
         setContents();
     }
 
@@ -78,19 +82,24 @@ public class ContestFragment extends Fragment {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
             } else if (contest.type != null) {
-                title.setText(contest.referendumTitle);
 
-                if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
-                    subtitle.setText(contest.referendumSubtitle);
-                } else {
-                    subtitle.setVisibility(View.GONE);
+                if (contest.referendumTitle != null) {
+                    title.setText(contest.referendumTitle);
+                    if (contest.referendumTitle.length() > 20) {
+                        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_small));
+                    }
                 }
 
                 // deal with huge referendum descriptions by reducing font size.
                 // Cannot make fragment a ScrollView, because it already contains a
                 // scrolling list of candidates.
-                if (contest.referendumTitle.length() > 20) {
-                    title.setTextSize(18);
+                if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
+                    subtitle.setText(contest.referendumSubtitle);
+                    if (contest.referendumSubtitle.length() > 20) {
+                        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_small));
+                    }
+                } else {
+                    subtitle.setVisibility(View.GONE);
                 }
             }
 
@@ -140,8 +149,5 @@ public class ContestFragment extends Fragment {
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
 
         super.onDetach();
-    }
-
-    public interface OnInteractionListener {
     }
 }
