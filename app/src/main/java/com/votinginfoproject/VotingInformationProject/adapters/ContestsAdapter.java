@@ -95,8 +95,8 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
     private void setTextView(TextView view, String text) {
         if (text != null && !text.isEmpty()) {
             // deal with huge referendum descriptions by only showing first 20 characters
-            if (text.length() > 20) {
-                view.setText(text.substring(0, 20) + "...");
+            if (text.length() > 25) {
+                view.setText(text.substring(0, 25) + "...");
             } else {
                 view.setText(text);
             }
