@@ -302,6 +302,12 @@ public class HomeFragment extends Fragment {
             builder.appendPath(resources.getString(R.string.civic_info_api_version));
             String officialOnly = resources.getBoolean(R.bool.civic_info_official_only) ? "true" : "false";
             builder.appendPath("voterinfo").appendQueryParameter("officialOnly", officialOnly);
+
+            // set flag to view pre-production data
+            if (resources.getBoolean(R.bool.use_preproduction)) {
+                builder.appendQueryParameter("productionDataOnly", "false");
+            }
+
             if (!electionId.isEmpty()) {
                 builder.appendQueryParameter("electionId", electionId);
             }
