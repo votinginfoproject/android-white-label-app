@@ -82,7 +82,18 @@ public class ContestFragment extends Fragment {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
             } else if (contest.type != null) {
+                // Have a referendum, which has no candidates list.  So,
+                // remove scrolling list view and instead use scroll view for title/subtitle.
+                ViewGroup parent = (ViewGroup) myActivity.findViewById(R.id.contest_fragment);
+                parent.removeView(myActivity.findViewById(R.id.contest_fragment_inner_layout));
+                View scroll = myActivity.getLayoutInflater().inflate(R.layout.contest_referendum, parent, false);
+                parent.addView(scroll);
 
+                // go find references to the TextViews in the new ScrollView
+                title = (TextView)myActivity.findViewById(R.id.contest_title);
+                subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
+
+                // deal with huge referendum descriptions by reducing font size a bit.
                 if (contest.referendumTitle != null) {
                     title.setText(contest.referendumTitle);
                     if (contest.referendumTitle.length() > 20) {
@@ -90,9 +101,6 @@ public class ContestFragment extends Fragment {
                     }
                 }
 
-                // deal with huge referendum descriptions by reducing font size.
-                // Cannot make fragment a ScrollView, because it already contains a
-                // scrolling list of candidates.
                 if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
                     subtitle.setText(contest.referendumSubtitle);
                     if (contest.referendumSubtitle.length() > 20) {
@@ -115,7 +123,7 @@ public class ContestFragment extends Fragment {
                         myActivity.showCandidateDetails(contestNum, position);
                     }
                 });
-            } else {
+            } else if (!contest.type.equals("Referendum")) {
                 Log.d("ContestFragment", "No candidates found for selected contest.");
                 myActivity.findViewById(R.id.contest_candidate_list_header).setVisibility(View.GONE);
             }
