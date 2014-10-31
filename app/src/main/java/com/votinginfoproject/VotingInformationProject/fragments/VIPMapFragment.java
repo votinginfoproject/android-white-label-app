@@ -234,7 +234,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         if (!voterInfo.getOpenEarlyVoteSites().isEmpty()) {
             filterOptions.add(filterLabels.EARLY);
         }
-        if (voterInfo.pollingLocations != null && !voterInfo.pollingLocations.isEmpty()) {
+        if (!voterInfo.getPollingLocations().isEmpty()) {
             filterOptions.add(filterLabels.POLLING);
         }
         if(!voterInfo.getOpenDropOffLocations().isEmpty()) {
@@ -366,8 +366,8 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             }
 
             // use blue markers for polling locations
-            if (voterInfo.pollingLocations != null && showPolling) {
-                addLocationsToMap(voterInfo.pollingLocations, BitmapDescriptorFactory.HUE_AZURE);
+            if (!voterInfo.getPollingLocations().isEmpty() && showPolling) {
+                addLocationsToMap(voterInfo.getPollingLocations(), BitmapDescriptorFactory.HUE_AZURE);
             }
 
             // use green markers for drop boxes

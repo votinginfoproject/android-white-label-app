@@ -180,6 +180,19 @@ public class VoterInfoTests extends AndroidTestCase {
         // should have a drop-box location
         foundLocation = info.getLocationForId(loc6.id);
         assertEquals("location six", foundLocation.name);
+
+        // should have two polling locations
+        assertEquals(info.getPollingLocations().size(), 2);
+
+        // should limit drop-box locations to first 50
+        for (int i = 0; i <= 60; i++) {
+            loc6.id = Integer.toString(i + 10);
+            dropOffLocations.add(loc6);
+        }
+
+        info.dropOffLocations = dropOffLocations;
+        info.setUpLocations();
+        assertEquals(info.getOpenDropOffLocations().size(), 50);
     }
 
     public void testGetAdministrativeBodies() {
