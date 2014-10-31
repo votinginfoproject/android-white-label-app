@@ -70,7 +70,7 @@ public class CivicApiAddress {
 
         if (line1 != null && !line1.isEmpty()) {
             builder.append(line1);
-            builder.append(" ");
+            builder.append(", ");
         }
 
         if (city != null && !city.isEmpty()) {
