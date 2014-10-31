@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,11 @@ public class VoterInfo {
     private ArrayList<PollingLocation> allLocations;
     private ArrayList<PollingLocation> openEarlyVoteSites;
     private ArrayList<PollingLocation> openDropOffLocations;
+    private ArrayList<PollingLocation> usePollingLocations;
+
+    // limit drop box locations to first 50, and polling and early voting sites to first 25
+    private static final int MAX_VOTING_SITES = 25;
+    private static final int MAX_DROPBOX_SITES = 50;
 
     /**
      * Find a contest at a particular offset in the party-filtered list.  For use with list item
@@ -111,17 +117,26 @@ public class VoterInfo {
     public void setUpLocations() {
         // get all locations (both polling and early voting)
         allLocations = new ArrayList();
-
         if (pollingLocations != null) {
-            allLocations.addAll(pollingLocations);
+            // only show first polling locations
+            if (pollingLocations.size() > MAX_VOTING_SITES) {
+                usePollingLocations = new ArrayList(pollingLocations.subList(0, MAX_VOTING_SITES));
+            } else {
+                usePollingLocations = new ArrayList(pollingLocations);
+                Collections.copy(usePollingLocations, pollingLocations);
+            }
+            allLocations.addAll(usePollingLocations);
+        } else {
+            usePollingLocations = new ArrayList();
         }
 
         // only display early voting sites and drop-off locations that haven't closed yet
-        openEarlyVoteSites = buildOpenSitesList(earlyVoteSites);
-        openDropOffLocations = buildOpenSitesList(dropOffLocations);
+        // only show first 25 early voting sites found, and first 50 drop-boxes
+        openEarlyVoteSites = buildOpenSitesList(earlyVoteSites, MAX_VOTING_SITES);
+        openDropOffLocations = buildOpenSitesList(dropOffLocations, MAX_DROPBOX_SITES);
 
-        Log.d("VoterInfo", "Found " + openEarlyVoteSites.size() + " open early voting sites");
-        Log.d("VoterInfo", "Found " + openDropOffLocations.size() + " open drop-off locations");
+        Log.d("VoterInfo", "Using " + openEarlyVoteSites.size() + " open early voting sites");
+        Log.d("VoterInfo", "Using " + openDropOffLocations.size() + " open drop-off locations");
 
         allLocations.addAll(openEarlyVoteSites);
         allLocations.addAll(openDropOffLocations);
@@ -143,13 +158,19 @@ public class VoterInfo {
     /** Helper function to build a list of open polling locations from a given list
      *
      * @param fromList List of early voting or drop-off locations to check
+     * @param limit Maximum number of locations to return for this location type
      * @return List of locations found that have not closed yet
      */
-    private ArrayList<PollingLocation> buildOpenSitesList(List<PollingLocation> fromList) {
+    private ArrayList<PollingLocation> buildOpenSitesList(List<PollingLocation> fromList, int limit) {
         ArrayList<PollingLocation> returnList = new ArrayList();
         if (fromList != null) {
             Date today = election.getCurrentDay();
+            int counter = 0;
             for (PollingLocation loc : fromList) {
+                counter += 1;
+                if (counter > limit) {
+                    return returnList;
+                }
                 Date start = election.getDayFromString(loc.startDate);
                 Date end = election.getDayFromString(loc.endDate);
                 if (start == null || end == null) {
@@ -170,6 +191,10 @@ public class VoterInfo {
 
     public List<PollingLocation> getOpenEarlyVoteSites() {
         return openEarlyVoteSites;
+    }
+
+    public List<PollingLocation> getPollingLocations() {
+        return usePollingLocations;
     }
 
     /**

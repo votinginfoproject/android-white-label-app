@@ -15,7 +15,6 @@ import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivi
 import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import java.text.DecimalFormat;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -25,7 +24,6 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
     VIPTabBarActivity myActivity;
     DecimalFormat distanceFormat;
-    Comparator<PollingLocation> pollingLocationComparator;
     String distanceSuffix;
     boolean useMetric;
     Location home;
@@ -37,10 +35,6 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         TextView address;
         TextView distance;
         boolean isQueryingDistance; // only query for distance if not already doing so
-    }
-
-    public void sortList() {
-        sort(pollingLocationComparator);
     }
 
     /**
@@ -59,14 +53,6 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         } else {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_imperial);
         }
-
-        // sort locations by distance
-        pollingLocationComparator = new Comparator<PollingLocation>() {
-            @Override
-            public int compare(PollingLocation loc1, PollingLocation loc2) {
-                return Double.compare(loc1.address.distance, loc2.address.distance);
-            }
-        };
     }
 
     @Override

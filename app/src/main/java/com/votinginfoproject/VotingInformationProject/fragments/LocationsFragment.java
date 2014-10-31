@@ -95,7 +95,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         if (!voterInfo.getOpenEarlyVoteSites().isEmpty()) {
             filterOptions.add(filterLabels.EARLY);
         }
-        if (voterInfo.pollingLocations != null && !voterInfo.pollingLocations.isEmpty()) {
+        if (!voterInfo.getPollingLocations().isEmpty()) {
             filterOptions.add(filterLabels.POLLING);
         }
         if(!voterInfo.getOpenDropOffLocations().isEmpty()) {
@@ -124,8 +124,6 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
             locationsList.setVisibility(View.GONE);
             noneFoundMessage.setText(R.string.locations_none_found);
             noneFoundMessage.setVisibility(View.VISIBLE);
-        } else {
-            listAdapter.sortList();
         }
 
         return rootView;
@@ -139,7 +137,6 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         if (locations != null && !locations.isEmpty()) {
             listAdapter.clear();
             listAdapter.addAll(locations);
-            listAdapter.sortList();
             locationsList.setVisibility(View.VISIBLE);
             noneFoundMessage.setVisibility(View.GONE);
         } else {
@@ -152,7 +149,6 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
 
     public void refreshList() {
         if (listAdapter != null) {
-            listAdapter.sortList();  // sorting the list will also refresh it
             locationsList.invalidate();
         }
     }
@@ -179,7 +175,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         } else if (selection == filterLabels.EARLY) {
             setFilter(voterInfo.getOpenEarlyVoteSites());
         } else if (selection == filterLabels.POLLING) {
-            setFilter(voterInfo.pollingLocations);
+            setFilter(voterInfo.getPollingLocations());
         } else if (selection == filterLabels.DROPBOX) {
             setFilter(voterInfo.getOpenDropOffLocations());
         } else {
