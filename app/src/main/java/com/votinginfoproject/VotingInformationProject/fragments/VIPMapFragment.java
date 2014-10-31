@@ -209,7 +209,13 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
                         map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 60));
                     } else if (thisLocation != null) {
                         // zoom to selected location
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
+                        if (thisLocation == homeLocation) {
+                            // zoom out further when viewing general map centered on home
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 8));
+                        } else {
+                            // zom to specific polling location or other point of interest
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
+                        }
                     }
                 }
             });
