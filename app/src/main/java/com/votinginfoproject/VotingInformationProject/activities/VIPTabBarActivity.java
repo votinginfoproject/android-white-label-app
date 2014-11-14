@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -40,6 +42,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.DirectionsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.SupportWebViewFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
@@ -51,7 +54,7 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
 
 public class VIPTabBarActivity extends FragmentActivity implements GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, DirectionsQuery.PolylineCallBackListener  {
+        GooglePlayServicesClient.OnConnectionFailedListener, DirectionsQuery.PolylineCallBackListener, View.OnClickListener  {
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -72,6 +75,69 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     LocationClient mLocationClient;
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
     int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
+
+    // track what the current fragment is and the history of selected fragments (for moving back)
+    private int currentFragment = R.id.ballot_fragment;
+    private Stack<Integer> fragmentHistory = new Stack();
+
+    public void setCurrentFragment(int currentFragment) {
+        this.currentFragment = currentFragment;
+        fragmentHistory.push(currentFragment);
+    }
+
+    public boolean isLoadingFeedBackForm() {
+        return loadingFeedBackForm;
+    }
+
+    public void setLoadingFeedBackForm(boolean loadingFeedBackForm) {
+        this.loadingFeedBackForm = loadingFeedBackForm;
+    }
+
+    boolean loadingFeedBackForm = false;
+
+    /**
+     * OnClick listener for feedback form link
+     * @param v The clickable text field for supplying feedback
+     */
+    @Override
+    public void onClick(View v) {
+        if (isLoadingFeedBackForm()) {
+            Log.d("ContestFragment", "Already loading feedback form.");
+            return;
+        }
+        Log.d("ContestFragment", "Feedback button text clicked");
+        loadingFeedBackForm = true;
+        // load browser in app
+
+        // Send in reference to the calling view's parent, so it can be found again later.
+        // Necessary because there are multiple references to the feedback text view, so the scope
+        // of search must be restricted to find ~this~ feedback text view again.
+        View parent = (View)v.getParent().getParent();
+        SupportWebViewFragment webViewFragment = SupportWebViewFragment.newInstance(parent.getId());
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        // swap out current fragment with support web fragment,
+        // and put current fragment on backstack
+        ft.replace(getCurrentFragment(), webViewFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // set the current fragment when back pressed
+        if (!fragmentHistory.isEmpty()) {
+            currentFragment = fragmentHistory.pop();
+        }
+        super.onBackPressed();
+    }
+
+    public int getCurrentFragment() {
+        return currentFragment;
+    }
+
+    public void clearFragmentHistory() {
+        fragmentHistory.clear();
+    }
 
     // track the labels used in the filter drop-down
     public static class FilterLabels {
@@ -131,6 +197,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     public VIPTabBarActivity(VIPAppContext context) {
         super();
         mAppContext = context;
+        fragmentHistory.push(currentFragment);
     }
 
     public VIPTabBarActivity() {
@@ -170,8 +237,9 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // Contest fragment will hide the ballot fragment components, then show them again
         // when user navigates back.
         fragmentTransaction.replace(R.id.ballot_fragment, contestFragment);
+        setCurrentFragment(R.id.contest_fragment);
 
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("contest");
         fragmentTransaction.commit();
     }
 
@@ -188,7 +256,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // See showContestDetails for info on how the fragment transition occurs
         fragmentTransaction.replace(R.id.ballot_fragment, candidateFragment);
 
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("candidate");
         fragmentTransaction.commit();
     }
 
@@ -235,7 +303,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                     // got here from locations tab
                     fragmentTransaction.replace(R.id.locations_list_fragment, directionsFragment);
                 }
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.addToBackStack("directions");
                 fragmentTransaction.commit();
             }
         });
@@ -307,7 +375,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             // got here from locations tab
             fragmentTransaction.replace(R.id.locations_list_fragment, mapFragment);
         }
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("map");
         fragmentTransaction.commit();
     }
 

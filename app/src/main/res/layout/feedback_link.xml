@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/feedback_link"
+    android:descendantFocusability="blocksDescendants"
+    style="@style/match_width_match_height" >
+
+    <TextView
+        android:id="@+id/feedback_footer"
+        android:drawableRight="@drawable/ic_menu_notifications"
+        android:text="@string/feedback_link"
+        android:onClick="onClick"
+        style="@style/feedback_link" />
+</RelativeLayout>

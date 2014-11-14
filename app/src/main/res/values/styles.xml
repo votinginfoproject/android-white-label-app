@@ -32,7 +32,7 @@
         <item name="android:layout_alignParentLeft">true</item>
     </style>
 
-    <style name="fragment_subheader"  parent="@style/wrap_width_wrap_height">
+    <style name="fragment_subheader" parent="@style/wrap_width_wrap_height">
         <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textColor">@color/text_gray</item>
         <item name="android:textStyle">bold</item>
@@ -45,7 +45,23 @@
         <item name="android:layout_alignParentLeft">true</item>
     </style>
 
-    <style name="listview"  parent="@style/wrap_width_wrap_height">
+    <style name="feedback_link" parent="@style/wrap_width_wrap_height">
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/item_header_blue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingTop">@dimen/feedback_link_top_padding</item>
+        <item name="android:paddingBottom">@dimen/home_large_padding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:drawablePadding">@dimen/home_small_padding</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="listview" parent="@style/wrap_width_wrap_height">
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:divider">@color/list_divider_gray</item>
         <item name="android:dividerHeight">1sp</item>
