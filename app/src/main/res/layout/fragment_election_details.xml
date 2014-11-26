@@ -39,4 +39,9 @@
         android:visibility="gone"
         style="@style/fragment_header" />
 
+    <RelativeLayout
+        android:layout_below="@id/election_details_scroll_view"
+        style="@style/match_width_match_height" >
+        <include layout="@layout/feedback_link" />
+    </RelativeLayout>
 </RelativeLayout>

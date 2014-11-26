@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
+import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
@@ -36,6 +37,7 @@ public class TabsAdapter extends FragmentPagerAdapter
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>(3);
     private LocationsFragment locationsFragment;
     private FragmentManager tabsFragmentManager;
+    private VIPTabBarActivity myActivity;
 
     static final class TabInfo {
         private final Class<?> clss;
@@ -49,6 +51,7 @@ public class TabsAdapter extends FragmentPagerAdapter
 
     public TabsAdapter(FragmentActivity activity, ViewPager pager) {
         super(activity.getSupportFragmentManager());
+        myActivity = (VIPTabBarActivity) activity;
         mActionBar = activity.getActionBar();
         tabsFragmentManager = activity.getSupportFragmentManager();
         mViewPager = pager;
@@ -116,6 +119,7 @@ public class TabsAdapter extends FragmentPagerAdapter
         // Clear back stack on tab change.  Otherwise stack will keep history for all tabs,
         // which can result in inconsistent state and/or unexpected behavior.
         tabsFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        myActivity.clearFragmentHistory();
     }
 
     /**
@@ -125,8 +129,20 @@ public class TabsAdapter extends FragmentPagerAdapter
      */
     @Override
     public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-        if (tab.getTag() == "locations_tab") {
+        // tell activity which tab has been selected
+        String tag = tab.getTag().toString();
+        if (tag.equals("ballot_tab")) {
+            myActivity.setCurrentFragment(R.id.ballot_fragment);
+        } else if (tag.equals("locations_tab")) {
             locationsFragment.refreshList();
+            myActivity.setCurrentFragment(R.id.locations_list_fragment);
+        } else if (tag.equals("details_tab")) {
+            myActivity.setCurrentFragment(R.id.election_details_fragment);
+        } else {
+            Log.e("TabsAdapter", "Tab " + tag + " is unrecognized!");
         }
+
     }
+
+
 }

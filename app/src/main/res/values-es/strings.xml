@@ -52,6 +52,10 @@
     <string name="home_election_spinner_description">Tome una elección:</string>
     <string name="home_party_spinner_description">Elija un partido:</string>
 
+    <!-- Feedback Strings -->
+    <string name="feedback_link">Report an Error</string>
+    <string name="feedback_loading">Loading feedback form...</string>
+
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Competencias</string>
 

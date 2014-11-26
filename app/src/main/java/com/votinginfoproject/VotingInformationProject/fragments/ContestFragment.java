@@ -72,7 +72,7 @@ public class ContestFragment extends Fragment {
         TextView subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
 
         try {
-            voterInfo = ((VIPTabBarActivity) myActivity).getVoterInfo();
+            voterInfo = myActivity.getVoterInfo();
             contest = voterInfo.getContestAt(contestNum);
             Log.d("ContestFragment", "Got contest for office: " + contest.office);
 
@@ -81,9 +81,15 @@ public class ContestFragment extends Fragment {
             if (!contest.type.equals("Referendum")) {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
+                // add footer view for feedback
+                ListView list = (ListView)myActivity.findViewById(R.id.contest_candidate_list);
+                View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, list, false);
+                // 'false' argument here is to make the footer list item not clickable (text instead is clickable)
+                list.addFooterView(feedback_layout, null, false);
             } else if (contest.type != null) {
                 // Have a referendum, which has no candidates list.  So,
                 // remove scrolling list view and instead use scroll view for title/subtitle.
+                // Scroll view includes feedback link at the bottom.
                 ViewGroup parent = (ViewGroup) myActivity.findViewById(R.id.contest_fragment);
                 parent.removeView(myActivity.findViewById(R.id.contest_fragment_inner_layout));
                 View scroll = myActivity.getLayoutInflater().inflate(R.layout.contest_referendum, parent, false);
@@ -145,15 +151,16 @@ public class ContestFragment extends Fragment {
                              Bundle savedInstanceState) {
         mContainer = container;
         Log.d("ContestFragment:onCreateView", "Hiding ballot container's view");
-        container.getChildAt(0).setVisibility(View.INVISIBLE);
-
-        return inflater.inflate(R.layout.fragment_contest, container, false);
+        mContainer.getChildAt(0).setVisibility(View.INVISIBLE);
+        return inflater.inflate(R.layout.fragment_contest, mContainer, false);
     }
 
     @Override
     public void onDetach() {
         // Show ballot fragment components again when user goes back
         Log.d("ContestFragment:onDetach", "Showing ballot container's view again");
+        VIPTabBarActivity myActivity = (VIPTabBarActivity)getActivity();
+        myActivity.setCurrentFragment(R.id.ballot_fragment);
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
 
         super.onDetach();

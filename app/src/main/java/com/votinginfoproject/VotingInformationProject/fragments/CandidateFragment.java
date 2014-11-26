@@ -258,7 +258,6 @@ public class CandidateFragment extends Fragment {
         // Show contest fragment components again when user goes back
         Log.d("CandidateFragment:onDetach", "Showing contest container's view again");
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
-
         super.onDetach();
     }
 

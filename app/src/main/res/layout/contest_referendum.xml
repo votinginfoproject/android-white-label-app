@@ -16,6 +16,8 @@
             android:id="@+id/contest_subtitle"
             android:layout_below="@+id/contest_title"
             style="@style/fragment_subheader" />
+
+        <include layout="@layout/feedback_link" />
     </LinearLayout>
 
 </ScrollView>

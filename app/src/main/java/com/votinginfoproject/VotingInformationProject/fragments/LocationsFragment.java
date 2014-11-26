@@ -84,6 +84,10 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
             }
         });
 
+        View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, locationsList, false);
+        // 'false' argument here is to make the footer list item not clickable (text instead is clickable)
+        locationsList.addFooterView(feedback_layout, null, false);
+
         // get labels for dropdown
         filterLabels = myActivity.getFilterLabels();
 

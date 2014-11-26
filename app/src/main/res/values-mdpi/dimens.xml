@@ -16,4 +16,6 @@
     <dimen name="home_xlarge_padding">7sp</dimen>
     <dimen name="home_edittext_size">18sp</dimen>
     <dimen name="home_button_height">36sp</dimen>
+
+    <dimen name="feedback_link_top_padding">44sp</dimen>
 </resources>
