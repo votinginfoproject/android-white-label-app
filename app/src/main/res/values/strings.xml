@@ -54,7 +54,7 @@
     <string name="home_party_spinner_description">Please pick a party:</string>
 
     <!-- Feedback Strings -->
-    <string name="feedback_link">Provide feedback</string>
+    <string name="feedback_link">Report an Error</string>
     <string name="feedback_loading">Loading feedback form...</string>
 
     <!-- Election View Strings -->
