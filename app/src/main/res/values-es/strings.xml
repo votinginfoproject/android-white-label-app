@@ -54,7 +54,7 @@
 
     <!-- Feedback Strings -->
     <string name="feedback_link">Report an Error</string>
-    <string name="feedback_loading">Loading feedback form...</string>
+    <string name="feedback_loading">Cargando formulario de comentarios...</string>
 
     <!-- Election View Strings -->
     <string name="ballot_contests_list_header">Competencias</string>
