@@ -45,6 +45,7 @@ public class VoterInfo {
     private static final int MAX_VOTING_SITES = 25;
     private static final int MAX_DROPBOX_SITES = 50;
 
+    private boolean mailOnly;
     /**
      * Find a contest at a particular offset in the party-filtered list.  For use with list item
      * found in ContestsAdapter list.
@@ -319,5 +320,13 @@ public class VoterInfo {
         }
 
         return null;
+    }
+
+    /**
+     * Specifies whether voters in the precinct vote only by mailing their ballots (with the
+     * possible option of dropping off their ballots as well).
+     */
+    public boolean isMailOnly() {
+        return mailOnly;
     }
 }
