@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationsAdapter;
@@ -26,6 +28,17 @@ import java.util.List;
 
 public class LocationsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
+    static final ButterKnife.Action<View> HIDE = new ButterKnife.Action<View>() {
+        @Override public void apply(View view, int index) {
+            view.setVisibility(View.GONE);
+        }
+    };
+    static final ButterKnife.Action<View> SHOW = new ButterKnife.Action<View>() {
+        @Override public void apply(View view, int index) {
+            view.setVisibility(View.VISIBLE);
+        }
+    };
+
     VoterInfo voterInfo;
     LocationsAdapter listAdapter;
     View rootView;
@@ -33,6 +46,12 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     ListView locationsList;
     ArrayList<PollingLocation> allLocations;
     VIPTabBarActivity.FilterLabels filterLabels;
+
+    @Bind({R.id.locations_list_map_button, R.id.locations_list, R.id.locations_list_spinner})
+    List<View> locationViews;
+
+    @Bind(R.id.mail_only_message)
+    TextView mailOnlyMessage;
 
     // track which location filter was last selected, and only refresh list if it changed
     long lastSelectedFilterItem = 0; // default to all items, which is first in list
@@ -48,6 +67,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_locations, container, false);
+        ButterKnife.bind(this, rootView);
         final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
 
         Resources res = myActivity.getResources();
@@ -60,6 +80,14 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
 
         // clear directions polyline, if set from directions view
         myActivity.polylineCallback("", null);
+
+        if(voterInfo.isMailOnly()) {
+            ButterKnife.apply(locationViews, HIDE);
+            mailOnlyMessage.setVisibility(View.VISIBLE);
+        } else {
+            ButterKnife.apply(locationViews, SHOW);
+            mailOnlyMessage.setVisibility(View.GONE);
+        }
 
         // click handler for map button
         rootView.findViewById(R.id.locations_list_map_button).setOnClickListener(new View.OnClickListener() {

@@ -20,6 +20,18 @@
             style="@style/fragment_subheader"
             android:singleLine="false" />
 
+        <TextView
+            android:id="@+id/mail_only_message"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mail_only"
+            style="@style/Bubble.TextAppearance.Dark"
+            android:layout_below="@id/locations_election_subtitle"
+            android:textSize="20sp"
+            android:visibility="gone"
+            />
+
         <Button
             style="@style/map_button"
             android:id="@+id/locations_list_map_button"
