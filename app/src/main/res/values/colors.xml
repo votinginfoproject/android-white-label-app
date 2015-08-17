@@ -12,4 +12,5 @@
     <color name="home_edittext_background">#137bbb</color>
     <color name="home_warning_background">#042a42</color>
     <color name="brand_name_text">#60c9f8</color>
+    <color name="dark_text">#dd000000</color>
 </resources>
