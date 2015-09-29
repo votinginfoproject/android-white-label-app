@@ -25,7 +25,7 @@
             android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mail_only"
+            android:text="@string/mail_only_info"
             style="@style/Bubble.TextAppearance.Dark"
             android:layout_below="@id/locations_election_subtitle"
             android:textSize="20sp"
