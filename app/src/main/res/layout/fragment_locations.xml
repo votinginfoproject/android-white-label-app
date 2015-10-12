@@ -20,47 +20,59 @@
             style="@style/fragment_subheader"
             android:singleLine="false" />
 
-        <TextView
-            android:id="@+id/mail_only_message"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/mail_only_info"
-            style="@style/Bubble.TextAppearance.Dark"
-            android:layout_below="@id/locations_election_subtitle"
-            android:textSize="20sp"
-            android:visibility="gone"
-            />
-
         <Button
             style="@style/map_button"
             android:id="@+id/locations_list_map_button"
             android:text="@string/locations_list_map_button_label" />
 
-        <Spinner
-            android:id="@+id/locations_list_spinner"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/locations_election_subtitle"
-            android:layout_alignLeft="@+id/locations_election_subtitle"
-            android:layout_toRightOf="@+id/locations_list_map_button"
-            style="@style/spinner_locations" />
+            android:orientation="vertical"
+            >
 
-        <ListView
-            style="@style/listview"
-            android:id="@+id/locations_list"
-            android:layout_below="@+id/locations_list_spinner"
-            android:layout_toRightOf="@+id/locations_election_subtitle"
-            android:focusable="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/locations_none_found_message"
-            android:layout_below="@+id/locations_list_spinner"
-            android:layout_toRightOf="@+id/locations_election_subtitle"
-            style="@style/fragment_subheader"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            <TextView
+                android:id="@+id/mail_only_message"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/mail_only_info"
+                style="@style/Bubble.TextAppearance.Dark"
+                android:layout_below="@id/locations_election_subtitle"
+                android:textSize="16sp"
+                android:visibility="gone"
+                />
 
+            <Spinner
+                android:id="@+id/locations_list_spinner"
+                android:layout_alignLeft="@+id/locations_election_subtitle"
+                android:layout_toRightOf="@+id/locations_list_map_button"
+                style="@style/spinner_locations"
+                />
+
+            <ListView
+                style="@style/listview"
+                android:id="@+id/locations_list"
+                android:layout_below="@+id/locations_list_spinner"
+                android:layout_toRightOf="@+id/locations_election_subtitle"
+                android:focusable="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/locations_none_found_message"
+                android:layout_below="@+id/locations_list_spinner"
+                android:layout_toRightOf="@+id/locations_election_subtitle"
+                style="@style/fragment_subheader"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

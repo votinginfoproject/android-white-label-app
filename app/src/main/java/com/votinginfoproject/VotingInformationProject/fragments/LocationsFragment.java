@@ -47,9 +47,6 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     ArrayList<PollingLocation> allLocations;
     VIPTabBarActivity.FilterLabels filterLabels;
 
-    @Bind({R.id.locations_list_map_button, R.id.locations_list, R.id.locations_list_spinner})
-    List<View> locationViews;
-
     @Bind(R.id.mail_only_message)
     TextView mailOnlyMessage;
 
@@ -82,10 +79,8 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         myActivity.polylineCallback("", null);
 
         if(voterInfo.isMailOnly()) {
-            ButterKnife.apply(locationViews, HIDE);
             mailOnlyMessage.setVisibility(View.VISIBLE);
         } else {
-            ButterKnife.apply(locationViews, SHOW);
             mailOnlyMessage.setVisibility(View.GONE);
         }
 
@@ -202,13 +197,13 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         lastSelectedFilterItem = id;
 
         String selection = (String) parent.getItemAtPosition(position);
-        if (selection == filterLabels.ALL) {
+        if (selection.equals(filterLabels.ALL)) {
             setFilter(allLocations);
-        } else if (selection == filterLabels.EARLY) {
+        } else if (selection.equals(filterLabels.EARLY)) {
             setFilter(voterInfo.getOpenEarlyVoteSites());
-        } else if (selection == filterLabels.POLLING) {
+        } else if (selection.equals(filterLabels.POLLING)) {
             setFilter(voterInfo.getPollingLocations());
-        } else if (selection == filterLabels.DROPBOX) {
+        } else if (selection.equals(filterLabels.DROPBOX)) {
             setFilter(voterInfo.getOpenDropOffLocations());
         } else {
             Log.e("LocationsFragment", "Selected item " + selection + "isn't recognized!");
