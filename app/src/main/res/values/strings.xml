@@ -34,7 +34,7 @@
     <string name="tabbar_enable_location_services_prompt">Could not find current location.  Enable location services now?</string>
 
     <!-- Home View Strings -->
-    <string name="home_textview_brandname">Brand Name</string>
+    <string name="home_textview_brandname">The Voting Information Project</string>
     <string name="home_textview_votinginfo">Voting Information</string>
     <string name="home_textview_getting_started">Get started by providing the address at which you are registered to vote.</string>
     <string name="home_textview_election_spinner_text">Choose an election:</string>
@@ -148,5 +148,6 @@
     <string name="about_license">BSD 3-Clause License\n\nCopyright (c) 2014, The Pew Charitable Trust\n\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nNeither the name of The Pew Charitable Trusts nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n</string>
     <string name="mail_only">This election is mail only.</string>
     <string name="mail_only_info">Your upcoming election is mail-only. Please contact your local election official to learn more about how to receive and return your ballot.</string>
+    <string name="use_my_current_location">Use my current location</string>
 
 </resources>

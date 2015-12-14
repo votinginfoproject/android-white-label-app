@@ -6,11 +6,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '21.1.2'
+    buildToolsVersion '23.0.2'
     defaultConfig {
-        applicationId 'com.votinginfoproject.VotingInformationProject'
+        applicationId 'com.votinginfoproject.vip'
         minSdkVersion 15
         targetSdkVersion 22
+        versionCode 5
+        versionName "3.2"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -28,7 +30,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.4'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:22.2.0'

@@ -91,6 +91,16 @@
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
+    <Button
+        android:layout_below="@+id/home_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/use_my_current_location"
+        android:layout_marginTop="@dimen/home_large_padding"
+        android:layout_marginBottom="@dimen/home_large_padding"
+        android:id="@+id/locate_me_button"
+        />
+
     <TextView
         android:id="@+id/home_textview_status"
         android:drawableLeft="@android:drawable/stat_sys_warning"
@@ -99,7 +109,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/home_large_padding"
         android:background="@color/home_warning_background"
-        android:layout_below="@+id/home_edittext"
+        android:layout_below="@+id/locate_me_button"
         android:drawablePadding="15sp"
         android:gravity="left"
         android:padding="@dimen/home_large_padding"

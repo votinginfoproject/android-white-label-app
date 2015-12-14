@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -23,6 +26,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
@@ -33,13 +42,15 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener {
 
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
@@ -61,6 +72,7 @@ public class HomeFragment extends Fragment {
     OnInteractionListener mListener;
     boolean isTest;
 
+    private GoogleApiClient googleApiClient;
     /**
      * For use when testing only.  Sets flag to indicate that we're testing the app, so it will
      * use the special test election ID for the query.
@@ -91,6 +103,7 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         context = myActivity.getApplicationContext();
         resources = context.getResources();
+        ButterKnife.bind(this, rootView);
 
         // read flag from api_keys file for whether to use test election or not
         isTest = resources.getBoolean(R.bool.use_test_election);
@@ -116,6 +129,16 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
+    public void onStart() {
+        googleApiClient.connect();
+        super.onStart();
+    }
+
+    public void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -124,6 +147,14 @@ public class HomeFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
         }
     }
 
@@ -201,6 +232,47 @@ public class HomeFragment extends Fragment {
         homeElectionSpinnerWrapper.setVisibility(View.GONE);
         homeGoButton.setVisibility(View.GONE);
         constructVoterInfoQuery();
+    }
+
+    @OnClick(R.id.locate_me_button)
+    public void locateUser() {
+        if(googleApiClient.isConnected()) {
+            try {
+                Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                Geocoder geocoder = new Geocoder(getActivity());
+                List<Address> addresses =
+                    geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                if (addresses.size() == 1) {
+                    Address address = addresses.get(0);
+                    String addressText = getAddressText(address);
+                    homeEditTextAddress.setText(addressText);
+                    makeElectionQuery();
+                } else {
+                  showLocationLookupError();
+                }
+            } catch (IOException e) {
+
+            }
+        } else {
+          showLocationLookupError();
+        }
+    }
+
+    private void showLocationLookupError() {
+      Toast.makeText(getActivity(),
+          "Failed to lookup your current location. Please try again later.",
+          Toast.LENGTH_SHORT).show();
+    }
+
+    private String getAddressText(Address address) {
+      String result = "";
+      for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+        result += address.getAddressLine(i);
+        if (i < address.getMaxAddressLineIndex()) {
+          result += "\n";
+        }
+      }
+      return result;
     }
 
     private void setupViewListeners() {
@@ -397,6 +469,18 @@ public class HomeFragment extends Fragment {
                 homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
         };
+    }
+
+    @Override public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(getActivity(), "Getting your location failed", Toast.LENGTH_SHORT).show();
     }
 
     /**
