@@ -1,9 +1,14 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -23,6 +28,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
@@ -33,13 +42,15 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener {
 
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
@@ -60,6 +71,9 @@ public class HomeFragment extends Fragment {
     SharedPreferences preferences;
     OnInteractionListener mListener;
     boolean isTest;
+
+    private GoogleApiClient googleApiClient;
+    private boolean displayMailOnlyPrompt = true;
 
     /**
      * For use when testing only.  Sets flag to indicate that we're testing the app, so it will
@@ -83,6 +97,23 @@ public class HomeFragment extends Fragment {
         myActivity = (HomeActivity)getActivity();
         preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
+    }
+
+    public void onStart() {
+        googleApiClient.connect();
+        super.onStart();
+    }
+
+    public void onStop() {
+        super.onStop();
+        if(googleApiClient != null) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+        displayMailOnlyPrompt = true;
     }
 
     @Override
@@ -125,6 +156,15 @@ public class HomeFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        }
+
     }
 
     @Override
@@ -293,7 +333,7 @@ public class HomeFragment extends Fragment {
         String electionId = "";
 
         if (isTest) {
-            electionId = "4100"; // test election ID (for use only in testing)
+            electionId = "2000"; // test election ID (for use only in testing)
         }
 
         try {
@@ -367,7 +407,12 @@ public class HomeFragment extends Fragment {
                 }
 
                 VoterInfo voterInfo = (VoterInfo)result;
-                presentVoterInfoResult(voterInfo);
+
+                if(voterInfo.isMailOnly() && displayMailOnlyPrompt){
+                    showMailOnlyDialog(voterInfo);
+                } else {
+                    presentVoterInfoResult(voterInfo);
+                }
             }
         };
 
@@ -397,6 +442,89 @@ public class HomeFragment extends Fragment {
                 homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
         };
+    }
+
+    private void showMailOnlyDialog(final VoterInfo result) {
+        displayMailOnlyPrompt = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        AlertDialog dialog = builder.setTitle(R.string.mail_in_state_dialog_title)
+            .setMessage(R.string.mail_only_dialog_message)
+            .setPositiveButton(R.string.mail_only_dialog_continue, new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    makeElectionQuery();
+                    presentVoterInfoResult(result);
+                }
+            })
+            .setNeutralButton(R.string.mail_only_dialog_current_location, new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    homeGoButton.setVisibility(View.INVISIBLE);
+                    startAddressLookup();
+                }
+            })
+            .setNegativeButton(R.string.mail_only_dialog_alternate_address, new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    homeGoButton.setVisibility(View.INVISIBLE);
+                    changeAddress();
+                }
+            })
+            .setCancelable(false)
+            .create();
+        dialog.show();
+    }
+
+    private void startAddressLookup() {
+        if(googleApiClient.isConnected()) {
+            try {
+                Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                Geocoder geocoder = new Geocoder(getActivity());
+                List<Address> addresses =
+                    geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                if (addresses.size() == 1) {
+                    Address address = addresses.get(0);
+                    String addressText = getAddressText(address);
+                    homeEditTextAddress.setText(addressText);
+                    makeElectionQuery();
+                } else {
+                    showLocationLookupError();
+                }
+            } catch (IOException e) {
+                showLocationLookupError();
+            }
+        } else {
+            showLocationLookupError();
+        }
+    }
+
+    private void showLocationLookupError() {
+        Toast.makeText(getActivity(), R.string.location_lookup_error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    private String getAddressText(Address address) {
+        String result = "";
+        for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+            result += address.getAddressLine(i);
+            if (i < address.getMaxAddressLineIndex()) {
+                result += "\n";
+            }
+        }
+        return result;
+    }
+
+    private void changeAddress() {
+        setAddress("");
+        homeEditTextAddress.setText("");
+    }
+
+    @Override public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     /**
