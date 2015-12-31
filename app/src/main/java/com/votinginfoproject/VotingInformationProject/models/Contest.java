@@ -23,5 +23,11 @@ public class Contest {
     public String referendumTitle;
     public String referendumSubtitle;
     public String referendumUrl;
+    public String referendumBrief;
+    public String referendumText;
+    public String referendumProStatement;
+    public String referendumConStatement;
+    public String referendumPassageThreshold;
+    public String referendumEffectOfAbstain;
     public List <Source> sources;
 }

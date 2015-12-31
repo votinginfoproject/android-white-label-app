@@ -7,9 +7,14 @@
 
     <TextView
         android:id="@+id/contest_list_item_title"
-        style="@style/list_item_header" />
+        style="@style/list_item_header"
+        android:layout_width="match_parent"
+        android:ellipsize="end"
+        android:maxLines="1" />
     <TextView
         android:id="@+id/contest_list_item_subtitle"
+        android:ellipsize="end"
         android:layout_below="@+id/contest_list_item_title"
+        android:layout_width="match_parent"
         style="@style/list_item_content" />
 </RelativeLayout>

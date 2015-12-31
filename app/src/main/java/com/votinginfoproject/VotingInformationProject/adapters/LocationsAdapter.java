@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.adapters;
 
 import android.content.Context;
 import android.location.Location;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,8 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         TextView address;
         TextView distance;
         boolean isQueryingDistance; // only query for distance if not already doing so
+        TextView voterServices;
+        TextView pollingHours;
     }
 
     /**
@@ -68,6 +71,8 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
             viewHolder.address = (TextView) convertView.findViewById(R.id.location_list_item_address);
             viewHolder.distance = (TextView) convertView.findViewById(R.id.location_list_item_distance);
             viewHolder.isQueryingDistance = false;
+            viewHolder.pollingHours = (TextView) convertView.findViewById(R.id.polling_hours);
+            viewHolder.voterServices = (TextView) convertView.findViewById(R.id.voter_services);
             convertView.setTag(viewHolder);
 
             // declare a final copy, for use in inner class OnClickListener
@@ -124,7 +129,24 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
             viewHolder.distance.setTag(addr);
         }
 
+        setTextOrHideView(viewHolder.pollingHours, location.pollingHours);
+
+        if(!TextUtils.isEmpty(location.voterServices)) {
+            viewHolder.voterServices.setVisibility(View.VISIBLE);
+            viewHolder.voterServices.setText("Voter Services: " + location.voterServices);
+        } else {
+            viewHolder.voterServices.setVisibility(View.GONE);
+        }
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    private static void setTextOrHideView(TextView textView, CharSequence text) {
+        if(!TextUtils.isEmpty(text)) {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(text);
+        } else {
+            textView.setVisibility(View.GONE);
+        }
     }
 }

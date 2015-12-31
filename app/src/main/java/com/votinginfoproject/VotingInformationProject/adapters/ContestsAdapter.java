@@ -76,11 +76,11 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
 
         // Populate the data into the template view using the data object
         if (contest.type.equals("Referendum")) {
-            setTextView(viewHolder.subTitle, contest.referendumSubtitle);
-            setTextView(viewHolder.title, contest.referendumTitle);
+            viewHolder.subTitle.setText(contest.referendumSubtitle);
+            viewHolder.title.setText(contest.referendumTitle);
         } else {
-            setTextView(viewHolder.title, contest.office);
-            setTextView(viewHolder.subTitle, electionName);
+            viewHolder.title.setText(contest.office);
+            viewHolder.subTitle.setText(electionName);
         }
 
         // Return the completed view to render on screen

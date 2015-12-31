@@ -23,14 +23,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
-import com.votinginfoproject.VotingInformationProject.models.*;
-
+import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
+import com.votinginfoproject.VotingInformationProject.models.Contest;
+import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -226,7 +228,9 @@ public class HomeFragment extends Fragment {
         homeEditTextAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH && mListener != null) {
+                if ((actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                    && mListener != null) {
                     makeElectionQuery();
                 }
                 // Return false to close the keyboard

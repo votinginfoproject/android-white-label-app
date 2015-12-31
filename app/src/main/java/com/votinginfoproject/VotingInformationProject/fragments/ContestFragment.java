@@ -12,12 +12,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.CandidatesAdapter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
+import static butterknife.ButterKnife.findById;
 
 public class ContestFragment extends Fragment {
     private static final String CONTEST_NUM = "contest_number";
@@ -99,6 +102,10 @@ public class ContestFragment extends Fragment {
                 title = (TextView)myActivity.findViewById(R.id.contest_title);
                 subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
 
+                TextView referendumText = findById(scroll, R.id.contest_referendum_text);
+                TextView referendumPro = findById(scroll, R.id.contest_referendum_pro);
+                TextView referendumCon = findById(scroll, R.id.contest_referendum_con);
+
                 // deal with huge referendum descriptions by reducing font size a bit.
                 if (contest.referendumTitle != null) {
                     title.setText(contest.referendumTitle);
@@ -115,6 +122,10 @@ public class ContestFragment extends Fragment {
                 } else {
                     subtitle.setVisibility(View.GONE);
                 }
+
+                referendumText.setText(contest.referendumText);
+                referendumPro.setText(contest.referendumProStatement);
+                referendumCon.setText(contest.referendumConStatement);
             }
 
             // populate candidate list

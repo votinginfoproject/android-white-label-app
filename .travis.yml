@@ -2,15 +2,15 @@ language: android
 jdk: oraclejdk8
 env:
   matrix:
-    - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-18 ANDROID_ABI=armeabi-v7a
 
 android:
   components:
-    - build-tools-21.1.1
+    - build-tools-21.1.2
     - platform-tools
-    - android-21
-    - sys-img-armeabi-v7a-android-21
-    - addon-google_apis-google-21
+    - android-22
+    - sys-img-armeabi-v7a-android-22
+    - addon-google_apis-google-22
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
@@ -27,10 +27,10 @@ before_install:
   - cp xmltemplates/api_keys.xml.template app/src/main/res/values/api_keys.xml
   - mkdir -p app/src/main/res/xml
   - cp xmltemplates/app_tracker.xml.template app/src/main/res/xml/app_tracker.xml
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - sleep 5
-  - emulator -avd test -no-skin -no-audio -no-window -no-boot-anim &
-  - sleep 30
+  - echo no | android create avd --force -n test -t android-18 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82
 
 before_script:
   - ./ci/wait_for_emulator.sh

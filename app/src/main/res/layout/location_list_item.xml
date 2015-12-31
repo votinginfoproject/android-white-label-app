@@ -55,4 +55,22 @@
         android:layout_alignBaseline="@+id/location_list_item_address"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/polling_hours"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/location_list_item_address"
+        />
+
+    <TextView
+        android:id="@+id/voter_services"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/polling_hours"
+        />
 </RelativeLayout>
