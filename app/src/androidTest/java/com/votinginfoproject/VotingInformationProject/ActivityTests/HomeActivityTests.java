@@ -183,14 +183,14 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
                 int counter = 0;
                 while ((go.getVisibility() != View.VISIBLE) && counter < 20) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                         counter += 1;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

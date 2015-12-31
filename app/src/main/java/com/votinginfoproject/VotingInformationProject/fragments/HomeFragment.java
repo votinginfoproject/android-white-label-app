@@ -293,7 +293,7 @@ public class HomeFragment extends Fragment {
         String electionId = "";
 
         if (isTest) {
-            electionId = "4100"; // test election ID (for use only in testing)
+            electionId = "2000"; // test election ID (for use only in testing)
         }
 
         try {
