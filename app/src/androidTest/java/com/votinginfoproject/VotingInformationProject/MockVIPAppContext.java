@@ -38,7 +38,7 @@ public class MockVIPAppContext extends VIPAppContext {
         CivicApiAddress address = new CivicApiAddress();
 
         testElection.name = "Test Election";
-        testElection.electionDay = "2014-01-01";
+        testElection.electionDay = "2017-01-01";
         testInfo.election = testElection;
 
         testContestOne.type = "general";
