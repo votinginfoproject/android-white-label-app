@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,7 +7,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 
 import org.apache.http.HttpResponse;
@@ -169,6 +166,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
         clearLastElection();
         errorCallbackListener.callback(errors[0]);
+        cancel(true);
     }
 
     /**
