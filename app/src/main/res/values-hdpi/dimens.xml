@@ -14,7 +14,7 @@
     <dimen name="home_small_padding">3sp</dimen>
     <dimen name="home_large_padding">5sp</dimen>
     <dimen name="home_xlarge_padding">10sp</dimen>
-    <dimen name="home_edittext_size">20sp</dimen>
+    <dimen name="home_edittext_size">18sp</dimen>
     <dimen name="home_button_height">38sp</dimen>
 
     <dimen name="feedback_link_top_padding">50sp</dimen>

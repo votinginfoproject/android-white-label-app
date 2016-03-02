@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"
+          android:color="@android:color/white" /> <!-- pressed -->
+    <item android:state_focused="true"
+          android:color="@android:color/white" /> <!-- focused -->
+
+    <item android:state_activated="true"
+          android:color="@color/spinner.selected.text" />
+
+    <item android:state_activated="false"
+          android:color="@color/spinner.unselected.text" />
+
+    <item android:color="@color/spinner.selected.text" />
+</selector>

@@ -3,6 +3,9 @@
     <color name="button_blue">#00234b</color>
     <color name="item_header_blue">#0067ab</color>
     <color name="white">#ffffff</color>
+    <color name="hint.white">#AAFFFFFF</color>
+    <color name="spinner.unselected.text">#656565</color>
+    <color name="spinner.selected.text">#333</color>
     <color name="button_gray">#cccccc</color>
     <color name="text_gray">#808080</color>
     <color name="section_header_gray">#ebeef0</color>

@@ -1,12 +1,16 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -38,9 +42,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-
 public class HomeFragment extends Fragment {
-
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
@@ -169,6 +171,7 @@ public class HomeFragment extends Fragment {
             Gson gson = new GsonBuilder().create();
             VoterInfo voterInfo = gson.fromJson(lastElection, VoterInfo.class);
             Log.d("HomeFragment", "Got voter info result from shared preferences.");
+
             // check if stored election has passed yet
             if (voterInfo.election.isElectionOver()) {
                 Log.d("HomeFragment", "Election in shared preferences is over; re-querying.");
@@ -179,6 +182,7 @@ public class HomeFragment extends Fragment {
             }
         } catch (Exception ex) {
             Log.e("HomeFragment", "Failed to re-hydrate last election!");
+
             ex.printStackTrace();
             queryWithNewAddress(address);
         }
@@ -192,11 +196,14 @@ public class HomeFragment extends Fragment {
      */
     private void queryWithNewAddress(String new_address) {
         Log.d("HomeFragment", "queryWithNewAddress");
+
         setAddress(new_address);
+
         // clear previous election before making a query for a new address
         mListener.searchedAddress(null);
         currentElection = null;
         myActivity.setSelectedParty("");
+
         // only hide election picker when searching with a new address
         homeElectionSpinnerWrapper.setVisibility(View.GONE);
         homeGoButton.setVisibility(View.GONE);
@@ -242,7 +249,6 @@ public class HomeFragment extends Fragment {
         homeElectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
-
                 Election selectedElection = (Election) adapterView.getItemAtPosition(index);
                 Log.d("HomeFragment", "Selected via election picker: " + selectedElection.toString());
                 // Only fire a new voterInfo query if the election changes
@@ -250,6 +256,9 @@ public class HomeFragment extends Fragment {
                     currentElection = selectedElection;
                     constructVoterInfoQuery();
                 }
+
+                ((TextView) view).setTextColor(Color.WHITE);
+                view.setBackgroundResource(0);
             }
 
             @Override
@@ -262,8 +271,22 @@ public class HomeFragment extends Fragment {
         homePartySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
-                myActivity.setSelectedParty((String) adapterView.getItemAtPosition(index));
-                Log.d("HomeFragment", "Selected via party picker: " + myActivity.getSelectedParty());
+                //If index is zero, no real value is selected
+                if(index == 0) {
+                    //Disable Button
+                    homeGoButton.setEnabled(false);
+                    homeGoButton.setAlpha(0.5f);
+                } else {
+                    //Enable Button
+                    homeGoButton.setEnabled(true);
+                    homeGoButton.setAlpha(1.f);
+
+                    myActivity.setSelectedParty((String) adapterView.getItemAtPosition(index));
+                    Log.d("HomeFragment", "Selected via party picker: " + myActivity.getSelectedParty());
+                }
+
+                ((TextView) view).setTextColor(Color.WHITE);
+                view.setBackgroundResource(0);
             }
 
             @Override
@@ -363,6 +386,7 @@ public class HomeFragment extends Fragment {
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                     // read error result, if TalkBack enabled
                     homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+
                     return;
                 }
 
@@ -378,10 +402,13 @@ public class HomeFragment extends Fragment {
                 try {
                     homeGoButton.setVisibility(View.INVISIBLE);
                     CivicApiError error = (CivicApiError) result;
-                    Log.d("HomeFragment", "Civic API returned error");
-                    Log.d("HomeFragment", error.code + ": " + error.message);
+
                     CivicApiError.Error error1 = error.errors.get(0);
-                    Log.d("HomeFragment", error1.domain + " " + error1.reason + " " + error1.message);
+
+                    Log.d("HomeFragment", "Civic API returned error: " + error.code + ": " +
+                            error.message + " " + error1.domain + " " + error1.reason + " " +
+                            error1.message);
+
                     if (CivicApiError.errorMessages.get(error1.reason) != null) {
                         homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                     } else {
@@ -449,6 +476,12 @@ public class HomeFragment extends Fragment {
         }
         ArrayAdapter<Election> adapter = new ArrayAdapter<Election>(myActivity, R.layout.home_spinner_view, elections);
         homeElectionSpinner.setAdapter(adapter);
+
+        homeElectionSpinner.setSelection(0, true);
+
+        View v = homeElectionSpinner.getSelectedView();
+        ((TextView)v).setTextColor(Color.WHITE);
+        v.setBackgroundResource(0);
     }
 
     public void setSpinnerParty(List<Contest> contests) {
@@ -469,8 +502,19 @@ public class HomeFragment extends Fragment {
             List<String> partiesList = new ArrayList<String>(parties);
             // sort list alphabetically
             Collections.sort(partiesList);
+
+            partiesList.add(0, context.getString(R.string.home_party_spinner_description));
+
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(myActivity, R.layout.home_spinner_view, partiesList);
+
             homePartySpinner.setAdapter(adapter);
+
+            homePartySpinner.setSelection(0, true);
+
+            View selectedView = homePartySpinner.getSelectedView();
+            ((TextView)selectedView).setTextColor(Color.WHITE);
+            selectedView.setBackgroundResource(0);
+
             homePartySpinnerWrapper.setVisibility(View.VISIBLE);
         } else {
             homePartySpinnerWrapper.setVisibility(View.GONE);

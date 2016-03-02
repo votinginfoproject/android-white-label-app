@@ -39,6 +39,8 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void setSelectedParty(String selectedParty) {
         this.selectedParty = selectedParty;
         app.setSelectedParty(selectedParty);
+
+
     }
 
     String selectedParty;

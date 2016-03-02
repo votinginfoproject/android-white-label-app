@@ -43,12 +43,11 @@ public class VIPApp extends Application {
 
     public synchronized Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
-
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             Tracker t = analytics.newTracker(R.xml.app_tracker);
             mTrackers.put(trackerId, t);
-
         }
+
         return mTrackers.get(trackerId);
     }
 

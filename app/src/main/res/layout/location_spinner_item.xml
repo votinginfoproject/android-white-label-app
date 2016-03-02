@@ -2,8 +2,7 @@
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
-    style="?android:attr/spinnerItemStyle"
-    android:textColor="@color/item_header_blue"
+    android:textColor="@drawable/spinner_text_selector"
     android:textStyle="bold"
     android:textSize="@dimen/text_xlarge"
     android:singleLine="true"

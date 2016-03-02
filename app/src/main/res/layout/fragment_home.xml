@@ -73,9 +73,10 @@
             android:background="@color/home_edittext_background"
             android:textSize="@dimen/home_edittext_size"
             android:textColor="@color/white"
+            android:textColorHint="@color/hint.white"
             android:layout_marginTop="@dimen/home_large_padding"
             android:editable="true"
-            android:paddingTop="5sp"
+            android:padding="5sp"
             android:paddingBottom="5sp" />
 
         <ImageView
@@ -128,7 +129,9 @@
             android:id="@+id/home_election_spinner"
             android:layout_below="@+id/home_election_spinner_text"
             android:contentDescription="@string/home_election_spinner_description"
-            android:prompt="@string/home_election_spinner_description" />
+            android:prompt="@string/home_election_spinner_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -139,20 +142,10 @@
         android:gravity="center"
         android:paddingBottom="@dimen/home_small_padding"
         android:paddingTop="@dimen/home_small_padding" >
-
-        <TextView
-            android:id="@+id/home_party_spinner_text"
-            android:layout_centerHorizontal="true"
-            style="@style/wrap_width_wrap_height"
-            android:textSize="@dimen/text_medium"
-            android:text="@string/home_textview_party_spinner_text"/>
-
         <Spinner
             style="@style/spinner_home"
             android:id="@+id/home_party_spinner"
-            android:layout_below="@+id/home_party_spinner_text"
-            android:contentDescription="@string/home_party_spinner_description"
-            android:prompt="@string/home_party_spinner_description" />
+            android:contentDescription="@string/home_party_spinner_description"/>
     </RelativeLayout>
 
     <Button
