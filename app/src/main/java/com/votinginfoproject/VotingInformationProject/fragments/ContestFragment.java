@@ -12,12 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.CandidatesAdapter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import static butterknife.ButterKnife.findById;
@@ -44,6 +43,7 @@ public class ContestFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public ContestFragment() {
         // Required empty public constructor
     }
@@ -61,21 +61,22 @@ public class ContestFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         Log.d("ContestFragment", "In onActivityCreated");
         res = getResources();
         setContents();
     }
 
-    /** Helper function to populate the view labels.
-    *
-    */
+    /**
+     * Helper function to populate the view labels.
+     */
     private void setContents() {
-        final VIPTabBarActivity myActivity = (VIPTabBarActivity)getActivity();
-        TextView title = (TextView)myActivity.findViewById(R.id.contest_title);
-        TextView subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
+        final VIPTabBarActivity myActivity = (VIPTabBarActivity) getActivity();
+        TextView title = (TextView) myActivity.findViewById(R.id.contest_title);
+        TextView subtitle = (TextView) myActivity.findViewById(R.id.contest_subtitle);
 
         try {
-            voterInfo = myActivity.getVoterInfo();
+            voterInfo = UserPreferences.getVoterInfo();
             contest = voterInfo.getContestAt(contestNum);
             Log.d("ContestFragment", "Got contest for office: " + contest.office);
 
@@ -85,7 +86,7 @@ public class ContestFragment extends Fragment {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
                 // add footer view for feedback
-                ListView list = (ListView)myActivity.findViewById(R.id.contest_candidate_list);
+                ListView list = (ListView) myActivity.findViewById(R.id.contest_candidate_list);
                 View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, list, false);
                 // 'false' argument here is to make the footer list item not clickable (text instead is clickable)
                 list.addFooterView(feedback_layout, null, false);
@@ -99,8 +100,8 @@ public class ContestFragment extends Fragment {
                 parent.addView(scroll);
 
                 // go find references to the TextViews in the new ScrollView
-                title = (TextView)myActivity.findViewById(R.id.contest_title);
-                subtitle = (TextView)myActivity.findViewById(R.id.contest_subtitle);
+                title = (TextView) myActivity.findViewById(R.id.contest_title);
+                subtitle = (TextView) myActivity.findViewById(R.id.contest_subtitle);
 
                 TextView referendumText = findById(scroll, R.id.contest_referendum_text);
                 TextView referendumPro = findById(scroll, R.id.contest_referendum_pro);
@@ -170,7 +171,7 @@ public class ContestFragment extends Fragment {
     public void onDetach() {
         // Show ballot fragment components again when user goes back
         Log.d("ContestFragment:onDetach", "Showing ballot container's view again");
-        VIPTabBarActivity myActivity = (VIPTabBarActivity)getActivity();
+        VIPTabBarActivity myActivity = (VIPTabBarActivity) getActivity();
         myActivity.setCurrentFragment(R.id.ballot_fragment);
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
 

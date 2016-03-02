@@ -1,6 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,8 +31,8 @@ import com.votinginfoproject.VotingInformationProject.adapters.LocationInfoWindo
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +48,6 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
 
     VoterInfo voterInfo;
     VIPTabBarActivity mActivity;
-    static final Resources mResources = VIPAppContext.getContext().getResources();
     View mapView;
     RelativeLayout rootView;
     LayoutInflater layoutInflater;
@@ -83,13 +82,13 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         String selection = (String) parent.getItemAtPosition(position);
         if (selection == filterLabels.ALL) {
             showEarly = showPolling = showDropBox = true;
-        } else if (selection == filterLabels.EARLY) {
+        } else if (selection.equals(filterLabels.EARLY)) {
             showEarly = true;
             showPolling = showDropBox = false;
-        } else if (selection == filterLabels.POLLING) {
+        } else if (selection.equals(filterLabels.POLLING)) {
             showPolling = true;
             showEarly = showDropBox = false;
-        } else if (selection == filterLabels.DROPBOX) {
+        } else if (selection.equals(filterLabels.DROPBOX)) {
             showDropBox = true;
             showEarly = showPolling = false;
         } else {
@@ -108,10 +107,10 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
     boolean showEarly = true;
     boolean showDropBox = true;
 
-    public static VIPMapFragment newInstance(String tag, String polyline) {
+    public static VIPMapFragment newInstance(Context context, String tag, String polyline) {
         // instantiate with map options
         GoogleMapOptions options = new GoogleMapOptions();
-        VIPMapFragment fragment = VIPMapFragment.newInstance(options);
+        VIPMapFragment fragment = VIPMapFragment.newInstance(context, options);
 
         Bundle args = new Bundle();
         args.putString(LOCATION_ID, tag);
@@ -121,12 +120,14 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         return fragment;
     }
 
-    public static VIPMapFragment newInstance(GoogleMapOptions options) {
+    public static VIPMapFragment newInstance(Context context, GoogleMapOptions options) {
         Bundle args = new Bundle();
         // need to send API key to initialize map
-        args.putParcelable(mResources.getString(R.string.google_api_android_key), options);
+        args.putParcelable(context.getString(R.string.google_api_android_key), options);
+
         VIPMapFragment fragment = new VIPMapFragment();
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -135,9 +136,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // programmatically add map view, so filter drop-down appears on top
         mapView = super.onCreateView(inflater, container, savedInstanceState);
         rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_map, container, false);
@@ -146,9 +145,8 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         rootView.addView(mapView, layoutParams);
 
         mActivity = (VIPTabBarActivity) this.getActivity();
-        Resources res = mActivity.getResources();
 
-        voterInfo = mActivity.getVoterInfo();
+        voterInfo = UserPreferences.getVoterInfo();
         allLocations = voterInfo.getAllLocations();
         homeLocation = mActivity.getHomeLatLng();
         currentLocation = mActivity.getUserLocation();
@@ -170,7 +168,6 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             thisLocation = homeLocation;
         } else if (haveElectionAdminBody) {
             thisLocation = voterInfo.getAdminBodyLatLng(locationId);
-
         } else {
             Log.d("VIPMapFragment", "Have location ID: " + locationId);
             selectedLocation = voterInfo.getLocationForId(locationId);
@@ -230,19 +227,22 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         ArrayList<String> filterOptions = new ArrayList<>(4);
         // always show 'all sites' option
         filterOptions.add(filterLabels.ALL);
+
         // show the other three options if there are any
         if (!voterInfo.getOpenEarlyVoteSites().isEmpty()) {
             filterOptions.add(filterLabels.EARLY);
         }
+
         if (!voterInfo.getPollingLocations().isEmpty()) {
             filterOptions.add(filterLabels.POLLING);
         }
-        if(!voterInfo.getOpenDropOffLocations().isEmpty()) {
+
+        if (!voterInfo.getOpenDropOffLocations().isEmpty()) {
             filterOptions.add(filterLabels.DROPBOX);
         }
 
         Spinner filterSpinner = (Spinner) rootView.findViewById(R.id.locations_map_spinner);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(mActivity,
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mActivity,
                 R.layout.location_spinner_item, filterOptions);
         spinnerAdapter.setDropDownViewResource(R.layout.locations_spinner_view);
         filterSpinner.setAdapter(spinnerAdapter);
@@ -261,19 +261,13 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
                 if (key.equals(HOME) || key.equals((CURRENT_LOCATION))) {
                     return;
                 }
-                
+
                 Log.d("LocationsFragment", "Clicked marker for " + key);
                 mActivity.showDirections(key);
             }
         });
 
         return rootView;
-    }
-
-    private void refreshMapView() {
-        map.clear();
-        new AddMarkersTask().execute(locationId);
-        addNonPollingToMap();
     }
 
     /**
@@ -283,32 +277,35 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         // add marker for user-entered address
         if (homeLocation != null) {
             Marker marker = map.addMarker(new MarkerOptions()
-                            .position(homeLocation)
-                            .title(mResources.getString(R.string.locations_map_user_address_label))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
+                    .position(homeLocation)
+                    .title(mActivity.getString(R.string.locations_map_user_address_label))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
             );
+
             markerIds.put(marker.getId(), HOME);
         }
 
         if (currentLocation != null) {
             // add marker for current user location (used for directions)
             Marker marker = map.addMarker(new MarkerOptions()
-                            .position(currentLocation)
-                            .title(mResources.getString(R.string.locations_map_user_location_label))
-                            .snippet(currentAddress)
-                            .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
+                    .position(currentLocation)
+                    .title(mActivity.getString(R.string.locations_map_user_location_label))
+                    .snippet(currentAddress)
+                    .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
             );
+
             markerIds.put(marker.getId(), CURRENT_LOCATION);
         }
 
         if (haveElectionAdminBody) {
             // add marker for state or local election administration body
             Marker marker = map.addMarker(new MarkerOptions()
-                            .position(thisLocation)
-                            .title(mResources.getString(R.string.locations_map_election_administration_body_label))
-                            .snippet(voterInfo.getAdminAddress(locationId).toString())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
+                    .position(thisLocation)
+                    .title(mActivity.getString(R.string.locations_map_election_administration_body_label))
+                    .snippet(voterInfo.getAdminAddress(locationId).toString())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
             );
+
             marker.showInfoWindow();
             // allow for getting directions from election admin body location
             markerIds.put(marker.getId(), locationId);
@@ -319,7 +316,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             PolylineOptions polylineOptions = new PolylineOptions();
             List<LatLng> pts = PolyUtil.decode(encodedPolyline);
             polylineOptions.addAll(pts);
-            polylineOptions.color(mResources.getColor(R.color.brand_name_text));
+            polylineOptions.color(mActivity.getResources().getColor(R.color.brand_name_text));
             map.addPolyline(polylineOptions);
         }
     }
@@ -340,9 +337,10 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
 
     private class AddMarkersTask extends AsyncTask<String, Integer, String> {
 
-        /** Helper function to add collection of polling locations to map.
+        /**
+         * Helper function to add collection of polling locations to map.
          *
-         * @param locations list of PollingLocations to add
+         * @param locations        list of PollingLocations to add
          * @param bitmapDescriptor BitmapDescriptorFactory value for marker color
          */
         private void addLocationsToMap(List<PollingLocation> locations, float bitmapDescriptor) {
@@ -357,8 +355,8 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
 
         @Override
         protected String doInBackground(String... select_locations) {
-            markers = new HashMap(allLocations.size());
-            markerIds = new HashMap(allLocations.size());
+            markers = new HashMap<>(allLocations.size());
+            markerIds = new HashMap<>(allLocations.size());
 
             // use red markers for early voting sites
             if (showEarly) {
@@ -379,10 +377,11 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         }
 
         @Override
-        protected  void onPostExecute(String checkId) {
+        protected void onPostExecute(String checkId) {
             for (String key : markers.keySet()) {
                 Marker marker = map.addMarker(markers.get(key));
                 markerIds.put(marker.getId(), key);
+
                 if (key.equals(locationId)) {
                     // show popup for marker at selected location
                     marker.showInfoWindow();
@@ -392,8 +391,8 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
     }
 
     private MarkerOptions createMarkerOptions(PollingLocation location, float color) {
-
         String showTitle = location.name;
+
         if (showTitle == null || showTitle.isEmpty()) {
             showTitle = location.address.locationName;
         }
@@ -412,21 +411,19 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
 
         if (location.pollingHours != null && !location.pollingHours.isEmpty()) {
             showSnippet.append("\n\n");
-            showSnippet.append(mResources.getString(R.string.locations_map_polling_location_hours_label));
+            showSnippet.append(mActivity.getString(R.string.locations_map_polling_location_hours_label));
             showSnippet.append("\n");
             showSnippet.append(location.pollingHours);
         } else {
             // display placeholder for no hours
             showSnippet.append("\n\n");
-            showSnippet.append(mResources.getString(R.string.locations_map_polling_location_hours_not_found));
+            showSnippet.append(mActivity.getString(R.string.locations_map_polling_location_hours_not_found));
         }
 
         return new MarkerOptions()
                 .position(new LatLng(location.address.latitude, location.address.longitude))
                 .title(showTitle)
                 .snippet(showSnippet.toString())
-                .icon(BitmapDescriptorFactory.defaultMarker(color))
-        ;
+                .icon(BitmapDescriptorFactory.defaultMarker(color));
     }
-
 }

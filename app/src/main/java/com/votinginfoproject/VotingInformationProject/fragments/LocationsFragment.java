@@ -20,6 +20,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationsAdapter;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
@@ -184,7 +185,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // get election info
-        voterInfo = ((VIPTabBarActivity) activity).getVoterInfo();
+        voterInfo = UserPreferences.getVoterInfo();
     }
 
     @Override

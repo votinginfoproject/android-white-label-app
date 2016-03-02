@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import org.apache.http.util.EncodingUtils;
@@ -98,12 +99,13 @@ public class SupportWebViewFragment extends Fragment {
 
         // build the POST
         Uri.Builder builder = new Uri.Builder();
-        VoterInfo info = ((VIPTabBarActivity) getActivity()).getVoterInfo();
+        VoterInfo info = UserPreferences.getVoterInfo();
         builder.appendQueryParameter("electionId", info.election.getId());
         builder.appendQueryParameter("address", info.normalizedInput.toGeocodeString());
         // strip leading question mark from parameters
         String paramString = builder.build().toString().substring(1);
         byte[] post = EncodingUtils.getBytes(paramString, "BASE64");
+
         mWebView.postUrl("https://voter-info-tool.appspot.com/feedback", post);
 
         return mWebView;
@@ -111,6 +113,7 @@ public class SupportWebViewFragment extends Fragment {
 
     private void setTextView(String txt) {
         View parent = myActivity.findViewById(parentViewId);
+
         TextView tv;
         if (parent == null) {
             // in case of a referendum, structure is different (not in a list)

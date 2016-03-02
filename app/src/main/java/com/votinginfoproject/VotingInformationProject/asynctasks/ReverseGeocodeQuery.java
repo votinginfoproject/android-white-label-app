@@ -1,12 +1,11 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,9 +36,9 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
      *
      * @param callBack function to be called with geocode results
      */
-    public ReverseGeocodeQuery(ReverseGeocodeCallBackListener callBack) {
+    public ReverseGeocodeQuery(Context context, ReverseGeocodeCallBackListener callBack) {
         super();
-        this.geocoder = new Geocoder(VIPAppContext.getContext());
+        this.geocoder = new Geocoder(context);
         this.callBackListener = callBack;
     }
 

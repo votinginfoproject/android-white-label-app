@@ -4,13 +4,11 @@ import com.votinginfoproject.VotingInformationProject.models.AdministrationRegio
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.District;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.Source;
 import com.votinginfoproject.VotingInformationProject.models.State;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
+import com.votinginfoproject.VotingInformationProject.application.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;

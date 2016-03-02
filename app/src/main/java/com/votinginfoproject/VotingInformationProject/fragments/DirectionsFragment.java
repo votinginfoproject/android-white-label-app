@@ -18,6 +18,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.HashMap;
@@ -97,8 +98,8 @@ public class DirectionsFragment extends Fragment {
         container.getChildAt(0).setVisibility(View.INVISIBLE);
 
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
-        myActivity = (VIPTabBarActivity)this.getActivity();
-        VoterInfo voterInfo = myActivity.getVoterInfo();
+        myActivity = (VIPTabBarActivity) this.getActivity();
+        VoterInfo voterInfo = UserPreferences.getVoterInfo();
 
         Resources res = myActivity.getResources();
         unselectedTextColor = res.getColor(R.color.button_blue);
@@ -116,8 +117,8 @@ public class DirectionsFragment extends Fragment {
         }
 
         // location labels
-        TextView directions_title_label = (TextView)rootView.findViewById(R.id.directions_title);
-        TextView directions_subtitle_label = (TextView)rootView.findViewById(R.id.directions_subtitle);
+        TextView directions_title_label = (TextView) rootView.findViewById(R.id.directions_title);
+        TextView directions_subtitle_label = (TextView) rootView.findViewById(R.id.directions_subtitle);
 
         String locationName = voterInfo.getDescriptionForId(location_id);
         if (!locationName.isEmpty()) {
@@ -131,14 +132,14 @@ public class DirectionsFragment extends Fragment {
             directions_subtitle_label.setVisibility(View.GONE);
         }
 
-        directionsList = (ListView)rootView.findViewById(R.id.directions_list);
-        noneFoundMessage = (TextView)rootView.findViewById(R.id.directions_none_found_message);
-        openInMapsButton = (Button)rootView.findViewById(R.id.directions_open_in_maps_button);
+        directionsList = (ListView) rootView.findViewById(R.id.directions_list);
+        noneFoundMessage = (TextView) rootView.findViewById(R.id.directions_none_found_message);
+        openInMapsButton = (Button) rootView.findViewById(R.id.directions_open_in_maps_button);
 
         setUpWithOrigin(homeLatLng);
 
         // highlight default button
-        Button walkButton = (Button)rootView.findViewById(R.id.directions_walk_button);
+        Button walkButton = (Button) rootView.findViewById(R.id.directions_walk_button);
         walkButton.setTextColor(selectedTextColor);
         walkButton.setBackgroundResource(R.drawable.button_bar_button_selected);
         lastSelectedButton = walkButton;
@@ -203,6 +204,7 @@ public class DirectionsFragment extends Fragment {
 
     /**
      * Helper function to set click handlers for the list filter buttons
+     *
      * @param buttonId R id of the button to listen to
      */
     private void setButtonInBarClickListener(final int buttonId) {
@@ -242,15 +244,15 @@ public class DirectionsFragment extends Fragment {
         });
     }
 
-    /** Helper function to fetch directions from asynchronous query.
-     *
+    /**
+     * Helper function to fetch directions from asynchronous query.
      */
     private void queryDirections() {
         // clear last directions polyline
         myActivity.polylineCallback("", null);
         String homeCoords = homeLatLng.latitude + "," + homeLatLng.longitude;
         String locationCoords = locationAddress.latitude + "," + locationAddress.longitude;
-        new DirectionsQuery(directionsList, noneFoundMessage, homeCoords, locationCoords, myActivity).execute(directionsMode);
+        new DirectionsQuery(getActivity(), directionsList, noneFoundMessage, homeCoords, locationCoords, myActivity).execute(directionsMode);
     }
 
     @Override

@@ -16,7 +16,6 @@ import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bo
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Response;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -36,8 +35,8 @@ import java.util.HashMap;
 /**
  * Asynchronously query the Google Directions API for directions from user's address to a polling
  * location, via a given mode.
- *
- *
+ * <p/>
+ * <p/>
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class DirectionsQuery extends AsyncTask<String, String, Response> {
@@ -48,8 +47,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     String addressKey;
     HttpContext httpContext;
     HttpClient httpClient;
-    Context context;
     Resources resources;
+    Context mContext;
     PolylineCallBackListener listener;
 
     private final WeakReference<ListView> directionsListViewReference;
@@ -64,11 +63,13 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         public void polylineCallback(String polyline, Bounds bounds);
     }
 
-    public DirectionsQuery(ListView listView, TextView errorView, String originCoordinates,
+    public DirectionsQuery(Context context, ListView listView, TextView errorView, String originCoordinates,
                            String destinationCoordinates, PolylineCallBackListener listener) {
         super();
-        context = VIPAppContext.getContext();
-        resources = context.getResources();
+
+        mContext = context;
+
+        resources = mContext.getResources();
         this.homeCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
         this.api_key = context.getResources().getString(R.string.google_api_browser_key);
@@ -85,6 +86,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         cacheKeyBuilder.append("-");
         cacheKeyBuilder.append(destinationCoordinates);
         cacheKeyBuilder.append("-");
+
         this.addressKey = cacheKeyBuilder.toString();
     }
 
@@ -173,8 +175,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         return null;
     }
 
-    /** Show loading message while fetching response.
-     *
+    /**
+     * Show loading message while fetching response.
      */
     @Override
     protected void onPreExecute() {
@@ -218,7 +220,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         }
 
         Leg leg = foundRoute.legs.get(0);
-        DirectionsAdapter listAdapter = new DirectionsAdapter(leg.steps);
+        DirectionsAdapter listAdapter = new DirectionsAdapter(mContext, leg.steps);
         ListView directionsListView = directionsListViewReference.get();
         TextView errorView = errorViewReference.get();
 

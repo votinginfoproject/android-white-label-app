@@ -20,6 +20,7 @@ import com.votinginfoproject.VotingInformationProject.asynctasks.FetchImageQuery
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 
@@ -27,7 +28,6 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
  * A simple {@link Fragment} subclass.
  * Use the {@link CandidateFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class CandidateFragment extends Fragment {
     private static final String CONTEST_NUM = "contest_number";
@@ -46,7 +46,7 @@ public class CandidateFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param contestIndex Index of the contest in the contests list
+     * @param contestIndex   Index of the contest in the contests list
      * @param candidateIndex Index of the candidate in the candidates list
      * @return A new instance of fragment CandidateFragment.
      */
@@ -58,6 +58,7 @@ public class CandidateFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public CandidateFragment() {
         // Required empty public constructor
     }
@@ -74,8 +75,9 @@ public class CandidateFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         Log.d("ContestFragment", "In onActivityCreated");
-        mActivity = (VIPTabBarActivity)getActivity();
+        mActivity = (VIPTabBarActivity) getActivity();
         setContents();
     }
 
@@ -83,10 +85,11 @@ public class CandidateFragment extends Fragment {
      * Helper function to populate the candidate view labels
      */
     private void setContents() {
-        TextView nameView = (TextView)mActivity.findViewById(R.id.candidate_name);
-        TextView partyView = (TextView)mActivity.findViewById(R.id.candidate_party);
+        TextView nameView = (TextView) mActivity.findViewById(R.id.candidate_name);
+        TextView partyView = (TextView) mActivity.findViewById(R.id.candidate_party);
+
         try {
-            voterInfo = mActivity.getVoterInfo();
+            voterInfo = UserPreferences.getVoterInfo();
             contest = voterInfo.getContestAt(contestNum);
             candidate = contest.candidates.get(candidateNum);
 
@@ -97,15 +100,15 @@ public class CandidateFragment extends Fragment {
             partyView.setText(party);
 
             // SET CANDIDATE DETAILS
-            boolean phoneVisible =  setTextView(R.id.candidate_details_phone_text, R.id.candidate_details_phone_row, candidate.phone);
+            boolean phoneVisible = setTextView(R.id.candidate_details_phone_text, R.id.candidate_details_phone_row, candidate.phone);
             if (phoneVisible) {
                 setDetailClickHandler(R.id.candidate_details_phone_row, "phone", candidate.phone);
             }
-            boolean emailVisible =  setTextView(R.id.candidate_details_email_text, R.id.candidate_details_email_row, candidate.email);
+            boolean emailVisible = setTextView(R.id.candidate_details_email_text, R.id.candidate_details_email_row, candidate.email);
             if (emailVisible) {
                 setDetailClickHandler(R.id.candidate_details_email_row, "email", candidate.email);
             }
-            boolean websiteVisible =  setTextView(R.id.candidate_details_web_site_text, R.id.candidate_details_web_site_row, candidate.candidateUrl);
+            boolean websiteVisible = setTextView(R.id.candidate_details_web_site_text, R.id.candidate_details_web_site_row, candidate.candidateUrl);
             if (websiteVisible) {
                 setDetailClickHandler(R.id.candidate_details_web_site_row, "website", candidate.candidateUrl);
             }
@@ -169,7 +172,7 @@ public class CandidateFragment extends Fragment {
 
     private boolean setTextView(int labelId, int containerId, String val) {
         boolean isVisible = false;
-        TextView textView = (TextView)mActivity.findViewById(labelId);
+        TextView textView = (TextView) mActivity.findViewById(labelId);
         if (val != null && !val.isEmpty()) {
             textView.setText(val);
             isVisible = true;
@@ -217,7 +220,7 @@ public class CandidateFragment extends Fragment {
             case "email":
                 intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:"));
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {cleanValue});
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{cleanValue});
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 try {
                     startActivity(intent);

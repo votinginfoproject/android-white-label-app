@@ -18,16 +18,16 @@ import android.widget.EditText;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 
 public class HomeActivity extends FragmentActivity implements HomeFragment.OnInteractionListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
     static final int PICK_CONTACT_REQUEST = 1;
-    VIPApp app;
+
     Uri contactUri;
     EditText addressView;
     LoaderManager loaderManager;
@@ -39,7 +39,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void setSelectedParty(String selectedParty) {
         this.selectedParty = selectedParty;
 
-        app.setSelectedParty(selectedParty);
+        UserPreferences.setSelectedParty(selectedParty);
     }
 
     String selectedParty;
@@ -48,14 +48,14 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        app = new VIPAppContext((VIPApp) getApplicationContext()).getVIPApp();
+
         loaderManager = getLoaderManager();
         selectedParty = "";
         contactUri = null;
         addressView = (EditText) findViewById(R.id.home_edittext_address);
 
         // Get analytics tracker (should auto-report)
-        app.getTracker(VIPApp.TrackerName.APP_TRACKER);
+        GATracker.getTracker(GATracker.TrackerName.APP_TRACKER);
     }
 
     @Override
@@ -127,7 +127,12 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
 
     public void searchedAddress(VoterInfo voterInfo) {
         // set VoterInfo object on app singleton
-        app.setVoterInfo(voterInfo, selectedParty);
+        if (voterInfo == null) {
+            UserPreferences.setVoterInfo(null);
+        } else {
+            voterInfo.setSelectedParty(selectedParty);
+            UserPreferences.setVoterInfo(voterInfo);
+        }
     }
 
     @Override

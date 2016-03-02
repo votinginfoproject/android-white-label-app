@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.adapters;
 
+import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ public class DirectionsAdapter extends ArrayAdapter<Step> {
      *
      * @param steps list of steps returned by Google Directions API to put in ListView
      */
-    public DirectionsAdapter(List<Step> steps) {
-        super(VIPAppContext.getContext(), R.layout.directions_list_item, steps);
+    public DirectionsAdapter(Context context, List<Step> steps) {
+        super(context, R.layout.directions_list_item, steps);
     }
 
     @Override

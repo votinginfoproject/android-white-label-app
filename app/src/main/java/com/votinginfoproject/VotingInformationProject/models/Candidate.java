@@ -2,6 +2,9 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.graphics.Bitmap;
 
+import com.votinginfoproject.VotingInformationProject.application.VIPApp;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -78,7 +81,7 @@ public class Candidate {
      */
     public void setCandidatePhoto(Bitmap bitmap) {
         if (voterInfo == null) {
-            voterInfo = ((VIPApp)VIPApp.getContext()).getVoterInfo();
+            voterInfo = UserPreferences.getVoterInfo();
         }
         photoCacheKey = voterInfo.addImageToCache(bitmap);
     }

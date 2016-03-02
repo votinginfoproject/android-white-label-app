@@ -33,7 +33,6 @@ import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQue
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class HomeFragment extends Fragment {
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
     HomeActivity myActivity;
-    Context context;
+    Context mContext;
     Resources resources;
     EditText homeEditTextAddress;
     TextView homeTextViewStatus;
@@ -92,8 +91,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        context = myActivity.getApplicationContext();
-        resources = context.getResources();
+        mContext = myActivity.getApplicationContext();
+        resources = mContext.getResources();
 
         // read flag from api_keys file for whether to use test election or not
         isTest = resources.getBoolean(R.bool.use_test_election);
@@ -140,7 +139,7 @@ public class HomeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        context = null;
+        mContext = null;
     }
 
     /**
@@ -249,6 +248,7 @@ public class HomeFragment extends Fragment {
                         && mListener != null) {
                     makeElectionQuery();
                 }
+
                 // Return false to close the keyboard
                 return false;
             }
@@ -310,14 +310,13 @@ public class HomeFragment extends Fragment {
      * disconnected, display a message and quit the app.
      */
     public void checkInternetConnectivity() {
-        Context context = VIPAppContext.getContext();
-        ConnectivityManager cm = (ConnectivityManager) context
+        ConnectivityManager cm = (ConnectivityManager) mContext
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
         if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
             homeGoButton.setVisibility(View.INVISIBLE);
-            homeTextViewStatus.setText(context.getResources().getText(R.string.home_error_no_internet));
+            homeTextViewStatus.setText(mContext.getResources().getText(R.string.home_error_no_internet));
         }
     }
 
@@ -519,7 +518,7 @@ public class HomeFragment extends Fragment {
             // sort list alphabetically
             Collections.sort(partiesList);
 
-            partiesList.add(0, context.getString(R.string.home_party_spinner_description));
+            partiesList.add(0, mContext.getString(R.string.home_party_spinner_description));
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(myActivity, R.layout.home_spinner_view, partiesList);
 

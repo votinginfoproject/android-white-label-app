@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.ContestsAdapter;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 
@@ -33,10 +35,10 @@ public class BallotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
-        myActivity = (VIPTabBarActivity)this.getActivity();
+        myActivity = (VIPTabBarActivity) this.getActivity();
         // election label
-        TextView election_name_label = (TextView)rootView.findViewById(R.id.ballot_election_name);
-        TextView election_date_label = (TextView)rootView.findViewById(R.id.ballot_election_date);
+        TextView election_name_label = (TextView) rootView.findViewById(R.id.ballot_election_name);
+        TextView election_date_label = (TextView) rootView.findViewById(R.id.ballot_election_date);
         election_name_label.setText(voterInfo.election.name);
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
@@ -64,14 +66,14 @@ public class BallotFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        myActivity = (VIPTabBarActivity)this.getActivity();
+        myActivity = (VIPTabBarActivity) this.getActivity();
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // get election info
-        voterInfo = ((VIPTabBarActivity) activity).getVoterInfo();
+        voterInfo = UserPreferences.getVoterInfo();
         Log.d("BallotFragment", "Got election: " + voterInfo.election.name);
     }
 }

@@ -15,8 +15,7 @@ public class AboutActivity extends Activity {
         setContentView(R.layout.activity_about);
 
         // asynchronously add required attribution for Google Maps, prepended with app license
-        TextView legalNoticesView = (TextView)this.findViewById(R.id.about_legal_notices);
-        new LoadOpenSourceLicense().execute(legalNoticesView);
+        TextView legalNoticesView = (TextView) this.findViewById(R.id.about_legal_notices);
+        new LoadOpenSourceLicense(this).execute(legalNoticesView);
     }
-
 }

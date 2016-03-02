@@ -1,11 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
-import java.util.ArrayList;
-import java.util.Stack;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -27,14 +23,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
+import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.asynctasks.ReverseGeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment;
@@ -44,17 +42,19 @@ import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsF
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.SupportWebViewFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
-import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
-import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
-public class VIPTabBarActivity extends FragmentActivity implements GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, DirectionsQuery.PolylineCallBackListener, View.OnClickListener  {
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, DirectionsQuery.PolylineCallBackListener, View.OnClickListener {
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -62,7 +62,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     ViewPager mViewPager;
     static TabsAdapter mTabsAdapter;
     FragmentManager mFragmentManager;
-    VIPAppContext mAppContext;
     GeocodeQuery.GeocodeCallBackListener pollingCallBackListener;
     GeocodeQuery.GeocodeCallBackListener homeCallBackListener;
     GeocodeQuery.GeocodeCallBackListener adminBodyCallBackListener;
@@ -70,9 +69,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     Location homeLocation;
     LocationsFragment locationsFragment;
     DirectionsFragment directionsFragment;
-    Context context;
+
     boolean useMetric;
-    LocationClient mLocationClient;
+
+    private GoogleApiClient mGoogleApiClient;
+
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
     int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
 
@@ -97,6 +98,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
     /**
      * OnClick listener for feedback form link
+     *
      * @param v The clickable text field for supplying feedback
      */
     @Override
@@ -112,7 +114,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // Send in reference to the calling view's parent, so it can be found again later.
         // Necessary because there are multiple references to the feedback text view, so the scope
         // of search must be restricted to find ~this~ feedback text view again.
-        View parent = (View)v.getParent().getParent();
+        View parent = (View) v.getParent().getParent();
         SupportWebViewFragment webViewFragment = SupportWebViewFragment.newInstance(parent.getId());
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         // swap out current fragment with support web fragment,
@@ -159,7 +161,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
     public FilterLabels getFilterLabels() {
         if (filterLabels == null) {
-            Resources res = context.getResources();
+            Resources res = this.getResources();
             filterLabels = new FilterLabels(res.getString(R.string.locations_list_all_label),
                     res.getString(R.string.locations_list_early_voting_label),
                     res.getString(R.string.locations_list_polling_sites_label),
@@ -192,20 +194,12 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
     /**
      * Non-default constructor for testing, to set the application context.
+     *
      * @param context Mock context with a VoterInfo object
      */
-    public VIPTabBarActivity(VIPAppContext context) {
-        super();
-        mAppContext = context;
-        fragmentHistory.push(currentFragment);
-    }
-
     public VIPTabBarActivity() {
         super();
-    }
-
-    public VIPAppContext getAppContext() {
-        return mAppContext;
+        fragmentHistory.push(currentFragment);
     }
 
     @Override
@@ -243,10 +237,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         fragmentTransaction.commit();
     }
 
-	/**
+    /**
      * Transition from contest fragment to candidate fragment when user selects list item.
      *
-     * @param contestPosition Index of selected contest within the VoterInfo object's list of contests
+     * @param contestPosition   Index of selected contest within the VoterInfo object's list of contests
      * @param candidatePosition Index of selected candidate within the contest's list of candidates
      */
     public void showCandidateDetails(int contestPosition, int candidatePosition) {
@@ -321,16 +315,18 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     }
 
     private boolean playServicesAvailable() {
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             Log.d("VIPTabBarActivity", "Google Play services are available!");
+
             return true;
         } else {
             Log.e("VIPTabBarActivity", "Google Play services are unavailable!");
             // alert user
-            CharSequence errorMessage = context.getResources().getText(R.string.locations_map_play_services_unavailable);
-            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
+            CharSequence errorMessage = this.getResources().getText(R.string.locations_map_play_services_unavailable);
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
+
             return false;
         }
     }
@@ -358,15 +354,16 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         }
         if (!haveLocation) {
             // alert user if no location to show on map
-            CharSequence errorMessage = context.getResources().getText(R.string.locations_map_not_geocoded);
-            Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
+            CharSequence errorMessage = this.getResources().getText(R.string.locations_map_not_geocoded);
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
+
             return;
         }
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        SupportMapFragment mapFragment = VIPMapFragment.newInstance(destinationLocationIndex, encodedDirectionsPolyline);
+        SupportMapFragment mapFragment = VIPMapFragment.newInstance(getBaseContext(), destinationLocationIndex, encodedDirectionsPolyline);
         if (destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.STATE) ||
                 destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
             // got here from details tab
@@ -379,14 +376,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         fragmentTransaction.commit();
     }
 
-    public VoterInfo getVoterInfo() {
-        return mAppContext.getVIPApp().getVoterInfo();
-    }
-
     public LatLng getHomeLatLng() {
         if (homeLocation != null) {
             return new LatLng(homeLocation.getLatitude(), homeLocation.getLongitude());
         }
+
         return null;
     }
 
@@ -396,11 +390,9 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         setContentView(R.layout.activity_viptab_bar);
 
         mFragmentManager = getSupportFragmentManager();
-        mAppContext = new VIPAppContext((VIPApp) getApplicationContext());
-        context = VIPApp.getContext();
 
         // Get analytics tracker (should auto-report)
-        mAppContext.getVIPApp().getTracker(VIPApp.TrackerName.APP_TRACKER);
+        GATracker.getTracker(GATracker.TrackerName.APP_TRACKER);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -425,7 +417,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         // start geocoding addresses when activity launches
         setUpGeocodings();
 
-        mLocationClient = new LocationClient(this, this, this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).
+                addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
     }
 
     /**
@@ -434,11 +427,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
      */
     private void setUpGeocodings() {
         // get LocationsFragment's root view
-        locationsFragment = (LocationsFragment)mTabsAdapter.getItem(1);
-        voterInfo = getVoterInfo();
+        locationsFragment = (LocationsFragment) mTabsAdapter.getItem(1);
+        voterInfo = UserPreferences.getVoterInfo();
         voterInfo.setUpLocations();
 
-        useMetric = mAppContext.useMetric();
+        useMetric = UserPreferences.useMetric();
 
         // set up callback listener for reverse-geocode address result
         reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
@@ -488,17 +481,17 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 homeLocation = new Location("home");
                 homeLocation.setLatitude(lat);
                 homeLocation.setLongitude(lon);
-                mAppContext.setHomeLocation(homeLocation);
+                UserPreferences.setHomeLocation(homeLocation);
 
                 // start background geocode tasks for polling locations
                 ArrayList<PollingLocation> allLocations = voterInfo.getAllLocations();
                 for (PollingLocation location : allLocations) {
                     // key by address, if location has no ID
                     if (location.id != null) {
-                        new GeocodeQuery(context, pollingCallBackListener, location.id,
+                        new GeocodeQuery(getBaseContext(), pollingCallBackListener, location.id,
                                 location.address.toGeocodeString(), homeLocation, useMetric, null).execute();
                     } else {
-                        new GeocodeQuery(context, pollingCallBackListener, location.address.toGeocodeString(),
+                        new GeocodeQuery(getBaseContext(), pollingCallBackListener, location.address.toGeocodeString(),
                                 location.address.toGeocodeString(), homeLocation, useMetric, null).execute();
                     }
                 }
@@ -508,14 +501,14 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
                 // state
                 CivicApiAddress stateAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
                 if (stateAdminAddress != null) {
-                    new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.STATE,
+                    new GeocodeQuery(getBaseContext(), adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.STATE,
                             stateAdminAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                 }
 
                 // local
                 CivicApiAddress localAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
                 if (localAdminAddress != null) {
-                    new GeocodeQuery(context, adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.LOCAL,
+                    new GeocodeQuery(getBaseContext(), adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.LOCAL,
                             localAdminAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                 }
             }
@@ -544,7 +537,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
 
         if (playServicesAvailable()) {
             // geocode home address; once result returned, geocode polling and admin body locations
-            new GeocodeQuery(context, homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
+            new GeocodeQuery(getBaseContext(), homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
                     null, useMetric, null).execute();
         }
     }
@@ -555,12 +548,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             return null;
         }
 
-        if (!mLocationClient.isConnected()) {
+        if (!mGoogleApiClient.isConnected()) {
             // location services aren't ready yet (maybe just turned on)
             // wait for onConnected() to be called, then try again
-            if (!mLocationClient.isConnecting()) {
+            if (!mGoogleApiClient.isConnecting()) {
                 Log.d("VIPTabBarActivity", "Location client not connected; try connecting...");
-                mLocationClient.disconnect(); // call connect from disconnect
+                mGoogleApiClient.disconnect(); // call connect from disconnect
+
                 return null;
             } else {
                 Log.d("VIPTabBarActivity", "Location client is connecting...");
@@ -568,13 +562,17 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
             }
         }
 
-        Location currentLocation = mLocationClient.getLastLocation();
+        Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         if (currentLocation != null) {
             userLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
             Log.d("HomeActivity", "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+
             // now go reverse-geocode to find address for current location
             userLocationAddress = "";
-            new ReverseGeocodeQuery(reverseGeocodeCallBackListener).execute(currentLocation);
+            new ReverseGeocodeQuery(getBaseContext(), reverseGeocodeCallBackListener).execute(currentLocation);
+
             return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         } else {
             Log.e("HomeActivity", "Current location not found!  Are Location services enabled?");
@@ -612,6 +610,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     private void retryGetDirections() {
         if (selectedOriginItem == 0) {
             Log.e("VIPTabBarActivity", "No longer using current location for directions!  Ignoring.");
+
             return;
         }
 
@@ -635,7 +634,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
         if (requestCode == PROMPT_ENABLE_LOCATION_SERVICES) {
             // User got back from location services screen; try to get their location again.
             // Do not prompt them again to enable location services.
-           retryGetDirections();
+            retryGetDirections();
         } else {
             Log.e("VIPTabBarActivity", "Got result for unrecognized activity!");
         }
@@ -648,7 +647,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     protected void onStart() {
         super.onStart();
         // connect to location service
-        mLocationClient.connect();
+        mGoogleApiClient.connect();
         //Get an Analytics tracker to report app starts, uncaught exceptions, etc.
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
@@ -658,7 +657,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
      */
     @Override
     protected void onStop() {
-        mLocationClient.disconnect();
+        mGoogleApiClient.disconnect();
         super.onStop();
         //Stop analytics tracking
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
@@ -671,9 +670,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GooglePlaySer
     }
 
     @Override
-    public void onDisconnected() {
-        Log.d("VIPTabBarActivity", "Location services disconnected; try connecting.");
-        mLocationClient.connect();
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 
     @Override

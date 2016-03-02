@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class ElectionDetailsFragment extends Fragment {
     public static ElectionDetailsFragment newInstance() {
         return new ElectionDetailsFragment();
     }
+
     public ElectionDetailsFragment() {
         // Required empty public constructor
     }
@@ -92,15 +94,16 @@ public class ElectionDetailsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("ElectionDetailsFragment", "In onActivityCreated");
-        mActivity = (VIPTabBarActivity)getActivity();
+        mActivity = (VIPTabBarActivity) getActivity();
         resources = mActivity.getResources();
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
         // get state and local election administration bodies
-        voterInfo = ((VIPTabBarActivity) mActivity).getVoterInfo();
+        voterInfo = UserPreferences.getVoterInfo();
         stateAdmin = voterInfo.getStateAdmin();
         localAdmin = voterInfo.getLocalAdmin();
-        if (localAdmin != null ) {
+
+        if (localAdmin != null) {
             Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
             if (stateAdmin == null) {
                 // no state admin body; hide button bar and just show local
@@ -160,7 +163,7 @@ public class ElectionDetailsFragment extends Fragment {
      * Helper function to set click listeners for expandable section headers.
      *
      * @param sectionHeaderId R id of section header (button)
-     * @param sectionId R id of sub-section to show/hide on click
+     * @param sectionId       R id of sub-section to show/hide on click
      */
     private void setSectionClickListener(int sectionHeaderId, final int sectionId,
                                          final int unselectedIcon, final int selectedIcon) {
@@ -191,7 +194,7 @@ public class ElectionDetailsFragment extends Fragment {
     private void collapseAllSubSections() {
         for (DetailSection detail : detailSections) {
             // un-highlight section header
-            Button btn = (Button)mActivity.findViewById(detail.header);
+            Button btn = (Button) mActivity.findViewById(detail.header);
             btn.setBackgroundResource(unselectedSectionBackground);
             btn.setCompoundDrawablesWithIntrinsicBounds(detail.unselectedIcon, 0, 0, 0);
 
@@ -203,6 +206,7 @@ public class ElectionDetailsFragment extends Fragment {
 
     /**
      * Helper function to set click handlers for the election body selection buttons
+     *
      * @param buttonId R id of the button to listen to
      */
     private void setButtonInBarClickListener(final int buttonId) {
@@ -214,7 +218,7 @@ public class ElectionDetailsFragment extends Fragment {
                     return; // ignore button click if already viewing that list
                 }
 
-                Button btn = (Button)v;
+                Button btn = (Button) v;
 
                 // highlight current selection (and un-highlight others)
                 btn.setBackgroundResource(R.drawable.button_bar_button_selected);
@@ -237,9 +241,10 @@ public class ElectionDetailsFragment extends Fragment {
         });
     }
 
-    /** Helper function to populate the administrative body table values.
+    /**
+     * Helper function to populate the administrative body table values.
      *
-     * @param body Administration body to show in the view contents
+     * @param body     Administration body to show in the view contents
      * @param eab_type String describing which admin body this is
      */
     private void setContents(ElectionAdministrationBody body, String eab_type) {
@@ -285,10 +290,10 @@ public class ElectionDetailsFragment extends Fragment {
     /**
      * Helper function to turn labels into links for fields that are URLs.
      *
-     * @param labelId R id of the label to link-ify
+     * @param labelId     R id of the label to link-ify
      * @param containerId R id of the label's parent view (to hide it if there's no link found)
-     * @param dividerId R id of divider line below row (to hide if there's no link found)
-     * @param val String containing the URL
+     * @param dividerId   R id of divider line below row (to hide if there's no link found)
+     * @param val         String containing the URL
      */
     private void setLink(int labelId, int containerId, int dividerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(labelId);
@@ -324,9 +329,9 @@ public class ElectionDetailsFragment extends Fragment {
      * Helper function to set a TextView to a string, or hide the TextView's containing view,
      * if the string is null or empty.
      *
-     * @param textViewId R id of the TextView to set
+     * @param textViewId  R id of the TextView to set
      * @param containerId R id of the TextView's parent view, to hide if value is missing
-     * @param val String to put in the TextView
+     * @param val         String to put in the TextView
      */
     private void setTextView(int textViewId, int containerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(textViewId);
@@ -342,7 +347,7 @@ public class ElectionDetailsFragment extends Fragment {
     /**
      * Helper function to set a TextView for physical address that links to map.
      *
-     * @param val String to put in the TextView
+     * @param val      String to put in the TextView
      * @param eab_type String for which admin body this is
      */
     private void setPhysicalAddressView(String val, final String eab_type) {

@@ -15,6 +15,8 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -47,10 +49,12 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
      */
     public LocationsAdapter(Context context, List<PollingLocation> locations) {
         super(context, R.layout.location_list_item, locations);
+
         myActivity = (VIPTabBarActivity)context;
-        useMetric = ((VIPTabBarActivity)context).getAppContext().useMetric();
-        home = ((VIPTabBarActivity)context).getAppContext().getHomeLocation();
+        useMetric = UserPreferences.useMetric();
+        home = UserPreferences.getHomeLocation();
         distanceFormat =  new DecimalFormat("0.00 ");
+
         if (useMetric) {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_metric);
         } else {
