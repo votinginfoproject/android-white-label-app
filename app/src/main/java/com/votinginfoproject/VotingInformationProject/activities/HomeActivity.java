@@ -38,9 +38,8 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
 
     public void setSelectedParty(String selectedParty) {
         this.selectedParty = selectedParty;
+
         app.setSelectedParty(selectedParty);
-
-
     }
 
     String selectedParty;
@@ -53,7 +52,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         loaderManager = getLoaderManager();
         selectedParty = "";
         contactUri = null;
-        addressView = (EditText)findViewById(R.id.home_edittext_address);
+        addressView = (EditText) findViewById(R.id.home_edittext_address);
 
         // Get analytics tracker (should auto-report)
         app.getTracker(VIPApp.TrackerName.APP_TRACKER);
@@ -63,6 +62,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
         return true;
     }
 
@@ -88,6 +88,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
@@ -135,7 +136,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             return null;
         }
 
-        String[] projection = { ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS };
+        String[] projection = {ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS};
         return new CursorLoader(this, contactUri, projection, null, null, null);
     }
 
@@ -151,7 +152,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             addressView.setText(address);
 
             // initate search with new address
-            HomeFragment myFragment = (HomeFragment)getSupportFragmentManager().findFragmentById(R.id.home_fragment);
+            HomeFragment myFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.home_fragment);
             myFragment.makeElectionQuery();
         } else {
             Log.e("HomeActivity", "Cursor got no results!");

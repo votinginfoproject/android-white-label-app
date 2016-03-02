@@ -1,16 +1,13 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
@@ -37,6 +35,7 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.VIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -82,7 +81,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myActivity = (HomeActivity)getActivity();
+
+        myActivity = (HomeActivity) getActivity();
         preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
     }
@@ -91,25 +91,26 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
         context = myActivity.getApplicationContext();
         resources = context.getResources();
 
         // read flag from api_keys file for whether to use test election or not
         isTest = resources.getBoolean(R.bool.use_test_election);
 
-        homeTextViewStatus = (TextView)rootView.findViewById(R.id.home_textview_status);
+        homeTextViewStatus = (TextView) rootView.findViewById(R.id.home_textview_status);
 
-        homeGoButton = (Button)rootView.findViewById(R.id.home_go_button);
+        homeGoButton = (Button) rootView.findViewById(R.id.home_go_button);
 
-        homeSelectContactButton = (ImageView)rootView.findViewById(R.id.home_select_contact_button);
+        homeSelectContactButton = (ImageView) rootView.findViewById(R.id.home_select_contact_button);
 
-        homeEditTextAddress = (EditText)rootView.findViewById(R.id.home_edittext_address);
+        homeEditTextAddress = (EditText) rootView.findViewById(R.id.home_edittext_address);
         homeEditTextAddress.setText(getAddress());
 
-        homeElectionSpinner = (Spinner)rootView.findViewById(R.id.home_election_spinner);
+        homeElectionSpinner = (Spinner) rootView.findViewById(R.id.home_election_spinner);
         homeElectionSpinnerWrapper = rootView.findViewById(R.id.home_election_spinner_wrapper);
 
-        homePartySpinner = (Spinner)rootView.findViewById(R.id.home_party_spinner);
+        homePartySpinner = (Spinner) rootView.findViewById(R.id.home_party_spinner);
         homePartySpinnerWrapper = rootView.findViewById(R.id.home_party_spinner_wrapper);
 
         setupViewListeners();
@@ -133,6 +134,13 @@ public class HomeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        context = null;
     }
 
     /**
@@ -189,7 +197,8 @@ public class HomeFragment extends Fragment {
 
     }
 
-    /** Query the Civic Info API after the entered address has changed, and store the address
+    /**
+     * Query the Civic Info API after the entered address has changed, and store the address
      * and election result to shared preferences.
      *
      * @param new_address New address entered
@@ -236,8 +245,8 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_SEARCH ||
-                    (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                    && mListener != null) {
+                        (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        && mListener != null) {
                     makeElectionQuery();
                 }
                 // Return false to close the keyboard
@@ -272,7 +281,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
                 //If index is zero, no real value is selected
-                if(index == 0) {
+                if (index == 0) {
                     //Disable Button
                     homeGoButton.setEnabled(false);
                     homeGoButton.setAlpha(0.5f);
@@ -305,11 +314,13 @@ public class HomeFragment extends Fragment {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
         if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
             homeGoButton.setVisibility(View.INVISIBLE);
             homeTextViewStatus.setText(context.getResources().getText(R.string.home_error_no_internet));
         }
     }
+
     private void constructVoterInfoQuery() {
         checkInternetConnectivity(); // check for connection before querying
 
@@ -321,7 +332,9 @@ public class HomeFragment extends Fragment {
 
         try {
             electionId = currentElection.getId();
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            Log.e("HomeFragment", "Current election is unset");
+        }
 
         try {
             Uri.Builder builder = new Uri.Builder();
@@ -390,7 +403,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                VoterInfo voterInfo = (VoterInfo)result;
+                VoterInfo voterInfo = (VoterInfo) result;
                 presentVoterInfoResult(voterInfo);
             }
         };
@@ -415,7 +428,7 @@ public class HomeFragment extends Fragment {
                         Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
                         homeTextViewStatus.setText(R.string.home_error_unknown);
                     }
-                } catch(NullPointerException e) {
+                } catch (NullPointerException e) {
                     Log.e("HomeFragment", "Null encountered in API error result");
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                 }
@@ -431,14 +444,16 @@ public class HomeFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnInteractionListener {
         public void onGoButtonPressed(View view);
+
         public void onSelectContactButtonPressed(View view);
+
         public void searchedAddress(VoterInfo voterInfo);
     }
 
@@ -454,6 +469,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Store a new address into shared preferences, and clear out last saved election.
+     *
      * @param address Address string to store
      */
     public void setAddress(String address) {
@@ -480,7 +496,7 @@ public class HomeFragment extends Fragment {
         homeElectionSpinner.setSelection(0, true);
 
         View v = homeElectionSpinner.getSelectedView();
-        ((TextView)v).setTextColor(Color.WHITE);
+        ((TextView) v).setTextColor(Color.WHITE);
         v.setBackgroundResource(0);
     }
 
@@ -512,7 +528,7 @@ public class HomeFragment extends Fragment {
             homePartySpinner.setSelection(0, true);
 
             View selectedView = homePartySpinner.getSelectedView();
-            ((TextView)selectedView).setTextColor(Color.WHITE);
+            ((TextView) selectedView).setTextColor(Color.WHITE);
             selectedView.setBackgroundResource(0);
 
             homePartySpinnerWrapper.setVisibility(View.VISIBLE);
