@@ -13,7 +13,7 @@
 
         <TextView
             android:text="@string/about.app.description"
-            style="@style/fragment_subheader" />
+            style="@style/fragment_sub_header" />
 
         <TextView
             android:text="@string/about.terms.title"
@@ -21,7 +21,7 @@
 
         <TextView
             android:text="@string/about.terms.description"
-            style="@style/fragment_subheader" />
+            style="@style/fragment_sub_header" />
 
         <TextView
             android:text="@string/about.title.privacy"
@@ -29,7 +29,7 @@
 
         <TextView
             android:text="@string/about.privacy.description"
-            style="@style/fragment_subheader" />
+            style="@style/fragment_sub_header" />
 
         <TextView
             android:text="@string/about.title.legal_notices"
@@ -38,6 +38,6 @@
         <TextView
             android:id="@+id/about_legal_notices"
             android:text="@string/about.description.legal_notices"
-            style="@style/fragment_subheader" />
+            style="@style/fragment_sub_header" />
     </LinearLayout>
 </ScrollView>

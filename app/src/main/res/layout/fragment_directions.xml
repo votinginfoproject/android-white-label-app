@@ -17,7 +17,7 @@
             android:id="@+id/directions_subtitle"
             android:layout_toLeftOf="@+id/directions_map_button"
             android:layout_below="@+id/directions_title"
-            style="@style/fragment_subheader" />
+            style="@style/fragment_sub_header" />
 
         <Button
             style="@style/map_button"
@@ -59,7 +59,7 @@
         </LinearLayout>
 
         <ListView
-            style="@style/listview"
+            style="@style/vip_list_view"
             android:id="@+id/directions_list"
             android:layout_below="@+id/directions_button_bar"
             android:layout_above="@+id/directions_open_in_maps_button"
@@ -72,7 +72,7 @@
             android:visibility="gone"
             android:id="@+id/directions_none_found_message"
             android:text="@string/directions.error.no_directions_found"
-            style="@style/fragment_subheader"
+            style="@style/fragment_sub_header"
             android:layout_below="@+id/directions_button_bar"
             android:layout_toRightOf="@+id/directions_subtitle"
             android:layout_alignParentLeft="true"

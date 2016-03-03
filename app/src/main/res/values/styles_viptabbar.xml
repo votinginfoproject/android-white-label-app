@@ -19,76 +19,75 @@
 
 <resources>
 
-    <style name="Theme.Viptabbar" parent="@android:style/Theme.Holo">
+    <style name="Theme.Vip_tab_bar" parent="@android:style/Theme.Holo">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_viptabbar</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu.Viptabbar</item>
-        <item name="android:dropDownListViewStyle">@style/DropDownListView.Viptabbar</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Viptabbar</item>
-        <item name="android:actionBarTabTextStyle">@style/ActionBarTabTextStyle.Viptabbar</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Vip_tab_bar</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Vip_tab_bar</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Vip_tab_bar</item>
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabTextStyle.Vip_tab_bar</item>
         <item name="android:actionMenuTextColor">@color/white</item>
-        <item name="android:actionDropDownStyle">@style/DropDownNav.Viptabbar</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Viptabbar</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Vip_tab_bar</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Vip_tab_bar</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_viptabbar</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_viptabbar</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Viptabbar</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Vip_tab_bar</item>
     </style>
 
-    <style name="ActionBar.Solid.Viptabbar" parent="@android:style/Widget.Holo.ActionBar.Solid">
+    <style name="ActionBar.Solid.Vip_tab_bar" parent="@android:style/Widget.Holo.ActionBar.Solid">
         <item name="android:background">@drawable/ab_solid_viptabbar</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_viptabbar</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_viptabbar</item>
-        <item name="android:progressBarStyle">@style/ProgressBar.Viptabbar</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Viptabbar</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Vip_tab_bar</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Vip_tab_bar</item>
     </style>
 
-    <style name="ActionBar.Transparent.Viptabbar" parent="@android:style/Widget.Holo.ActionBar">
+    <style name="ActionBar.Transparent.Vip_tab_bar" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:background">@drawable/ab_transparent_viptabbar</item>
-        <item name="android:progressBarStyle">@style/ProgressBar.Viptabbar</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Viptabbar</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Vip_tab_bar</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Vip_tab_bar</item>
     </style>
 
-    <style name="PopupMenu.Viptabbar" parent="@android:style/Widget.Holo.ListPopupWindow">
+    <style name="PopupMenu.Vip_tab_bar" parent="@android:style/Widget.Holo.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_viptabbar</item>	
     </style>
 
-    <style name="DropDownListView.Viptabbar" parent="@android:style/Widget.Holo.ListView.DropDown">
+    <style name="DropDownListView.Vip_tab_bar" parent="@android:style/Widget.Holo.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_viptabbar</item>
     </style>
 
-    <style name="ActionBarTabStyle.Viptabbar" parent="@android:style/Widget.Holo.ActionBar.TabView">
+    <style name="ActionBarTabStyle.Vip_tab_bar" parent="@android:style/Widget.Holo.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_viptabbar</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Viptabbar</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Vip_tab_bar</item>
         <item name="android:paddingLeft">1sp</item>
         <item name="android:paddingRight">1sp</item>
     </style>
 
-    <style name="ActionBarTitleTextStyle.Viptabbar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    <style name="ActionBarTitleTextStyle.Vip_tab_bar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_medium</item>
     </style>
 
-    <style name="ActionBarTabTextStyle.Viptabbar" parent="@android:style/Widget.Holo.ActionBar.TabText">
+    <style name="ActionBarTabTextStyle.Vip_tab_bar" parent="@android:style/Widget.Holo.ActionBar.TabText">
         <item name="android:textColor">@color/button_blue</item>
     </style>
 
-    <style name="DropDownNav.Viptabbar" parent="@android:style/Widget.Holo.Spinner">
+    <style name="DropDownNav.Vip_tab_bar" parent="@android:style/Widget.Holo.Spinner">
         <item name="android:background">@drawable/spinner_background_ab_viptabbar</item>
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_viptabbar</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_viptabbar</item>
     </style>
     
-    <style name="ProgressBar.Viptabbar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+    <style name="ProgressBar.Vip_tab_bar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_viptabbar</item>
     </style>
     
-    <style name="ActionButton.CloseMode.Viptabbar" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
+    <style name="ActionButton.CloseMode.Vip_tab_bar" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
         <item name="android:background">@drawable/btn_cab_done_viptabbar</item>
     </style>
 
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
-    <style name="Theme.Viptabbar.Widget" parent="@android:style/Theme.Holo">
-        <item name="android:popupMenuStyle">@style/PopupMenu.Viptabbar</item>
-        <item name="android:dropDownListViewStyle">@style/DropDownListView.Viptabbar</item>
+    <style name="Theme.Vip_tab_bar.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Vip_tab_bar</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Vip_tab_bar</item>
     </style>
-
 </resources>

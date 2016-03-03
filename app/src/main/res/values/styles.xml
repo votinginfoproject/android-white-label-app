@@ -32,7 +32,7 @@
         <item name="android:layout_alignParentLeft">true</item>
     </style>
 
-    <style name="fragment_subheader" parent="@style/wrap_width_wrap_height">
+    <style name="fragment_sub_header" parent="@style/wrap_width_wrap_height">
         <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textColor">@color/text_gray</item>
         <item name="android:textStyle">bold</item>
@@ -61,7 +61,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="listview" parent="@style/wrap_width_wrap_height">
+    <style name="vip_list_view" parent="@style/wrap_width_wrap_height">
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:divider">@color/list_divider_gray</item>
         <item name="android:dividerHeight">1sp</item>
