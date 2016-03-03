@@ -16,8 +16,8 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.CandidatesAdapter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import static butterknife.ButterKnife.findById;
 
@@ -28,6 +28,8 @@ public class ContestFragment extends Fragment {
     Contest contest;
     private ViewGroup mContainer;
     Resources res;
+
+    private ListView mListView;
 
     /**
      * Use this factory method to create a new instance of
@@ -41,6 +43,7 @@ public class ContestFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(CONTEST_NUM, contest_number);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -56,6 +59,8 @@ public class ContestFragment extends Fragment {
             contestNum = getArguments().getInt(CONTEST_NUM);
             Log.d("ContestFragment", "Got contest #" + contestNum);
         }
+
+        mListView = (ListView) getActivity().findViewById(R.id.contest_candidate_list);
     }
 
     @Override
@@ -86,10 +91,9 @@ public class ContestFragment extends Fragment {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
                 // add footer view for feedback
-                ListView list = (ListView) myActivity.findViewById(R.id.contest_candidate_list);
-                View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, list, false);
+                View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, mListView, false);
                 // 'false' argument here is to make the footer list item not clickable (text instead is clickable)
-                list.addFooterView(feedback_layout, null, false);
+                mListView.addFooterView(feedback_layout, null, false);
             } else if (contest.type != null) {
                 // Have a referendum, which has no candidates list.  So,
                 // remove scrolling list view and instead use scroll view for title/subtitle.
@@ -132,9 +136,8 @@ public class ContestFragment extends Fragment {
             // populate candidate list
             if (contest.candidates != null && !contest.candidates.isEmpty()) {
                 CandidatesAdapter adapter = new CandidatesAdapter(myActivity, contest.candidates);
-                ListView candidateList = (ListView) myActivity.findViewById(R.id.contest_candidate_list);
-                candidateList.setAdapter(adapter);
-                candidateList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                mListView.setAdapter(adapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("CandidateList", "clicked: " + contest.candidates.get(position).name);
