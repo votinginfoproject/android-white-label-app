@@ -24,14 +24,16 @@ import java.lang.ref.WeakReference;
 
 /**
  * Download an image from a given URL, then set the bitmap on a given ImageView.
- *
+ * <p/>
  * Based partially on this blog post on Android image downloading:
  * http://android-developers.blogspot.com/2010/07/multithreading-for-performance.html
- *
+ * <p/>
  * Created by kathrynkillebrew on 8/7/14.
  */
 public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     private final WeakReference<ImageView> imageView;
+    private final static String TAG = FetchImageQuery.class.getSimpleName();
+
     HttpContext httpContext;
     HttpClient httpClient;
     Candidate candidate;
@@ -60,7 +62,7 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             int status = response.getStatusLine().getStatusCode();
 
             if (status != HttpStatus.SC_OK) {
-                Log.e("FetchImageQuery", "Error " + status + " while fetching image at URL " + photoUrl);
+                Log.e(TAG, "Error " + status + " while fetching image at URL " + photoUrl);
                 return null;
             }
 
@@ -86,7 +88,7 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             status = response.getStatusLine().getStatusCode();
 
             if (status != HttpStatus.SC_OK) {
-                Log.e("FetchImageQuery", "Error " + status + " while fetching image at URL " + photoUrl);
+                Log.e(TAG, "Error " + status + " while fetching image at URL " + photoUrl);
                 return null;
             }
 
@@ -98,22 +100,22 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             }
 
         } catch (IOException e) {
-            Log.e("FetchImageQuery", "IOException downloading image at URL " + photoUrl);
+            Log.e(TAG, "IOException downloading image at URL " + photoUrl);
             e.printStackTrace();
             cancel(true);
         } catch (OutOfMemoryError err) {
-            Log.e("FetchImageQuery", "Ran out of memory dowloading image at URL " + photoUrl);
+            Log.e(TAG, "Ran out of memory dowloading image at URL " + photoUrl);
             cancel(true);
         } catch (Exception ex) {
-            Log.e("FetchImageQuery", "Exception downloading image at URL " + photoUrl);
+            Log.e(TAG, "Exception downloading image at URL " + photoUrl);
             ex.printStackTrace();
             cancel(true);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
-                }  catch (IOException ex) {
-                    Log.e("FetchImageQuery", "Error closing input stream");
+                } catch (IOException ex) {
+                    Log.e(TAG, "Error closing input stream");
                     ex.printStackTrace();
                 }
             }
@@ -122,7 +124,7 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
                 try {
                     httpGet.abort();
                 } catch (Exception ex) {
-                    Log.e("FetchImageQuery", "Error aborting HTTP Get");
+                    Log.e(TAG, "Error aborting HTTP Get");
                     ex.printStackTrace();
                 }
             }
@@ -133,19 +135,19 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        Log.e("FetchImageQuery", "Image fetch got cancelled!");
+        Log.e(TAG, "Image fetch got cancelled!");
     }
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         if (isCancelled()) {
-            Log.e("FetchImageQuery:onPostExecute", "Task cancelled; not setting bitmap.");
+            Log.e(TAG + ":onPostExecute", "Task cancelled; not setting bitmap.");
             bitmap = null;
             return;
         }
 
         if (bitmap == null) {
-            Log.e("FetchImageQuery:onPostExecute", "Bitmap is null; not setting bitmap.");
+            Log.e(TAG + ":onPostExecute", "Bitmap is null; not setting bitmap.");
             return;
         }
 
@@ -156,12 +158,12 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             // get weakly referenced image view
             ImageView view = imageView.get();
             if (view != null) {
-                Log.d("FetchImageQuery:onPostExecute", "Setting image bitmap.");
+                Log.d(TAG + ":onPostExecute", "Setting image bitmap.");
                 view.setImageBitmap(bitmap);
                 view.setVisibility(View.VISIBLE);
             }
         } else {
-            Log.e("FetchImageQuery:onPostExecute", "No ImageView found to give the bitmap.");
+            Log.e(TAG + ":onPostExecute", "No ImageView found to give the bitmap.");
         }
     }
 
@@ -185,7 +187,7 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
 
         if (height > reqHeight || width > reqWidth) {
 
-            Log.d("FetchImageQuery", "Scaling image down from " + height + " " + width);
+            Log.d(TAG, "Scaling image down from " + height + " " + width);
 
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;

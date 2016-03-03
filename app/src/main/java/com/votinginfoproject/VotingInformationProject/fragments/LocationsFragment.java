@@ -14,28 +14,32 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationsAdapter;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class LocationsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+    private final String TAG = LocationsFragment.class.getSimpleName();
 
     static final ButterKnife.Action<View> HIDE = new ButterKnife.Action<View>() {
-        @Override public void apply(View view, int index) {
+        @Override
+        public void apply(View view, int index) {
             view.setVisibility(View.GONE);
         }
     };
     static final ButterKnife.Action<View> SHOW = new ButterKnife.Action<View>() {
-        @Override public void apply(View view, int index) {
+        @Override
+        public void apply(View view, int index) {
             view.setVisibility(View.VISIBLE);
         }
     };
@@ -57,6 +61,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     public static LocationsFragment newInstance() {
         return new LocationsFragment();
     }
+
     public LocationsFragment() {
         // Required empty public constructor
     }
@@ -66,20 +71,20 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_locations, container, false);
         ButterKnife.bind(this, rootView);
-        final VIPTabBarActivity myActivity = (VIPTabBarActivity)this.getActivity();
+        final VIPTabBarActivity myActivity = (VIPTabBarActivity) this.getActivity();
 
         Resources res = myActivity.getResources();
 
         // election labels
-        TextView election_name_label = (TextView)rootView.findViewById(R.id.locations_election_title);
-        TextView election_date_label = (TextView)rootView.findViewById(R.id.locations_election_subtitle);
+        TextView election_name_label = (TextView) rootView.findViewById(R.id.locations_election_title);
+        TextView election_date_label = (TextView) rootView.findViewById(R.id.locations_election_subtitle);
         election_name_label.setText(voterInfo.election.name);
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // clear directions polyline, if set from directions view
         myActivity.polylineCallback("", null);
 
-        if(voterInfo.isMailOnly()) {
+        if (voterInfo.isMailOnly()) {
             mailOnlyMessage.setVisibility(View.VISIBLE);
         } else {
             mailOnlyMessage.setVisibility(View.GONE);
@@ -96,14 +101,14 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         });
 
         // set up locations list
-        locationsList = (ListView)rootView.findViewById(R.id.locations_list);
+        locationsList = (ListView) rootView.findViewById(R.id.locations_list);
         locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // get location ID tagged onto its distance label in the list adapter
                 String itemTag = view.findViewById(R.id.location_list_item_distance).getTag().toString();
                 // open directions view on list item tap (will open map view on item button tap)
-                Log.d("LocationsFragment", "Clicked list item " + itemTag);
+                Log.d(TAG, "Clicked list item " + itemTag);
                 myActivity.showDirections(itemTag);
             }
         });
@@ -126,12 +131,12 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         if (!voterInfo.getPollingLocations().isEmpty()) {
             filterOptions.add(filterLabels.POLLING);
         }
-        if(!voterInfo.getOpenDropOffLocations().isEmpty()) {
+        if (!voterInfo.getOpenDropOffLocations().isEmpty()) {
             filterOptions.add(filterLabels.DROPBOX);
         }
 
         Spinner filterSpinner = (Spinner) rootView.findViewById(R.id.locations_list_spinner);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(myActivity,
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(myActivity,
                 R.layout.location_spinner_item, filterOptions);
         spinnerAdapter.setDropDownViewResource(R.layout.locations_spinner_view);
         filterSpinner.setAdapter(spinnerAdapter);
@@ -159,6 +164,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
 
     /**
      * Helper function to set locations list when filter button clicked
+     *
      * @param locations PollingLocation objects to put in the list
      */
     private void setFilter(List<PollingLocation> locations) {
@@ -207,7 +213,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         } else if (selection.equals(filterLabels.DROPBOX)) {
             setFilter(voterInfo.getOpenDropOffLocations());
         } else {
-            Log.e("LocationsFragment", "Selected item " + selection + "isn't recognized!");
+            Log.e(TAG, "Selected item " + selection + "isn't recognized!");
             setFilter(allLocations);
         }
     }

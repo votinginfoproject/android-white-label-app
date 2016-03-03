@@ -20,6 +20,8 @@ public class Election {
 
     private Date currentDay;
 
+    private final String TAG = Election.class.getSimpleName();
+
     public Election() {
         this(null, null, null);
     }
@@ -38,10 +40,11 @@ public class Election {
         if (str_date == null || str_date.isEmpty()) {
             return null;
         }
+
         try {
             return api_date_format.parse(str_date);
         } catch (ParseException e) {
-            Log.e("ElectionModel", "Failed to parse API date string " + str_date);
+            Log.e(TAG, "Failed to parse API date string " + str_date);
             return null;
         }
     }
@@ -58,7 +61,8 @@ public class Election {
             calendar.set(Calendar.MILLISECOND, 0);
             currentDay = calendar.getTime();
         }
-        Log.d("Election", "Current date is " + currentDay.toString());
+        Log.d(TAG, "Current date is " + currentDay.toString());
+
         return currentDay;
     }
 
@@ -67,7 +71,8 @@ public class Election {
      */
     public boolean isElectionOver() {
         Date election_day = getDayFromString(electionDay);
-        Log.d("Election", "Election date is " + election_day.toString());
+        Log.d(TAG, "Election date is " + election_day.toString());
+
         return getCurrentDay().after(election_day);
     }
 
@@ -75,11 +80,13 @@ public class Election {
         if (electionDay == null || electionDay.isEmpty()) {
             return "";
         }
+
         try {
             Date election_date = api_date_format.parse(electionDay);
             return api_date_display_format.format(election_date);
         } catch (ParseException e) {
-            Log.e("ElectionModel", "Failed to parse election date " + electionDay);
+            Log.e(TAG, "Failed to parse election date " + electionDay);
+
             return electionDay;
         }
     }

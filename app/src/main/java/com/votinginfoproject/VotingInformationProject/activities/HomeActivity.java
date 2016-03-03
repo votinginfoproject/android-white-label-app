@@ -32,6 +32,8 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     EditText addressView;
     LoaderManager loaderManager;
 
+    private final String TAG = HomeActivity.class.getSimpleName();
+
     public String getSelectedParty() {
         return selectedParty;
     }
@@ -151,7 +153,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             data.moveToFirst();
             // get result with single column, named data1
             String address = data.getString(0);
-            Log.d("HomeActivity", "Got cursor result: " + address);
+            Log.d(TAG, "Got cursor result: " + address);
 
             // set address found in view
             addressView.setText(address);
@@ -160,7 +162,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             HomeFragment myFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.home_fragment);
             myFragment.makeElectionQuery();
         } else {
-            Log.e("HomeActivity", "Cursor got no results!");
+            Log.e(TAG, "Cursor got no results!");
         }
     }
 

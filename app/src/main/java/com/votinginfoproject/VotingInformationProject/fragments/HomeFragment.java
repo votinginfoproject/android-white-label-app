@@ -41,6 +41,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+    private final String TAG = HomeFragment.class.getSimpleName();
+
     Button homeGoButton;
     CivicInfoApiQuery.CallBackListener voterInfoListener;
     CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
@@ -149,10 +151,12 @@ public class HomeFragment extends Fragment {
     public void makeElectionQuery() {
         String new_address = homeEditTextAddress.getText().toString();
         if (new_address.equals(address)) {
-            Log.d("HomeFragment", "Address has not changed.");
+            Log.d(TAG, "Address has not changed.");
+
             getElectionFromPreferences();
         } else {
-            Log.d("HomeFragment", "Searching with changed address.");
+            Log.d(TAG, "Searching with changed address.");
+
             queryWithNewAddress(new_address);
         }
     }
@@ -168,7 +172,7 @@ public class HomeFragment extends Fragment {
 
         String lastElection = preferences.getString(resources.getString(R.string.LAST_ELECTION_KEY), "");
         if (lastElection.isEmpty()) {
-            Log.e("HomeFragment", "Could not find last election in preferences!");
+            Log.e(TAG, "Could not find last election in preferences!");
             queryWithNewAddress(address);
             return;
         }
@@ -177,23 +181,25 @@ public class HomeFragment extends Fragment {
         try {
             Gson gson = new GsonBuilder().create();
             VoterInfo voterInfo = gson.fromJson(lastElection, VoterInfo.class);
-            Log.d("HomeFragment", "Got voter info result from shared preferences.");
+
+            Log.d(TAG, "Got voter info result from shared preferences.");
 
             // check if stored election has passed yet
             if (voterInfo.election.isElectionOver()) {
-                Log.d("HomeFragment", "Election in shared preferences is over; re-querying.");
+                Log.d(TAG, "Election in shared preferences is over; re-querying.");
+
                 queryWithNewAddress(address);
             } else {
-                Log.d("HomeFragment", "Election in shared preferences is still valid; using it.");
+                Log.d(TAG, "Election in shared preferences is still valid; using it.");
+
                 presentVoterInfoResult(voterInfo);
             }
         } catch (Exception ex) {
-            Log.e("HomeFragment", "Failed to re-hydrate last election!");
+            Log.e(TAG, "Failed to re-hydrate last election!");
 
             ex.printStackTrace();
             queryWithNewAddress(address);
         }
-
     }
 
     /**
@@ -203,7 +209,7 @@ public class HomeFragment extends Fragment {
      * @param new_address New address entered
      */
     private void queryWithNewAddress(String new_address) {
-        Log.d("HomeFragment", "queryWithNewAddress");
+        Log.d(TAG, "queryWithNewAddress");
 
         setAddress(new_address);
 
@@ -259,7 +265,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
                 Election selectedElection = (Election) adapterView.getItemAtPosition(index);
-                Log.d("HomeFragment", "Selected via election picker: " + selectedElection.toString());
+                Log.d(TAG, "Selected via election picker: " + selectedElection.toString());
                 // Only fire a new voterInfo query if the election changes
                 if (!selectedElection.getId().equals(currentElection.getId())) {
                     currentElection = selectedElection;
@@ -291,7 +297,7 @@ public class HomeFragment extends Fragment {
                     homeGoButton.setAlpha(1.f);
 
                     myActivity.setSelectedParty((String) adapterView.getItemAtPosition(index));
-                    Log.d("HomeFragment", "Selected via party picker: " + myActivity.getSelectedParty());
+                    Log.d(TAG, "Selected via party picker: " + myActivity.getSelectedParty());
                 }
 
                 ((TextView) view).setTextColor(Color.WHITE);
@@ -332,7 +338,7 @@ public class HomeFragment extends Fragment {
         try {
             electionId = currentElection.getId();
         } catch (NullPointerException e) {
-            Log.e("HomeFragment", "Current election is unset");
+            Log.e(TAG, "Current election is unset");
         }
 
         try {
@@ -353,7 +359,7 @@ public class HomeFragment extends Fragment {
             builder.appendQueryParameter("address", address);
             builder.appendQueryParameter("key", resources.getString(R.string.google_api_browser_key));
             String apiUrl = builder.build().toString();
-            Log.d("HomeActivity", "searchedAddress: " + apiUrl);
+            Log.d(TAG, "searchedAddress: " + apiUrl);
 
             homePartySpinnerWrapper.setVisibility(View.GONE);
 
@@ -365,7 +371,7 @@ public class HomeFragment extends Fragment {
             new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener,
                     preferences, resources.getString(R.string.LAST_ELECTION_KEY)).execute(apiUrl);
         } catch (Exception e) {
-            Log.e("HomeActivity Exception", "searchedAddress: " + address);
+            Log.e(TAG + ":Exception", "searchedAddress: " + address);
         }
     }
 
@@ -394,7 +400,7 @@ public class HomeFragment extends Fragment {
             public void callback(Object result) {
                 if (result == null) {
                     // if query returns null, then CivicInfoApiQuery had an exception
-                    Log.e("HomeFragment", "Got null result from voterInfoQuery!");
+                    Log.e(TAG, "Got null result from voterInfoQuery!");
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                     // read error result, if TalkBack enabled
                     homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
@@ -417,18 +423,18 @@ public class HomeFragment extends Fragment {
 
                     CivicApiError.Error error1 = error.errors.get(0);
 
-                    Log.d("HomeFragment", "Civic API returned error: " + error.code + ": " +
+                    Log.d(TAG, "Civic API returned error: " + error.code + ": " +
                             error.message + " " + error1.domain + " " + error1.reason + " " +
                             error1.message);
 
                     if (CivicApiError.errorMessages.get(error1.reason) != null) {
                         homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                     } else {
-                        Log.d("HomeFragment", "Unknown API error reason: " + error1.reason);
+                        Log.d(TAG, "Unknown API error reason: " + error1.reason);
                         homeTextViewStatus.setText(R.string.home_error_unknown);
                     }
                 } catch (NullPointerException e) {
-                    Log.e("HomeFragment", "Null encountered in API error result");
+                    Log.e(TAG, "Null encountered in API error result");
                     homeTextViewStatus.setText(R.string.home_error_unknown);
                 }
 
@@ -449,11 +455,11 @@ public class HomeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnInteractionListener {
-        public void onGoButtonPressed(View view);
+        void onGoButtonPressed(View view);
 
-        public void onSelectContactButtonPressed(View view);
+        void onSelectContactButtonPressed(View view);
 
-        public void searchedAddress(VoterInfo voterInfo);
+        void searchedAddress(VoterInfo voterInfo);
     }
 
     public String getAddress() {
@@ -472,12 +478,13 @@ public class HomeFragment extends Fragment {
      * @param address Address string to store
      */
     public void setAddress(String address) {
-        Log.d("HomeFragment", "Storing a new address into shared preferences.");
+        Log.d(TAG, "Storing a new address into shared preferences.");
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear(); // clears last saved election, if there is one
         String addressKey = getString(R.string.LAST_ADDRESS_KEY);
         editor.putString(addressKey, address);
         editor.apply();
+
         this.address = address;
     }
 
@@ -485,22 +492,25 @@ public class HomeFragment extends Fragment {
     public void setSpinnerElections(List<Election> elections) {
         if (elections == null || elections.size() < 2) {
             homeElectionSpinnerWrapper.setVisibility(View.GONE);
+
             return;
         } else {
             homeElectionSpinnerWrapper.setVisibility(View.VISIBLE);
         }
+
         ArrayAdapter<Election> adapter = new ArrayAdapter<Election>(myActivity, R.layout.home_spinner_view, elections);
         homeElectionSpinner.setAdapter(adapter);
 
         homeElectionSpinner.setSelection(0, true);
 
+        //Force selected text view style
         View v = homeElectionSpinner.getSelectedView();
         ((TextView) v).setTextColor(Color.WHITE);
         v.setBackgroundResource(0);
     }
 
     public void setSpinnerParty(List<Contest> contests) {
-        HashSet<String> parties = new HashSet(5);
+        HashSet<String> parties = new HashSet<>(5);
         if (contests != null) {
             for (Contest contest : contests) {
                 // if contest has a primary party listed, it must be for a primary election
@@ -509,7 +519,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         } else {
-            Log.d("HomeFragment", "No contests for election");
+            Log.d(TAG, "No contests for election");
         }
 
         if (!parties.isEmpty()) {

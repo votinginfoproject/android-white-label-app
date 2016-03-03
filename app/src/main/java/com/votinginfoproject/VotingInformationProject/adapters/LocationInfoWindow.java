@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -10,7 +11,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 
 /**
  * Class for custom map info window to use with polling locations.
- *
+ * <p/>
  * Created by kathrynkillebrew on 7/29/14.
  */
 public class LocationInfoWindow implements GoogleMap.InfoWindowAdapter {
@@ -24,12 +25,12 @@ public class LocationInfoWindow implements GoogleMap.InfoWindowAdapter {
     @Override
     public View getInfoContents(Marker marker) {
         View popup = inflater.inflate(R.layout.map_popup, null);
-        TextView text = (TextView)popup.findViewById(R.id.title);
+        TextView text = (TextView) popup.findViewById(R.id.title);
         text.setText(marker.getTitle());
-        text = (TextView)popup.findViewById(R.id.snippet);
+        text = (TextView) popup.findViewById(R.id.snippet);
         text.setText(marker.getSnippet());
 
-        return(popup);
+        return (popup);
     }
 
     @Override

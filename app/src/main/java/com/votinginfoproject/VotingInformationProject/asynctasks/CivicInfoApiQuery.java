@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,7 +7,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 
 import org.apache.http.HttpResponse;
@@ -27,14 +24,16 @@ import java.io.InputStreamReader;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
- *
+ * <p/>
  * Generalized class for querying the API
  */
 @SuppressWarnings("unchecked")
 public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
+    private final String TAG = CivicInfoApiQuery.class.getSimpleName();
+
     public interface CallBackListener {
-        public void callback(Object ob);
+        void callback(Object ob);
     }
 
     CallBackListener callbackListener;
@@ -49,14 +48,14 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
     /**
      * Constructor
      *
-     * @param clazz Class of object expected to be returned by query for gson to parse into
-     * @param callBack Callback method that takes returned object of type clazz
-     * @param errorCallback Callback method that takes returned CivicApiError object
-     * @param preferences SharedPreferences for calling activity for saving response string
+     * @param clazz           Class of object expected to be returned by query for gson to parse into
+     * @param callBack        Callback method that takes returned object of type clazz
+     * @param errorCallback   Callback method that takes returned CivicApiError object
+     * @param preferences     SharedPreferences for calling activity for saving response string
      * @param lastElectionKey key for SharedPreferences on which to save response string
      */
-    public CivicInfoApiQuery (Class clazz, CallBackListener callBack, CallBackListener errorCallback,
-                              SharedPreferences preferences, String lastElectionKey) {
+    public CivicInfoApiQuery(Class clazz, CallBackListener callBack, CallBackListener errorCallback,
+                             SharedPreferences preferences, String lastElectionKey) {
         try {
             this.returnClass = clazz;
             this.callbackListener = callBack;
@@ -72,8 +71,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
     }
 
     /**
-     *
-     * @param urls  query url
+     * @param urls query url
      * @return returns object of type of the class passed into the constructor
      */
     @Override
@@ -82,7 +80,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
         InputStream inputStream = null;
         HttpGet httpGet = null;
 
-        Log.d("CivicInfoApiQuery", "Url: " + url);
+        Log.d(TAG, "Url: " + url);
 
         try {
             httpGet = new HttpGet(url);
@@ -91,7 +89,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
             inputStream = response.getEntity().getContent();
             BufferedReader ir = new BufferedReader(new InputStreamReader(inputStream));
 
-            Log.d("CivicInfoApiQuery", "GOT RESPONSE STATUS: " + status);
+            Log.d(TAG, "GOT RESPONSE STATUS: " + status);
 
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -119,7 +117,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
             e.printStackTrace();
             clearLastElection();
         } catch (JsonSyntaxException e) {
-            Log.e("CivicInfoApiQuery", "Could not parse JSON response!");
+            Log.e(TAG, "Could not parse JSON response!");
             e.printStackTrace();
             clearLastElection();
         } catch (Exception e) {
@@ -130,7 +128,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
                 try {
                     inputStream.close();
                 } catch (IOException ex) {
-                    Log.e("CivicInfoApiQuery", "Error closing input stream");
+                    Log.e(TAG, "Error closing input stream");
                     ex.printStackTrace();
                 }
             }
@@ -139,7 +137,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
                 try {
                     httpGet.abort();
                 } catch (Exception ex) {
-                    Log.e("CivicInfoApiQuery", "Error aborting HTTP Get");
+                    Log.e(TAG, "Error aborting HTTP Get");
                     ex.printStackTrace();
                 }
             }
@@ -148,7 +146,6 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
     }
 
     /**
-     *
      * @param thing Object of type of class passed to constructor; returned to callback method
      */
     protected void onPostExecute(T thing) {
@@ -164,8 +161,8 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
      */
     @Override
     protected void onProgressUpdate(CivicApiError... errors) {
-        Log.d("CivicInfoApiQuery", "GOT API ERROR RESPONSE:");
-        Log.d("CivicInfoApiQuery", errors[0].code + ": " + errors[0].message);
+        Log.d(TAG, "GOT API ERROR RESPONSE:");
+        Log.d(TAG, errors[0].code + ": " + errors[0].message);
 
         clearLastElection();
         errorCallbackListener.callback(errors[0]);

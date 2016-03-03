@@ -1,10 +1,10 @@
 package com.votinginfoproject.VotingInformationProject.asynctasks;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.location.Geocoder;
-import android.location.Address;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -18,14 +18,14 @@ import java.util.List;
 /**
  * Asynchronously query the geocoding service with an address (must not be done on the UI thread!)
  * Returns first co-ordinates found to callback function passed to constructor.
- *
+ * <p/>
  * The callback returns the ID passed in, and the co-ordinates.
  * It will return negative co-ordinates in case of error, or no results found.
- *
+ * <p/>
  * Created by kathrynkillebrew on 7/25/14.
  */
 public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, ArrayList<Double>>> {
-
+    private final String TAG = GeocodeQuery.class.getSimpleName();
     private final static double MILES_IN_METER = 0.000621371192;
     private final static double KILOMETERS_IN_METER = 0.001;
 
@@ -38,27 +38,26 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
     private final WeakReference<TextView> distanceView;
     DecimalFormat distanceFormat;
 
-
     public interface GeocodeCallBackListener {
         /**
          * Callback for geocoder response.
          *
-         * @param label Identifier for address sent; same as ID sent into constructor.
-         * @param latitude Coordinate found in geocoding respnse (negative value indicates error)
+         * @param label     Identifier for address sent; same as ID sent into constructor.
+         * @param latitude  Coordinate found in geocoding respnse (negative value indicates error)
          * @param longitude Coordinate found in geocoding respnse (negative value indicates error)
-         * @param distance Distance from given address to user-entered location (zero if this is user's address)
+         * @param distance  Distance from given address to user-entered location (zero if this is user's address)
          */
-        public void callback(String label, double latitude, double longitude, double distance);
+        void callback(String label, double latitude, double longitude, double distance);
     }
 
     /**
      * Constructor.  Set parameters for geocoding job here.
      *
-     * @param context application context
-     * @param callBack function to be called with geocode results
-     * @param id string identifier for the address that will also be returned
-     * @param address string containing the address to geocode
-     * @param home Android Location object for user-entered address; used for distance calculation
+     * @param context   application context
+     * @param callBack  function to be called with geocode results
+     * @param id        string identifier for the address that will also be returned
+     * @param address   string containing the address to geocode
+     * @param home      Android Location object for user-entered address; used for distance calculation
      * @param useMetric boolean for units of measurement; false -> imperial units, true -> metric
      */
     public GeocodeQuery(Context context, GeocodeCallBackListener callBack, String id, String address,
@@ -72,7 +71,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
         this.useMetric = useMetric;
         if (distanceView != null) {
             this.distanceView = new WeakReference(distanceView);
-            distanceFormat =  new DecimalFormat("0.00 ");
+            distanceFormat = new DecimalFormat("0.00 ");
         } else {
             this.distanceView = null;
         }
@@ -85,7 +84,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
         ArrayList<Double> returnVals = new ArrayList<Double>(3);
 
         if (!Geocoder.isPresent()) {
-            Log.e("GeocodeQuery", "No geocoder service available!");
+            Log.e(TAG, "No geocoder service available!");
             returnVals.add(-2.0);
             returnVals.add(-2.0);
             returnVals.add(0.0);
@@ -95,7 +94,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
 
         try {
             if (geocodeAddress == null || geocodeAddress.isEmpty()) {
-                Log.e("GeocodeQuery", "No address to geocode!");
+                Log.e(TAG, "No address to geocode!");
             }
 
             List<Address> results = geocoder.getFromLocationName(geocodeAddress, 1);
@@ -125,14 +124,14 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
                 }
                 returnMap.put(key, returnVals);
             } else {
-                Log.d("GeocodeQuery", "No result found for address " + geocodeAddress);
+                Log.d(TAG, "No result found for address " + geocodeAddress);
                 returnVals.add(-1.0);
                 returnVals.add(-1.0);
                 returnVals.add(0.0);
                 returnMap.put("error", returnVals);
             }
         } catch (IOException e) {
-            Log.e("GeocodeQuery", "IOException geocoding address " + geocodeAddress);
+            Log.e(TAG, "IOException geocoding address " + geocodeAddress);
             e.printStackTrace();
             returnVals.add(-3.0);
             returnVals.add(-3.0);
@@ -154,7 +153,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
             try {
                 if (distanceView != null && distance > 0) {
                     TextView view = distanceView.get();
-                    Log.d("GeocodeQuery:onPostExecute", "Setting distance TextView");
+                    Log.d(TAG + ":onPostExecute", "Setting distance TextView");
                     if (useMetric) {
                         view.setText(distanceFormat.format(distance) + " km");
                     } else {
@@ -162,7 +161,7 @@ public class GeocodeQuery extends AsyncTask<String, String, HashMap<String, Arra
                     }
                 }
             } catch (Exception e) {
-                Log.e("GeocodeQuery:onPostExecute", "Failed to set distance label");
+                Log.e(TAG + ":onPostExecute", "Failed to set distance label");
                 e.printStackTrace();
             }
 

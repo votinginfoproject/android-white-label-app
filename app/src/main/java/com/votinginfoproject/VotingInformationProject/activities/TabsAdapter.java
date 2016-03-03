@@ -26,9 +26,9 @@ import java.util.ArrayList;
  * view to show as the tab content.  It listens to changes in tabs, and takes
  * care of switch to the correct paged in the ViewPager whenever the selected
  * tab changes.
- *
+ * <p/>
  * NOTE: This class is lifted directly from the ViewPager class docs:
- *       http://developer.android.com/reference/android/support/v4/view/ViewPager.html
+ * http://developer.android.com/reference/android/support/v4/view/ViewPager.html
  */
 public class TabsAdapter extends FragmentPagerAdapter
         implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
@@ -38,6 +38,8 @@ public class TabsAdapter extends FragmentPagerAdapter
     private LocationsFragment locationsFragment;
     private FragmentManager tabsFragmentManager;
     private VIPTabBarActivity myActivity;
+
+    private final String TAG = TabsAdapter.class.getSimpleName();
 
     static final class TabInfo {
         private final Class<?> clss;
@@ -88,7 +90,7 @@ public class TabsAdapter extends FragmentPagerAdapter
                 return ElectionDetailsFragment.newInstance();
             }
             default: {
-                Log.e("VIPTabBarActivity", "GETTING DEFAULT FRAGMENT FOR POSITION " + position);
+                Log.e(TAG, "GETTING DEFAULT FRAGMENT FOR POSITION " + position);
                 return LocationsFragment.newInstance();
             }
         }
@@ -139,10 +141,7 @@ public class TabsAdapter extends FragmentPagerAdapter
         } else if (tag.equals("details_tab")) {
             myActivity.setCurrentFragment(R.id.election_details_fragment);
         } else {
-            Log.e("TabsAdapter", "Tab " + tag + " is unrecognized!");
+            Log.e(TAG, "Tab " + tag + " is unrecognized!");
         }
-
     }
-
-
 }

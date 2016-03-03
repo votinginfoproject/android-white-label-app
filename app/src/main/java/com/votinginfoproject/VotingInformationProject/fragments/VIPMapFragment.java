@@ -40,6 +40,7 @@ import java.util.List;
 
 
 public class VIPMapFragment extends SupportMapFragment implements AdapterView.OnItemSelectedListener {
+    private final String TAG = VIPMapFragment.class.getSimpleName();
 
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
@@ -92,7 +93,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             showDropBox = true;
             showEarly = showPolling = false;
         } else {
-            Log.e("VIPMapFragment", "Selected item " + selection + "isn't recognized!");
+            Log.e(TAG, "Selected item " + selection + "isn't recognized!");
             showEarly = showPolling = showDropBox = true;
         }
     }
@@ -169,7 +170,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         } else if (haveElectionAdminBody) {
             thisLocation = voterInfo.getAdminBodyLatLng(locationId);
         } else {
-            Log.d("VIPMapFragment", "Have location ID: " + locationId);
+            Log.d(TAG, "Have location ID: " + locationId);
             selectedLocation = voterInfo.getLocationForId(locationId);
             CivicApiAddress address = selectedLocation.address;
             thisLocation = new LatLng(address.latitude, address.longitude);
@@ -262,7 +263,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
                     return;
                 }
 
-                Log.d("LocationsFragment", "Clicked marker for " + key);
+                Log.d(TAG, "Clicked marker for " + key);
                 mActivity.showDirections(key);
             }
         });
@@ -346,7 +347,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         private void addLocationsToMap(List<PollingLocation> locations, float bitmapDescriptor) {
             for (PollingLocation location : locations) {
                 if (location.address.latitude == 0) {
-                    Log.d("VIPMapFragment", "Skipping adding to map location " + location.name);
+                    Log.d(TAG, "Skipping adding to map location " + location.name);
                     continue;
                 }
                 markers.put(location.address.toGeocodeString(), createMarkerOptions(location, bitmapDescriptor));

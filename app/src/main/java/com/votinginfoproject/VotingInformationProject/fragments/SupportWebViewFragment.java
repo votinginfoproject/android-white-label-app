@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -24,22 +24,25 @@ import org.apache.http.util.EncodingUtils;
  * but made to extend the support library version of Fragment, to be compatible with
  * the rest of the app.  Also, this fragment handles loading the feedback form via POST
  * and sets/unsets the text view for loading status.
- *
  */
 public class SupportWebViewFragment extends Fragment {
-
     private static final String PARENT_VIEW = "parent_view";
+    private final String TAG = SupportWebViewFragment.class.getSimpleName();
     private WebView mWebView;
     private boolean mIsWebViewAvailable;
     private VIPTabBarActivity myActivity;
     private Resources res;
     private int parentViewId;
 
+    public SupportWebViewFragment() {
+    }
+
     public static SupportWebViewFragment newInstance(int parent_view) {
         SupportWebViewFragment fragment = new SupportWebViewFragment();
         Bundle args = new Bundle();
         args.putInt(PARENT_VIEW, parent_view);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -49,7 +52,7 @@ public class SupportWebViewFragment extends Fragment {
 
         if (getArguments() != null) {
             parentViewId = getArguments().getInt(PARENT_VIEW);
-            Log.d("SupportWebViewFragment", "Got parent view ID #" + parentViewId);
+            Log.d(TAG, "Got parent view ID #" + parentViewId);
         }
     }
 
@@ -58,22 +61,17 @@ public class SupportWebViewFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
-    public SupportWebViewFragment() {
-    }
-
     /**
      * Called to instantiate the view. Creates and returns the WebView.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         res = getResources();
-        myActivity = (VIPTabBarActivity)getActivity();
+        myActivity = (VIPTabBarActivity) getActivity();
         myActivity.setLoadingFeedBackForm(true);
 
-        Log.d("SupportWebViewFragment:onCreateView", "Setting up new webview fragment");
+        Log.d(TAG + ":onCreateView", "Setting up new webview fragment");
 
         // web view takes a few seconds to load, so show a message
         setTextView(res.getString(R.string.feedback_loading));
@@ -90,7 +88,7 @@ public class SupportWebViewFragment extends Fragment {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress == 100) {
-                    Log.d("SupportWebViewFragment", "Done loading feedback form.");
+                    Log.d(TAG, "Done loading feedback form.");
                     // set the text back from the loading message when done loading
                     setTextView(res.getString(R.string.feedback_link));
                 }
@@ -134,6 +132,7 @@ public class SupportWebViewFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
         mWebView.onPause();
     }
 
@@ -144,6 +143,7 @@ public class SupportWebViewFragment extends Fragment {
     public void onResume() {
         mWebView.onResume();
         myActivity.setLoadingFeedBackForm(true);
+
         super.onResume();
     }
 
@@ -155,6 +155,7 @@ public class SupportWebViewFragment extends Fragment {
     public void onDestroyView() {
         mIsWebViewAvailable = false;
         myActivity.setLoadingFeedBackForm(false);
+
         super.onDestroyView();
     }
 
@@ -168,6 +169,7 @@ public class SupportWebViewFragment extends Fragment {
             mWebView = null;
         }
         myActivity.setLoadingFeedBackForm(false);
+
         super.onDestroy();
     }
 

@@ -17,6 +17,8 @@ import java.lang.ref.WeakReference;
  * Created by kathrynkillebrew on 8/29/14.
  */
 public class LoadOpenSourceLicense extends AsyncTask<TextView, Void, String> {
+    private final String TAG = LoadOpenSourceLicense.class.getSimpleName();
+
     private WeakReference<TextView> textView = null;
     private Context mContext;
 
@@ -35,13 +37,12 @@ public class LoadOpenSourceLicense extends AsyncTask<TextView, Void, String> {
 
             return builder.toString();
         } catch (Exception ex) {
-            Log.e("LoadOpenSourceLicense", "Failed to asynchronously fetch Google Play services attribution");
+            Log.e(TAG, "Failed to asynchronously fetch Google Play services attribution");
             ex.printStackTrace();
         }
 
         return "";
     }
-
 
     @Override
     protected void onPostExecute(String text) {
@@ -49,13 +50,13 @@ public class LoadOpenSourceLicense extends AsyncTask<TextView, Void, String> {
             // get weakly referenced text view
             TextView view = textView.get();
             if (view != null && !text.isEmpty()) {
-                Log.d("LoadOpenSourceLicense:onPostExecute", "Setting text in view.");
+                Log.d(TAG + ":onPostExecute", "Setting text in view.");
                 view.setText(text);
             } else {
-                Log.e("LoadOpenSourceLicense:onPostExecute", "Missing either view or text to set");
+                Log.e(TAG + ":onPostExecute", "Missing either view or text to set");
             }
         } else {
-            Log.e("LoadOpenSourceLicense:onPostExecute", "No TextView found to give the text.");
+            Log.e(TAG + ":onPostExecute", "No TextView found to give the text.");
         }
     }
 }

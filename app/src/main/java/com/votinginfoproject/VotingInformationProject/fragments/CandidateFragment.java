@@ -20,8 +20,8 @@ import com.votinginfoproject.VotingInformationProject.asynctasks.FetchImageQuery
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 
 /**
@@ -39,6 +39,8 @@ public class CandidateFragment extends Fragment {
     private VoterInfo voterInfo;
     private Contest contest;
     private Candidate candidate;
+
+    private final String TAG = CandidateFragment.class.getSimpleName();
 
     private ViewGroup mContainer;
 
@@ -76,7 +78,7 @@ public class CandidateFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d("ContestFragment", "In onActivityCreated");
+        Log.d(TAG, "In onActivityCreated");
         mActivity = (VIPTabBarActivity) getActivity();
         setContents();
     }
@@ -143,19 +145,19 @@ public class CandidateFragment extends Fragment {
             ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
             Bitmap havePhoto = candidate.getCandidatePhoto();
             if (havePhoto != null) {
-                Log.d("CandidateFragment", "Already have candidate photo; using it.");
+                Log.d(TAG, "Already have candidate photo; using it.");
                 photoView.setImageBitmap(havePhoto);
                 photoView.setVisibility(View.VISIBLE);
             } else {
                 if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
-                    Log.d("CandidateFragment", "Got candidate photo URL: " + candidate.photoUrl);
+                    Log.d(TAG, "Got candidate photo URL: " + candidate.photoUrl);
                     // set image bitmap in async task
                     new FetchImageQuery(candidate, photoView).execute(candidate.photoUrl);
                 }
             }
 
         } catch (Exception ex) {
-            Log.e("Candidate Fragment", "Failed to get candidate info!");
+            Log.e(TAG, "Failed to get candidate info!");
             ex.printStackTrace();
         }
     }
@@ -164,7 +166,7 @@ public class CandidateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContainer = container;
-        Log.d("CandidateFragment:onCreateView", "Hiding contest container's view");
+        Log.d(TAG + ":onCreateView", "Hiding contest container's view");
         container.getChildAt(0).setVisibility(View.INVISIBLE);
 
         return inflater.inflate(R.layout.fragment_candidate, container, false);
@@ -259,7 +261,7 @@ public class CandidateFragment extends Fragment {
     @Override
     public void onDetach() {
         // Show contest fragment components again when user goes back
-        Log.d("CandidateFragment:onDetach", "Showing contest container's view again");
+        Log.d(TAG + ":onDetach", "Showing contest container's view again");
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
         super.onDetach();
     }

@@ -11,6 +11,8 @@ import java.util.Locale;
  * Created by marcvandehey on 3/2/16.
  */
 public class UserPreferences {
+    private static final String TAG = UserPreferences.class.getSimpleName();
+
     private static UserPreferences ourInstance = new UserPreferences();
 
     private boolean useMetric;
@@ -55,7 +57,7 @@ public class UserPreferences {
         if (getInstance().voterInfo != null) {
             getInstance().voterInfo.setSelectedParty(selectedParty);
         } else {
-            Log.d("UserPreferences", "Cannot set party on VoterInfo because voterInfo is null");
+            Log.d(TAG, "Cannot set party on VoterInfo because voterInfo is null");
         }
     }
 }

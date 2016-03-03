@@ -74,6 +74,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
     private GoogleApiClient mGoogleApiClient;
 
+    private final String TAG = VIPTabBarActivity.class.getSimpleName();
+
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
     int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
 
@@ -104,10 +106,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     @Override
     public void onClick(View v) {
         if (isLoadingFeedBackForm()) {
-            Log.d("ContestFragment", "Already loading feedback form.");
+            Log.d(TAG, "Already loading feedback form.");
             return;
         }
-        Log.d("ContestFragment", "Feedback button text clicked");
+        Log.d(TAG, "Feedback button text clicked");
         loadingFeedBackForm = true;
         // load browser in app
 
@@ -255,7 +257,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     }
 
     public void showDirections(String item) {
-        Log.d("VIPTabBarActivity", "Going to show directions to " + item + "...");
+        Log.d(TAG, "Going to show directions to " + item + "...");
         // first ask user where to get directions from:  entered address, or current location?
         promptForDirectionsOrigin(item);
     }
@@ -268,7 +270,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         builder.setSingleChoiceItems(R.array.tabbar_directions_origin_options, selectedOriginItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.d("VIPTabBarActivity", "You selected: " + which);
+                Log.d(TAG, "You selected: " + which);
                 selectedOriginItem = which;
             }
         });
@@ -276,10 +278,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // user clicked ok
-                Log.d("VIPTabBarActivity", "Final selection: " + selectedOriginItem);
+                Log.d(TAG, "Final selection: " + selectedOriginItem);
 
                 // flag to tell directions which origin to use
                 boolean use_location = false;
+
                 if (selectedOriginItem > 0) {
                     use_location = true;
                 }
@@ -305,22 +308,22 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // user cancelled; do not show directions
-                Log.d("VIPTabBarActivity", "User cancelled dialog.");
+                Log.d(TAG, "User cancelled dialog.");
+
                 dialog.cancel();
             }
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
     private boolean playServicesAvailable() {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-            Log.d("VIPTabBarActivity", "Google Play services are available!");
+            Log.d(TAG, "Google Play services are available!");
 
             return true;
         } else {
-            Log.e("VIPTabBarActivity", "Google Play services are unavailable!");
+            Log.e(TAG, "Google Play services are unavailable!");
             // alert user
             CharSequence errorMessage = this.getResources().getText(R.string.locations_map_play_services_unavailable);
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
@@ -437,11 +440,11 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
             @Override
             public void callback(String address) {
-                Log.d("HomeActivity", "Got reverse-geocoded address " + address);
+                Log.d(TAG, "Got reverse-geocoded address " + address);
                 if (address != null && !address.isEmpty()) {
                     userLocationAddress = address;
                 } else {
-                    Log.e("HomeActivity", "Got empty address result!");
+                    Log.e(TAG, "Got empty address result!");
                     userLocationAddress = "";
                 }
             }
@@ -453,7 +456,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             @Override
             public void callback(String key, double lat, double lon, double distance) {
                 if (key.equals("error")) {
-                    Log.e("VIPTabBarActivity", "Geocode failed!");
+                    Log.e(TAG, "Geocode failed!");
                     return;
                 }
 
@@ -464,7 +467,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
                     foundLoc.address.longitude = lon;
                     foundLoc.address.distance = distance;
                 } else {
-                    Log.e("VIPTabBarActivity", "Could not find location " + key + " to set geocoding result!");
+                    Log.e(TAG, "Could not find location " + key + " to set geocoding result!");
                 }
             }
         };
@@ -474,7 +477,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             @Override
             public void callback(String key, double lat, double lon, double distance) {
                 if (key.equals("error")) {
-                    Log.e("VIPTabBarActivity", "Failed to geocode home address!");
+                    Log.e(TAG, "Failed to geocode home address!");
+
                     return;
                 }
 
@@ -519,7 +523,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             @Override
             public void callback(String key, double lat, double lon, double distance) {
                 if (key.equals("error")) {
-                    Log.e("VIPTabBarActivity", "Failed to geocode administrative body physical address!");
+                    Log.e(TAG, "Failed to geocode administrative body physical address!");
+
                     return;
                 }
 
@@ -529,7 +534,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
                     address.longitude = lon;
                     address.distance = distance;
                 } else {
-                    Log.e("VIPTabBarActivity", "Failed to set geocode result on election admin body!");
+                    Log.e(TAG, "Failed to set geocode result on election admin body!");
                 }
 
             }
@@ -552,12 +557,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             // location services aren't ready yet (maybe just turned on)
             // wait for onConnected() to be called, then try again
             if (!mGoogleApiClient.isConnecting()) {
-                Log.d("VIPTabBarActivity", "Location client not connected; try connecting...");
+                Log.d(TAG, "Location client not connected; try connecting...");
                 mGoogleApiClient.disconnect(); // call connect from disconnect
 
                 return null;
             } else {
-                Log.d("VIPTabBarActivity", "Location client is connecting...");
+                Log.d(TAG, "Location client is connecting...");
+
                 return null;
             }
         }
@@ -567,7 +573,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         if (currentLocation != null) {
             userLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-            Log.d("HomeActivity", "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+            Log.d(TAG, "Current location is: " + currentLocation.getLatitude() + "," + currentLocation.getLongitude());
 
             // now go reverse-geocode to find address for current location
             userLocationAddress = "";
@@ -575,7 +581,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
             return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         } else {
-            Log.e("HomeActivity", "Current location not found!  Are Location services enabled?");
+            Log.e(TAG, "Current location not found!  Are Location services enabled?");
             userLocation = null;
 
             if (showPrompt) {
@@ -609,7 +615,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
      */
     private void retryGetDirections() {
         if (selectedOriginItem == 0) {
-            Log.e("VIPTabBarActivity", "No longer using current location for directions!  Ignoring.");
+            Log.e(TAG, "No longer using current location for directions!  Ignoring.");
 
             return;
         }
@@ -622,10 +628,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             if (directionsFragment != null) {
                 directionsFragment.setUpWithOrigin(location);
             } else {
-                Log.e("VIPTabBarActivity", "Could not find directions fragment!");
+                Log.e(TAG, "Could not find directions fragment!");
             }
         } else {
-            Log.d("VIPTabBarActivity", "Location is still null");
+            Log.d(TAG, "Location is still null");
         }
     }
 
@@ -636,7 +642,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             // Do not prompt them again to enable location services.
             retryGetDirections();
         } else {
-            Log.e("VIPTabBarActivity", "Got result for unrecognized activity!");
+            Log.e(TAG, "Got result for unrecognized activity!");
         }
     }
 
@@ -665,7 +671,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d("VIPTabBarActivity", "Location services connected.");
+        Log.d(TAG, "Location services connected.");
         retryGetDirections(); // try to get found location to directions fragment
     }
 
@@ -681,12 +687,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e("VIPTabBarActivity", "Location services failed.");
+        Log.e(TAG, "Location services failed.");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
@@ -694,6 +701,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.viptab_bar, menu);
+
         return true;
     }
 
@@ -703,14 +711,17 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         if (id == android.R.id.home) {
             // Navigate to HomeActivity from main TabBar
             NavUtils.navigateUpFromSameTask(this);
         }
+
         if (id == R.id.action_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         }
+
         return super.onOptionsItemSelected(item);
     }
 }

@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.fragments;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,12 +21,13 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.UserPref
 import static butterknife.ButterKnife.findById;
 
 public class ContestFragment extends Fragment {
+    private final String TAG = ContestFragment.class.getSimpleName();
+
     private static final String CONTEST_NUM = "contest_number";
     private int contestNum;
     VoterInfo voterInfo;
     Contest contest;
     private ViewGroup mContainer;
-    Resources res;
 
     private ListView mListView;
 
@@ -57,7 +57,7 @@ public class ContestFragment extends Fragment {
 
         if (getArguments() != null) {
             contestNum = getArguments().getInt(CONTEST_NUM);
-            Log.d("ContestFragment", "Got contest #" + contestNum);
+            Log.d(TAG, "Got contest #" + contestNum);
         }
 
         mListView = (ListView) getActivity().findViewById(R.id.contest_candidate_list);
@@ -67,8 +67,7 @@ public class ContestFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d("ContestFragment", "In onActivityCreated");
-        res = getResources();
+        Log.d(TAG, "In onActivityCreated");
         setContents();
     }
 
@@ -83,7 +82,7 @@ public class ContestFragment extends Fragment {
         try {
             voterInfo = UserPreferences.getVoterInfo();
             contest = voterInfo.getContestAt(contestNum);
-            Log.d("ContestFragment", "Got contest for office: " + contest.office);
+            Log.d(TAG, "Got contest for office: " + contest.office);
 
             // title / subtitle is referendumTitle and referendumSubtitle, if election is
             // of type 'Referendum'; else title is office and subtitle is election name
@@ -115,14 +114,14 @@ public class ContestFragment extends Fragment {
                 if (contest.referendumTitle != null) {
                     title.setText(contest.referendumTitle);
                     if (contest.referendumTitle.length() > 20) {
-                        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_small));
+                        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getActivity().getResources().getDimension(R.dimen.text_small));
                     }
                 }
 
                 if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
                     subtitle.setText(contest.referendumSubtitle);
                     if (contest.referendumSubtitle.length() > 20) {
-                        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_small));
+                        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, getActivity().getResources().getDimension(R.dimen.text_small));
                     }
                 } else {
                     subtitle.setVisibility(View.GONE);
@@ -140,17 +139,17 @@ public class ContestFragment extends Fragment {
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Log.d("CandidateList", "clicked: " + contest.candidates.get(position).name);
+                        Log.d(TAG + ":List", "clicked: " + contest.candidates.get(position).name);
                         myActivity.showCandidateDetails(contestNum, position);
                     }
                 });
             } else if (!contest.type.equals("Referendum")) {
-                Log.d("ContestFragment", "No candidates found for selected contest.");
+                Log.d(TAG, "No candidates found for selected contest.");
                 myActivity.findViewById(R.id.contest_candidate_list_header).setVisibility(View.GONE);
             }
 
         } catch (Exception ex) {
-            Log.e("ContestFragment", "Failed to get contest info!");
+            Log.e(TAG, "Failed to get contest info!");
             ex.printStackTrace();
         }
     }
@@ -165,15 +164,16 @@ public class ContestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContainer = container;
-        Log.d("ContestFragment:onCreateView", "Hiding ballot container's view");
+        Log.d(TAG + ":onCreateView", "Hiding ballot container's view");
         mContainer.getChildAt(0).setVisibility(View.INVISIBLE);
+
         return inflater.inflate(R.layout.fragment_contest, mContainer, false);
     }
 
     @Override
     public void onDetach() {
         // Show ballot fragment components again when user goes back
-        Log.d("ContestFragment:onDetach", "Showing ballot container's view again");
+        Log.d(TAG + ":onDetach", "Showing ballot container's view again");
         VIPTabBarActivity myActivity = (VIPTabBarActivity) getActivity();
         myActivity.setCurrentFragment(R.id.ballot_fragment);
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);

@@ -18,13 +18,14 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.HashMap;
 
 
 public class DirectionsFragment extends Fragment {
+    private final String TAG = DirectionsFragment.class.getSimpleName();
 
     private static final String LOCATION_ID = "location_id";
     private static final String USE_CURRENT_LOCATION = "use_location";
@@ -56,14 +57,16 @@ public class DirectionsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
+
         if (getArguments() != null) {
             location_id = args.getString(LOCATION_ID);
-            Log.d("DirectionsFragment", "Got location " + location_id);
+            Log.d(TAG, "Got location " + location_id);
             use_location = args.getBoolean(USE_CURRENT_LOCATION);
+
             if (use_location) {
-                Log.d("DirectionsFragment", "Showing directions from current location");
+                Log.d(TAG, "Showing directions from current location");
             } else {
-                Log.d("DirectionsFragment", "Showing directions from entered address");
+                Log.d(TAG, "Showing directions from entered address");
             }
         }
     }
@@ -74,6 +77,7 @@ public class DirectionsFragment extends Fragment {
         args.putString(LOCATION_ID, key);
         args.putBoolean(USE_CURRENT_LOCATION, use_location);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -92,9 +96,10 @@ public class DirectionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         mContainer = container;
-        Log.d("DirectionsFragment:onCreateView", "Hiding location list container's view");
+
+        Log.d(TAG + ":onCreateView", "Hiding location list container's view");
+
         container.getChildAt(0).setVisibility(View.INVISIBLE);
 
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
@@ -121,6 +126,7 @@ public class DirectionsFragment extends Fragment {
         TextView directions_subtitle_label = (TextView) rootView.findViewById(R.id.directions_subtitle);
 
         String locationName = voterInfo.getDescriptionForId(location_id);
+
         if (!locationName.isEmpty()) {
             directions_title_label.setText(locationName);
             directions_subtitle_label.setText(locationAddress.toGeocodeString());
@@ -158,7 +164,7 @@ public class DirectionsFragment extends Fragment {
 
         // check for missing origin
         if (homeLatLng == null) {
-            Log.d("DirectionsFragment", "Got null origin location");
+            Log.d(TAG, "Got null origin location");
             directionsList.setVisibility(View.GONE);
             noneFoundMessage.setText(R.string.directions_no_origin_message);
             noneFoundMessage.setVisibility(View.VISIBLE);
@@ -168,7 +174,7 @@ public class DirectionsFragment extends Fragment {
             return;
         }
 
-        Log.d("DirectionsFragment", "Got origin location; setting up directions list");
+        Log.d(TAG, "Got origin location; setting up directions list");
 
         // add click handlers for button bar buttons
         setButtonInBarClickListener(R.id.directions_bike_button);
@@ -208,7 +214,6 @@ public class DirectionsFragment extends Fragment {
      * @param buttonId R id of the button to listen to
      */
     private void setButtonInBarClickListener(final int buttonId) {
-
         rootView.findViewById(buttonId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,7 +240,7 @@ public class DirectionsFragment extends Fragment {
                     directionsMode = "driving";
                 }
 
-                Log.d("DirectionsFragment", "New directions mode is " + directionsMode);
+                Log.d(TAG, "New directions mode is " + directionsMode);
                 queryDirections();
 
                 lastSelectedButtonId = buttonId;
@@ -252,12 +257,13 @@ public class DirectionsFragment extends Fragment {
         myActivity.polylineCallback("", null);
         String homeCoords = homeLatLng.latitude + "," + homeLatLng.longitude;
         String locationCoords = locationAddress.latitude + "," + locationAddress.longitude;
+
         new DirectionsQuery(getActivity(), directionsList, noneFoundMessage, homeCoords, locationCoords, myActivity).execute(directionsMode);
     }
 
     @Override
     public void onDetach() {
-        Log.d("DirectionsFragment:onDetach", "Showing location list container's view again");
+        Log.d(TAG + ":onDetach", "Showing location list container's view again");
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
 
         super.onDetach();

@@ -17,14 +17,15 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ElectionDetailsFragment extends Fragment {
+    private final String TAG = ElectionDetailsFragment.class.getSimpleName();
 
     private VIPTabBarActivity mActivity;
     Resources resources;
@@ -93,7 +94,9 @@ public class ElectionDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("ElectionDetailsFragment", "In onActivityCreated");
+
+        Log.d(TAG, "In onActivityCreated");
+
         mActivity = (VIPTabBarActivity) getActivity();
         resources = mActivity.getResources();
         mLinkMovementMethod = LinkMovementMethod.getInstance();
@@ -104,7 +107,8 @@ public class ElectionDetailsFragment extends Fragment {
         localAdmin = voterInfo.getLocalAdmin();
 
         if (localAdmin != null) {
-            Log.d("ElectionDetailsFragment", "Got local election admin body " + localAdmin.name);
+            Log.d(TAG, "Got local election admin body " + localAdmin.name);
+
             if (stateAdmin == null) {
                 // no state admin body; hide button bar and just show local
                 setContents(localAdmin, ElectionAdministrationBody.AdminBody.LOCAL);
@@ -130,7 +134,6 @@ public class ElectionDetailsFragment extends Fragment {
                 View noneMsg = mActivity.findViewById(R.id.details_none_found);
                 noneMsg.setVisibility(View.VISIBLE);
             }
-
         }
 
         // set up button bar
@@ -171,7 +174,6 @@ public class ElectionDetailsFragment extends Fragment {
         mActivity.findViewById(sectionHeaderId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Button btn = (Button) view;
                 View section = mActivity.findViewById(sectionId);
 
@@ -282,7 +284,7 @@ public class ElectionDetailsFragment extends Fragment {
             setPhysicalAddressView(body.getPhysicalAddress(), eab_type);
             setTextView(R.id.details_election_officials, R.id.details_election_officials_section_header, body.getElectionOfficials());
         } catch (Exception ex) {
-            Log.e("ElectionDetailsFragment", "Failed to set election details info!");
+            Log.e(TAG, "Failed to set election details info!");
             ex.printStackTrace();
         }
     }
@@ -298,6 +300,7 @@ public class ElectionDetailsFragment extends Fragment {
     private void setLink(int labelId, int containerId, int dividerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(labelId);
         View container = mActivity.findViewById(containerId);
+
         View divider = null;
         if (dividerId > 0) {
             divider = mActivity.findViewById(dividerId);
@@ -336,6 +339,7 @@ public class ElectionDetailsFragment extends Fragment {
     private void setTextView(int textViewId, int containerId, String val) {
         TextView textView = (TextView) mActivity.findViewById(textViewId);
         View container = mActivity.findViewById(containerId);
+
         if (val != null && !val.isEmpty()) {
             textView.setText(val);
             container.setVisibility(View.VISIBLE);
@@ -354,13 +358,14 @@ public class ElectionDetailsFragment extends Fragment {
         TextView textView = (TextView) mActivity.findViewById(R.id.details_physical_address);
         View container = mActivity.findViewById(R.id.details_physical_address_section_header);
         TableRow tableRow = (TableRow) mActivity.findViewById(R.id.details_physical_address_row);
+
         if (val != null && !val.isEmpty()) {
             textView.setText(val);
             container.setVisibility(View.VISIBLE);
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("ElectionDetailsFragment", "Clicked physical address; going to show map.");
+                    Log.d(TAG, "Clicked physical address; going to show map.");
                     mActivity.polylineCallback(null, null);
                     mActivity.showMap(eab_type);
                 }
@@ -369,5 +374,4 @@ public class ElectionDetailsFragment extends Fragment {
             container.setVisibility(View.GONE);
         }
     }
-
 }

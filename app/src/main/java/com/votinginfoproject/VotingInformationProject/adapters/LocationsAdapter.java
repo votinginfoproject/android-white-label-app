@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
+    private final String TAG = LocationsAdapter.class.getSimpleName();
+
     VIPTabBarActivity myActivity;
     DecimalFormat distanceFormat;
     String distanceSuffix;
@@ -37,23 +39,23 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         TextView name;
         TextView address;
         TextView distance;
-        boolean isQueryingDistance; // only query for distance if not already doing so
         TextView voterServices;
         TextView pollingHours;
+
+        boolean isQueryingDistance; // only query for distance if not already doing so
     }
 
     /**
-     *
-     * @param context expected to be VIPTabBarActivity
+     * @param context   expected to be VIPTabBarActivity
      * @param locations list of polling locations to display
      */
     public LocationsAdapter(Context context, List<PollingLocation> locations) {
         super(context, R.layout.location_list_item, locations);
 
-        myActivity = (VIPTabBarActivity)context;
+        myActivity = (VIPTabBarActivity) context;
         useMetric = UserPreferences.useMetric();
         home = UserPreferences.getHomeLocation();
-        distanceFormat =  new DecimalFormat("0.00 ");
+        distanceFormat = new DecimalFormat("0.00 ");
 
         if (useMetric) {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_metric);
@@ -65,6 +67,7 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         PollingLocation location = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -120,8 +123,9 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
              * task started in activity hasn't returned by the time the list loads.
              * Task started in activity will set properties on the location model object when it returns.
              */
-            Log.d("LocationsAdapter", "Getting distance from LocationsAdapter");
+            Log.d(TAG, "Getting distance from LocationsAdapter");
             viewHolder.isQueryingDistance = true;
+
             new GeocodeQuery(myActivity, null, addr,
                     location.address.toGeocodeString(), home, useMetric, viewHolder.distance).execute();
         }
@@ -135,18 +139,19 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
         setTextOrHideView(viewHolder.pollingHours, location.pollingHours);
 
-        if(!TextUtils.isEmpty(location.voterServices)) {
+        if (!TextUtils.isEmpty(location.voterServices)) {
             viewHolder.voterServices.setVisibility(View.VISIBLE);
             viewHolder.voterServices.setText("Voter Services: " + location.voterServices);
         } else {
             viewHolder.voterServices.setVisibility(View.GONE);
         }
+
         // Return the completed view to render on screen
         return convertView;
     }
 
     private static void setTextOrHideView(TextView textView, CharSequence text) {
-        if(!TextUtils.isEmpty(text)) {
+        if (!TextUtils.isEmpty(text)) {
             textView.setVisibility(View.VISIBLE);
             textView.setText(text);
         } else {

@@ -14,11 +14,12 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.ContestsAdapter;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 
 public class BallotFragment extends Fragment {
+    private final String TAG = BallotFragment.class.getSimpleName();
 
     VoterInfo voterInfo;
     VIPTabBarActivity myActivity;
@@ -66,6 +67,7 @@ public class BallotFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         myActivity = (VIPTabBarActivity) this.getActivity();
     }
 
@@ -74,6 +76,6 @@ public class BallotFragment extends Fragment {
         super.onAttach(activity);
         // get election info
         voterInfo = UserPreferences.getVoterInfo();
-        Log.d("BallotFragment", "Got election: " + voterInfo.election.name);
+        Log.d(TAG, "Got election: " + voterInfo.election.name);
     }
 }

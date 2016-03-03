@@ -41,6 +41,8 @@ import java.util.HashMap;
  */
 public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
+    private final String TAG = DirectionsQuery.class.getSimpleName();
+
     String homeCoordinates;
     String destinationCoordinates;
     String api_key;
@@ -60,7 +62,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         /**
          * Callback for returning encoded overview polyline and its bounds for map display
          */
-        public void polylineCallback(String polyline, Bounds bounds);
+        void polylineCallback(String polyline, Bounds bounds);
     }
 
     public DirectionsQuery(Context context, ListView listView, TextView errorView, String originCoordinates,
@@ -97,7 +99,8 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         String cacheKey = addressKey + travelModes[0];
         Response cachedResponse = directionsCache.get(cacheKey);
         if (cachedResponse != null) {
-            Log.d("DirectionsQuery", "Have response in cache.");
+            Log.d(TAG, "Have response in cache.");
+
             return cachedResponse;
         }
 
@@ -118,7 +121,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
 
         uri.append("&key=");
         uri.append(api_key);
-        Log.d("DirectionsQuery", uri.toString());
+        Log.d(TAG, uri.toString());
 
         InputStream inputStream = null;
         HttpGet httpGet = null;
@@ -130,7 +133,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             inputStream = response.getEntity().getContent();
             BufferedReader ir = new BufferedReader(new InputStreamReader(inputStream));
 
-            Log.d("DirectionsQuery", "GOT RESPONSE STATUS: " + status);
+            Log.d(TAG, "GOT RESPONSE STATUS: " + status);
 
             Gson gson = new GsonBuilder().create();
             if (status == HttpStatus.SC_OK) {
@@ -146,19 +149,17 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
                 return gsonObj;
             } else {
                 // error
-                Log.e("DirectionsQuery", "Error with response: " + ir.readLine());
+                Log.e(TAG, "Error with response: " + ir.readLine());
                 ir.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException ex) {
-                    Log.e("DirectionsQuery", "Error closing input stream");
+                    Log.e(TAG, "Error closing input stream");
                     ex.printStackTrace();
                 }
             }
@@ -167,7 +168,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
                 try {
                     httpGet.abort();
                 } catch (Exception ex) {
-                    Log.e("DirectionsQuery", "Error aborting HTTP Get");
+                    Log.e(TAG, "Error aborting HTTP Get");
                     ex.printStackTrace();
                 }
             }
@@ -190,21 +191,23 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             errorView.setVisibility(View.VISIBLE);
             directionsListView.setVisibility(View.GONE);
         } else {
-            Log.e("DirectionsQuery:onPreExecute", "Directions ListView and/or error TextView references are null.");
+            Log.e(TAG + ":onPreExecute", "Directions ListView and/or error TextView references are null.");
         }
     }
 
     @Override
     protected void onPostExecute(Response response) {
         if (response == null) {
-            Log.e("DirectionsQuery", "Did not get directions query response");
+            Log.e(TAG, "Did not get directions query response");
             showError();
+
             return;
         }
 
         if (!response.status.equals("OK")) {
-            Log.e("DirectionsQuery", "Directions query response status is: " + response.status);
+            Log.e(TAG, "Directions query response status is: " + response.status);
             showError();
+
             return;
         }
 
@@ -229,7 +232,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             directionsListView.setVisibility(View.VISIBLE);
             directionsListView.setAdapter(listAdapter);
         } else {
-            Log.e("DirectionsQuery:onPostExecute", "Directions ListView and/or error TextView references are null.");
+            Log.e(TAG + ":onPostExecute", "Directions ListView and/or error TextView references are null.");
         }
     }
 
@@ -242,7 +245,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             errorView.setText(resources.getString(R.string.directions_error_message));
             errorView.setVisibility(View.VISIBLE);
         } else {
-            Log.e("DirectionsQuery:showError", "Directions ListView and/or error TextView references are null.");
+            Log.e(TAG + ":showError", "Directions ListView and/or error TextView references are null.");
         }
     }
 }
