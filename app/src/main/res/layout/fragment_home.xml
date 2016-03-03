@@ -1,158 +1,169 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/bg_home"
-    tools:context="com.votinginfoproject.VotingInformationProject.fragments.HomeFragment">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_home"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="com.votinginfoproject.VotingInformationProject.fragments.HomeFragment">
 
     <TextView
         android:id="@+id/home_textview_brandname"
-        android:text="@string/home_textview_brandname"
         style="@style/fill_width_wrap_height"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/home_top_margin"
-        android:textAllCaps="true"
         android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_large"
+        android:text="@string/home_textview_brandname"
+        android:textAllCaps="true"
         android:textColor="@color/brand_name_text"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/home_textview_votinginfo"
-        android:text="@string/home_textview_votinginfo"
         style="@style/fill_width_wrap_height"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/home_small_padding"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/home_textview_brandname"
+        android:layout_marginTop="@dimen/home_small_padding"
         android:gravity="center"
-        android:textSize="@dimen/text_xxlarge" />
+        android:text="@string/home_textview_votinginfo"
+        android:textSize="@dimen/text_xxlarge"/>
 
     <TextView
         android:id="@+id/home_textview_getting_started"
-        android:text="@string/home_textview_getting_started"
-        android:labelFor="@+id/home_edittext_address"
         style="@style/fill_width_wrap_height"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/home_textview_votinginfo"
-        android:layout_marginTop="@dimen/home_large_padding"
         android:layout_marginBottom="@dimen/home_large_padding"
+        android:layout_marginTop="@dimen/home_large_padding"
         android:gravity="center"
-        android:textSize="@dimen/text_small"
-        android:textStyle="italic"
+        android:labelFor="@+id/home_edittext_address"
         android:paddingLeft="10sp"
-        android:paddingRight="10sp" />
+        android:paddingRight="10sp"
+        android:text="@string/home_textview_getting_started"
+        android:textSize="@dimen/text_small"
+        android:textStyle="italic"/>
 
     <!-- Cannot preview EditText elements using API v20+
          Fix by setting the API version in the design tab for this xml file to API <= v19
          http://code.google.com/p/android/issues/detail?id=72902 -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_below="@+id/home_textview_getting_started"
+    <RelativeLayout
         android:id="@+id/home_edittext"
         style="@style/fill_width_wrap_height"
+        android:layout_below="@+id/home_textview_getting_started"
         android:layout_centerVertical="true">
 
         <EditText
             android:id="@+id/home_edittext_address"
-            android:layout_centerVertical="true"
-            android:inputType="textPostalAddress|textCapWords"
-            android:imeOptions="actionSearch"
-            android:hint="@string/home_textview_getting_started"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/home_large_padding"
             android:layout_toLeftOf="@+id/home_select_contact_button"
+            android:layout_toStartOf="@id/home_select_contact_button"
             android:background="@color/home_edittext_background"
-            android:textSize="@dimen/home_edittext_size"
+            android:editable="true"
+            android:hint="@string/home_textview_getting_started"
+            android:imeOptions="actionSearch"
+            android:inputType="textPostalAddress|textCapWords"
+            android:padding="5sp"
+            android:paddingBottom="5sp"
             android:textColor="@color/white"
             android:textColorHint="@color/hint.white"
-            android:layout_marginTop="@dimen/home_large_padding"
-            android:editable="true"
-            android:padding="5sp"
-            android:paddingBottom="5sp" />
+            android:textSize="@dimen/home_edittext_size"/>
 
         <ImageView
             android:id="@+id/home_select_contact_button"
-            android:layout_alignParentRight="true"
-            android:contentDescription="@string/home_select_contact_button_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/home_view_button"
-            android:layout_alignTop="@+id/home_edittext_address"
             android:layout_alignBottom="@+id/home_edittext_address"
-            android:src="@drawable/ic_contacts"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/home_edittext_address"
+            android:layout_centerVertical="true"
+            android:background="@drawable/home_view_button"
+            android:contentDescription="@string/home_select_contact_button_description"
+            android:src="@drawable/ic_contacts"/>
     </RelativeLayout>
 
     <TextView
         android:id="@+id/home_textview_status"
-        android:drawableLeft="@android:drawable/stat_sys_warning"
         style="@style/fill_width_wrap_height"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/home_edittext"
         android:layout_marginTop="@dimen/home_large_padding"
         android:background="@color/home_warning_background"
-        android:layout_below="@+id/home_edittext"
+        android:drawableLeft="@android:drawable/stat_sys_warning"
         android:drawablePadding="15sp"
-        android:gravity="left"
+        android:drawableStart="@android:drawable/stat_sys_warning"
+        android:gravity="start"
         android:padding="@dimen/home_large_padding"
-        android:visibility="gone"
         android:textSize="@dimen/text_small"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/home_election_spinner_wrapper"
         style="@style/fill_width_wrap_height"
-        android:visibility="gone"
         android:layout_below="@+id/home_edittext"
         android:gravity="center"
         android:paddingBottom="@dimen/home_small_padding"
-        android:paddingTop="@dimen/home_small_padding">
+        android:paddingTop="@dimen/home_small_padding"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/home_election_spinner_text"
-            android:layout_centerHorizontal="true"
             style="@style/wrap_width_wrap_height"
-            android:textSize="@dimen/text_medium"
-            android:text="@string/home_textview_election_spinner_text"/>
+            android:layout_centerHorizontal="true"
+            android:text="@string/home_textview_election_spinner_text"
+            android:textSize="@dimen/text_medium"/>
 
         <Spinner
-            style="@style/spinner_home"
             android:id="@+id/home_election_spinner"
+            style="@style/spinner_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/home_election_spinner_text"
             android:contentDescription="@string/home_election_spinner_description"
-            android:prompt="@string/home_election_spinner_description"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:prompt="@string/home_election_spinner_description"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/home_party_spinner_wrapper"
         style="@style/fill_width_wrap_height"
         android:layout_below="@+id/home_election_spinner_wrapper"
-        android:visibility="gone"
         android:gravity="center"
         android:paddingBottom="@dimen/home_small_padding"
-        android:paddingTop="@dimen/home_small_padding" >
+        android:paddingTop="@dimen/home_small_padding"
+        android:visibility="gone">
+
         <Spinner
-            style="@style/spinner_home"
             android:id="@+id/home_party_spinner"
+            style="@style/spinner_home"
             android:contentDescription="@string/home_party_spinner_description"/>
     </RelativeLayout>
 
     <Button
-        android:text="@string/homeactivity_go_button"
-        android:contentDescription="@string/home_go_button_accessibility_description"
         android:id="@+id/home_go_button"
-        android:visibility="gone"
+        style="@style/home_view_button"
         android:layout_alignParentBottom="true"
-        style="@style/home_view_button" />
+        android:contentDescription="@string/home_go_button_accessibility_description"
+        android:text="@string/homeactivity_go_button"
+        android:visibility="gone"/>
 </RelativeLayout>
