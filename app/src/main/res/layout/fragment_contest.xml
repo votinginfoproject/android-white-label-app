@@ -20,7 +20,7 @@
             style="@style/fragment_subheader" />
 
         <TextView
-            android:text="@string/contest_candidate_list_header"
+            android:text="@string/contest.header.candidate_list"
             android:id="@+id/contest_candidate_list_header"
             android:layout_below="@+id/contest_subtitle"
             style="@style/section_header" />

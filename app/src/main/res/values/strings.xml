@@ -4,149 +4,149 @@
     <string name="app_name">VotingInformationProject</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
-    <string name="homeactivity_go_button">GO</string>
-    <string name="homeactivity_select_contact_button">Contacts</string>
-    <string name="homeactivity_select_location_button">Location</string>
-    <string name="title_activity_viptab_bar">Voting Info Project</string>
-    <string name="title_activity_about">About This App</string>
+    <string name="activity.home.go_button">GO</string>
+    <string name="activity.home.select_contact_button">Contacts</string>
+    <string name="activity.home.select_location_button">Location</string>
+    <string name="activity.vip.tab">Voting Info Project</string>
+    <string name="activity.title.about">About This App</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="no_phone">Phone not installed</string>
-    <string name="no_email">Email client not installed</string>
-    <string name="no_browser">Web browser not installed</string>
+    <string name="error.no_phone">Phone not installed</string>
+    <string name="error.no_email">Email client not installed</string>
+    <string name="error.no_browser">Web browser not installed</string>
 
     <!-- Tab Bar Strings -->
-    <string name="tabbar_ballot_tab">Ballot</string>
-    <string name="tabbar_where_to_vote_tab">Where to Vote</string>
-    <string name="tabbar_details_tab">Details</string>
+    <string name="activity.vip.tab.ballot_title">Ballot</string>
+    <string name="activity.vip.tab.where_to_vote_title">Where to Vote</string>
+    <string name="activity.vip.tab.details_title">Details</string>
 
     <!-- Directions origin dialog -->
-    <string name="tabbar_directions_origin_prompt">Where do you want directions from?</string>
+    <string name="activity.vip.tab.directions_origin_prompt">Where do you want directions from?</string>
 
-    <array name="tabbar_directions_origin_options">
+    <array name="activity_vip_tab_directions_origin_options">
         <item>Entered Address</item>
         <item>Current Location</item>
     </array>
 
     <!-- Prompt to enable location services -->
-    <string name="tabbar_enable_location_services_prompt">Could not find current location.  Enable location services now?</string>
+    <string name="activity.vip.tab.enable_location_services_prompt">Could not find current location.  Enable location services now?</string>
 
     <!-- Home View Strings -->
-    <string name="home_textview_brandname">Brand Name</string>
-    <string name="home_textview_votinginfo">Voting Information</string>
-    <string name="home_textview_getting_started">Get started by providing the address at which you are registered to vote.</string>
-    <string name="home_textview_election_spinner_text">Choose an election:</string>
-    <string name="home_textview_party_spinner_text">Choose a primary election party:</string>
-    <string name="home_status_loading">Loading data…</string>
-    <string name="home_error_address_not_found">Looks like we can\'t find your address. Please check that it\'s right and try again.</string>
-    <string name="home_error_parsing_address">We couldn\'t read the address you entered.  Please check that it\'s right and try again</string>
-    <string name="home_error_no_election_for_address">We couldn\'t find any election information for the address you entered.</string>
-    <string name="home_error_no_address">Please check that you\'ve got an address entered and try again.</string>
-    <string name="home_error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
-    <string name="home_error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
-    <string name="home_go_button_accessibility_description">Go to search results.</string>
-    <string name="home_select_contact_button_description">Open contacts to select a contact address.</string>
-    <string name="home_select_location_button_description">Use current location to search for elections.</string>
-    <string name="home_search_button_description">Search for results.</string>
-    <string name="home_election_spinner_description">Please pick an election"</string>
-    <string name="home_party_spinner_description">Please pick a party:</string>
+    <string name="fragment.home.text_view_brand_name">Brand Name</string>
+    <string name="fragment.home.text_view_voting_info">Voting Information</string>
+    <string name="fragment.home.text_view_getting_started">Get started by providing the address at which you are registered to vote.</string>
+    <string name="fragment.home.text_view_election_spinner_text">Choose an election:</string>
+    <string name="fragment.home.text_view_party_spinner_text">Choose a primary election party:</string>
+    <string name="fragment.home.status_loading">Loading data…</string>
+    <string name="fragment.home.error_address_not_found">Looks like we can\'t find your address. Please check that it\'s right and try again.</string>
+    <string name="fragment.home.error_parsing_address">We couldn\'t read the address you entered.  Please check that it\'s right and try again</string>
+    <string name="fragment.home.error_no_election_for_address">We couldn\'t find any election information for the address you entered.</string>
+    <string name="fragment.home.error_no_address">Please check that you\'ve got an address entered and try again.</string>
+    <string name="fragment.home.error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
+    <string name="fragment.home.error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
+    <string name="fragment.home.go_button_accessibility_description">Go to search results.</string>
+    <string name="fragment.home.select_contact_button_description">Open contacts to select a contact address.</string>
+    <string name="fragment.home.select_location_button_description">Use current location to search for elections.</string>
+    <string name="fragment.home.search_button_description">Search for results.</string>
+    <string name="fragment.home.election_spinner_description">Please pick an election"</string>
+    <string name="fragment.home.party_spinner_description">Please pick a party:</string>
 
     <!-- Feedback Strings -->
-    <string name="feedback_link">Report an Error</string>
-    <string name="feedback_loading">Loading feedback form...</string>
+    <string name="feedback.link">Report an Error</string>
+    <string name="feedback.loading">Loading feedback form…</string>
 
     <!-- Election View Strings -->
-    <string name="ballot_contests_list_header">Contests</string>
+    <string name="fragment.ballot.list.header.contests">Contests</string>
 
     <!-- Contest Detail Strings -->
-    <string name="contest_details_header">Contest Details</string>
-    <string name="contest_type_label">Type</string>
-    <string name="contest_office_label">Office</string>
-    <string name="contest_number_elected_label">Number Elected</string>
-    <string name="contest_number_voting_for_label">Number Voting For</string>
-    <string name="contest_ballot_placement_label">Ballot Placement</string>
-    <string name="contest_candidate_list_header">Candidates</string>
+    <string name="contest.header.details">Contest Details</string>
+    <string name="contest.label.type">Type</string>
+    <string name="contest.label.office">Office</string>
+    <string name="contest.label.number_elected">Number Elected</string>
+    <string name="contest.label.number_voting_for">Number Voting For</string>
+    <string name="contest.label.ballot_placement">Ballot Placement</string>
+    <string name="contest.header.candidate_list">Candidates</string>
 
     <!-- Candidate Details Strings -->
-    <string name="candidate_details_header">Candidate Details</string>
-    <string name="candidate_social_header">Social Media Channels</string>
-    <string name="candidate_no_name">No Name Available</string>
-    <string name="candidate_no_party">No Listed Affiliation</string>
-    <string name="candidate_details_none">No Candidate Details Available</string>
+    <string name="candidate.details_header">Candidate Details</string>
+    <string name="candidate.social_header">Social Media Channels</string>
+    <string name="candidate.no_name">No Name Available</string>
+    <string name="candidate.no_party">No Listed Affiliation</string>
+    <string name="candidate.details_none">No Candidate Details Available</string>
 
     <!-- Accessibility descriptions for images -->
-    <string name="social_channel_youtube_description">Visit YouTube channel</string>
-    <string name="social_channel_twitter_description">Visit Twitter feed</string>
-    <string name="social_channel_facebook_description">Visit FaceBook page</string>
-    <string name="social_channel_google_plus_description">Visit Google Plus page</string>
-    <string name="email_accessibility_description">Send email</string>
-    <string name="phone_accessibility_description">Call phone number</string>
-    <string name="website_accessibility_description">Visit website</string>
-    <string name="candidate_picture_description">Candidate picture</string>
+    <string name="social.channel.description.youtube">Visit YouTube channel</string>
+    <string name="social.channel.description.twitter">Visit Twitter feed</string>
+    <string name="social.channel.description.facebook">Visit FaceBook page</string>
+    <string name="social.channel.description.google_plus">Visit Google Plus page</string>
+
+    <string name="accessibility.description.email">Send email</string>
+    <string name="accessibility.description.phone">Call phone number</string>
+    <string name="accessibility.description.website">Visit website</string>
+    <string name="accessibility.description.candidate">Candidate picture</string>
 
     <!-- Election Detail Strings -->
-    <string name="details_state_administration_body_header">State Administration</string>
-    <string name="details_local_administration_body_header">Local Administration</string>
-    <string name="details_none_found_message">No election administration information found for this election.</string>
+    <string name="details.body.header.state_administration">State Administration</string>
+    <string name="details.body.header.local_administration">Local Administration</string>
+    <string name="details.no_messages_found">No election administration information found for this election.</string>
 
     <!-- Election Links Strings -->
-    <string name="details_links_section_header">Election Information Websites</string>
-    <string name="details_election_info_url_label">Election Information</string>
-    <string name="details_voter_registration_url_label">Voter Registration Information</string>
-    <string name="details_voter_registration_confirmation_url_label">Voter Registration Confirmation</string>
-    <string name="details_absentee_voting_url_label">Absentee Voter Information</string>
-    <string name="details_voting_location_finder_url_label">Voting Location Finder Information</string>
-    <string name="details_ballot_info_url_label">Ballot Information</string>
-    <string name="details_election_rules_url_label">Election Rules</string>
-    <string name="details_voter_services_label">Voter Services</string>
-    <string name="details_hours_of_operation_label">Hours of Operation</string>
-    <string name="details_correspondence_address_label">Correspondence Address</string>
-    <string name="details_physical_address_label">Physical Address</string>
-    <string name="details_election_officials_label">Election Officials</string>
+    <string name="details.section.header.links">Election Information Websites</string>
+    <string name="details.label.election_info_url">Election Information</string>
+    <string name="details.label.voter_registration_url">Voter Registration Information</string>
+    <string name="details.label.voter_registration_confirmation_url">Voter Registration Confirmation</string>
+    <string name="details.label.absentee_voting_url">Absentee Voter Information</string>
+    <string name="details.label.voting_location_finder_url">Voting Location Finder Information</string>
+    <string name="details.label.ballot_info_url">Ballot Information</string>
+    <string name="details.label.election_rules_url">Election Rules</string>
+    <string name="details.label.voter_services">Voter Services</string>
+    <string name="details.label.hours_of_operation">Hours of Operation</string>
+    <string name="details.label.correspondence_address">Correspondence Address</string>
+    <string name="details.label.physical_address">Physical Address</string>
+    <string name="details.label.election_officials">Election Officials</string>
     <!-- End Election Detail Strings -->
 
 
     <!-- Locations strings -->
-    <string name="locations_list_map_button_label">map</string>
-    <string name="locations_list_all_label">All Sites</string>
-    <string name="locations_list_early_voting_label">Early Voting</string>
-    <string name="locations_list_polling_sites_label">Polling Sites</string>
-    <string name="locations_list_dropoff_label">Drop Off</string>
-    <string name="locations_none_found">No locations found.</string>
-    <string name="locations_distance_suffix_imperial">mi.</string>
-    <string name="locations_distance_suffix_metric">km</string>
+    <string name="locations.button.list_map">map</string>
+    <string name="locations.list.label.all_sites">All Sites</string>
+    <string name="locations.list.label.early_voting">Early Voting</string>
+    <string name="locations.list.label.polling_sites">Polling Sites</string>
+    <string name="locations.list.label.drop_off">Drop Off</string>
+    <string name="locations.list.none_found">No locations found.</string>
+    <string name="locations.distance_suffix_imperial">mi.</string>
+    <string name="locations.distance_suffix_metric">km</string>
 
     <!-- Locations map strings -->
-    <string name="locations_map_user_address_label">User Address</string>
-    <string name="locations_map_user_location_label">Current Location</string>
-    <string name="locations_map_election_administration_body_label">Election Administration Body Location</string>
-    <string name="locations_map_play_services_unavailable">Google Play services are unavailable.  Cannot show locations map, distances, or directions.</string>
-    <string name="locations_map_not_geocoded">Unable to find location for that address.</string>
-    <string name="locations_map_polling_location_hours_label">Hours:</string>
-    <string name="locations_map_polling_location_hours_not_found">Hours of operation not found for this location.</string>
+    <string name="locations.map.label.user_address">User Address</string>
+    <string name="locations.map.label.user_location">Current Location</string>
+    <string name="locations.map.label.election_administration_body">Election Administration Body Location</string>
+    <string name="locations.map.error.play_services_unavailable">Google Play services are unavailable.  Cannot show locations map, distances, or directions.</string>
+    <string name="locations.map.error.geocode">Unable to find location for that address.</string>
+    <string name="locations.map.label.polling_location_hours">Hours:</string>
+    <string name="locations.map.error.polling_location_hours_not_found">Hours of operation not found for this location.</string>
 
     <!-- Directions list strings -->
-    <string name="directions_walk_button_label">Walk</string>
-    <string name="directions_bike_button_label">Bike</string>
-    <string name="directions_transit_button_label">Transit</string>
-    <string name="directions_drive_button_label">Drive</string>
-    <string name="directions_open_in_maps_button_label">Open in Google Maps</string>
-    <string name="directions_error_message">No directions found.</string>
-    <string name="directions_no_origin_message">Could not find origin point for directions.</string>
-    <string name="directions_loading_message">Loading directions...</string>
+    <string name="directions.label.walk_button">Walk</string>
+    <string name="directions.label.bike_button">Bike</string>
+    <string name="directions.label.transit_button">Transit</string>
+    <string name="directions.label.drive_button">Drive</string>
+    <string name="directions.label.open_in_maps_button">Open in Google Maps</string>
+    <string name="directions.error.no_directions_found">No directions found.</string>
+    <string name="directions.error.no_origin">Could not find origin point for directions.</string>
+    <string name="directions.loading">Loading directions…</string>
 
     <!-- About App strings -->
-    <string name="about_app_title">About This App</string>
-    <string name="about_app">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci.</string>
-    <string name="about_terms_title">Terms of Use</string>
-    <string name="about_terms">Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit.</string>
-    <string name="about_privacy_title">Privacy Policy</string>
-    <string name="about_privacy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</string>
-    <string name="about_legal_notices_title">Legal Notices</string>
-    <string name="about_license">BSD 3-Clause License\n\nCopyright (c) 2014, The Pew Charitable Trust\n\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nNeither the name of The Pew Charitable Trusts nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n</string>
-    <string name="mail_only">This election is mail only.</string>
-    <string name="mail_only_info">Your upcoming election is mail-only. Please contact your local election official to learn more about how to receive and return your ballot.</string>
-
+    <string name="about.app.title">About This App</string>
+    <string name="about.app.description">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci.</string>
+    <string name="about.terms.title">Terms of Use</string>
+    <string name="about.terms.description">Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit.</string>
+    <string name="about.title.privacy">Privacy Policy</string>
+    <string name="about.privacy.description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</string>
+    <string name="about.title.legal_notices">Legal Notices</string>
+    <string name="about.description.legal_notices">BSD 3-Clause License\n\nCopyright (c) 2014, The Pew Charitable Trust\n\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nNeither the name of The Pew Charitable Trusts nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n</string>
+    <string name="about.title.mail_only">This election is mail only.</string>
+    <string name="about.description.mail_only">Your upcoming election is mail-only. Please contact your local election official to learn more about how to receive and return your ballot.</string>
 </resources>

@@ -23,7 +23,7 @@
         <Button
             style="@style/map_button"
             android:id="@+id/locations_list_map_button"
-            android:text="@string/locations_list_map_button_label" />
+            android:text="@string/locations.button.list_map" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:paddingRight="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/mail_only_info"
+                android:text="@string/about.description.mail_only"
                 style="@style/Bubble.TextAppearance.Dark"
                 android:layout_below="@id/locations_election_subtitle"
                 android:textSize="16sp"

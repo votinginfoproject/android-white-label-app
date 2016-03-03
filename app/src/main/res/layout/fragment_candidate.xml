@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/candidate_photo"
             android:visibility="gone"
-            android:contentDescription="@string/candidate_picture_description"
+            android:contentDescription="@string/accessibility.description.candidate"
             android:src="@drawable/ic_avatar"
             android:adjustViewBounds="true"
             android:layout_width="80sp"
@@ -26,14 +26,14 @@
             android:id="@+id/candidate_name"
             style="@style/fragment_header"
             android:layout_toRightOf="@+id/candidate_photo"
-            android:text="@string/candidate_no_name" />
+            android:text="@string/candidate.no_name" />
 
         <TextView
             android:id="@+id/candidate_party"
             style="@style/fragment_subheader"
             android:layout_toRightOf="@+id/candidate_photo"
             android:layout_below="@+id/candidate_name"
-            android:text="@string/candidate_no_party" />
+            android:text="@string/candidate.no_party" />
 
     </RelativeLayout>
 
@@ -49,7 +49,7 @@
             <TextView
                 android:id="@+id/candidate_details_section_header"
                 style="@style/section_header"
-                android:text="@string/candidate_details_header" />
+                android:text="@string/candidate.details_header" />
 
             <TableLayout
                 android:id="@+id/candidate_details_table"
@@ -60,13 +60,13 @@
                     style="@style/table_row" >
 
                     <ImageView
-                        android:contentDescription="@string/website_accessibility_description"
+                        android:contentDescription="@string/accessibility.description.website"
                         android:id="@+id/candidate_details_web_site_image"
                         android:src="@drawable/ic_website"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_details_web_site_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
                 </TableRow>
 
@@ -79,13 +79,13 @@
                     android:id="@+id/candidate_details_phone_row">
 
                     <ImageView
-                        android:contentDescription="@string/phone_accessibility_description"
+                        android:contentDescription="@string/accessibility.description.phone"
                         android:id="@+id/candidate_details_phone_image"
                         android:src="@drawable/ic_phone"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_details_phone_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
 
                 </TableRow>
@@ -99,13 +99,13 @@
                     android:id="@+id/candidate_details_email_row">
 
                     <ImageView
-                        android:contentDescription="@string/email_accessibility_description"
+                        android:contentDescription="@string/accessibility.description.email"
                         android:id="@+id/candidate_details_email_image"
                         android:src="@drawable/ic_email"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_details_email_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
 
                 </TableRow>
@@ -124,7 +124,7 @@
                     <TextView
                         android:id="@+id/candidate_details_none_text"
                         android:gravity="center"
-                        android:text="@string/candidate_details_none"
+                        android:text="@string/candidate.details_none"
                         style="@style/candidate_details_row_text" />
 
                 </TableRow>
@@ -134,7 +134,7 @@
             <TextView
                 android:id="@+id/candidate_social_section_header"
                 style="@style/section_header"
-                android:text="@string/candidate_social_header" />
+                android:text="@string/candidate.social_header" />
 
             <TableLayout
                 android:id="@+id/candidate_social_table"
@@ -147,13 +147,13 @@
                     android:id="@+id/candidate_social_twitter_row">
 
                     <ImageView
-                        android:contentDescription="@string/social_channel_twitter_description"
+                        android:contentDescription="@string/social.channel.description.twitter"
                         android:id="@+id/candidate_social_twitter_image"
                         android:src="@drawable/ic_twitter"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_twitter_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
 
                 </TableRow>
@@ -167,13 +167,13 @@
                     android:id="@+id/candidate_social_facebook_row">
 
                     <ImageView
-                        android:contentDescription="@string/social_channel_facebook_description"
+                        android:contentDescription="@string/social.channel.description.facebook"
                         android:id="@+id/candidate_social_facebook_image"
                         android:src="@drawable/ic_facebook"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_facebook_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
 
                 </TableRow>
@@ -187,13 +187,13 @@
                     android:id="@+id/candidate_social_googleplus_row">
 
                     <ImageView
-                        android:contentDescription="@string/social_channel_google_plus_description"
+                        android:contentDescription="@string/social.channel.description.google_plus"
                         android:id="@+id/candidate_social_googleplus_image"
                         android:src="@drawable/ic_googleplus"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_googleplus_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
 
                 </TableRow>
@@ -207,13 +207,13 @@
                     android:id="@+id/candidate_social_youtube_row">
 
                     <ImageView
-                        android:contentDescription="@string/social_channel_youtube_description"
+                        android:contentDescription="@string/social.channel.description.youtube"
                         android:id="@+id/candidate_social_youtube_image"
                         android:src="@drawable/ic_youtube"
                         style="@style/candidate_details_row_image" />
                     <TextView
                         android:id="@+id/candidate_social_youtube_text"
-                        android:text="@string/candidate_social_header"
+                        android:text="@string/candidate.social_header"
                         style="@style/candidate_details_row_text" />
                 </TableRow>
             </TableLayout>

@@ -8,36 +8,36 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="@string/about_app_title"
+            android:text="@string/about.app.title"
             style="@style/fragment_header" />
 
         <TextView
-            android:text="@string/about_app"
+            android:text="@string/about.app.description"
             style="@style/fragment_subheader" />
 
         <TextView
-            android:text="@string/about_terms_title"
+            android:text="@string/about.terms.title"
             style="@style/fragment_header" />
 
         <TextView
-            android:text="@string/about_terms"
+            android:text="@string/about.terms.description"
             style="@style/fragment_subheader" />
 
         <TextView
-            android:text="@string/about_privacy_title"
+            android:text="@string/about.title.privacy"
             style="@style/fragment_header" />
 
         <TextView
-            android:text="@string/about_privacy"
+            android:text="@string/about.privacy.description"
             style="@style/fragment_subheader" />
 
         <TextView
-            android:text="@string/about_legal_notices_title"
+            android:text="@string/about.title.legal_notices"
             style="@style/fragment_header" />
 
         <TextView
             android:id="@+id/about_legal_notices"
-            android:text="@string/about_license"
+            android:text="@string/about.description.legal_notices"
             style="@style/fragment_subheader" />
     </LinearLayout>
 </ScrollView>

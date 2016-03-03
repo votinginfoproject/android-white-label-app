@@ -28,10 +28,10 @@ public class CivicApiError {
     public static final Map<String, Integer> errorMessages;
     static {
         Map<String, Integer> messages = new HashMap<>(4);
-        messages.put("invalid", R.string.home_error_no_election_for_address);
-        messages.put("required", R.string.home_error_no_address);
-        messages.put("parseError", R.string.home_error_parsing_address);
-        messages.put("notFound", R.string.home_error_address_not_found);
+        messages.put("invalid", R.string.fragment_home_error_no_election_for_address);
+        messages.put("required", R.string.fragment_home_error_no_address);
+        messages.put("parseError", R.string.fragment_home_error_parsing_address);
+        messages.put("notFound", R.string.fragment_home_error_address_not_found);
         errorMessages = Collections.unmodifiableMap(messages);
     }
 

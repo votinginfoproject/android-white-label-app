@@ -164,10 +164,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     public FilterLabels getFilterLabels() {
         if (filterLabels == null) {
             Resources res = this.getResources();
-            filterLabels = new FilterLabels(res.getString(R.string.locations_list_all_label),
-                    res.getString(R.string.locations_list_early_voting_label),
-                    res.getString(R.string.locations_list_polling_sites_label),
-                    res.getString(R.string.locations_list_dropoff_label));
+            filterLabels = new FilterLabels(res.getString(R.string.locations_list_label_all_sites),
+                    res.getString(R.string.locations_list_label_early_voting),
+                    res.getString(R.string.locations_list_label_polling_sites),
+                    res.getString(R.string.locations_list_label_drop_off));
         }
         return filterLabels;
     }
@@ -264,10 +264,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
     private void promptForDirectionsOrigin(final String item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT);
-        builder.setTitle(R.string.tabbar_directions_origin_prompt);
+        builder.setTitle(R.string.activity_vip_tab_directions_origin_prompt);
 
         // persist user's last choice in list by passing selectedOriginItem as the selected index
-        builder.setSingleChoiceItems(R.array.tabbar_directions_origin_options, selectedOriginItem, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(R.array.activity_vip_tab_directions_origin_options, selectedOriginItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.d(TAG, "You selected: " + which);
@@ -325,7 +325,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         } else {
             Log.e(TAG, "Google Play services are unavailable!");
             // alert user
-            CharSequence errorMessage = this.getResources().getText(R.string.locations_map_play_services_unavailable);
+            CharSequence errorMessage = this.getResources().getText(R.string.locations_map_error_play_services_unavailable);
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -357,7 +357,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         }
         if (!haveLocation) {
             // alert user if no location to show on map
-            CharSequence errorMessage = this.getResources().getText(R.string.locations_map_not_geocoded);
+            CharSequence errorMessage = this.getResources().getText(R.string.locations_map_error_geocode);
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -409,9 +409,9 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
         // Set up TabsAdapter
         mTabsAdapter = new TabsAdapter(this, mViewPager);
-        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_ballot_tab), BallotFragment.class, "ballot_tab", null);
-        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_where_to_vote_tab), LocationsFragment.class, "locations_tab", null);
-        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.tabbar_details_tab), ElectionDetailsFragment.class, "details_tab", null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.activity_vip_tab_ballot_title), BallotFragment.class, "ballot_tab", null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.activity_vip_tab_where_to_vote_title), LocationsFragment.class, "locations_tab", null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.activity_vip_tab_details_title), ElectionDetailsFragment.class, "details_tab", null);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -587,7 +587,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             if (showPrompt) {
                 // user has probably disabled Location services; prompt them to go turn it on
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT);
-                builder.setMessage(R.string.tabbar_enable_location_services_prompt);
+                builder.setMessage(R.string.activity_vip_tab_enable_location_services_prompt);
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

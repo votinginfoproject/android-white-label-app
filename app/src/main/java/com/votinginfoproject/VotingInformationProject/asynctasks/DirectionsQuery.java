@@ -187,7 +187,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         TextView errorView = errorViewReference.get();
 
         if (directionsListView != null && errorView != null) {
-            errorView.setText(resources.getString(R.string.directions_loading_message));
+            errorView.setText(resources.getString(R.string.directions_loading));
             errorView.setVisibility(View.VISIBLE);
             directionsListView.setVisibility(View.GONE);
         } else {
@@ -242,7 +242,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         TextView errorView = errorViewReference.get();
         if (directionsListView != null && errorView != null) {
             directionsListView.setVisibility(View.GONE);
-            errorView.setText(resources.getString(R.string.directions_error_message));
+            errorView.setText(resources.getString(R.string.directions_error_no_directions_found));
             errorView.setVisibility(View.VISIBLE);
         } else {
             Log.e(TAG + ":showError", "Directions ListView and/or error TextView references are null.");

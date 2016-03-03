@@ -155,7 +155,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
 
         if (allLocations.isEmpty()) {
             locationsList.setVisibility(View.GONE);
-            noneFoundMessage.setText(R.string.locations_none_found);
+            noneFoundMessage.setText(R.string.locations_list_none_found);
             noneFoundMessage.setVisibility(View.VISIBLE);
         }
 
@@ -176,7 +176,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         } else {
             locationsList.setVisibility(View.GONE);
             // should only be able to select 'all' filter with no results
-            noneFoundMessage.setText(R.string.locations_none_found);
+            noneFoundMessage.setText(R.string.locations_list_none_found);
             noneFoundMessage.setVisibility(View.VISIBLE);
         }
     }

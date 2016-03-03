@@ -22,7 +22,7 @@
         <Button
             style="@style/map_button"
             android:id="@+id/directions_map_button"
-            android:text="@string/locations_list_map_button_label" />
+            android:text="@string/locations.button.list_map" />
 
         <LinearLayout
             style="@style/button_bar"
@@ -33,7 +33,7 @@
 
             <Button
                 style="@style/button_bar_button"
-                android:text="@string/directions_walk_button_label"
+                android:text="@string/directions.label.walk_button"
                 android:id="@+id/directions_walk_button" />
 
             <View style="@style/button_bar_separator" />
@@ -41,13 +41,13 @@
             <Button
                 android:id="@+id/directions_bike_button"
                 style="@style/button_bar_button"
-                android:text="@string/directions_bike_button_label" />
+                android:text="@string/directions.label.bike_button" />
 
             <View style="@style/button_bar_separator" />
 
             <Button
                 style="@style/button_bar_button"
-                android:text="@string/directions_transit_button_label"
+                android:text="@string/directions.label.transit_button"
                 android:id="@+id/directions_transit_button" />
 
             <View style="@style/button_bar_separator" />
@@ -55,7 +55,7 @@
             <Button
                 android:id="@+id/directions_drive_button"
                 style="@style/button_bar_button"
-                android:text="@string/directions_drive_button_label" />
+                android:text="@string/directions.label.drive_button" />
         </LinearLayout>
 
         <ListView
@@ -71,7 +71,7 @@
         <TextView
             android:visibility="gone"
             android:id="@+id/directions_none_found_message"
-            android:text="@string/directions_error_message"
+            android:text="@string/directions.error.no_directions_found"
             style="@style/fragment_subheader"
             android:layout_below="@+id/directions_button_bar"
             android:layout_toRightOf="@+id/directions_subtitle"
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/directions_bottom_padding"
-            android:text="@string/directions_open_in_maps_button_label"
+            android:text="@string/directions.label.open_in_maps_button"
             android:layout_margin="15sp"
             android:id="@+id/directions_open_in_maps_button"
             android:background="@drawable/go_to_maps_button"

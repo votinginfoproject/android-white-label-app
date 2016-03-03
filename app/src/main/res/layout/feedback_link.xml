@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/feedback_footer"
         android:drawableRight="@drawable/ic_menu_notifications"
-        android:text="@string/feedback_link"
+        android:text="@string/feedback.link"
         android:onClick="onClick"
         style="@style/feedback_link" />
 </RelativeLayout>

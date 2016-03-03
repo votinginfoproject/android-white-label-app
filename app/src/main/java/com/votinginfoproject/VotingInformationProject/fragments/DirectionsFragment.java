@@ -166,7 +166,7 @@ public class DirectionsFragment extends Fragment {
         if (homeLatLng == null) {
             Log.d(TAG, "Got null origin location");
             directionsList.setVisibility(View.GONE);
-            noneFoundMessage.setText(R.string.directions_no_origin_message);
+            noneFoundMessage.setText(R.string.directions_error_no_origin);
             noneFoundMessage.setVisibility(View.VISIBLE);
             openInMapsButton.setVisibility(View.GONE);
             // clear last directions polyline

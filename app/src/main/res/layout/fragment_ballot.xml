@@ -19,12 +19,12 @@
 
         <ListView
             android:id="@+id/ballot_contests_list"
-            android:contentDescription="@string/ballot_contests_list_header"
+            android:contentDescription="@string/fragment.ballot.list.header.contests"
             android:layout_below="@+id/ballot_contests_header"
             style="@style/listview" />
 
         <TextView
-            android:text="@string/ballot_contests_list_header"
+            android:text="@string/fragment.ballot.list.header.contests"
             android:id="@+id/ballot_contests_header"
             android:layout_below="@+id/ballot_election_date"
             style="@style/section_header" />

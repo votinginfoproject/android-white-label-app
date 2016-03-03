@@ -208,7 +208,7 @@ public class CandidateFragment extends Fragment {
                 try {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    showErrorAlert(getString(R.string.no_browser));
+                    showErrorAlert(getString(R.string.error_no_browser));
                 }
                 break;
             case "phone":
@@ -216,7 +216,7 @@ public class CandidateFragment extends Fragment {
                     intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", cleanValue, null));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    showErrorAlert(getString(R.string.no_phone));
+                    showErrorAlert(getString(R.string.error_no_phone));
                 }
                 break;
             case "email":
@@ -227,7 +227,7 @@ public class CandidateFragment extends Fragment {
                 try {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    showErrorAlert(getString(R.string.no_email));
+                    showErrorAlert(getString(R.string.error_no_email));
                 }
                 break;
         }
@@ -242,7 +242,7 @@ public class CandidateFragment extends Fragment {
                 try {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    showErrorAlert(getString(R.string.no_browser));
+                    showErrorAlert(getString(R.string.error_no_browser));
                 }
             }
         });

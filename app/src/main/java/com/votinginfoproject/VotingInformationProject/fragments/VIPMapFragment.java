@@ -279,7 +279,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         if (homeLocation != null) {
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(homeLocation)
-                    .title(mActivity.getString(R.string.locations_map_user_address_label))
+                    .title(mActivity.getString(R.string.locations_map_label_user_address))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
             );
 
@@ -290,7 +290,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             // add marker for current user location (used for directions)
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(currentLocation)
-                    .title(mActivity.getString(R.string.locations_map_user_location_label))
+                    .title(mActivity.getString(R.string.locations_map_label_user_location))
                     .snippet(currentAddress)
                     .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
             );
@@ -302,7 +302,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             // add marker for state or local election administration body
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(thisLocation)
-                    .title(mActivity.getString(R.string.locations_map_election_administration_body_label))
+                    .title(mActivity.getString(R.string.locations_map_label_election_administration_body))
                     .snippet(voterInfo.getAdminAddress(locationId).toString())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
             );
@@ -412,13 +412,13 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
 
         if (location.pollingHours != null && !location.pollingHours.isEmpty()) {
             showSnippet.append("\n\n");
-            showSnippet.append(mActivity.getString(R.string.locations_map_polling_location_hours_label));
+            showSnippet.append(mActivity.getString(R.string.locations_map_label_polling_location_hours));
             showSnippet.append("\n");
             showSnippet.append(location.pollingHours);
         } else {
             // display placeholder for no hours
             showSnippet.append("\n\n");
-            showSnippet.append(mActivity.getString(R.string.locations_map_polling_location_hours_not_found));
+            showSnippet.append(mActivity.getString(R.string.locations_map_error_polling_location_hours_not_found));
         }
 
         return new MarkerOptions()

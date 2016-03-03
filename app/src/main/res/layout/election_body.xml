@@ -12,7 +12,7 @@
 
             <TextView
                 android:id="@+id/details_admin_body_name"
-                android:text="@string/details_state_administration_body_header"
+                android:text="@string/details.body.header.state_administration"
                 android:paddingLeft="0sp"
                 android:paddingRight="15sp"
                 android:layout_span="2"
@@ -30,7 +30,7 @@
 
             <Button
                 android:id="@+id/details_links_section_header"
-                android:text="@string/details_links_section_header"
+                android:text="@string/details.section.header.links"
                 android:drawableLeft="@drawable/ic_website"
                 style="@style/details_accordion_button" />
         </TableRow>
@@ -45,7 +45,7 @@
                 android:id="@+id/details_election_info_url_row" >
 
                 <TextView
-                    android:text="@string/details_election_info_url_label"
+                    android:text="@string/details.label.election_info_url"
                     android:id="@+id/details_election_info_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -60,7 +60,7 @@
                 style="@style/table_row" >
 
                 <TextView
-                    android:text="@string/details_voter_registration_url_label"
+                    android:text="@string/details.label.voter_registration_url"
                     android:id="@+id/details_registration_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -75,7 +75,7 @@
                 style="@style/table_row" >
 
                 <TextView
-                    android:text="@string/details_voter_registration_confirmation_url_label"
+                    android:text="@string/details.label.voter_registration_confirmation_url"
                     android:id="@+id/details_registration_confirmation_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -90,7 +90,7 @@
                 android:id="@+id/details_absentee_url_row">
 
                 <TextView
-                    android:text="@string/details_absentee_voting_url_label"
+                    android:text="@string/details.label.absentee_voting_url"
                     android:id="@+id/details_absentee_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -105,7 +105,7 @@
                 android:id="@+id/details_location_finder_url_row">
 
                 <TextView
-                    android:text="@string/details_voting_location_finder_url_label"
+                    android:text="@string/details.label.voting_location_finder_url"
                     android:id="@+id/details_location_finder_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -120,7 +120,7 @@
                 android:id="@+id/details_ballot_info_url_row">
 
                 <TextView
-                    android:text="@string/details_ballot_info_url_label"
+                    android:text="@string/details.label.ballot_info_url"
                     android:id="@+id/details_ballot_info_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -135,7 +135,7 @@
                 android:id="@+id/details_election_rules_url_row">
 
                 <TextView
-                    android:text="@string/details_election_rules_url_label"
+                    android:text="@string/details.label.election_rules_url"
                     android:id="@+id/details_election_rules_url_label"
                     style="@style/details_link_row" />
             </TableRow>
@@ -149,7 +149,7 @@
 
             <Button
                 android:id="@+id/details_voter_services_section_header"
-                android:text="@string/details_voter_services_label"
+                android:text="@string/details.label.voter_services"
                 android:drawableLeft="@drawable/ic_vservices"
                 style="@style/details_accordion_button" />
         </TableRow>
@@ -178,7 +178,7 @@
 
             <Button
                 android:id="@+id/details_hours_of_operation_section_header"
-                android:text="@string/details_hours_of_operation_label"
+                android:text="@string/details.label.hours_of_operation"
                 android:drawableLeft="@drawable/ic_hours"
                 style="@style/details_accordion_button" />
         </TableRow>
@@ -209,7 +209,7 @@
 
             <Button
                 android:id="@+id/details_correspondence_address_section_header"
-                android:text="@string/details_correspondence_address_label"
+                android:text="@string/details.label.correspondence_address"
                 android:drawableLeft="@drawable/ic_address"
                 style="@style/details_accordion_button" />
         </TableRow>
@@ -240,7 +240,7 @@
 
             <Button
                 android:id="@+id/details_physical_address_section_header"
-                android:text="@string/details_physical_address_label"
+                android:text="@string/details.label.physical_address"
                 android:drawableLeft="@drawable/ic_address"
                 style="@style/details_accordion_button" />
         </TableRow>
@@ -275,7 +275,7 @@
 
             <Button
                 android:id="@+id/details_election_officials_section_header"
-                android:text="@string/details_election_officials_label"
+                android:text="@string/details.label.election_officials"
                 android:drawableLeft="@drawable/ic_officials"
                 style="@style/details_accordion_button" />
         </TableRow>

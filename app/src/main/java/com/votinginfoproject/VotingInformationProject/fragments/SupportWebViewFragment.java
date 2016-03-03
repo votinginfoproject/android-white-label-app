@@ -71,7 +71,7 @@ public class SupportWebViewFragment extends Fragment {
         myActivity = (VIPTabBarActivity) getActivity();
         myActivity.setLoadingFeedBackForm(true);
 
-        Log.d(TAG + ":onCreateView", "Setting up new webview fragment");
+        Log.d(TAG + ":onCreateView", "Setting up new WebView fragment");
 
         // web view takes a few seconds to load, so show a message
         setTextView(res.getString(R.string.feedback_loading));
@@ -100,6 +100,7 @@ public class SupportWebViewFragment extends Fragment {
         VoterInfo info = UserPreferences.getVoterInfo();
         builder.appendQueryParameter("electionId", info.election.getId());
         builder.appendQueryParameter("address", info.normalizedInput.toGeocodeString());
+
         // strip leading question mark from parameters
         String paramString = builder.build().toString().substring(1);
         byte[] post = EncodingUtils.getBytes(paramString, "BASE64");

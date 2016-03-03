@@ -11,14 +11,14 @@
 
         <Button
             style="@style/button_bar_button"
-            android:text="@string/details_state_administration_body_header"
+            android:text="@string/details.body.header.state_administration"
             android:id="@+id/details_state_button" />
 
         <View style="@style/button_bar_separator" />
 
         <Button
             style="@style/button_bar_button"
-            android:text="@string/details_local_administration_body_header"
+            android:text="@string/details.body.header.local_administration"
             android:id="@+id/details_local_button" />
     </LinearLayout>
 
@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/details_none_found"
-        android:text="@string/details_none_found_message"
+        android:text="@string/details.no_messages_found"
         android:visibility="gone"
         style="@style/fragment_header" />
 

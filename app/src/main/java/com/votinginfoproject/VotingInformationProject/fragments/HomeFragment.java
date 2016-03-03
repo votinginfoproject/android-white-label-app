@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment {
      */
     public void getElectionFromPreferences() {
         // show loading text
-        homeTextViewStatus.setText(R.string.home_status_loading);
+        homeTextViewStatus.setText(R.string.fragment_home_status_loading);
         homeTextViewStatus.setVisibility(View.VISIBLE);
 
         String lastElection = preferences.getString(resources.getString(R.string.LAST_ELECTION_KEY), "");
@@ -322,7 +322,7 @@ public class HomeFragment extends Fragment {
 
         if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
             homeGoButton.setVisibility(View.INVISIBLE);
-            homeTextViewStatus.setText(mContext.getResources().getText(R.string.home_error_no_internet));
+            homeTextViewStatus.setText(mContext.getResources().getText(R.string.fragment_home_error_no_internet));
         }
     }
 
@@ -364,7 +364,7 @@ public class HomeFragment extends Fragment {
             homePartySpinnerWrapper.setVisibility(View.GONE);
 
             // show loading text
-            homeTextViewStatus.setText(R.string.home_status_loading);
+            homeTextViewStatus.setText(R.string.fragment_home_status_loading);
             homeTextViewStatus.setVisibility(View.VISIBLE);
 
             // Make query
@@ -401,7 +401,7 @@ public class HomeFragment extends Fragment {
                 if (result == null) {
                     // if query returns null, then CivicInfoApiQuery had an exception
                     Log.e(TAG, "Got null result from voterInfoQuery!");
-                    homeTextViewStatus.setText(R.string.home_error_unknown);
+                    homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
                     // read error result, if TalkBack enabled
                     homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
 
@@ -431,11 +431,11 @@ public class HomeFragment extends Fragment {
                         homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                     } else {
                         Log.d(TAG, "Unknown API error reason: " + error1.reason);
-                        homeTextViewStatus.setText(R.string.home_error_unknown);
+                        homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
                     }
                 } catch (NullPointerException e) {
                     Log.e(TAG, "Null encountered in API error result");
-                    homeTextViewStatus.setText(R.string.home_error_unknown);
+                    homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
                 }
 
                 // read error result, if TalkBack enabled
@@ -528,7 +528,7 @@ public class HomeFragment extends Fragment {
             // sort list alphabetically
             Collections.sort(partiesList);
 
-            partiesList.add(0, mContext.getString(R.string.home_party_spinner_description));
+            partiesList.add(0, mContext.getString(R.string.fragment_home_party_spinner_description));
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(myActivity, R.layout.home_spinner_view, partiesList);
 

@@ -15,7 +15,7 @@
         android:layout_width="40sp"
         android:layout_height="40sp"
 
-        android:contentDescription="@string/candidate_picture_description"/>
+        android:contentDescription="@string/accessibility.description.candidate"/>
     <TextView
         android:id="@+id/candidate_list_item_name"
         android:layout_toRightOf="@+id/candidate_list_item_picture"
