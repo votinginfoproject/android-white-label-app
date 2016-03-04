@@ -14,8 +14,11 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.ContestsAdapter;
+import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+
+import java.util.ArrayList;
 
 
 public class BallotFragment extends Fragment {
@@ -23,6 +26,7 @@ public class BallotFragment extends Fragment {
 
     VoterInfo voterInfo;
     VIPTabBarActivity myActivity;
+    ArrayList<Contest> filteredContests;
 
     public static BallotFragment newInstance() {
         return new BallotFragment();
@@ -30,6 +34,7 @@ public class BallotFragment extends Fragment {
 
     public BallotFragment() {
         // Required empty public constructor
+        filteredContests = new ArrayList<>();
     }
 
     @Override
@@ -45,7 +50,9 @@ public class BallotFragment extends Fragment {
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // fill list of contests
-        ContestsAdapter adapter = new ContestsAdapter(myActivity, voterInfo.getFilteredContests(), voterInfo.election.name);
+        filteredContests.addAll(voterInfo.getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+
+        ContestsAdapter adapter = new ContestsAdapter(myActivity, filteredContests, voterInfo.election.name);
         adapter.sortList();
         ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
 

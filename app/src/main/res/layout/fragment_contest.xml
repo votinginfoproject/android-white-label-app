@@ -16,13 +16,13 @@
 
         <TextView
             android:id="@+id/contest_subtitle"
-            android:layout_below="@+id/contest_title"
+            android:layout_below="@id/contest_title"
             style="@style/fragment_sub_header" />
 
         <TextView
             android:text="@string/contest.header.candidate_list"
             android:id="@+id/contest_candidate_list_header"
-            android:layout_below="@+id/contest_subtitle"
+            android:layout_below="@id/contest_subtitle"
             style="@style/section_header" />
 
         <ListView

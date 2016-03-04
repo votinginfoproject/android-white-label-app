@@ -15,6 +15,8 @@ public class UserPreferences {
 
     private static UserPreferences ourInstance = new UserPreferences();
 
+    private String selectedParty ;
+
     private boolean useMetric;
     private Location homeLocation;
     private VoterInfo voterInfo;
@@ -27,6 +29,7 @@ public class UserPreferences {
         this.useMetric = !Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country());
         this.homeLocation = null;
         this.voterInfo = null;
+        this.selectedParty = "";
     }
 
     public static Location getHomeLocation() {
@@ -54,10 +57,10 @@ public class UserPreferences {
     }
 
     public static void setSelectedParty(String selectedParty) {
-        if (getInstance().voterInfo != null) {
-            getInstance().voterInfo.setSelectedParty(selectedParty);
-        } else {
-            Log.d(TAG, "Cannot set party on VoterInfo because voterInfo is null");
-        }
+        ourInstance.selectedParty = selectedParty;
+    }
+
+    public static String getSelectedParty() {
+        return ourInstance.selectedParty;
     }
 }

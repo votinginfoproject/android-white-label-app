@@ -23,6 +23,8 @@ import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +38,6 @@ public class CandidateFragment extends Fragment {
     private int candidateNum;
 
     private VIPTabBarActivity mActivity;
-    private VoterInfo voterInfo;
     private Contest contest;
     private Candidate candidate;
 
@@ -58,6 +59,7 @@ public class CandidateFragment extends Fragment {
         args.putInt(CONTEST_NUM, contestIndex);
         args.putInt(CANDIDATE_NUM, candidateIndex);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -91,8 +93,9 @@ public class CandidateFragment extends Fragment {
         TextView partyView = (TextView) mActivity.findViewById(R.id.candidate_party);
 
         try {
-            voterInfo = UserPreferences.getVoterInfo();
-            contest = voterInfo.getContestAt(contestNum);
+            ArrayList<Contest> contests = new ArrayList<>();
+            contests.addAll(UserPreferences.getVoterInfo().getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+            contest = contests.get(contestNum);
             candidate = contest.candidates.get(candidateNum);
 
             String name = (candidate.name != null) ? candidate.name : getString(R.string.candidate_no_name);

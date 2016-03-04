@@ -122,7 +122,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         SupportWebViewFragment webViewFragment = SupportWebViewFragment.newInstance(parent.getId());
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         // swap out current fragment with support web fragment,
-        // and put current fragment on backstack
+        // and put current fragment on back stack
         ft.replace(getCurrentFragment(), webViewFragment);
         ft.addToBackStack(null);
         ft.commit();

@@ -130,9 +130,10 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
     public void searchedAddress(VoterInfo voterInfo) {
         // set VoterInfo object on app singleton
         if (voterInfo == null) {
+            UserPreferences.setSelectedParty("");
             UserPreferences.setVoterInfo(null);
         } else {
-            voterInfo.setSelectedParty(selectedParty);
+            UserPreferences.setSelectedParty(selectedParty);
             UserPreferences.setVoterInfo(voterInfo);
         }
     }

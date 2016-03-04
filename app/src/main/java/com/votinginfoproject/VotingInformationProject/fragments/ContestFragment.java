@@ -18,6 +18,8 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
+import java.util.ArrayList;
+
 import static butterknife.ButterKnife.findById;
 
 public class ContestFragment extends Fragment {
@@ -25,11 +27,13 @@ public class ContestFragment extends Fragment {
 
     private static final String CONTEST_NUM = "contest_number";
     private int contestNum;
-    VoterInfo voterInfo;
     Contest contest;
     private ViewGroup mContainer;
 
     private ListView mListView;
+
+    private TextView mTitle;
+    private TextView mSubtitle;
 
     /**
      * Use this factory method to create a new instance of
@@ -47,20 +51,37 @@ public class ContestFragment extends Fragment {
         return fragment;
     }
 
-    public ContestFragment() {
-        // Required empty public constructor
-    }
-
+    /**
+     * Hide ballot fragment components here, then show them again when user goes back.
+     * Doing this because replacing a fragment within a TabBar doesn't remove the old fragment.
+     * Ballot layout has its contents wrapped in an inner RelativeLayout so there is only one
+     * child view to hide/show here.
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mContainer = container;
+        Log.d(TAG + ":onCreateView", "Hiding ballot container's view");
+        mContainer.getChildAt(0).setVisibility(View.INVISIBLE);
+
+        View inflaterView = inflater.inflate(R.layout.fragment_contest, null, false);
+
+        mListView = (ListView) inflaterView.findViewById(R.id.contest_candidate_list);
+        mTitle = (TextView) inflaterView.findViewById(R.id.contest_title);
+        mSubtitle = (TextView) inflaterView.findViewById(R.id.contest_subtitle);
 
         if (getArguments() != null) {
             contestNum = getArguments().getInt(CONTEST_NUM);
             Log.d(TAG, "Got contest #" + contestNum);
         }
 
-        mListView = (ListView) getActivity().findViewById(R.id.contest_candidate_list);
+        setContents();
+
+        return inflaterView;
+    }
+
+    public ContestFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -68,7 +89,6 @@ public class ContestFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         Log.d(TAG, "In onActivityCreated");
-        setContents();
     }
 
     /**
@@ -76,19 +96,21 @@ public class ContestFragment extends Fragment {
      */
     private void setContents() {
         final VIPTabBarActivity myActivity = (VIPTabBarActivity) getActivity();
-        TextView title = (TextView) myActivity.findViewById(R.id.contest_title);
-        TextView subtitle = (TextView) myActivity.findViewById(R.id.contest_subtitle);
+
 
         try {
-            voterInfo = UserPreferences.getVoterInfo();
-            contest = voterInfo.getContestAt(contestNum);
+            ArrayList<Contest> contests = new ArrayList<>();
+            VoterInfo voterInfo = UserPreferences.getVoterInfo();
+
+            contests.addAll(voterInfo.getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+            contest = contests.get(contestNum);
             Log.d(TAG, "Got contest for office: " + contest.office);
 
             // title / subtitle is referendumTitle and referendumSubtitle, if election is
             // of type 'Referendum'; else title is office and subtitle is election name
             if (!contest.type.equals("Referendum")) {
-                title.setText(contest.office);
-                subtitle.setText(voterInfo.election.name);
+                mTitle.setText(contest.office);
+                mSubtitle.setText(voterInfo.election.name);
 
                 // add footer view for feedback
                 View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, mListView, false);
@@ -105,8 +127,8 @@ public class ContestFragment extends Fragment {
                 parent.addView(scroll);
 
                 // go find references to the TextViews in the new ScrollView
-                title = (TextView) myActivity.findViewById(R.id.contest_title);
-                subtitle = (TextView) myActivity.findViewById(R.id.contest_subtitle);
+                mTitle = (TextView) myActivity.findViewById(R.id.contest_title);
+                mSubtitle = (TextView) myActivity.findViewById(R.id.contest_subtitle);
 
                 TextView referendumText = findById(scroll, R.id.contest_referendum_text);
                 TextView referendumPro = findById(scroll, R.id.contest_referendum_pro);
@@ -114,19 +136,21 @@ public class ContestFragment extends Fragment {
 
                 // deal with huge referendum descriptions by reducing font size a bit.
                 if (contest.referendumTitle != null) {
-                    title.setText(contest.referendumTitle);
+                    mTitle.setText(contest.referendumTitle);
+
                     if (contest.referendumTitle.length() > 20) {
-                        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getActivity().getResources().getDimension(R.dimen.text_small));
+                        mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, getActivity().getResources().getDimension(R.dimen.text_small));
                     }
                 }
 
                 if (contest.referendumSubtitle != null && !contest.referendumSubtitle.isEmpty()) {
-                    subtitle.setText(contest.referendumSubtitle);
+                    mSubtitle.setText(contest.referendumSubtitle);
+
                     if (contest.referendumSubtitle.length() > 20) {
-                        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, getActivity().getResources().getDimension(R.dimen.text_small));
+                        mSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, getActivity().getResources().getDimension(R.dimen.text_small));
                     }
                 } else {
-                    subtitle.setVisibility(View.GONE);
+                    mSubtitle.setVisibility(View.GONE);
                 }
 
                 referendumText.setText(contest.referendumText);
@@ -142,34 +166,21 @@ public class ContestFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d(TAG + ":List", "clicked: " + contest.candidates.get(position).name);
+
                         myActivity.showCandidateDetails(contestNum, position);
                     }
                 });
             } else if (!contest.type.equals("Referendum")) {
                 Log.d(TAG, "No candidates found for selected contest.");
+
                 myActivity.findViewById(R.id.contest_candidate_list_header).setVisibility(View.GONE);
             }
 
         } catch (Exception ex) {
             Log.e(TAG, "Failed to get contest info!");
+
             ex.printStackTrace();
         }
-    }
-
-    /**
-     * Hide ballot fragment components here, then show them again when user goes back.
-     * Doing this because replacing a fragment within a TabBar doesn't remove the old fragment.
-     * Ballot layout has its contents wrapped in an inner RelativeLayout so there is only one
-     * child view to hide/show here.
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mContainer = container;
-        Log.d(TAG + ":onCreateView", "Hiding ballot container's view");
-        mContainer.getChildAt(0).setVisibility(View.INVISIBLE);
-
-        return inflater.inflate(R.layout.fragment_contest, mContainer, false);
     }
 
     @Override
