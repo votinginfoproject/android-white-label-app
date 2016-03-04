@@ -19,6 +19,7 @@ import java.util.List;
  * Created by kathrynkillebrew on 8/14/14.
  */
 public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
+    private static String TAG = ReverseGeocodeQuery.class.getSimpleName();
 
     Geocoder geocoder;
     ReverseGeocodeCallBackListener callBackListener;
@@ -48,26 +49,26 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
         location = locations[0];
 
         if (!Geocoder.isPresent()) {
-            Log.e("GeocodeQuery", "No geocode service available!");
+            Log.e(TAG, "No geocode service available!");
             return "";
         }
 
         try {
             if (location == null) {
-                Log.e("GeocodeQuery", "No location to geocode!");
+                Log.e(TAG, "No location to geocode!");
                 return "";
             }
 
             List<Address> results = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (results != null && !results.isEmpty()) {
                 Address gotAddress = results.get(0);
-                Log.d("ReverseGeocodeQuery:doInBackground", "Got address result " + gotAddress.toString());
+                Log.d(TAG  + ":doInBackground", "Got address result " + gotAddress.toString());
                 return  formatAddress(gotAddress);
             } else {
-                Log.d("GeocodeQuery", "No result found for location");
+                Log.d(TAG, "No result found for location");
             }
         } catch (IOException e) {
-            Log.e("GeocodeQuery", "IOException reverse-geocode location");
+            Log.e(TAG, "IOException reverse-geocode location");
             e.printStackTrace();
         }
 
@@ -101,7 +102,7 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
         if (callBackListener != null) {
             callBackListener.callback(address);
         } else {
-            Log.e("ReverseGeocodeQuery:onPostExecute", "Callback listener is null!  Cannot return geocoded address.");
+            Log.e(TAG + ":onPostExecute", "Callback listener is null!  Cannot return geocoded address.");
         }
     }
 }
