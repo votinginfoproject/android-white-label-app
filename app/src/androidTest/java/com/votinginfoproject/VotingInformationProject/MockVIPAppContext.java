@@ -10,13 +10,14 @@ import com.votinginfoproject.VotingInformationProject.models.Source;
 import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.application.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 
 /**
  * Created by kathrynkillebrew on 7/22/14.
  */
-public class MockVIPAppContext extends VIPAppContext {
+public class MockVIPAppContext {
 
     private VIPApp app;
 
@@ -85,19 +86,10 @@ public class MockVIPAppContext extends VIPAppContext {
         testState.local_jurisdiction = new AdministrationRegion();
         testState.local_jurisdiction.electionAdministrationBody = localAdmin;
 
-        testInfo.state = new ArrayList();
+        testInfo.state = new ArrayList<>();
         testInfo.state.add(testState);
 
 
-        app.setVoterInfo(testInfo, "");
+        UserPreferences.setVoterInfo(testInfo);
     }
-
-    public VIPApp getVIPApp() {
-        return app;
-    }
-
-    public void setVIPApp(VIPApp vip_app) {
-        app = vip_app;
-    }
-
 }

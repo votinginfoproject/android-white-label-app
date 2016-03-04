@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class ElectionTests extends AndroidTestCase {
 
-    public void testEmptyContstructorCreatesNullProperties() {
+    public void testEmptyConstructorCreatesNullProperties() {
         Election election = new Election();
         assertNull(election.id);
         assertNull(election.name);

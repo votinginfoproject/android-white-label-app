@@ -10,6 +10,7 @@ import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrat
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.application.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,9 +29,7 @@ public class VoterInfoTests extends AndroidTestCase {
     }
 
     public void testContestFilter() {
-        MockVIPAppContext mockContext = new MockVIPAppContext();
-        VIPApp app = mockContext.getVIPApp();
-        VoterInfo info = app.getVoterInfo();
+        VoterInfo info = UserPreferences.getVoterInfo();
 
         // should have both contests in filtered list with empty party string
         List<Contest> filteredContests = info.getFilteredContests();
@@ -38,7 +37,7 @@ public class VoterInfoTests extends AndroidTestCase {
         assertEquals(2, filteredContests.size());
 
         // should have only one contest when filtered by party name
-        app.setSelectedParty("Yes please");
+        UserPreferences.setSelectedParty("Yes please");
         filteredContests = info.getFilteredContests();
         assertNotNull(filteredContests);
         assertEquals(1, filteredContests.size());
@@ -47,9 +46,7 @@ public class VoterInfoTests extends AndroidTestCase {
     }
 
     public void testGetLocationFromList() {
-        MockVIPAppContext mockContext = new MockVIPAppContext();
-        VIPApp app = mockContext.getVIPApp();
-        VoterInfo info = app.getVoterInfo();
+        VoterInfo info = UserPreferences.getVoterInfo();
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat api_date_format = new SimpleDateFormat("yyyy-MM-dd");
@@ -60,21 +57,21 @@ public class VoterInfoTests extends AndroidTestCase {
         Date tomorrow = calendar.getTime();
 
 
-        ArrayList<PollingLocation> earlyLocations = new ArrayList();
-        ArrayList<PollingLocation> pollingLocations = new ArrayList();
-        ArrayList<PollingLocation> dropOffLocations = new ArrayList();
+        ArrayList<PollingLocation> earlyLocations = new ArrayList<>();
+        ArrayList<PollingLocation> pollingLocations = new ArrayList<>();
+        ArrayList<PollingLocation> dropOffLocations = new ArrayList<>();
 
         PollingLocation loc1 = new PollingLocation();
         loc1.name = "location one";
         loc1.id = "1";
-        CivicApiAddress locOneAddr = new CivicApiAddress();
-        locOneAddr.locationName = "One";
-        locOneAddr.line1 = "123 Foo St";
-        locOneAddr.city = "Nowheresville";
-        locOneAddr.state = "DE";
-        locOneAddr.latitude = 45;
-        locOneAddr.longitude = -75;
-        loc1.address = locOneAddr;
+        CivicApiAddress locOneAddress = new CivicApiAddress();
+        locOneAddress.locationName = "One";
+        locOneAddress.line1 = "123 Foo St";
+        locOneAddress.city = "Nowheresville";
+        locOneAddress.state = "DE";
+        locOneAddress.latitude = 45;
+        locOneAddress.longitude = -75;
+        loc1.address = locOneAddress;
 
         pollingLocations.add(loc1);
 
@@ -92,23 +89,23 @@ public class VoterInfoTests extends AndroidTestCase {
 
         PollingLocation loc2 = new PollingLocation();
         loc2.name = "location two";
-        CivicApiAddress locTwoAddr = new CivicApiAddress();
-        locTwoAddr.locationName = "Two";
-        locTwoAddr.line1 = "123 Bar St";
-        locTwoAddr.city = "Nowheresville";
-        locTwoAddr.state = "DE";
-        loc2.address = locTwoAddr;
+        CivicApiAddress locTwoAddress = new CivicApiAddress();
+        locTwoAddress.locationName = "Two";
+        locTwoAddress.line1 = "123 Bar St";
+        locTwoAddress.city = "Nowheresville";
+        locTwoAddress.state = "DE";
+        loc2.address = locTwoAddress;
 
         pollingLocations.add(loc2);
 
         PollingLocation loc3 = new PollingLocation();
         loc3.name = "location three";
-        CivicApiAddress locThreeAddr = new CivicApiAddress();
-        locThreeAddr.locationName = "Three";
-        locThreeAddr.line1 = "123 Baz St";
-        locThreeAddr.city = "Somewheresville";
-        locThreeAddr.state = "PA";
-        loc3.address = locThreeAddr;
+        CivicApiAddress locThreeAddress = new CivicApiAddress();
+        locThreeAddress.locationName = "Three";
+        locThreeAddress.line1 = "123 Baz St";
+        locThreeAddress.city = "Somewheresville";
+        locThreeAddress.state = "PA";
+        loc3.address = locThreeAddress;
 
         // location 3 is available today only (should use it)
         loc3.startDate = api_date_format.format(today);
@@ -122,7 +119,7 @@ public class VoterInfoTests extends AndroidTestCase {
         PollingLocation loc4 = new PollingLocation();
         loc4.id = "4";
         loc4.name = "location four";
-        loc4.address = locThreeAddr;
+        loc4.address = locThreeAddress;
         loc4.startDate = api_date_format.format(yesterday);
         loc4.endDate = loc4.startDate;
 
@@ -132,7 +129,7 @@ public class VoterInfoTests extends AndroidTestCase {
         PollingLocation loc5 = new PollingLocation();
         loc5.id = "5";
         loc5.name = "location five";
-        loc5.address = locThreeAddr;
+        loc5.address = locThreeAddress;
 
         loc5.startDate = api_date_format.format(tomorrow);
         loc5.endDate = loc5.startDate;
@@ -143,7 +140,7 @@ public class VoterInfoTests extends AndroidTestCase {
         PollingLocation loc6 = new PollingLocation();
         loc6.id = "6";
         loc6.name = "location six";
-        loc6.address = locThreeAddr;
+        loc6.address = locThreeAddress;
 
         loc6.startDate = api_date_format.format(today);
         loc6.endDate = loc6.startDate;
@@ -196,9 +193,7 @@ public class VoterInfoTests extends AndroidTestCase {
     }
 
     public void testGetAdministrativeBodies() {
-        MockVIPAppContext mockContext = new MockVIPAppContext();
-        VIPApp app = mockContext.getVIPApp();
-        VoterInfo info = app.getVoterInfo();
+        VoterInfo info = UserPreferences.getVoterInfo();
         info.setUpLocations();
 
         // should be able to get admin body address

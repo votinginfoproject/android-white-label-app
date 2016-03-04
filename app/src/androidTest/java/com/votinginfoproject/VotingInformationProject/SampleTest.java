@@ -10,8 +10,8 @@ public class SampleTest extends AndroidTestCase {
    public void testTwoEqualsTwoJUnit() {
        final int expected = 2;
        final int reality = 2;
-       assertEquals(expected, reality);
 
+       assertEquals(expected, reality);
    }
 }
 

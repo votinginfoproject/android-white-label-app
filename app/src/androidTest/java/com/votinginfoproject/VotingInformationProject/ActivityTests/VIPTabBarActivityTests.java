@@ -9,6 +9,7 @@ import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivi
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 /**
  * Created by kathrynkillebrew on 7/22/14.
@@ -27,7 +28,7 @@ public class VIPTabBarActivityTests extends ActivityInstrumentationTestCase2<VIP
         super.setUp();
 
         // use non-default constructor for activity to set mock data
-        setActivity(new VIPTabBarActivity(new MockVIPAppContext()));
+        setActivity(new VIPTabBarActivity());
 
         refreshActivity();
     }
@@ -39,7 +40,7 @@ public class VIPTabBarActivityTests extends ActivityInstrumentationTestCase2<VIP
 
     @UiThreadTest
     public void testVIPTabBarHasVoterInfo() {
-        VoterInfo voterInfo = tabBarActivity.getVoterInfo();
+        VoterInfo voterInfo = UserPreferences.getVoterInfo();
         assertEquals(voterInfo.election.name, "Test Election");
     }
 
