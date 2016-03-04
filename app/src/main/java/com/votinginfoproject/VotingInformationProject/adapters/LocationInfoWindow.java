@@ -15,7 +15,6 @@ import com.votinginfoproject.VotingInformationProject.R;
  * Created by kathrynkillebrew on 7/29/14.
  */
 public class LocationInfoWindow implements GoogleMap.InfoWindowAdapter {
-
     LayoutInflater inflater = null;
 
     public LocationInfoWindow(LayoutInflater inflater) {

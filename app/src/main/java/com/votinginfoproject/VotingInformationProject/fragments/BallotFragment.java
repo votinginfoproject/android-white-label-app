@@ -37,6 +37,7 @@ public class BallotFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
         myActivity = (VIPTabBarActivity) this.getActivity();
+
         // election label
         TextView election_name_label = (TextView) rootView.findViewById(R.id.ballot_election_name);
         TextView election_date_label = (TextView) rootView.findViewById(R.id.ballot_election_date);

@@ -89,7 +89,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         } else if (selection.equals(filterLabels.POLLING)) {
             showPolling = true;
             showEarly = showDropBox = false;
-        } else if (selection.equals(filterLabels.DROPBOX)) {
+        } else if (selection.equals(filterLabels.DROP_BOX)) {
             showDropBox = true;
             showEarly = showPolling = false;
         } else {
@@ -239,7 +239,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         }
 
         if (!voterInfo.getOpenDropOffLocations().isEmpty()) {
-            filterOptions.add(filterLabels.DROPBOX);
+            filterOptions.add(filterLabels.DROP_BOX);
         }
 
         Spinner filterSpinner = (Spinner) rootView.findViewById(R.id.locations_map_spinner);

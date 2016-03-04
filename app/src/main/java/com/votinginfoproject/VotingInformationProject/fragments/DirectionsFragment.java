@@ -255,10 +255,10 @@ public class DirectionsFragment extends Fragment {
     private void queryDirections() {
         // clear last directions polyline
         myActivity.polylineCallback("", null);
-        String homeCoords = homeLatLng.latitude + "," + homeLatLng.longitude;
-        String locationCoords = locationAddress.latitude + "," + locationAddress.longitude;
+        String homeCoordinates = homeLatLng.latitude + "," + homeLatLng.longitude;
+        String locationCoordinates = locationAddress.latitude + "," + locationAddress.longitude;
 
-        new DirectionsQuery(getActivity(), directionsList, noneFoundMessage, homeCoords, locationCoords, myActivity).execute(directionsMode);
+        new DirectionsQuery(getActivity(), directionsList, noneFoundMessage, homeCoordinates, locationCoordinates, myActivity).execute(directionsMode);
     }
 
     @Override

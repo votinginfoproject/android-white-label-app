@@ -20,7 +20,7 @@ import java.util.UUID;
 public class VoterInfo {
     // limit drop box locations to first 50, and polling and early voting sites to first 25
     private static final int MAX_VOTING_SITES = 25;
-    private static final int MAX_DROPBOX_SITES = 50;
+    private static final int MAX_DROP_BOX_SITES = 50;
     private final String TAG = VoterInfo.class.getSimpleName();
     public String kind;
     public Election election;
@@ -47,7 +47,7 @@ public class VoterInfo {
      * Ensures otherElections is never a null field, and create photo cache for candidate images
      */
     public VoterInfo() {
-        this.otherElections = new ArrayList();
+        this.otherElections = new ArrayList<>();
         candidatePhotoCache = new CandidatePhotoCache();
     }
 
@@ -77,7 +77,7 @@ public class VoterInfo {
 
         // build filtered list of contests based on party
         if (contests != null) {
-            filteredContests = new ArrayList(contests.size());
+            filteredContests = new ArrayList<>(contests.size());
             // filter contest list for primary party
             if (!party.isEmpty()) {
                 for (Contest contest : contests) {
@@ -97,7 +97,7 @@ public class VoterInfo {
         } else {
             Log.d(TAG, "No contests for this election!");
 
-            filteredContests = new ArrayList();
+            filteredContests = new ArrayList<>();
         }
     }
 
@@ -115,25 +115,25 @@ public class VoterInfo {
      */
     public void setUpLocations() {
         // get all locations (both polling and early voting)
-        allLocations = new ArrayList();
+        allLocations = new ArrayList<>();
         if (pollingLocations != null) {
             // only show first polling locations
             if (pollingLocations.size() > MAX_VOTING_SITES) {
-                usePollingLocations = new ArrayList(pollingLocations.subList(0, MAX_VOTING_SITES));
+                usePollingLocations = new ArrayList<>(pollingLocations.subList(0, MAX_VOTING_SITES));
             } else {
-                usePollingLocations = new ArrayList(pollingLocations);
+                usePollingLocations = new ArrayList<>(pollingLocations);
                 Collections.copy(usePollingLocations, pollingLocations);
             }
 
             allLocations.addAll(usePollingLocations);
         } else {
-            usePollingLocations = new ArrayList();
+            usePollingLocations = new ArrayList<>();
         }
 
         // only display early voting sites and drop-off locations that haven't closed yet
         // only show first 25 early voting sites found, and first 50 drop-boxes
         openEarlyVoteSites = buildOpenSitesList(earlyVoteSites, MAX_VOTING_SITES);
-        openDropOffLocations = buildOpenSitesList(dropOffLocations, MAX_DROPBOX_SITES);
+        openDropOffLocations = buildOpenSitesList(dropOffLocations, MAX_DROP_BOX_SITES);
 
         Log.d(TAG, "Using " + openEarlyVoteSites.size() + " open early voting sites");
         Log.d(TAG, "Using " + openDropOffLocations.size() + " open drop-off locations");
@@ -143,7 +143,7 @@ public class VoterInfo {
 
         // Build map of PollingLocation id to its offset in the list of all locations,
         // to find it later when the distance calculation comes back.
-        locationIds = new HashMap(allLocations.size());
+        locationIds = new HashMap<>(allLocations.size());
         for (int i = allLocations.size(); i-- > 0; ) {
             PollingLocation location = allLocations.get(i);
 

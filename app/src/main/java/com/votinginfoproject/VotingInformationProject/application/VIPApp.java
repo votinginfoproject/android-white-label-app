@@ -12,9 +12,6 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.GATracke
  * This singleton class can hold data to be used across the application.
  */
 public class VIPApp extends Application {
-    private VoterInfo voterInfo;
-    private Location homeLocation;
-
     @Override
     public void onCreate() {
         super.onCreate();

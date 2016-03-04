@@ -81,7 +81,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
     // track what the current fragment is and the history of selected fragments (for moving back)
     private int currentFragment = R.id.ballot_fragment;
-    private Stack<Integer> fragmentHistory = new Stack();
+    private Stack<Integer> fragmentHistory = new Stack<>();
 
     public void setCurrentFragment(int currentFragment) {
         this.currentFragment = currentFragment;
@@ -107,8 +107,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     public void onClick(View v) {
         if (isLoadingFeedBackForm()) {
             Log.d(TAG, "Already loading feedback form.");
+
             return;
         }
+
         Log.d(TAG, "Feedback button text clicked");
         loadingFeedBackForm = true;
         // load browser in app
@@ -148,13 +150,13 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         public final String ALL;
         public final String EARLY;
         public final String POLLING;
-        public final String DROPBOX;
+        public final String DROP_BOX;
 
         FilterLabels(String all, String early, String polling, String dropbox) {
             this.ALL = all;
             this.EARLY = early;
             this.POLLING = polling;
-            this.DROPBOX = dropbox;
+            this.DROP_BOX = dropbox;
         }
     }
 
@@ -417,8 +419,8 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
 
-        // start geocoding addresses when activity launches
-        setUpGeocodings();
+        // geocode addresses when activity launches
+        setUpGeocodePreferences();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).
                 addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
@@ -428,7 +430,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
      * Helper function to geocode entered address and the polling location results for that address
      * when the tab bar is loaded.
      */
-    private void setUpGeocodings() {
+    private void setUpGeocodePreferences() {
         // get LocationsFragment's root view
         locationsFragment = (LocationsFragment) mTabsAdapter.getItem(1);
         voterInfo = UserPreferences.getVoterInfo();
@@ -440,7 +442,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
             @Override
             public void callback(String address) {
-                Log.d(TAG, "Got reverse-geocoded address " + address);
+                Log.d(TAG, "Got reverse-geocode address " + address);
                 if (address != null && !address.isEmpty()) {
                     userLocationAddress = address;
                 } else {
@@ -452,7 +454,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
         // Callback for polling location geocode result
         pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
-
             @Override
             public void callback(String key, double lat, double lon, double distance) {
                 if (key.equals("error")) {
@@ -536,7 +537,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
                 } else {
                     Log.e(TAG, "Failed to set geocode result on election admin body!");
                 }
-
             }
         };
 
@@ -665,6 +665,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+
         //Stop analytics tracking
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }

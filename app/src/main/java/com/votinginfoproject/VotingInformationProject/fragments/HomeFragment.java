@@ -386,7 +386,7 @@ public class HomeFragment extends Fragment {
         mListener.searchedAddress(voterInfo);
 
         // Show election picker if there are other elections
-        ArrayList<Election> elections = new ArrayList<Election>(voterInfo.otherElections);
+        ArrayList<Election> elections = new ArrayList<>(voterInfo.otherElections);
         elections.add(0, voterInfo.election);
 
         setSpinnerElections(elections);
@@ -402,6 +402,7 @@ public class HomeFragment extends Fragment {
                     // if query returns null, then CivicInfoApiQuery had an exception
                     Log.e(TAG, "Got null result from voterInfoQuery!");
                     homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
+
                     // read error result, if TalkBack enabled
                     homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
 
@@ -498,7 +499,7 @@ public class HomeFragment extends Fragment {
             homeElectionSpinnerWrapper.setVisibility(View.VISIBLE);
         }
 
-        ArrayAdapter<Election> adapter = new ArrayAdapter<Election>(myActivity, R.layout.home_spinner_view, elections);
+        ArrayAdapter<Election> adapter = new ArrayAdapter<>(myActivity, R.layout.home_spinner_view, elections);
         homeElectionSpinner.setAdapter(adapter);
 
         homeElectionSpinner.setSelection(0, true);
@@ -524,13 +525,13 @@ public class HomeFragment extends Fragment {
 
         if (!parties.isEmpty()) {
             // convert set to list for adapter
-            List<String> partiesList = new ArrayList<String>(parties);
+            List<String> partiesList = new ArrayList<>(parties);
             // sort list alphabetically
             Collections.sort(partiesList);
 
             partiesList.add(0, mContext.getString(R.string.fragment_home_party_spinner_description));
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(myActivity, R.layout.home_spinner_view, partiesList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(myActivity, R.layout.home_spinner_view, partiesList);
 
             homePartySpinner.setAdapter(adapter);
 

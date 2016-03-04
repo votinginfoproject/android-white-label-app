@@ -26,13 +26,13 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
 
     public interface ReverseGeocodeCallBackListener {
         /**
-         * Callback for geocoder response.
+         * Callback for geocode response.
          */
-        public void callback(String address);
+        void callback(String address);
     }
 
     /**
-     * Constructor.  Set parameters for geocoding job here.
+     * Constructor.  Set parameters for geocode job here.
      *
      * @param callBack function to be called with geocode results
      */
@@ -48,7 +48,7 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
         location = locations[0];
 
         if (!Geocoder.isPresent()) {
-            Log.e("GeocodeQuery", "No geocoder service available!");
+            Log.e("GeocodeQuery", "No geocode service available!");
             return "";
         }
 
@@ -67,7 +67,7 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
                 Log.d("GeocodeQuery", "No result found for location");
             }
         } catch (IOException e) {
-            Log.e("GeocodeQuery", "IOException reverse-geocoding location");
+            Log.e("GeocodeQuery", "IOException reverse-geocode location");
             e.printStackTrace();
         }
 
@@ -77,19 +77,22 @@ public class ReverseGeocodeQuery extends AsyncTask<Location, String, String> {
     /**
      * Helper function to parse Address object into formatted String.
      *
-     * @param address Address object returned by geocoder
+     * @param address Address object returned by geocode function
      * @return String representation of address
      */
     private String formatAddress(Address address) {
         StringBuilder formattedAddress = new StringBuilder();
-        int maxAddrLine = address.getMaxAddressLineIndex();
-        for (int i = 0; i < maxAddrLine; i++) {
+
+        int maxAddressLine = address.getMaxAddressLineIndex();
+
+        for (int i = 0; i < maxAddressLine; i++) {
             formattedAddress.append(address.getAddressLine(i));
             formattedAddress.append(" ");
         }
 
         // strip trailing space
         formattedAddress.deleteCharAt(formattedAddress.length() -1);
+
         return formattedAddress.toString();
     }
 

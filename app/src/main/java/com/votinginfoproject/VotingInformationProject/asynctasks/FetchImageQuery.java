@@ -42,7 +42,7 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
 
     public FetchImageQuery(Candidate candidate, ImageView imageView) {
         this.candidate = candidate;
-        this.imageView = new WeakReference(imageView);
+        this.imageView = new WeakReference<>(imageView);
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
         justGetBoundsOptions = new BitmapFactory.Options();
@@ -70,10 +70,9 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
 
             // first query for image size, to scale it
             BufferedHttpEntity entity = new BufferedHttpEntity(response.getEntity());
-            if (entity != null) {
-                inputStream = entity.getContent();
-                BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
-            }
+
+            inputStream = entity.getContent();
+            BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
 
             // Calculate inSampleSize
             justGetBoundsOptions.inSampleSize = calculateInSampleSize(justGetBoundsOptions);
@@ -93,11 +92,11 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
             }
 
             entity = new BufferedHttpEntity(response.getEntity());
-            if (entity != null) {
-                inputStream = entity.getContent();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
-                return bitmap;
-            }
+            inputStream = entity.getContent();
+
+            return BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
+
+
 
         } catch (IOException e) {
             Log.e(TAG, "IOException downloading image at URL " + photoUrl);

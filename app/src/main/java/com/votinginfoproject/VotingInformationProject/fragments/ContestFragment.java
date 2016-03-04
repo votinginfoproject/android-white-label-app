@@ -89,11 +89,13 @@ public class ContestFragment extends Fragment {
             if (!contest.type.equals("Referendum")) {
                 title.setText(contest.office);
                 subtitle.setText(voterInfo.election.name);
+
                 // add footer view for feedback
                 View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, mListView, false);
+
                 // 'false' argument here is to make the footer list item not clickable (text instead is clickable)
                 mListView.addFooterView(feedback_layout, null, false);
-            } else if (contest.type != null) {
+            } else {
                 // Have a referendum, which has no candidates list.  So,
                 // remove scrolling list view and instead use scroll view for title/subtitle.
                 // Scroll view includes feedback link at the bottom.

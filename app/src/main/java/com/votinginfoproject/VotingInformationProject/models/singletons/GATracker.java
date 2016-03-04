@@ -16,10 +16,6 @@ public class GATracker {
 
     private HashMap<TrackerName, Tracker> trackers = new HashMap<>();
 
-    private static GATracker getInstance() {
-        return ourInstance;
-    }
-
     public static void registerTracker(Context context, TrackerName trackerId) {
         if (ourInstance.trackers.get(trackerId) == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);

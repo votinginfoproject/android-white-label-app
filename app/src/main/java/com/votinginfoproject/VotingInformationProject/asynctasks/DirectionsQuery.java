@@ -56,7 +56,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
     private final WeakReference<ListView> directionsListViewReference;
     private final WeakReference<TextView> errorViewReference;
 
-    private static HashMap<String, Response> directionsCache = new HashMap(4);
+    private static HashMap<String, Response> directionsCache = new HashMap<>(4);
 
     public interface PolylineCallBackListener {
         /**
@@ -76,25 +76,18 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         this.destinationCoordinates = destinationCoordinates;
         this.api_key = context.getResources().getString(R.string.google_api_browser_key);
 
-        this.directionsListViewReference = new WeakReference(listView);
-        this.errorViewReference = new WeakReference(errorView);
+        this.directionsListViewReference = new WeakReference<>(listView);
+        this.errorViewReference = new WeakReference<>(errorView);
 
         this.httpContext = new BasicHttpContext();
         this.httpClient = new DefaultHttpClient();
         this.listener = listener;
 
-        // build cache key for this instance
-        StringBuilder cacheKeyBuilder = new StringBuilder(originCoordinates);
-        cacheKeyBuilder.append("-");
-        cacheKeyBuilder.append(destinationCoordinates);
-        cacheKeyBuilder.append("-");
-
-        this.addressKey = cacheKeyBuilder.toString();
+        this.addressKey = originCoordinates + "-" + destinationCoordinates + "-";
     }
 
     @Override
     protected Response doInBackground(String... travelModes) {
-
         // first check if we already have this one cached
         String cacheKey = addressKey + travelModes[0];
         Response cachedResponse = directionsCache.get(cacheKey);
@@ -211,7 +204,7 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
             return;
         }
 
-        // did not query for alternate routes or provide waypoints, so should get one route with one leg
+        // did not query for alternate routes or provide way points, so should get one route with one leg
         Route foundRoute = response.routes.get(0);
 
         // get overview polyline to display on map

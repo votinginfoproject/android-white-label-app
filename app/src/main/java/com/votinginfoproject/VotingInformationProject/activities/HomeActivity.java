@@ -158,7 +158,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
             // set address found in view
             addressView.setText(address);
 
-            // initate search with new address
+            // Initiate search with new address
             HomeFragment myFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.home_fragment);
             myFragment.makeElectionQuery();
         } else {

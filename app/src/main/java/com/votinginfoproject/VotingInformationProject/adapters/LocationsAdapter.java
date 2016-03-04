@@ -24,7 +24,6 @@ import java.util.List;
  * Created by kathrynkillebrew on 7/25/14.
  */
 public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
-
     private final String TAG = LocationsAdapter.class.getSimpleName();
 
     VIPTabBarActivity myActivity;
@@ -117,7 +116,8 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         }
 
         if (location.address.distance > 0) {
-            viewHolder.distance.setText(distanceFormat.format(location.address.distance) + distanceSuffix);
+            String distance = distanceFormat.format(location.address.distance) + distanceSuffix;
+            viewHolder.distance.setText(distance);
         } else if (home != null && !viewHolder.isQueryingDistance) {
             /** Start async task that will set this distance TextView when it returns; happens if
              * task started in activity hasn't returned by the time the list loads.

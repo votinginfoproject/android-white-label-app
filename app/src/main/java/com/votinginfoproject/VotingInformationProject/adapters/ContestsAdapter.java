@@ -61,6 +61,7 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Contest contest = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder;
         if (convertView == null) {

@@ -132,7 +132,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
             filterOptions.add(filterLabels.POLLING);
         }
         if (!voterInfo.getOpenDropOffLocations().isEmpty()) {
-            filterOptions.add(filterLabels.DROPBOX);
+            filterOptions.add(filterLabels.DROP_BOX);
         }
 
         Spinner filterSpinner = (Spinner) rootView.findViewById(R.id.locations_list_spinner);
@@ -210,7 +210,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
             setFilter(voterInfo.getOpenEarlyVoteSites());
         } else if (selection.equals(filterLabels.POLLING)) {
             setFilter(voterInfo.getPollingLocations());
-        } else if (selection.equals(filterLabels.DROPBOX)) {
+        } else if (selection.equals(filterLabels.DROP_BOX)) {
             setFilter(voterInfo.getOpenDropOffLocations());
         } else {
             Log.e(TAG, "Selected item " + selection + "isn't recognized!");
