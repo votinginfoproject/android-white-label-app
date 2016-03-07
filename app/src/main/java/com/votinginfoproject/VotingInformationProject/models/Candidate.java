@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.graphics.Bitmap;
 
-import com.votinginfoproject.VotingInformationProject.application.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
@@ -27,16 +26,16 @@ public class Candidate {
     // keep reference to VoterInfo to put photos in its cache
     private VoterInfo voterInfo;
 
-    /** Default Constructor
-     *
-     *  Ensures that the channels List is not-null when the class is instantiated
+    /**
+     * Default Constructor
+     * <p/>
+     * Ensures that the channels List is not-null when the class is instantiated
      */
     public Candidate() {
         this.channels = new ArrayList<>(4);
     }
 
     /**
-     *
      * @param type A string that matches to one of the social channel types
      *             returned by the CivicInfo voterInfo query
      * @return SocialMediaChannel that matches the passed type, or null if not found
@@ -54,7 +53,6 @@ public class Candidate {
     }
 
     /**
-     *
      * @return string description of candidate, for use in candidate list view
      */
     @Override
@@ -77,6 +75,7 @@ public class Candidate {
 
     /**
      * Add candidate photo to LRU cache
+     *
      * @param bitmap image to cache
      */
     public void setCandidatePhoto(Bitmap bitmap) {

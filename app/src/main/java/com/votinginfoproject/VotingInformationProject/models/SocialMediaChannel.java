@@ -71,15 +71,16 @@ public class SocialMediaChannel {
         if (type == null) {
             return null;
         }
+
         switch (type) {
             case "Twitter":
-                return Uri.parse("https://twitter.com/" + id);
+                return Uri.parse(id);
             case "Facebook":
-                return Uri.parse("https://facebook.com/" + id);
+                return Uri.parse(id);
             case "GooglePlus":
-                return Uri.parse("https://plus.google.com/+" + id);
+                return Uri.parse( id);
             case "YouTube":
-                return Uri.parse("https://www.youtube.com/user/" + id);
+                return Uri.parse(id);
             default:
                 return null;
         }
