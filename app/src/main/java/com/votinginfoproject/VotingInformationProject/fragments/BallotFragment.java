@@ -27,6 +27,7 @@ public class BallotFragment extends Fragment {
     VoterInfo voterInfo;
     VIPTabBarActivity myActivity;
     ArrayList<Contest> filteredContests;
+    private ContestsAdapter mAdapter;
 
     public static BallotFragment newInstance() {
         return new BallotFragment();
@@ -38,7 +39,7 @@ public class BallotFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ballot, container, false);
         myActivity = (VIPTabBarActivity) this.getActivity();
@@ -50,10 +51,11 @@ public class BallotFragment extends Fragment {
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // fill list of contests
+        filteredContests.clear();
         filteredContests.addAll(voterInfo.getFilteredContestsForParty(UserPreferences.getSelectedParty()));
 
-        ContestsAdapter adapter = new ContestsAdapter(myActivity, filteredContests, voterInfo.election.name);
-        adapter.sortList();
+        mAdapter = new ContestsAdapter(myActivity, filteredContests, voterInfo.election.name);
+        mAdapter.sortList();
         ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
 
         // add footer view for feedback
@@ -61,10 +63,12 @@ public class BallotFragment extends Fragment {
         // 'false' argument here is to make the footer list item not clickable (text instead is clickable)
         contestList.addFooterView(feedback_layout, null, false);
 
-        contestList.setAdapter(adapter);
+        contestList.setAdapter(mAdapter);
         contestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contest contest = mAdapter.getItem(position);
+                Log.v(TAG, "here: " + contest);
                 myActivity.showContestDetails(position);
             }
         });

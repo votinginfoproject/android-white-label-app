@@ -34,6 +34,8 @@ public class ContestFragment extends Fragment {
 
     private TextView mTitle;
     private TextView mSubtitle;
+    private TextView mHeaderTextView;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -69,6 +71,8 @@ public class ContestFragment extends Fragment {
         mListView = (ListView) inflaterView.findViewById(R.id.contest_candidate_list);
         mTitle = (TextView) inflaterView.findViewById(R.id.contest_title);
         mSubtitle = (TextView) inflaterView.findViewById(R.id.contest_subtitle);
+
+        mHeaderTextView = (TextView) inflaterView.findViewById(R.id.contest_candidate_list_header);
 
         if (getArguments() != null) {
             contestNum = getArguments().getInt(CONTEST_NUM);
@@ -172,8 +176,7 @@ public class ContestFragment extends Fragment {
                 });
             } else if (!contest.type.equals("Referendum")) {
                 Log.d(TAG, "No candidates found for selected contest.");
-
-                myActivity.findViewById(R.id.contest_candidate_list_header).setVisibility(View.GONE);
+                mHeaderTextView.setVisibility(View.GONE);
             }
 
         } catch (Exception ex) {
