@@ -166,6 +166,7 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
 
         clearLastElection();
         errorCallbackListener.callback(errors[0]);
+        cancel(true);
     }
 
     /**
