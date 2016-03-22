@@ -51,6 +51,7 @@ public class VoterInfo {
     }
 
     public List<Contest> getFilteredContestsForParty(String party) {
+        if (contests == null) return new ArrayList<>();
 
         ArrayList<Contest> filteredContests = new ArrayList<>(contests.size());
 
