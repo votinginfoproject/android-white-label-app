@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,43 +24,61 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
-import com.votinginfoproject.VotingInformationProject.asynctasks.CivicInfoApiQuery;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.api.interactors.CivicInfoInteractor;
+import com.votinginfoproject.VotingInformationProject.models.api.requests.CivicInfoRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+/**
+ * This interface must be implemented by activities that contain this
+ * fragment to allow an interaction in this fragment to be communicated
+ * to the activity and potentially other fragments contained in that
+ * activity.
+ * <p/>
+ * See the Android Training lesson <a href=
+ * "http://developer.android.com/training/basics/fragments/communicating.html"
+ * >Communicating with Other Fragments</a> for more information.
+ */
+
+
+public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicInfoCallback {
+
     private final String TAG = HomeFragment.class.getSimpleName();
 
-    Button homeGoButton;
-    CivicInfoApiQuery.CallBackListener voterInfoListener;
-    CivicInfoApiQuery.CallBackListener voterInfoErrorListener;
-    HomeActivity myActivity;
-    Context mContext;
-    Resources resources;
-    EditText homeEditTextAddress;
-    TextView homeTextViewStatus;
-    Spinner homeElectionSpinner;
-    View homeElectionSpinnerWrapper;
-    Spinner homePartySpinner;
-    View homePartySpinnerWrapper;
-    ImageView homeSelectContactButton;
+    private Button homeGoButton;
+    private HomeActivity myActivity;
+    private Context mContext;
+    private Resources resources;
+    private EditText homeEditTextAddress;
+    private TextView homeTextViewStatus;
+    private Spinner homeElectionSpinner;
+    private View homeElectionSpinnerWrapper;
+    private Spinner homePartySpinner;
+    private View homePartySpinnerWrapper;
+    private ImageView homeSelectContactButton;
 
-    Election currentElection;
-    String address;
-    SharedPreferences preferences;
-    OnInteractionListener mListener;
-    boolean isTest;
+    private Election currentElection;
+    private String address;
+    private SharedPreferences preferences;
+    private OnInteractionListener mListener;
+    private boolean isTest;
+
+    public HomeFragment() {
+        // Required empty public constructor
+    }
+
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
 
     /**
      * For use when testing only.  Sets flag to indicate that we're testing the app, so it will
@@ -69,14 +86,6 @@ public class HomeFragment extends Fragment {
      */
     public void doTestRun() {
         isTest = true;
-    }
-
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
-    }
-
-    public HomeFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -115,7 +124,6 @@ public class HomeFragment extends Fragment {
         homePartySpinnerWrapper = rootView.findViewById(R.id.home_party_spinner_wrapper);
 
         setupViewListeners();
-        setupCivicAPIListeners();
 
         return rootView;
     }
@@ -123,6 +131,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         try {
             mListener = (OnInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -134,6 +143,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
         mListener = null;
     }
 
@@ -145,71 +155,14 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Helper function to check if address has changed, and either re-query if it has changed,
-     * or fetch the last election from shared preferences if it hasn't.
-     */
-    public void makeElectionQuery() {
-        String new_address = homeEditTextAddress.getText().toString();
-        if (new_address.equals(address)) {
-            Log.d(TAG, "Address has not changed.");
-
-            getElectionFromPreferences();
-        } else {
-            Log.d(TAG, "Searching with changed address.");
-
-            queryWithNewAddress(new_address);
-        }
-    }
-
-    /**
-     * Fetch the last election from shared preferences if a search performed without a change in
-     * the entered address.
-     */
-    public void getElectionFromPreferences() {
-        // show loading text
-        homeTextViewStatus.setText(R.string.fragment_home_status_loading);
-        homeTextViewStatus.setVisibility(View.VISIBLE);
-
-        String lastElection = preferences.getString(resources.getString(R.string.LAST_ELECTION_KEY), "");
-        if (lastElection.isEmpty()) {
-            Log.e(TAG, "Could not find last election in preferences!");
-            queryWithNewAddress(address);
-            return;
-        }
-
-        // have last election in preferences; re-hydrate it
-        try {
-            Gson gson = new GsonBuilder().create();
-            VoterInfo voterInfo = gson.fromJson(lastElection, VoterInfo.class);
-
-            Log.d(TAG, "Got voter info result from shared preferences.");
-
-            // check if stored election has passed yet
-            if (voterInfo.election.isElectionOver()) {
-                Log.d(TAG, "Election in shared preferences is over; re-querying.");
-
-                queryWithNewAddress(address);
-            } else {
-                Log.d(TAG, "Election in shared preferences is still valid; using it.");
-
-                presentVoterInfoResult(voterInfo);
-            }
-        } catch (Exception ex) {
-            Log.e(TAG, "Failed to re-hydrate last election!");
-
-            ex.printStackTrace();
-            queryWithNewAddress(address);
-        }
-    }
-
-    /**
-     * Query the Civic Info API after the entered address has changed, and store the address
-     * and election result to shared preferences.
+     * Query the Civic Info API after the entered address has changed
      *
      * @param new_address New address entered
      */
-    private void queryWithNewAddress(String new_address) {
+    public void queryWithNewAddress(String new_address) {
         Log.d(TAG, "queryWithNewAddress");
+
+        showLoadingState();
 
         setAddress(new_address);
 
@@ -222,6 +175,18 @@ public class HomeFragment extends Fragment {
         homeElectionSpinnerWrapper.setVisibility(View.GONE);
         homeGoButton.setVisibility(View.GONE);
         constructVoterInfoQuery();
+    }
+
+    private void showLoadingState() {
+        homeTextViewStatus.setVisibility(View.VISIBLE);
+        homeSelectContactButton.setEnabled(false);
+        homeTextViewStatus.setText(R.string.fragment_home_status_loading);
+        homeEditTextAddress.setEnabled(false);
+    }
+
+    private void hideLoadingState() {
+        homeEditTextAddress.setEnabled(true);
+        homeSelectContactButton.setEnabled(true);
     }
 
     private void setupViewListeners() {
@@ -252,7 +217,7 @@ public class HomeFragment extends Fragment {
                 if ((actionId == EditorInfo.IME_ACTION_SEARCH ||
                         (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
                         && mListener != null) {
-                    makeElectionQuery();
+                    queryWithNewAddress(view.getText().toString());
                 }
 
                 // Return false to close the keyboard
@@ -341,38 +306,10 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "Current election is unset");
         }
 
-        try {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
-            builder.appendPath(resources.getString(R.string.civic_info_api_version));
-            String officialOnly = resources.getBoolean(R.bool.civic_info_official_only) ? "true" : "false";
-            builder.appendPath("voterinfo").appendQueryParameter("officialOnly", officialOnly);
+        CivicInfoRequest request = new CivicInfoRequest(getActivity(), electionId, address);
 
-            // set flag to view pre-production data
-            if (resources.getBoolean(R.bool.use_preproduction)) {
-                builder.appendQueryParameter("productionDataOnly", "false");
-            }
-
-            if (!electionId.isEmpty()) {
-                builder.appendQueryParameter("electionId", electionId);
-            }
-            builder.appendQueryParameter("address", address);
-            builder.appendQueryParameter("key", resources.getString(R.string.google_api_browser_key));
-            String apiUrl = builder.build().toString();
-            Log.d(TAG, "searchedAddress: " + apiUrl);
-
-            homePartySpinnerWrapper.setVisibility(View.GONE);
-
-            // show loading text
-            homeTextViewStatus.setText(R.string.fragment_home_status_loading);
-            homeTextViewStatus.setVisibility(View.VISIBLE);
-
-            // Make query
-            new CivicInfoApiQuery<VoterInfo>(VoterInfo.class, voterInfoListener, voterInfoErrorListener,
-                    preferences, resources.getString(R.string.LAST_ELECTION_KEY)).execute(apiUrl);
-        } catch (Exception e) {
-            Log.e(TAG + ":Exception", "searchedAddress: " + address);
-        }
+        CivicInfoInteractor civicInfoInteractor = new CivicInfoInteractor();
+        civicInfoInteractor.enqueueRequest(request, this);
     }
 
     private void presentVoterInfoResult(VoterInfo voterInfo) {
@@ -393,83 +330,7 @@ public class HomeFragment extends Fragment {
         setSpinnerParty(voterInfo.contests);
     }
 
-    private void setupCivicAPIListeners() {
-        // Callback for voterInfoQuery result
-        voterInfoListener = new CivicInfoApiQuery.CallBackListener() {
-            @Override
-            public void callback(Object result) {
-                if (result == null) {
-                    // if query returns null, then CivicInfoApiQuery had an exception
-                    Log.e(TAG, "Got null result from voterInfoQuery!");
-                    homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
-
-                    // read error result, if TalkBack enabled
-                    homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-
-                    return;
-                }
-
-                VoterInfo voterInfo = (VoterInfo) result;
-                presentVoterInfoResult(voterInfo);
-            }
-        };
-
-        // Callback for voterInfoQuery error result
-        voterInfoErrorListener = new CivicInfoApiQuery.CallBackListener() {
-            @Override
-            public void callback(Object result) {
-                try {
-                    homeGoButton.setVisibility(View.INVISIBLE);
-                    CivicApiError error = (CivicApiError) result;
-
-                    CivicApiError.Error error1 = error.errors.get(0);
-
-                    Log.d(TAG, "Civic API returned error: " + error.code + ": " +
-                            error.message + " " + error1.domain + " " + error1.reason + " " +
-                            error1.message);
-
-                    if (CivicApiError.errorMessages.get(error1.reason) != null) {
-                        homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
-                    } else {
-                        Log.d(TAG, "Unknown API error reason: " + error1.reason);
-                        homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
-                    }
-                } catch (NullPointerException e) {
-                    Log.e(TAG, "Null encountered in API error result");
-                    homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
-                }
-
-                // read error result, if TalkBack enabled
-                homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-            }
-        };
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnInteractionListener {
-        void onGoButtonPressed(View view);
-
-        void onSelectContactButtonPressed(View view);
-
-        void searchedAddress(VoterInfo voterInfo);
-    }
-
     public String getAddress() {
-        // Bias the returned address towards a saved address in preferences if one does
-        //  not exist in memory
-        if (address == null || address.isEmpty()) {
-            String addressKey = getString(R.string.LAST_ADDRESS_KEY);
-            address = preferences.getString(addressKey, "");
-        }
         return address;
     }
 
@@ -479,13 +340,6 @@ public class HomeFragment extends Fragment {
      * @param address Address string to store
      */
     public void setAddress(String address) {
-        Log.d(TAG, "Storing a new address into shared preferences.");
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear(); // clears last saved election, if there is one
-        String addressKey = getString(R.string.LAST_ADDRESS_KEY);
-        editor.putString(addressKey, address);
-        editor.apply();
-
         this.address = address;
     }
 
@@ -545,5 +399,53 @@ public class HomeFragment extends Fragment {
         } else {
             homePartySpinnerWrapper.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void civicInfoResponse(VoterInfo response) {
+        if (response != null) {
+            Log.v(TAG, " " + response.getError());
+
+            homeGoButton.setVisibility(View.VISIBLE);
+
+            if (response.isSuccessful()) {
+                presentVoterInfoResult(response);
+            } else {
+                homeGoButton.setVisibility(View.INVISIBLE);
+
+                CivicApiError error = response.getError();
+
+                CivicApiError.Error error1 = error.errors.get(0);
+
+                Log.d(TAG, "Civic API returned error: " + error.code + ": " +
+                        error.message + " " + error1.domain + " " + error1.reason + " " +
+                        error1.message);
+
+                if (CivicApiError.errorMessages.get(error1.reason) != null) {
+                    homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
+                } else {
+                    Log.d(TAG, "Unknown API error reason: " + error1.reason);
+                    homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
+                }
+
+                // read error result, if TalkBack enabled
+                homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                homeTextViewStatus.setVisibility(View.VISIBLE);
+            }
+        } else {
+            Log.d(TAG, "API returned null response");
+            homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
+            homeTextViewStatus.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+        }
+
+        hideLoadingState();
+    }
+
+    public interface OnInteractionListener {
+        void onGoButtonPressed(View view);
+
+        void onSelectContactButtonPressed(View view);
+
+        void searchedAddress(VoterInfo voterInfo);
     }
 }

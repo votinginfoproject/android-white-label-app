@@ -27,12 +27,11 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         LoaderManager.LoaderCallbacks<Cursor> {
 
     static final int PICK_CONTACT_REQUEST = 1;
-
+    private final String TAG = HomeActivity.class.getSimpleName();
     Uri contactUri;
     EditText addressView;
     LoaderManager loaderManager;
-
-    private final String TAG = HomeActivity.class.getSimpleName();
+    String selectedParty;
 
     public String getSelectedParty() {
         return selectedParty;
@@ -43,8 +42,6 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
 
         UserPreferences.setSelectedParty(selectedParty);
     }
-
-    String selectedParty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +158,7 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
 
             // Initiate search with new address
             HomeFragment myFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.home_fragment);
-            myFragment.makeElectionQuery();
+            myFragment.setAddress(address);
         } else {
             Log.e(TAG, "Cursor got no results!");
         }

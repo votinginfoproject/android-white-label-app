@@ -9,4 +9,13 @@ import java.util.List;
 public class ElectionQueryResponse {
     public String kind;
     public List<Election> elections;
+    private CivicApiError error;
+
+    public CivicApiError getError() {
+        return error;
+    }
+
+    public boolean isSuccessful() {
+        return error == null;
+    }
 }

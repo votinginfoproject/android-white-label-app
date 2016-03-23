@@ -40,6 +40,8 @@ public class VoterInfo {
     private ArrayList<PollingLocation> usePollingLocations;
     private boolean mailOnly;
 
+    private CivicApiError error;
+
     /**
      * Default Constructor
      * <p/>
@@ -329,5 +331,23 @@ public class VoterInfo {
      */
     public boolean isMailOnly() {
         return mailOnly;
+    }
+
+    /**
+     * Get the error if present
+     *
+     * @return
+     */
+    public CivicApiError getError() {
+        return error;
+    }
+
+    /**
+     * Checks to see if there is an error, if an error is present will return false
+     *
+     * @return
+     */
+    public boolean isSuccessful() {
+        return error == null;
     }
 }

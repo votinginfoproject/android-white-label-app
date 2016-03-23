@@ -4,23 +4,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
@@ -76,72 +65,72 @@ public class CivicInfoApiQuery<T> extends AsyncTask<String, CivicApiError, T> {
      */
     @Override
     protected T doInBackground(String... urls) {
-        String url = urls[0];
-        InputStream inputStream = null;
-        HttpGet httpGet = null;
-
-        Log.d(TAG, "Url: " + url);
-
-        try {
-            httpGet = new HttpGet(url);
-            HttpResponse response = httpClient.execute(httpGet, httpContext);
-            int status = response.getStatusLine().getStatusCode();
-            inputStream = response.getEntity().getContent();
-            BufferedReader ir = new BufferedReader(new InputStreamReader(inputStream));
-
-            Log.d(TAG, "GOT RESPONSE STATUS: " + status);
-
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = ir.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-            ir.close();
-            inputStream.close();
-            String responseStr = stringBuilder.toString();
-
-            Gson gson = new GsonBuilder().create();
-            if (status == HttpStatus.SC_OK) {
-                T gsonObj = gson.fromJson(responseStr, returnClass);
-                // store response to SharedPreferences
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(last_election_key, responseStr);
-                editor.apply();
-                return gsonObj;
-            } else {
-                // error
-                CivicApiErrorResponse myError = gson.fromJson(responseStr, CivicApiErrorResponse.class);
-                publishProgress(myError.error);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            clearLastElection();
-        } catch (JsonSyntaxException e) {
-            Log.e(TAG, "Could not parse JSON response!");
-            e.printStackTrace();
-            clearLastElection();
-        } catch (Exception e) {
-            e.printStackTrace();
-            clearLastElection();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException ex) {
-                    Log.e(TAG, "Error closing input stream");
-                    ex.printStackTrace();
-                }
-            }
-
-            if (httpGet != null) {
-                try {
-                    httpGet.abort();
-                } catch (Exception ex) {
-                    Log.e(TAG, "Error aborting HTTP Get");
-                    ex.printStackTrace();
-                }
-            }
-        }
+//        String url = urls[0];
+//        InputStream inputStream = null;
+//        HttpGet httpGet = null;
+//
+//        Log.d(TAG, "Url: " + url);
+//
+//        try {
+//            httpGet = new HttpGet(url);
+//            HttpResponse response = httpClient.execute(httpGet, httpContext);
+//            int status = response.getStatusLine().getStatusCode();
+//            inputStream = response.getEntity().getContent();
+//            BufferedReader ir = new BufferedReader(new InputStreamReader(inputStream));
+//
+//            Log.d(TAG, "GOT RESPONSE STATUS: " + status);
+//
+//            StringBuilder stringBuilder = new StringBuilder();
+//            String line;
+//            while ((line = ir.readLine()) != null) {
+//                stringBuilder.append(line);
+//            }
+//            ir.close();
+//            inputStream.close();
+//            String responseStr = stringBuilder.toString();
+//
+//            Gson gson = new GsonBuilder().create();
+//            if (status == HttpStatus.SC_OK) {
+//                T gsonObj = gson.fromJson(responseStr, returnClass);
+//                // store response to SharedPreferences
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putString(last_election_key, responseStr);
+//                editor.apply();
+//                return gsonObj;
+//            } else {
+//                // error
+//                CivicApiErrorResponse myError = gson.fromJson(responseStr, CivicApiErrorResponse.class);
+//                publishProgress(myError.error);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            clearLastElection();
+//        } catch (JsonSyntaxException e) {
+//            Log.e(TAG, "Could not parse JSON response!");
+//            e.printStackTrace();
+//            clearLastElection();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            clearLastElection();
+//        } finally {
+//            if (inputStream != null) {
+//                try {
+//                    inputStream.close();
+//                } catch (IOException ex) {
+//                    Log.e(TAG, "Error closing input stream");
+//                    ex.printStackTrace();
+//                }
+//            }
+//
+//            if (httpGet != null) {
+//                try {
+//                    httpGet.abort();
+//                } catch (Exception ex) {
+//                    Log.e(TAG, "Error aborting HTTP Get");
+//                    ex.printStackTrace();
+//                }
+//            }
+//        }
         return null;
     }
 

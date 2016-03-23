@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="LAST_ADDRESS_KEY" translatable="false">com.votinginfoproject.last_used_address</string>
-    <string name="LAST_ELECTION_KEY" translatable="false">com.votinginfoproject.last_election</string>
-</resources>

@@ -74,6 +74,11 @@ public class DirectionsQuery extends AsyncTask<String, String, Response> {
         resources = mContext.getResources();
         this.homeCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
+
+        /**
+         * Make sure the API keys have been added to the project
+         * Check out the "Adding API keys for the app" section of the readme for more details
+         */
         this.api_key = context.getResources().getString(R.string.google_api_browser_key);
 
         this.directionsListViewReference = new WeakReference<>(listView);

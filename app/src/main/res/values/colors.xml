@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="background.blue">#0068AC</color>
     <color name="button_blue">#00234b</color>
     <color name="item_header_blue">#0067ab</color>
     <color name="white">#ffffff</color>
