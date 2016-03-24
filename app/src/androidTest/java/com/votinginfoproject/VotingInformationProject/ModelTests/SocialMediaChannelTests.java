@@ -25,6 +25,4 @@ public class SocialMediaChannelTests extends AndroidTestCase {
         SocialMediaChannel channel = new SocialMediaChannel("testFacebook", "Facebook");
         assertEquals(cleanType, channel.getCleanType());
     }
-
-
 }

@@ -28,23 +28,6 @@ public class VoterInfoTests extends AndroidTestCase {
         assertNotNull(voterInfo.otherElections);
     }
 
-    public void testContestFilter() {
-        VoterInfo info = UserPreferences.getVoterInfo();
-
-        // should have both contests in filtered list with empty party string
-        List<Contest> filteredContests = info.getFilteredContests();
-        assertNotNull(filteredContests);
-        assertEquals(2, filteredContests.size());
-
-        // should have only one contest when filtered by party name
-        UserPreferences.setSelectedParty("Yes please");
-        filteredContests = info.getFilteredContests();
-        assertNotNull(filteredContests);
-        assertEquals(1, filteredContests.size());
-        assertEquals("Yes please", info.getContestAt(0).primaryParty);
-
-    }
-
     public void testGetLocationFromList() {
         VoterInfo info = UserPreferences.getVoterInfo();
 

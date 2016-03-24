@@ -53,9 +53,9 @@ public class CivicInfoRequest implements RequestType {
                 builder.appendQueryParameter("productionDataOnly", "false");
             }
 
-//            if (electionId != null && !electionId.isEmpty()) {
-            builder.appendQueryParameter("electionId", "2000");
-//            }
+            if (electionId != null && !electionId.isEmpty()) {
+                builder.appendQueryParameter("electionId", electionId);
+            }
 
             builder.appendQueryParameter("address", address);
             builder.appendQueryParameter("key", browserKey);

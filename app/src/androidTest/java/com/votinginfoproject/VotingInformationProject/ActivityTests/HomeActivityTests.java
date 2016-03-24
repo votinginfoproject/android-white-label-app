@@ -62,26 +62,6 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         assertNotNull(homeFragment);
     }
 
-    public void testHomeFragmentCommitsAddressToSharedPreferences() {
-        SharedPreferences preferences = homeActivity.getPreferences(Context.MODE_PRIVATE);
-        String addressKey = homeFragment.getString(R.string.LAST_ADDRESS_KEY);
-        assertEquals(homeFragment.getAddress(), "");
-
-        String testCommitAddress = "123 Main St, Richmond VA";
-        homeFragment.setAddress(testCommitAddress);
-        assertEquals(preferences.getString(addressKey, null), testCommitAddress);
-    }
-
-    public void testHomeFragmentPullsAddressFromSharedPreferences() {
-        SharedPreferences preferences = homeActivity.getPreferences(Context.MODE_PRIVATE);
-        String addressKey = homeFragment.getString(R.string.LAST_ADDRESS_KEY);
-        assertEquals(homeFragment.getAddress(), "");
-
-        String testPullAddress = "123 Test Address, County, State";
-        preferences.edit().putString(addressKey, testPullAddress).apply();
-        assertEquals(homeFragment.getAddress(), testPullAddress);
-    }
-
     public void testHomeActivityLoadsResponse() {
 
         Resources resources = homeActivity.getResources();
@@ -117,12 +97,10 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         builder = null;
 
         // save test result to shared preferences
-        String testAddress = "123 Main St, Richmond, VA";
-        SharedPreferences preferences = homeActivity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(resources.getString(R.string.LAST_ELECTION_KEY), responseStr);
+        final String testAddress = "123 Main St, Richmond, VA";
+
         homeFragment.setAddress(testAddress);
-        editor.commit();
+
         responseStr = null;
 
         final EditText homeEditTextAddress = (EditText)homeActivity.findViewById(R.id.home_edittext_address);
@@ -144,7 +122,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
                 // use test election
                 homeFragment.doTestRun();
                 // load result from shared preferences
-                homeFragment.getElectionFromPreferences();
+                homeFragment.queryWithNewAddress(testAddress);
             }
         });
 

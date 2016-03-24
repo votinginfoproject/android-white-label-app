@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -56,7 +55,6 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
     private Button homeGoButton;
     private HomeActivity myActivity;
     private Context mContext;
-    private Resources resources;
     private EditText homeEditTextAddress;
     private TextView homeTextViewStatus;
     private Spinner homeElectionSpinner;
@@ -101,10 +99,9 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mContext = myActivity.getApplicationContext();
-        resources = mContext.getResources();
 
         // read flag from api_keys file for whether to use test election or not
-        isTest = resources.getBoolean(R.bool.use_test_election);
+        isTest = mContext.getResources().getBoolean(R.bool.use_test_election);
 
         homeTextViewStatus = (TextView) rootView.findViewById(R.id.home_textview_status);
 

@@ -54,19 +54,19 @@ public class MockVIPAppContext {
         testCandidateTwo.name = "Test Candidate Two";
         testCandidateTwo.party = "LAN";
 
-        testContestOne.candidates = new ArrayList<Candidate>(1);
+        testContestOne.candidates = new ArrayList<>(1);
         testContestOne.candidates.add(testCandidateOne);
 
-        testContestTwo.candidates = new ArrayList<Candidate>(1);
+        testContestTwo.candidates = new ArrayList<>(1);
         testContestTwo.candidates.add(testCandidateTwo);
 
-        testContestOne.sources = new ArrayList<Source>(1);
+        testContestOne.sources = new ArrayList<>(1);
         testContestOne.sources.add(testSource);
 
-        testContestTwo.sources = new ArrayList<Source>(1);
+        testContestTwo.sources = new ArrayList<>(1);
         testContestTwo.sources.add(testSource);
 
-        testInfo.contests = new ArrayList<Contest>(2);
+        testInfo.contests = new ArrayList<>(2);
         testInfo.contests.add(testContestOne);
         testInfo.contests.add(testContestTwo);
 
