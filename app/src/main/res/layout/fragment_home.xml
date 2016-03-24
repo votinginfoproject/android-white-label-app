@@ -19,12 +19,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:lines="1"
         android:text="@string/fragment.home.text_view_brand_name"
         android:textAllCaps="true"
         android:textColor="@color/brand_name_text"
         android:textIsSelectable="false"
-        android:textSize="@dimen/text_large"
+        android:textSize="@dimen/text_medium"
         android:textStyle="bold"/>
 
     <TextView
@@ -36,9 +36,10 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/home_textview_brandname"
         android:layout_marginTop="@dimen/home_small_padding"
-        android:gravity="center"
         android:text="@string/fragment.home.text_view_voting_info"
-        android:textSize="30dip"/>
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_xxlarge"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/home_textview_getting_started"
@@ -48,7 +49,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/home_textview_votinginfo"
-        android:layout_marginTop="@dimen/home_large_padding"
+        android:layout_marginTop="25dp"
         android:labelFor="@+id/home_edittext_address"
         android:text="@string/fragment.home.text_view_getting_started"
         android:textSize="@dimen/text_small"/>
@@ -80,6 +81,7 @@
             android:textSize="@dimen/home_edittext_size"/>
 
         <ImageView
+            android:padding="5dp"
             android:id="@+id/home_select_contact_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -152,33 +154,27 @@
             android:contentDescription="@string/fragment.home.party_spinner_description"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <Button
+        android:id="@+id/home_go_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_height="@dimen/home_button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/home_view_button"
+        android:contentDescription="@string/fragment.home.go_button_accessibility_description"
+        android:text="@string/activity.home.go_button"
+        android:textColor="@drawable/home_view_button_text"
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
-        <Button
-            android:id="@+id/home_go_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/home_button_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:background="@drawable/home_view_button"
-            android:contentDescription="@string/fragment.home.go_button_accessibility_description"
-            android:text="@string/activity.home.go_button"
-            android:textColor="@drawable/home_view_button_text"
-            android:textSize="@dimen/text_large"
-            android:textStyle="bold"
-            android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/home_about_us_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/ic_action_about"/>
-    </RelativeLayout>
+    <Button
+        android:id="@+id/home_about_us_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_action_about"/>
 </RelativeLayout>

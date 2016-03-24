@@ -8,7 +8,7 @@
     <dimen name="text_medium">20sp</dimen>
     <dimen name="text_large">22sp</dimen>
     <dimen name="text_xlarge">26sp</dimen>
-    <dimen name="text_xxlarge">28sp</dimen>
+    <dimen name="text_xxlarge">35sp</dimen>
 
     <dimen name="home_top_margin">63sp</dimen>
     <dimen name="home_small_padding">5sp</dimen>

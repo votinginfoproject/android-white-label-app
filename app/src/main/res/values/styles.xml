@@ -45,6 +45,18 @@
         <item name="android:layout_alignParentLeft">true</item>
     </style>
 
+    <style name="fragment_description" parent="@style/wrap_width_wrap_height">
+        <item name="android:textSize">@dimen/text_xsmall</item>
+        <item name="android:textColor">@color/text_gray</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:paddingBottom">@dimen/home_xlarge_padding</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
     <style name="feedback_link" parent="@style/wrap_width_wrap_height">
         <item name="android:textSize">@dimen/text_small</item>
         <item name="android:textColor">@color/item_header_blue</item>

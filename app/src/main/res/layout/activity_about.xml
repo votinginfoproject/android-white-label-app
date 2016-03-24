@@ -1,43 +1,43 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/fragment_style"
-    tools:context="com.votinginfoproject.VotingInformationProject.activities.AboutActivity">
+<ScrollView style="@style/fragment_style"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.votinginfoproject.VotingInformationProject.activities.AboutActivity">
 
     <LinearLayout
         style="@style/wrap_width_wrap_height"
         android:orientation="vertical">
 
         <TextView
-            android:text="@string/about.app.title"
-            style="@style/fragment_header" />
+            style="@style/fragment_header"
+            android:text="@string/about.app.title"/>
 
         <TextView
-            android:text="@string/about.app.description"
-            style="@style/fragment_sub_header" />
+            style="@style/fragment_description"
+            android:text="@string/about.app.description"/>
 
         <TextView
-            android:text="@string/about.terms.title"
-            style="@style/fragment_header" />
+            style="@style/fragment_header"
+            android:text="@string/about.terms.title"/>
 
         <TextView
-            android:text="@string/about.terms.description"
-            style="@style/fragment_sub_header" />
+            style="@style/fragment_description"
+            android:text="@string/about.terms.description"/>
 
         <TextView
-            android:text="@string/about.title.privacy"
-            style="@style/fragment_header" />
+            style="@style/fragment_header"
+            android:text="@string/about.title.privacy"/>
 
         <TextView
-            android:text="@string/about.privacy.description"
-            style="@style/fragment_sub_header" />
+            style="@style/fragment_description"
+            android:text="@string/about.privacy.description"/>
 
         <TextView
-            android:text="@string/about.title.legal_notices"
-            style="@style/fragment_header" />
+            style="@style/fragment_header"
+            android:text="@string/about.title.legal_notices"/>
 
         <TextView
             android:id="@+id/about_legal_notices"
-            android:text="@string/about.description.legal_notices"
-            style="@style/fragment_sub_header" />
+            style="@style/fragment_description"
+            android:text="@string/about.description.legal_notices"/>
     </LinearLayout>
 </ScrollView>

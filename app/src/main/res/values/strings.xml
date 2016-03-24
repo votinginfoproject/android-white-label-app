@@ -34,7 +34,7 @@
     <string name="activity.vip.tab.enable_location_services_prompt">Could not find current location.  Enable location services now?</string>
 
     <!-- Home View Strings -->
-    <string name="fragment.home.text_view_brand_name">The Voting Information Project</string>
+    <string name="fragment.home.text_view_brand_name">VOTING INFO PROJECT</string>
     <string name="fragment.home.text_view_voting_info">Voting Information</string>
     <string name="fragment.home.text_view_getting_started">Enter Your Address:</string>
     <string name="fragment.home.text_view_election_spinner_text">Choose an election:</string>
