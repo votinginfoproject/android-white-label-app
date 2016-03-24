@@ -96,6 +96,13 @@ public class HomeActivity extends FragmentActivity implements HomeFragment.OnInt
         startActivity(intent);
     }
 
+    @Override
+    public void onAboutUsButtonPressed() {
+        // Navigate to About us
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
     public void onSelectContactButtonPressed(View view) {
         // contact picker intent to return an address; will only show contacts that have an address
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI);

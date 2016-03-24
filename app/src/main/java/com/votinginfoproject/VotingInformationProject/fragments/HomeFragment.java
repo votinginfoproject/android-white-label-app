@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -65,10 +64,10 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
     private Spinner homePartySpinner;
     private View homePartySpinnerWrapper;
     private ImageView homeSelectContactButton;
+    private Button aboutUsButton;
 
     private Election currentElection;
     private String address;
-    private SharedPreferences preferences;
     private OnInteractionListener mListener;
     private boolean isTest;
 
@@ -93,7 +92,6 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
         super.onCreate(savedInstanceState);
 
         myActivity = (HomeActivity) getActivity();
-        preferences = myActivity.getPreferences(Context.MODE_PRIVATE);
         currentElection = new Election();
     }
 
@@ -111,6 +109,7 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
         homeTextViewStatus = (TextView) rootView.findViewById(R.id.home_textview_status);
 
         homeGoButton = (Button) rootView.findViewById(R.id.home_go_button);
+        aboutUsButton = (Button) rootView.findViewById(R.id.home_about_us_button);
 
         homeSelectContactButton = (ImageView) rootView.findViewById(R.id.home_select_contact_button);
 
@@ -196,6 +195,16 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
             public void onClick(View view) {
                 if (mListener != null) {
                     mListener.onGoButtonPressed(view);
+                }
+            }
+        });
+
+        // About Us Button onClickListener
+        aboutUsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onAboutUsButtonPressed();
                 }
             }
         });
@@ -443,6 +452,8 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
 
     public interface OnInteractionListener {
         void onGoButtonPressed(View view);
+
+        void onAboutUsButtonPressed();
 
         void onSelectContactButtonPressed(View view);
 
