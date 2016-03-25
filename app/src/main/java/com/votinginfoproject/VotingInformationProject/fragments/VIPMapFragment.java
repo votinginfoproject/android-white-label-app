@@ -317,7 +317,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
             PolylineOptions polylineOptions = new PolylineOptions();
             List<LatLng> pts = PolyUtil.decode(encodedPolyline);
             polylineOptions.addAll(pts);
-            polylineOptions.color(mActivity.getResources().getColor(R.color.brand_name_text));
+            polylineOptions.color(mActivity.getResources().getColor(R.color.brand));
             map.addPolyline(polylineOptions);
         }
     }
