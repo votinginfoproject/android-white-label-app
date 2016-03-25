@@ -8,7 +8,9 @@ android {
     compileSdkVersion 22
     buildToolsVersion '21.1.2'
     defaultConfig {
-        applicationId 'com.votinginfoproject.VotingInformationProject'
+        applicationId 'com.votinginfoproject.vip'
+        versionName "3.4.0"
+        versionCode 7
         minSdkVersion 15
         targetSdkVersion 22
     }
