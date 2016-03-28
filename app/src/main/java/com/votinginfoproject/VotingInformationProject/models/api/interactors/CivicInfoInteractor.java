@@ -24,7 +24,7 @@ public class CivicInfoInteractor extends BaseInteractor<VoterInfo, CivicInfoInte
     protected VoterInfo doInBackground(RequestType... params) {
         VoterInfo response = null;
 
-        if (params.length > 0 && params[0].getClass().equals(CivicInfoRequest.class)) {
+        if (params.length > 0) {
             OkHttpClient client = new OkHttpClient();
             Gson gson = new GsonBuilder().create();
 
@@ -35,9 +35,6 @@ public class CivicInfoInteractor extends BaseInteractor<VoterInfo, CivicInfoInte
             try {
                 Response okHttpResponse = client.newCall(request).execute();
                 response = gson.fromJson(okHttpResponse.body().string(), VoterInfo.class);
-
-                Log.v(TAG, "RESPONSE: " + okHttpResponse.toString());
-                Log.v(TAG, "BODY: " + okHttpResponse.body().string());
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Unexpected error in VoterInfo Request");

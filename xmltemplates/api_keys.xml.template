@@ -2,6 +2,7 @@
 <resources>
     <string name="google_api_android_key" translatable="false"></string>
     <string name="google_api_browser_key" translatable="false"></string>
+    <string name="stoplight_api_key" translatable="false"></string>
     <string name="civic_info_api_version" translatable="false">v2</string>
     <bool name="civic_info_official_only" translatable="false">true</bool>
     <string name="google_analytics_tracking_id" translatable="false"></string>

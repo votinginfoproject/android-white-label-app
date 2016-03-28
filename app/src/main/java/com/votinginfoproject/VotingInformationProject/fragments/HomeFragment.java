@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.votinginfoproject.VotingInformationProject.BuildConfig;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
@@ -30,6 +31,7 @@ import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.CivicInfoInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.CivicInfoRequest;
+import com.votinginfoproject.VotingInformationProject.models.api.requests.StopLightCivicInfoRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -312,7 +314,14 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
             Log.e(TAG, "Current election is unset");
         }
 
-        CivicInfoRequest request = new CivicInfoRequest(getActivity(), electionId, address);
+        CivicInfoRequest request;
+
+        //Check if we are building with the Debug settings, if so attempt to use StopLight
+        if (BuildConfig.DEBUG) {
+            request = new StopLightCivicInfoRequest(getActivity(), electionId, address);
+        } else {
+            request = new CivicInfoRequest(getActivity(), electionId, address);
+        }
 
         CivicInfoInteractor civicInfoInteractor = new CivicInfoInteractor();
         civicInfoInteractor.enqueueRequest(request, this);

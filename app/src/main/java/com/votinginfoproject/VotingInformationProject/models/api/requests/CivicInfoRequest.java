@@ -41,10 +41,30 @@ public class CivicInfoRequest implements RequestType {
         this.apiVersion = context.getResources().getString(R.string.civic_info_api_version);
     }
 
+    public boolean getOfficialOnly() {
+        return officialOnly;
+    }
+
+    public boolean getProductionDataOnly() {
+        return productionDataOnly;
+    }
+
+    public String getElectionId() {
+        return electionId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
     public String buildQueryString() {
         try {
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("https").authority("www.googleapis.com").appendPath("civicinfo");
+            builder.scheme("https").authority(getAuthorityString()).appendPath("civicinfo");
             builder.appendPath(apiVersion);
             builder.appendPath("voterinfo");
             builder.appendQueryParameter("officialOnly", String.valueOf(officialOnly));
@@ -69,5 +89,9 @@ public class CivicInfoRequest implements RequestType {
         }
 
         return "";
+    }
+
+    public String getAuthorityString() {
+        return "www.googleapis.com";
     }
 }

@@ -43,5 +43,3 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.3.4'
     compile 'com.jakewharton:butterknife:7.0.1'
 }
-
-

@@ -20,12 +20,12 @@ Android Support Library v4 revision 19.1
 Building/Running the app:
 -------------------------
 
-#### Setting up the Java Environment
+### Setting up the Java Environment
 
 Install the [Java SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) on your system.
 
 
-#### Set up Git Repository
+### Set up Git Repository
 
 *  Install git.  For Windows users, you may wish to do so by installing [GitHub for Windows](https://windows.github.com/).  For Mac users, there is [GitHub for Mac](https://mac.github.com/).
 
@@ -35,7 +35,7 @@ Install the [Java SDK](http://www.oracle.com/technetwork/java/javase/downloads/j
     [https://github.com/votinginfoproject/android-white-label-app.git](https://github.com/votinginfoproject/android-white-label-app.git)
 
 
-#### Installing Android SDK Dependencies
+### Installing Android SDK Dependencies
 
 *  Install [Android Studio](https://developer.android.com/sdk/installing/studio.html).
 
@@ -54,20 +54,20 @@ install the following:
   -  For a faster emulator on Windows, Extras -> Intel x86 Emulator Accelerator
 
 
-#### Install device drivers and enable debug mode on device
+### Install device drivers and enable debug mode on device
 
 *  Windows users will need to install the appropriate USB driver for their device in order to run the app on a device.  Please see the [list of available USB drivers](http://developer.android.com/tools/extras/oem-usb.html) and installation instructions.
 
 * You can [enable debug mode on your device](http://developer.android.com/tools/device.html) to allow debugging over USB.
 
 
-#### Running in an emulator
+### Running in an emulator
 
 The app will run on an Android emulator.  However, the map, directions, and distances to polling locations will not be available within the emulator, as these features depend on Google Play services, which are not available from within the emulator.
 
 The emulator will run much faster with hardware acceleration enabled.  Please see the [directions on using the Android emulator and enabling hardware acceleration](http://developer.android.com/tools/devices/emulator.html).  For Windows, this uses the HAXM emulator accelerator package available under 'Extras' in the SDK Manager.
 
-#### Adding API keys for the app
+### Adding API keys for the app
 
 *  Copy the `api_keys.xml.template` file from the `xmltemplates` directory to `app/src/main/res/values/api_keys.xml`.
 
@@ -112,7 +112,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 
     -  Note that the Google Maps API uses the Android key, and the Google Directions and Civic Info APIs use the browser key.
 
-#### Set up Google Analytics
+### Set up Google Analytics
 *  Copy the `app_tracker.xml.template` file from the `xmltemplates` directory to `app/src/main/res/xml/app_tracker.xml`.
 
     - On Windows, in the project directory at the command prompt, enter:
@@ -125,15 +125,49 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 
 *  Edit `app/src/main/res/xml/app_tracker.xml` in the project to add in your [Google Analytics](http://www.google.com/analytics) tracking ID to the `ga_trackingId` field, if you have one.
 
-#### Running the app
+### Set up Stoplight
+
+ Due to the data from the Google Civic API changing frequently, it is beneficial to model responses to allow for uninterrupted development. 
+ 
+ <b>This step is completely optional. If no spotlight API key is present the normal Google Civic API will be used instead</b>
+ 
+ Stoplight is a service that allows you to capture responses and it will generate the model based on the actual response. 
+ 
+####Create the service
+  
+```
+Create a Stoplight account at https://designer.stoplight.io/register 
+Create a new workspace 'Pew' 
+Create an API repo; name: VIP, initial protocol + host: https://www.googleapis.com, initial base path: /civicinfo/v2
+Add an endpoint; Name: Voter Information, HTTP Method: GET, Path: /voterinfo
+Authentication; API Key, add the key you obtained from 'Updating the Civic Info API Key'
+```
+
+####Add some data
+ 
+ ```
+ Under 'Responses' select "Add +"
+ Select the 'Example' tab and paste in a JSON response
+ Click 'Generate definition from example'
+ Click 'Save endpoint'
+ Select 'Mocking' and pick the endpoint you created to activate
+ ```
+You can create as many endpoints as you need and choose to mock with them or not mock at all and simply pass the request through to the actual API.
+
+
+Example test data is located at:
+[app/src/main/res/raw/test_response.json](app/src/main/res/raw/test_response.json)
+
+
+### Running the app
 
 Sync your gradle build file if your IDE asks you to, and then run the app via Run -> Run.
 
 
-Testing the app
----------------
 
-#### Creating the VIPAndroidTests Run Configuration
+##Testing the app
+
+### Creating the VIPAndroidTests Run Configuration
 
 *  In Android Studio, go to Run -> Edit Configurations.
 
@@ -148,7 +182,7 @@ you to select the device to run the tests on at runtime.  Optionally check 'Use 
 if you generally only use one device/emulator to test on.
 
 
-#### Running Tests
+### Running Tests
 
 *  Ensure that the VIPAndroidTests run configuration is selected in the dropdown in the
 second toolbar at the top of Android Studio, then select Run->Run or click the 'Run' button 
@@ -158,8 +192,7 @@ just to the right of the run configuration dropdown.
 in the bottom center of the IDE on test completion.
 
 
-Troubleshooting Steps
----------------------
+##Troubleshooting Steps
 
 If the project won't build, here are a few steps to try:
 
@@ -170,10 +203,9 @@ If the project won't build, here are a few steps to try:
 Note that if maps aren't displaying in the app, that's usually due to an issue with setting the applowed Android applications in the Google Developer Console.
 
 
-Deploying to the Play Store
----------------------------
+##Deploying to the Play Store
 
-#### Rename the package
+### Rename the package
 To publish the app in the Android Play Store, first rename the package so it will not conflict with other apps in the Play Store.
 
 1.  Right-click on the package folder in Android Studio, in the project tool window on the left.
@@ -189,14 +221,14 @@ To publish the app in the Android Play Store, first rename the package so it wil
 
 6.  Sign into the Google Developer Console and update the package name listed for the allowed Android application entries to use the new package name.
 
-#### Generate signed APK with release key
+### Generate signed APK with release key
 
 1.  In Android Studio, go to Build -> Generate Signed APK in the menu.
 2.  Select to create a new key.  Note that the key store password and alias password should match.
 3.  In the 'Build Type' drop-down on the last screen of the wizard, select 'release'.  Note the APK destination folder.
 4.  Click 'Finish' to generate the signed APK, which you may find in the APK destination folder to upload to the Play Store.
 
-#### Update API settings for new package name and signing key
+### Update API settings for new package name and signing key
 The new key generated to sign the app for release will need its SHA1 added to the Google Developer Console as an allowed Android application, as for the debug key above.
 Follow the steps above for adding an allowed Android application, but now run the `keytool` command for the new signing key:
 
