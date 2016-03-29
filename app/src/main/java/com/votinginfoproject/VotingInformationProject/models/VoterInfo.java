@@ -22,6 +22,7 @@ public class VoterInfo {
     private static final int MAX_VOTING_SITES = 25;
     private static final int MAX_DROP_BOX_SITES = 50;
     private final String TAG = VoterInfo.class.getSimpleName();
+
     public String kind;
     public Election election;
     public List<Election> otherElections;

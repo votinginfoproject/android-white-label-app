@@ -19,9 +19,16 @@ public class GATracker {
     public static void registerTracker(Context context, TrackerName trackerId) {
         if (ourInstance.trackers.get(trackerId) == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+
+            //Google Analytics API Key required.
+            // Please reference the "Adding API keys for the app" section of the Readme for more details.
             Tracker t = analytics.newTracker(R.xml.app_tracker);
             ourInstance.trackers.put(trackerId, t);
         }
+    }
+
+    public static synchronized Tracker getTracker(TrackerName trackerId) {
+        return ourInstance.trackers.get(trackerId);
     }
 
     /**
@@ -33,9 +40,5 @@ public class GATracker {
      */
     public enum TrackerName {
         APP_TRACKER, // Tracker for this app.  To add other trackers, name them in this enum.
-    }
-
-    public static synchronized Tracker getTracker(TrackerName trackerId) {
-        return ourInstance.trackers.get(trackerId);
     }
 }

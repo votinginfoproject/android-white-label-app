@@ -8,4 +8,7 @@
     <string name="google_analytics_tracking_id" translatable="false"></string>
     <bool name="use_test_election" translatable="false">false</bool>
     <bool name="use_preproduction" translatable="false">false</bool>
+
+    <!-- Note this is ignored for Live builds -->
+    <bool name="use_stoplight" translatable="false">false</bool>
 </resources>

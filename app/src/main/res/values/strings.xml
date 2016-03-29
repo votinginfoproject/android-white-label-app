@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="test_address" translatable="false">100 n main st, providence, RI, 02903</string>
 
     <string name="app_name">VotingInformationProject</string>
     <string name="action_settings">Settings</string>

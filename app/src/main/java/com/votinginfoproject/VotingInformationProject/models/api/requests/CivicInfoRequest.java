@@ -78,6 +78,13 @@ public class CivicInfoRequest implements RequestType {
             }
 
             builder.appendQueryParameter("address", address);
+
+            if (browserKey == null || browserKey.isEmpty()) {
+                Log.e(TAG, "----------------------- Google Civic Browser Key is not set -----------------------");
+                Log.e(TAG, "Please reference the \"Adding API keys for the app\" section of the Readme for more details.");
+                Log.e(TAG, "----------------------- Google Civic Browser Key is not set -----------------------");
+            }
+
             builder.appendQueryParameter("key", browserKey);
             String apiUrl = builder.build().toString();
 
@@ -85,7 +92,7 @@ public class CivicInfoRequest implements RequestType {
 
             return builder.build().toString();
         } catch (Exception e) {
-
+            Log.e(TAG, "There was an error building Uri. " + e.getLocalizedMessage());
         }
 
         return "";

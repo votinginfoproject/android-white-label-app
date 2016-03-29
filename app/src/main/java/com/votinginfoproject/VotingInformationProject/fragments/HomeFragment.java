@@ -317,8 +317,12 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
         CivicInfoRequest request;
 
         //Check if we are building with the Debug settings, if so attempt to use StopLight
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && getActivity().getResources().getBoolean(R.bool.use_stoplight)) {
             request = new StopLightCivicInfoRequest(getActivity(), electionId, address);
+
+            //Set address to test string for directions api
+            address = getActivity().getString(R.string.test_address);
+            homeEditTextAddress.setText(address);
         } else {
             request = new CivicInfoRequest(getActivity(), electionId, address);
         }
@@ -419,8 +423,6 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
     @Override
     public void civicInfoResponse(VoterInfo response) {
         if (response != null) {
-            Log.v(TAG, " " + response.getError());
-
             homeGoButton.setVisibility(View.VISIBLE);
 
             if (response.isSuccessful()) {
@@ -432,14 +434,13 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
 
                 CivicApiError.Error error1 = error.errors.get(0);
 
-                Log.d(TAG, "Civic API returned error: " + error.code + ": " +
-                        error.message + " " + error1.domain + " " + error1.reason + " " +
-                        error1.message);
+                Log.e(TAG, "Civic API returned error: " + error.code + ": " +
+                        error.message + " : " + error1.domain + " : " + error1.reason);
 
                 if (CivicApiError.errorMessages.get(error1.reason) != null) {
                     homeTextViewStatus.setText(CivicApiError.errorMessages.get(error1.reason));
                 } else {
-                    Log.d(TAG, "Unknown API error reason: " + error1.reason);
+                    Log.e(TAG, "Unknown API error reason: " + error1.reason);
                     homeTextViewStatus.setText(R.string.fragment_home_error_unknown);
                 }
 

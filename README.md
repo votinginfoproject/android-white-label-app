@@ -3,8 +3,8 @@ android-white-label-app
 
 Android White Label Application for the Voting Information Project
 
-Requires: Android Studio v0.8.0+
-
+Requires: 
+Android Studio v0.8.0+
 
 ##Build Status
 [![](https://travis-ci.org/votinginfoproject/android-white-label-app.svg?branch=develop)](https://travis-ci.org/votinginfoproject/android-white-label-app)
@@ -13,8 +13,10 @@ Dependencies:
 -------------
 
 Min SDK Version: 15 (Ice Cream Sandwich 4.0.3)
-Target SDK Version: 19 (Android KitKat)
-Android Support Library v4 revision 19.1
+
+Target SDK Version: 22 (Android Lollipop 5.1)
+
+Android Support Library v4 revision 22.2
 
 
 Building/Running the app:
@@ -44,12 +46,12 @@ Install the [Java SDK](http://www.oracle.com/technetwork/java/javase/downloads/j
 *  Then, in Android Studio, go to Tools->Android->SDK Manager and
 install the following:
 
-  -  Tools -> Android SDK Build-tools 19.1
-  -  Android 4.4.2K (API V19) -> SDK Platform and Google APIs
+  -  Tools -> Android SDK Build-tools 22.2
+  -  Android 5.1 (API v.22) -> SDK Platform and Google APIs
        - For running in an emulator, install one or both system images.  The Intel x86 system image will run much faster than ARM, especially if hardware acceleration is enabled.
   -  Extras -> Android Support Library
   -  Extras -> Android Support Repository
-  -  Extras -> Google Play Services (v.19)
+  -  Extras -> Google Play Services (v.22)
   -  Extras -> Google Repository
   -  For a faster emulator on Windows, Extras -> Intel x86 Emulator Accelerator
 
@@ -129,7 +131,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 
  Due to the data from the Google Civic API changing frequently, it is beneficial to model responses to allow for uninterrupted development. 
  
- <b>This step is completely optional. If no spotlight API key is present the normal Google Civic API will be used instead</b>
+ <b>This step is completely optional. If no spotlight API key is present the normal Google Civic API will be used instead.</b>
  
  Stoplight is a service that allows you to capture responses and it will generate the model based on the actual response. 
  
@@ -162,7 +164,6 @@ Example test data is located at:
 ### Running the app
 
 Sync your gradle build file if your IDE asks you to, and then run the app via Run -> Run.
-
 
 
 ##Testing the app
