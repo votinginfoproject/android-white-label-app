@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,42 +17,70 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
+import com.votinginfoproject.VotingInformationProject.adapters.DirectionsAdapter;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
+import com.votinginfoproject.VotingInformationProject.models.api.requests.DirectionsRequest;
+import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class DirectionsFragment extends Fragment {
-    private final String TAG = DirectionsFragment.class.getSimpleName();
-
+public class DirectionsFragment extends Fragment implements DirectionsInteractor.DirectionsCallback {
     private static final String LOCATION_ID = "location_id";
     private static final String USE_CURRENT_LOCATION = "use_location";
-
-    private String location_id;
-    private boolean use_location;
-
-    private CivicApiAddress locationAddress;
-    private LatLng homeLatLng;
-    private ViewGroup mContainer;
+    private final String TAG = DirectionsFragment.class.getSimpleName();
     VIPTabBarActivity myActivity;
-    private View rootView;
-    private TextView noneFoundMessage;
-    private ListView directionsList;
-    private Button openInMapsButton;
-
     HashMap<String, String> directionsFlags;
-
     // track which location filter button was last clicked, and only refresh list if it changed
     int lastSelectedButtonId = R.id.directions_walk_button;
     Button lastSelectedButton;
-
     int selectedTextColor;
     int unselectedTextColor;
-
     String directionsMode = "walking";
+    private HashMap<String, DirectionsResponse> directionsCache;
+    private DirectionsAdapter listAdapter;
+    private String location_id;
+    private boolean use_location;
+    private CivicApiAddress locationAddress;
+    private LatLng homeLatLng;
+    private ViewGroup mContainer;
+    private View rootView;
+    private TextView errorTextView;
+    private ListView directionsList;
+    private Button openInMapsButton;
+    private DirectionsInteractor directionsInteractor;
+
+    public DirectionsFragment() {
+        // see comment here regarding undocumented dirflg parameter to get Google Maps to open
+        // with a given transit mode pre-selected:
+        // http://stackoverflow.com/questions/14161591/ability-to-choose-direction-type-for-google-maps-intent
+        directionsFlags = new HashMap<String, String>(4) {{
+            put("walking", "w");
+            put("transit", "r");
+            put("bicycling", "b");
+            put("driving", "d");
+        }};
+
+        directionsCache = new HashMap<>(4);
+    }
+
+    public static DirectionsFragment newInstance(String key, boolean use_location) {
+        DirectionsFragment fragment = new DirectionsFragment();
+        Bundle args = new Bundle();
+        args.putString(LOCATION_ID, key);
+        args.putBoolean(USE_CURRENT_LOCATION, use_location);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,28 +98,6 @@ public class DirectionsFragment extends Fragment {
                 Log.d(TAG, "Showing directions from entered address");
             }
         }
-    }
-
-    public static DirectionsFragment newInstance(String key, boolean use_location) {
-        DirectionsFragment fragment = new DirectionsFragment();
-        Bundle args = new Bundle();
-        args.putString(LOCATION_ID, key);
-        args.putBoolean(USE_CURRENT_LOCATION, use_location);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
-    public DirectionsFragment() {
-        // see comment here regarding undocumented dirflg parameter to get Google Maps to open
-        // with a given transit mode pre-selected:
-        // http://stackoverflow.com/questions/14161591/ability-to-choose-direction-type-for-google-maps-intent
-        directionsFlags = new HashMap<String, String>(4) {{
-            put("walking", "w");
-            put("transit", "r");
-            put("bicycling", "b");
-            put("driving", "d");
-        }};
     }
 
     @Override
@@ -139,7 +146,7 @@ public class DirectionsFragment extends Fragment {
         }
 
         directionsList = (ListView) rootView.findViewById(R.id.directions_list);
-        noneFoundMessage = (TextView) rootView.findViewById(R.id.directions_none_found_message);
+        errorTextView = (TextView) rootView.findViewById(R.id.directions_none_found_message);
         openInMapsButton = (Button) rootView.findViewById(R.id.directions_open_in_maps_button);
 
         setUpWithOrigin(homeLatLng);
@@ -166,11 +173,11 @@ public class DirectionsFragment extends Fragment {
         if (homeLatLng == null) {
             Log.d(TAG, "Got null origin location");
             directionsList.setVisibility(View.GONE);
-            noneFoundMessage.setText(R.string.directions_error_no_origin);
-            noneFoundMessage.setVisibility(View.VISIBLE);
+            errorTextView.setText(R.string.directions_error_no_origin);
+            errorTextView.setVisibility(View.VISIBLE);
             openInMapsButton.setVisibility(View.GONE);
             // clear last directions polyline
-            myActivity.polylineCallback("", null);
+            myActivity.clearPolylines();
             return;
         }
 
@@ -221,6 +228,8 @@ public class DirectionsFragment extends Fragment {
                     return; // ignore button click if already viewing that list
                 }
 
+                directionsList.setVisibility(View.INVISIBLE);
+
                 Button btn = (Button) v;
 
                 // highlight current selection (and un-highlight last button)
@@ -241,7 +250,14 @@ public class DirectionsFragment extends Fragment {
                 }
 
                 Log.d(TAG, "New directions mode is " + directionsMode);
-                queryDirections();
+
+                if (directionsCache.containsKey(directionsMode)) {
+                    Log.d(TAG, "Getting " + directionsMode + " from cache");
+                    myActivity.clearPolylines();
+                    setupMapResponse(directionsCache.get(directionsMode));
+                } else {
+                    queryDirections();
+                }
 
                 lastSelectedButtonId = buttonId;
                 lastSelectedButton = btn;
@@ -254,18 +270,86 @@ public class DirectionsFragment extends Fragment {
      */
     private void queryDirections() {
         // clear last directions polyline
-        myActivity.polylineCallback("", null);
-        String homeCoordinates = homeLatLng.latitude + "," + homeLatLng.longitude;
-        String locationCoordinates = locationAddress.latitude + "," + locationAddress.longitude;
+        myActivity.clearPolylines();
+        String originCoordinates = homeLatLng.latitude + "," + homeLatLng.longitude;
+        String destinationCoordinates = locationAddress.latitude + "," + locationAddress.longitude;
 
-        new DirectionsQuery(getActivity(), directionsList, noneFoundMessage, homeCoordinates, locationCoordinates, myActivity).execute(directionsMode);
+        String key = getActivity().getResources().getString(R.string.google_api_browser_key);
+        DirectionsRequest request = new DirectionsRequest(getActivity().getBaseContext(), key, directionsMode, originCoordinates, destinationCoordinates);
+
+        if (directionsInteractor != null) {
+            directionsInteractor.cancel(true);
+            directionsInteractor.onDestroy();
+        }
+
+        directionsInteractor = new DirectionsInteractor();
+        directionsInteractor.enqueueRequest(request, this);
     }
 
     @Override
     public void onDetach() {
         Log.d(TAG + ":onDetach", "Showing location list container's view again");
+        directionsCache.clear();
         mContainer.getChildAt(0).setVisibility(View.VISIBLE);
+        directionsInteractor.cancel(true);
+        directionsInteractor.onDestroy();
 
         super.onDetach();
+    }
+
+    @Override
+    public void directionsResponse(DirectionsResponse response) {
+        if (response == null) {
+            Log.e(TAG, "Did not get directions query directionsResponse");
+            showError();
+
+            return;
+        } else if (!response.hasErrors()) {
+            Log.e(TAG, "Directions query directionsResponse status is: " + response.status);
+            showError();
+
+            return;
+        }
+
+        directionsCache.put(response.mode, response);
+
+        setupMapResponse(response);
+    }
+
+    public void setupMapResponse(@NonNull DirectionsResponse response) {
+        myActivity.clearPolylines();
+
+        // did not query for alternate routes or provide way points, so should get one route with one leg
+        Route foundRoute = response.routes.get(0);
+
+        // get overview polyline to display on map
+        String encodedPolyline = foundRoute.overview_polyline.points;
+        Bounds polylineBounds = foundRoute.bounds;
+
+        if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
+            myActivity.setMapPolylines(encodedPolyline, polylineBounds);
+        }
+
+        Leg leg = foundRoute.legs.get(0);
+
+        if (listAdapter == null) {
+            //Add empty list, if you init with walking directions, re-adding them will show an empty list
+            listAdapter = new DirectionsAdapter(getActivity(), new ArrayList<Step>());
+            directionsList.setAdapter(listAdapter);
+        } else {
+            listAdapter.clear();
+        }
+
+        listAdapter.addAll(leg.steps);
+        listAdapter.notifyDataSetChanged();
+
+        errorTextView.setVisibility(View.GONE);
+        directionsList.setVisibility(View.VISIBLE);
+    }
+
+    public void showError() {
+        directionsList.setVisibility(View.GONE);
+        errorTextView.setText(getActivity().getResources().getString(R.string.directions_error_no_directions_found));
+        errorTextView.setVisibility(View.VISIBLE);
     }
 }

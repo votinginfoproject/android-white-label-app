@@ -9,14 +9,6 @@ import android.widget.ImageView;
 
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +26,8 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     private final WeakReference<ImageView> imageView;
     private final static String TAG = FetchImageQuery.class.getSimpleName();
 
-    HttpContext httpContext;
-    HttpClient httpClient;
+//    HttpContext httpContext;
+//    HttpClient httpClient;
     Candidate candidate;
     final BitmapFactory.Options justGetBoundsOptions;
 
@@ -43,8 +35,8 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     public FetchImageQuery(Candidate candidate, ImageView imageView) {
         this.candidate = candidate;
         this.imageView = new WeakReference<>(imageView);
-        this.httpContext = new BasicHttpContext();
-        this.httpClient = new DefaultHttpClient();
+//        this.httpContext = new BasicHttpContext();
+//        this.httpClient = new DefaultHttpClient();
         justGetBoundsOptions = new BitmapFactory.Options();
         justGetBoundsOptions.inJustDecodeBounds = true;
         justGetBoundsOptions.inPurgeable = true;
@@ -54,80 +46,79 @@ public class FetchImageQuery extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... urls) {
         String photoUrl = urls[0];
         InputStream inputStream = null;
-        HttpGet httpGet = null;
-
-        try {
-            httpGet = new HttpGet(photoUrl);
-            HttpResponse response = httpClient.execute(httpGet, httpContext);
-            int status = response.getStatusLine().getStatusCode();
-
-            if (status != HttpStatus.SC_OK) {
-                Log.e(TAG, "Error " + status + " while fetching image at URL " + photoUrl);
-                return null;
-            }
-
-            // scale down image to fit candidate detail view thumbnail
-
-            // first query for image size, to scale it
-            BufferedHttpEntity entity = new BufferedHttpEntity(response.getEntity());
-
-            inputStream = entity.getContent();
-            BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
-
-            // Calculate inSampleSize
-            justGetBoundsOptions.inSampleSize = calculateInSampleSize(justGetBoundsOptions);
-
-            // Decode bitmap with inSampleSize set
-            justGetBoundsOptions.inJustDecodeBounds = false;
-
-            // re-query, now to actually get the image
-            inputStream.close();
-            httpGet = new HttpGet(photoUrl);
-            response = httpClient.execute(httpGet, httpContext);
-            status = response.getStatusLine().getStatusCode();
-
-            if (status != HttpStatus.SC_OK) {
-                Log.e(TAG, "Error " + status + " while fetching image at URL " + photoUrl);
-                return null;
-            }
-
-            entity = new BufferedHttpEntity(response.getEntity());
-            inputStream = entity.getContent();
-
-            return BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
-
-
-
-        } catch (IOException e) {
-            Log.e(TAG, "IOException downloading image at URL " + photoUrl);
-            e.printStackTrace();
-            cancel(true);
-        } catch (OutOfMemoryError err) {
-            Log.e(TAG, "Ran out of memory dowloading image at URL " + photoUrl);
-            cancel(true);
-        } catch (Exception ex) {
-            Log.e(TAG, "Exception downloading image at URL " + photoUrl);
-            ex.printStackTrace();
-            cancel(true);
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException ex) {
-                    Log.e(TAG, "Error closing input stream");
-                    ex.printStackTrace();
-                }
-            }
-
-            if (httpGet != null) {
-                try {
-                    httpGet.abort();
-                } catch (Exception ex) {
-                    Log.e(TAG, "Error aborting HTTP Get");
-                    ex.printStackTrace();
-                }
-            }
-        }
+//        HttpGet httpGet = null;
+//
+//        try {
+//            httpGet = new HttpGet(photoUrl);
+//            HttpResponse response = httpClient.execute(httpGet, httpContext);
+//            int status = response.getStatusLine().getStatusCode();
+//
+//            if (status != HttpStatus.SC_OK) {
+//                Log.e(TAG, "Error " + status + " while fetching image at URL " + photoUrl);
+//                return null;
+//            }
+//
+//            // scale down image to fit candidate detail view thumbnail
+//
+//            // first query for image size, to scale it
+//            BufferedHttpEntity entity = new BufferedHttpEntity(response.getEntity());
+//
+//            inputStream = entity.getContent();
+//            BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
+//
+//            // Calculate inSampleSize
+//            justGetBoundsOptions.inSampleSize = calculateInSampleSize(justGetBoundsOptions);
+//
+//            // Decode bitmap with inSampleSize set
+//            justGetBoundsOptions.inJustDecodeBounds = false;
+//
+//            // re-query, now to actually get the image
+//            inputStream.close();
+//            httpGet = new HttpGet(photoUrl);
+//            response = httpClient.execute(httpGet, httpContext);
+//            status = response.getStatusLine().getStatusCode();
+//
+//            if (status != HttpStatus.SC_OK) {
+//                Log.e(TAG, "Error " + status + " while fetching image at URL " + photoUrl);
+//                return null;
+//            }
+//
+//            entity = new BufferedHttpEntity(response.getEntity());
+//            inputStream = entity.getContent();
+//
+//            return BitmapFactory.decodeStream(inputStream, null, justGetBoundsOptions);
+//
+//
+//        } catch (IOException e) {
+//            Log.e(TAG, "IOException downloading image at URL " + photoUrl);
+//            e.printStackTrace();
+//            cancel(true);
+//        } catch (OutOfMemoryError err) {
+//            Log.e(TAG, "Ran out of memory dowloading image at URL " + photoUrl);
+//            cancel(true);
+//        } catch (Exception ex) {
+//            Log.e(TAG, "Exception downloading image at URL " + photoUrl);
+//            ex.printStackTrace();
+//            cancel(true);
+//        } finally {
+//            if (inputStream != null) {
+//                try {
+//                    inputStream.close();
+//                } catch (IOException ex) {
+//                    Log.e(TAG, "Error closing input stream");
+//                    ex.printStackTrace();
+//                }
+//            }
+//
+//            if (httpGet != null) {
+//                try {
+//                    httpGet.abort();
+//                } catch (Exception ex) {
+//                    Log.e(TAG, "Error aborting HTTP Get");
+//                    ex.printStackTrace();
+//                }
+//            }
+//        }
         return null;
     }
 

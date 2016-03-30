@@ -6,4 +6,5 @@ package com.votinginfoproject.VotingInformationProject.models.api.requests;
  * Created by marcvandehey on 3/22/16.
  */
 public interface RequestType {
+    String buildQueryString();
 }

@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -26,40 +25,6 @@ import java.util.List;
 
 
 public class ElectionDetailsFragment extends Fragment {
-    private final String TAG = ElectionDetailsFragment.class.getSimpleName();
-
-    private VIPTabBarActivity mActivity;
-    Resources resources;
-    private MovementMethod mLinkMovementMethod;
-
-    int selectedButtonTextColor;
-    int unselectedButtonTextColor;
-    int selectedSectionBackground;
-    int unselectedSectionBackground;
-
-    VoterInfo voterInfo;
-    ElectionAdministrationBody stateAdmin;
-    ElectionAdministrationBody localAdmin;
-    boolean haveLink;
-
-    // track which location filter button was last clicked, and only refresh list if it changed
-    int lastSelectedButtonId = R.id.details_state_button;
-    Button lastSelectedButton;
-
-    private static class DetailSection {
-        final int section;
-        final int header;
-        final int unselectedIcon;
-        final int selectedIcon;
-
-        DetailSection(int header, int section, int unselectedIcon, int selectedIcon) {
-            this.section = section;
-            this.header = header;
-            this.unselectedIcon = unselectedIcon;
-            this.selectedIcon = selectedIcon;
-        }
-    }
-
     // collapsible section headers, and their sub-sections
     // 0 -> section header, 1-> section, 2-> unselected section icon, 3-> selected section icon
     static final List<DetailSection> detailSections = new ArrayList<DetailSection>() {{
@@ -70,6 +35,25 @@ public class ElectionDetailsFragment extends Fragment {
         add(new DetailSection(R.id.details_physical_address_section_header, R.id.details_physical_address_section, R.drawable.ic_address, R.drawable.ic_address_active));
         add(new DetailSection(R.id.details_election_officials_section_header, R.id.details_election_officials_section, R.drawable.ic_officials, R.drawable.ic_officials_active));
     }};
+    private final String TAG = ElectionDetailsFragment.class.getSimpleName();
+    Resources resources;
+    int selectedButtonTextColor;
+    int unselectedButtonTextColor;
+    int selectedSectionBackground;
+    int unselectedSectionBackground;
+    VoterInfo voterInfo;
+    ElectionAdministrationBody stateAdmin;
+    ElectionAdministrationBody localAdmin;
+    boolean haveLink;
+    // track which location filter button was last clicked, and only refresh list if it changed
+    int lastSelectedButtonId = R.id.details_state_button;
+    Button lastSelectedButton;
+    private VIPTabBarActivity mActivity;
+    private MovementMethod mLinkMovementMethod;
+
+    public ElectionDetailsFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -79,10 +63,6 @@ public class ElectionDetailsFragment extends Fragment {
      */
     public static ElectionDetailsFragment newInstance() {
         return new ElectionDetailsFragment();
-    }
-
-    public ElectionDetailsFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -367,12 +347,26 @@ public class ElectionDetailsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Clicked physical address; going to show map.");
-                    mActivity.polylineCallback(null, null);
+                    mActivity.clearPolylines();
                     mActivity.showMap(eab_type);
                 }
             });
         } else {
             container.setVisibility(View.GONE);
+        }
+    }
+
+    private static class DetailSection {
+        final int section;
+        final int header;
+        final int unselectedIcon;
+        final int selectedIcon;
+
+        DetailSection(int header, int section, int unselectedIcon, int selectedIcon) {
+            this.section = section;
+            this.header = header;
+            this.unselectedIcon = unselectedIcon;
+            this.selectedIcon = selectedIcon;
         }
     }
 }

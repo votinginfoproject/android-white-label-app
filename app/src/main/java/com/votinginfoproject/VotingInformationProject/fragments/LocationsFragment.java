@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.LocationsAdapter;
+import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
@@ -29,8 +30,6 @@ import butterknife.ButterKnife;
 
 
 public class LocationsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-    private final String TAG = LocationsFragment.class.getSimpleName();
-
     static final ButterKnife.Action<View> HIDE = new ButterKnife.Action<View>() {
         @Override
         public void apply(View view, int index) {
@@ -43,14 +42,14 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
             view.setVisibility(View.VISIBLE);
         }
     };
-
+    private final String TAG = LocationsFragment.class.getSimpleName();
     VoterInfo voterInfo;
     LocationsAdapter listAdapter;
     View rootView;
     TextView noneFoundMessage;
     ListView locationsList;
     ArrayList<PollingLocation> allLocations;
-    VIPTabBarActivity.FilterLabels filterLabels;
+    FilterLabels filterLabels;
 
     @Bind(R.id.mail_only_message)
     TextView mailOnlyMessage;
@@ -58,12 +57,12 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     // track which location filter was last selected, and only refresh list if it changed
     long lastSelectedFilterItem = 0; // default to all items, which is first in list
 
-    public static LocationsFragment newInstance() {
-        return new LocationsFragment();
-    }
-
     public LocationsFragment() {
         // Required empty public constructor
+    }
+
+    public static LocationsFragment newInstance() {
+        return new LocationsFragment();
     }
 
     @Override
@@ -82,7 +81,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // clear directions polyline, if set from directions view
-        myActivity.polylineCallback("", null);
+        myActivity.clearPolylines();
 
         if (voterInfo.isMailOnly()) {
             mailOnlyMessage.setVisibility(View.VISIBLE);
@@ -95,7 +94,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
             @Override
             public void onClick(View v) {
                 // zoom to user address
-                myActivity.polylineCallback(null, null);
+                myActivity.clearPolylines();
                 myActivity.showMap("home");
             }
         });

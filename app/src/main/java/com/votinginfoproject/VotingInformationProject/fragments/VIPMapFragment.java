@@ -30,6 +30,7 @@ import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivi
 import com.votinginfoproject.VotingInformationProject.adapters.LocationInfoWindow;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
+import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
@@ -103,7 +104,7 @@ public class VIPMapFragment extends SupportMapFragment implements AdapterView.On
         // required method implementation
     }
 
-    VIPTabBarActivity.FilterLabels filterLabels = null;
+    FilterLabels filterLabels = null;
     boolean showPolling = true;
     boolean showEarly = true;
     boolean showDropBox = true;

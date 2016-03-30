@@ -31,7 +31,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.asynctasks.DirectionsQuery;
 import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.asynctasks.ReverseGeocodeQuery;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
@@ -44,9 +43,12 @@ import com.votinginfoproject.VotingInformationProject.fragments.SupportWebViewFr
 import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
+import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
+import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
@@ -54,13 +56,16 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, DirectionsQuery.PolylineCallBackListener, View.OnClickListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
+    // activity identifier
+    static final int PROMPT_ENABLE_LOCATION_SERVICES = 1;
+    static TabsAdapter mTabsAdapter;
+    private final String TAG = VIPTabBarActivity.class.getSimpleName();
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    static TabsAdapter mTabsAdapter;
     FragmentManager mFragmentManager;
     GeocodeQuery.GeocodeCallBackListener pollingCallBackListener;
     GeocodeQuery.GeocodeCallBackListener homeCallBackListener;
@@ -69,22 +74,28 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     Location homeLocation;
     LocationsFragment locationsFragment;
     DirectionsFragment directionsFragment;
-
     boolean useMetric;
-
-    private GoogleApiClient mGoogleApiClient;
-
-    private final String TAG = VIPTabBarActivity.class.getSimpleName();
-
     ReverseGeocodeQuery.ReverseGeocodeCallBackListener reverseGeocodeCallBackListener;
     int selectedOriginItem = 0; // item selected from prompt for directions origin; 0 for user-entered address
-
+    boolean loadingFeedBackForm = false;
+    // track filters
+    FilterLabels filterLabels = null;
+    String userLocationAddress;
+    LatLng userLocation;
+    String encodedDirectionsPolyline = "";
+    LatLngBounds polylineBounds;
+    private GoogleApiClient mGoogleApiClient;
     // track what the current fragment is and the history of selected fragments (for moving back)
     private int currentFragment = R.id.ballot_fragment;
     private Stack<Integer> fragmentHistory = new Stack<>();
 
-    public void setCurrentFragment(int currentFragment) {
-        this.currentFragment = currentFragment;
+    /**
+     * Non-default constructor for testing, to set the application context.
+     *
+     * @param context Mock context with a VoterInfo object
+     */
+    public VIPTabBarActivity() {
+        super();
         fragmentHistory.push(currentFragment);
     }
 
@@ -95,8 +106,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     public void setLoadingFeedBackForm(boolean loadingFeedBackForm) {
         this.loadingFeedBackForm = loadingFeedBackForm;
     }
-
-    boolean loadingFeedBackForm = false;
 
     /**
      * OnClick listener for feedback form link
@@ -141,27 +150,14 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         return currentFragment;
     }
 
+    public void setCurrentFragment(int currentFragment) {
+        this.currentFragment = currentFragment;
+        fragmentHistory.push(currentFragment);
+    }
+
     public void clearFragmentHistory() {
         fragmentHistory.clear();
     }
-
-    // track the labels used in the filter drop-down
-    public static class FilterLabels {
-        public final String ALL;
-        public final String EARLY;
-        public final String POLLING;
-        public final String DROP_BOX;
-
-        FilterLabels(String all, String early, String polling, String dropbox) {
-            this.ALL = all;
-            this.EARLY = early;
-            this.POLLING = polling;
-            this.DROP_BOX = dropbox;
-        }
-    }
-
-    // track filters
-    FilterLabels filterLabels = null;
 
     public FilterLabels getFilterLabels() {
         if (filterLabels == null) {
@@ -178,48 +174,12 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         return userLocationAddress;
     }
 
-    String userLocationAddress;
-
     public LatLng getUserLocation() {
         return userLocation;
     }
 
-    LatLng userLocation;
-    String encodedDirectionsPolyline = "";
-
     public LatLngBounds getPolylineBounds() {
         return polylineBounds;
-    }
-
-    LatLngBounds polylineBounds;
-
-    // activity identifier
-    static final int PROMPT_ENABLE_LOCATION_SERVICES = 1;
-
-    /**
-     * Non-default constructor for testing, to set the application context.
-     *
-     * @param context Mock context with a VoterInfo object
-     */
-    public VIPTabBarActivity() {
-        super();
-        fragmentHistory.push(currentFragment);
-    }
-
-    @Override
-    public void polylineCallback(String polyline, Bounds bounds) {
-        // got encoded polyline for the directions overview; set it on the Activity for the map to find
-        encodedDirectionsPolyline = polyline;
-
-        // get polyline bounds in format map can use
-        if (bounds != null) {
-            LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-            boundsBuilder.include(new LatLng(bounds.northeast.lat, bounds.northeast.lng));
-            boundsBuilder.include(new LatLng(bounds.southwest.lat, bounds.southwest.lng));
-            polylineBounds = boundsBuilder.build();
-        } else {
-            polylineBounds = null;
-        }
     }
 
     /**
@@ -724,5 +684,25 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setMapPolylines(String polyline, Bounds bounds) {
+        // got encoded polyline for the directions overview; set it on the Activity for the map to find
+        encodedDirectionsPolyline = polyline;
+
+        // get polyline bounds in format map can use
+        if (bounds != null) {
+            LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+            boundsBuilder.include(new LatLng(bounds.northeast.lat, bounds.northeast.lng));
+            boundsBuilder.include(new LatLng(bounds.southwest.lat, bounds.southwest.lng));
+            polylineBounds = boundsBuilder.build();
+        } else {
+            polylineBounds = null;
+        }
+    }
+
+    public void clearPolylines() {
+        encodedDirectionsPolyline = null;
+        polylineBounds = null;
     }
 }

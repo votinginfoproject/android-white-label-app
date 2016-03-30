@@ -41,24 +41,8 @@ public class CivicInfoRequest implements RequestType {
         this.apiVersion = context.getResources().getString(R.string.civic_info_api_version);
     }
 
-    public boolean getOfficialOnly() {
-        return officialOnly;
-    }
-
-    public boolean getProductionDataOnly() {
-        return productionDataOnly;
-    }
-
-    public String getElectionId() {
-        return electionId;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public String getApiVersion() {
-        return apiVersion;
     }
 
     public String buildQueryString() {

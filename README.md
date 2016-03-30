@@ -133,7 +133,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
  
  <b>This step is completely optional. If no spotlight API key is present the normal Google Civic API will be used instead.</b>
  
- Stoplight is a service that allows you to capture responses and it will generate the model based on the actual response. 
+ Stoplight is a service that allows you to capture responses and it will generate the model based on the actual directionsResponse.
  
 ####Create the service
   
@@ -149,7 +149,7 @@ Authentication; API Key, add the key you obtained from 'Updating the Civic Info 
  
  ```
  Under 'Responses' select "Add +"
- Select the 'Example' tab and paste in a JSON response
+ Select the 'Example' tab and paste in a JSON directionsResponse
  Click 'Generate definition from example'
  Click 'Save endpoint'
  Select 'Mocking' and pick the endpoint you created to activate

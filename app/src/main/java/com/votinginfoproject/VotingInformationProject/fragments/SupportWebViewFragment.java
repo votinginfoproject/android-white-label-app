@@ -17,7 +17,7 @@ import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivi
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
-import org.apache.http.util.EncodingUtils;
+//import org.apache.http.util.EncodingUtils;
 
 /**
  * This web view fragment is based on the Android library web view fragment,
@@ -103,9 +103,9 @@ public class SupportWebViewFragment extends Fragment {
 
         // strip leading question mark from parameters
         String paramString = builder.build().toString().substring(1);
-        byte[] post = EncodingUtils.getBytes(paramString, "BASE64");
-
-        mWebView.postUrl("https://voter-info-tool.appspot.com/feedback", post);
+//        byte[] post = EncodingUtils.getBytes(paramString, "BASE64");
+//
+//        mWebView.postUrl("https://voter-info-tool.appspot.com/feedback", post);
 
         return mWebView;
     }

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
- * Response object for voterInfoQuery:
+ * DirectionsResponse object for voterInfoQuery:
  * https://developers.google.com/civic-information/docs/v1/voterinfo/voterInfoQuery
  */
 public class VoterInfo {
