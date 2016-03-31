@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
     <style name="fill_width_wrap_height">
         <item name="android:layout_width">fill_parent</item>
@@ -17,7 +34,7 @@
     </style>
 
     <style name="fragment_style" parent="@style/match_width_match_height">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="fragment_header" parent="@style/wrap_width_wrap_height">
@@ -79,7 +96,7 @@
         <item name="android:dividerHeight">1sp</item>
         <item name="android:headerDividersEnabled">true</item>
         <item name="android:footerDividersEnabled">true</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@android:color/white</item>
         <item name="android:textColor">@color/text_gray</item>
     </style>
 
@@ -91,7 +108,7 @@
         <item name="android:padding">10sp</item>
     </style>
 
-    <style name="contest_detail_label"  parent="@style/wrap_width_wrap_height">
+    <style name="contest_detail_label" parent="@style/wrap_width_wrap_height">
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
         <item name="android:paddingTop">5sp</item>
@@ -100,7 +117,7 @@
         <item name="android:textColor">@color/text_gray</item>
     </style>
 
-    <style name="contest_detail_item"  parent="@style/wrap_width_wrap_height">
+    <style name="contest_detail_item" parent="@style/wrap_width_wrap_height">
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
         <item name="android:paddingTop">5sp</item>
@@ -112,7 +129,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="list_item_header" parent="@style/wrap_width_wrap_height" >
+    <style name="list_item_header" parent="@style/wrap_width_wrap_height">
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
         <item name="android:gravity">left</item>
@@ -122,7 +139,7 @@
         <item name="android:textColor">@color/item_header_blue</item>
     </style>
 
-    <style name="list_item_content" parent="@style/wrap_width_wrap_height" >
+    <style name="list_item_content" parent="@style/wrap_width_wrap_height">
         <item name="android:paddingLeft">15sp</item>
         <item name="android:paddingRight">15sp</item>
         <item name="android:textSize">@dimen/text_small</item>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#0068AC</color>
+    <color name="colorPrimaryDark">#004F91</color>
+    <color name="colorAccent">#ffffff</color>
+    <color name="colorAccentDark">#55C7FD</color>
+
     <color name="background.blue">#0068AC</color>
     <color name="button_blue">#00234b</color>
     <color name="item_header_blue">#0067ab</color>
-    <color name="white">#ffffff</color>
+    <color name="white">@android:color/white</color>
     <color name="hint.white">#AAFFFFFF</color>
     <color name="spinner.unselected.text">#656565</color>
     <color name="spinner.selected.text">#333</color>
