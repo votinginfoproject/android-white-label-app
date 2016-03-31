@@ -1,12 +1,9 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
-import android.graphics.Bitmap;
-
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -17,14 +14,11 @@ public class Candidate {
     public String party;
     public String candidateUrl;
     public String phone;
+    @SerializedName("photo_url")
     public String photoUrl;
     public String email;
     public Long orderOnBallot;
     public List<SocialMediaChannel> channels;
-    public UUID photoCacheKey;
-
-    // keep reference to VoterInfo to put photos in its cache
-    private VoterInfo voterInfo;
 
     /**
      * Default Constructor
@@ -58,30 +52,5 @@ public class Candidate {
     @Override
     public String toString() {
         return name + "\n" + party;
-    }
-
-    /**
-     * Get photo for this candidate from LRU cache
-     *
-     * @return bitmap from cache (or null if not in cache)
-     */
-    public Bitmap getCandidatePhoto() {
-        if (photoCacheKey != null) {
-            return voterInfo.getImageFromCache(photoCacheKey);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Add candidate photo to LRU cache
-     *
-     * @param bitmap image to cache
-     */
-    public void setCandidatePhoto(Bitmap bitmap) {
-        if (voterInfo == null) {
-            voterInfo = UserPreferences.getVoterInfo();
-        }
-        photoCacheKey = voterInfo.addImageToCache(bitmap);
     }
 }

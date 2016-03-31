@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.fragments;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.asynctasks.FetchImageQuery;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
@@ -34,16 +33,17 @@ import java.util.ArrayList;
 public class CandidateFragment extends Fragment {
     private static final String CONTEST_NUM = "contest_number";
     private static final String CANDIDATE_NUM = "candidate_number";
+    private final String TAG = CandidateFragment.class.getSimpleName();
     private int contestNum;
     private int candidateNum;
-
     private VIPTabBarActivity mActivity;
     private Contest contest;
     private Candidate candidate;
-
-    private final String TAG = CandidateFragment.class.getSimpleName();
-
     private ViewGroup mContainer;
+
+    public CandidateFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -61,10 +61,6 @@ public class CandidateFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
-    }
-
-    public CandidateFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -105,7 +101,7 @@ public class CandidateFragment extends Fragment {
             partyView.setText(party);
 
             // SET CANDIDATE DETAILS
-            boolean phoneVisible = setTextView(R.id.candidate_details_phone_text, R.id.candidate_details_phone_row, candidate.phone);
+            final boolean phoneVisible = setTextView(R.id.candidate_details_phone_text, R.id.candidate_details_phone_row, candidate.phone);
             if (phoneVisible) {
                 setDetailClickHandler(R.id.candidate_details_phone_row, "phone", candidate.phone);
             }
@@ -145,20 +141,33 @@ public class CandidateFragment extends Fragment {
             }
 
             // SET CANDIDATE PHOTO
-            ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
-            Bitmap havePhoto = candidate.getCandidatePhoto();
-            if (havePhoto != null) {
-                Log.d(TAG, "Already have candidate photo; using it.");
-                photoView.setImageBitmap(havePhoto);
-                photoView.setVisibility(View.VISIBLE);
-            } else {
-                if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
-                    Log.d(TAG, "Got candidate photo URL: " + candidate.photoUrl);
-                    // set image bitmap in async task
-                    new FetchImageQuery(candidate, photoView).execute(candidate.photoUrl);
-                }
-            }
+            final ImageView photoView = (ImageView) mActivity.findViewById(R.id.candidate_photo);
 
+            if (candidate.photoUrl != null && !candidate.photoUrl.isEmpty()) {
+                Log.d(TAG, "Got candidate photo URL: " + candidate.photoUrl);
+
+                Picasso.Builder builder = new Picasso.Builder(getContext());
+                builder.listener(new Picasso.Listener() {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                        Log.e(TAG, "Candidate Image Failed to load:" + uri.toString());
+                        photoView.setVisibility(View.GONE);
+                    }
+                });
+
+                Picasso picasso = builder.build();
+                picasso.load(candidate.photoUrl).into(photoView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        photoView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError() {
+                    }//Using onImageLoadFailed Callback instead
+                });
+
+            }
         } catch (Exception ex) {
             Log.e(TAG, "Failed to get candidate info!");
             ex.printStackTrace();
