@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId 'com.votinginfoproject.vip'
         versionName "3.4.1"
-        versionCode 8
+        versionCode 9
         minSdkVersion 15
         targetSdkVersion 22
     }
