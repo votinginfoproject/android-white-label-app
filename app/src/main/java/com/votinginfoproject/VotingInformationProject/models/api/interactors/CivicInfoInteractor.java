@@ -37,7 +37,6 @@ public class CivicInfoInteractor extends BaseInteractor<VoterInfo, CivicInfoInte
                 response = gson.fromJson(okHttpResponse.body().string(), VoterInfo.class);
 
                 Log.v(TAG, "RESPONSE: " + okHttpResponse.toString());
-                Log.v(TAG, "BODY: " + okHttpResponse.body().string());
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Unexpected error in VoterInfo Request");

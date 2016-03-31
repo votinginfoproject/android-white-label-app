@@ -15,7 +15,7 @@ public class CivicInfoRequest implements RequestType {
     private static final String TAG = CivicInfoRequest.class.getSimpleName();
 
     private boolean officialOnly;
-    private boolean productionDataOnly;
+    private boolean usePreproductionData;
     private String electionId;
     private String address;
     private String browserKey;
@@ -37,7 +37,7 @@ public class CivicInfoRequest implements RequestType {
          */
         this.browserKey = context.getResources().getString(R.string.google_api_browser_key);
         this.officialOnly = context.getResources().getBoolean(R.bool.civic_info_official_only);
-        this.productionDataOnly = context.getResources().getBoolean(R.bool.use_preproduction);
+        this.usePreproductionData = context.getResources().getBoolean(R.bool.use_preproduction);
         this.apiVersion = context.getResources().getString(R.string.civic_info_api_version);
     }
 
@@ -49,7 +49,7 @@ public class CivicInfoRequest implements RequestType {
             builder.appendPath("voterinfo");
             builder.appendQueryParameter("officialOnly", String.valueOf(officialOnly));
 
-            if (!productionDataOnly) {
+            if (usePreproductionData) {
                 builder.appendQueryParameter("productionDataOnly", "false");
             }
 

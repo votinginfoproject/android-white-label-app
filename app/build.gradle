@@ -9,8 +9,8 @@ android {
     buildToolsVersion '21.1.2'
     defaultConfig {
         applicationId 'com.votinginfoproject.vip'
-        versionName "3.4.0"
-        versionCode 7
+        versionName "3.4.1"
+        versionCode 8
         minSdkVersion 15
         targetSdkVersion 22
     }
