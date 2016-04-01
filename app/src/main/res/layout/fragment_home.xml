@@ -71,7 +71,7 @@
             android:layout_marginTop="@dimen/home_large_padding"
             android:layout_toLeftOf="@+id/home_select_contact_button"
             android:layout_toStartOf="@id/home_select_contact_button"
-            android:background="@color/home_edittext_background"
+            android:background="@color/home.edit.text.background"
             android:imeOptions="actionSearch"
             android:inputType="textPostalAddress|textCapWords"
             android:padding="5sp"
@@ -115,7 +115,7 @@
         android:visibility="gone"/>
 
     <LinearLayout
-        android:id="@+id/home_election_spinner_wrapper"
+        android:id="@+id/home_election_selector_wrapper"
         style="@style/fill_width_wrap_height"
         android:layout_below="@+id/home_edittext"
         android:gravity="center"
@@ -140,9 +140,9 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/home_party_spinner_wrapper"
+        android:id="@+id/home_party_selector_wrapper"
         style="@style/fill_width_wrap_height"
-        android:layout_below="@+id/home_election_spinner_wrapper"
+        android:layout_below="@+id/home_election_selector_wrapper"
         android:gravity="center"
         android:paddingBottom="@dimen/home_small_padding"
         android:paddingTop="@dimen/home_small_padding"
@@ -176,5 +176,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ic_action_about"/>
+        android:background="@drawable/ic_info"/>
 </RelativeLayout>

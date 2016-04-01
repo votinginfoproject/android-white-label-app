@@ -37,10 +37,10 @@
     <!-- Home View Strings -->
     <string name="fragment.home.text_view_brand_name">VOTING INFO PROJECT</string>
     <string name="fragment.home.text_view_voting_info">Voting Information</string>
-    <string name="fragment.home.text_view_getting_started">Enter Your Address:</string>
-    <string name="fragment.home.text_view_election_spinner_text">Choose an election:</string>
-    <string name="fragment.home.text_view_party_spinner_text">Choose a primary election party:</string>
-    <string name="fragment.home.status_loading">Loading data…</string>
+    <string name="fragment.home.text_view_getting_started">Enter Your Address</string>
+    <string name="fragment.home.text_view_election_spinner_text">Pick an Election</string>
+    <string name="fragment.home.text_view_party_spinner_text">There are partisan contests in this election. Choose a party to view.</string>
+    <string name="activity_home_status_loading">Loading data…</string>
     <string name="fragment.home.error_address_not_found">Looks like we can\'t find your address. Please check that it\'s right and try again.</string>
     <string name="fragment.home.error_parsing_address">We couldn\'t read the address you entered.  Please check that it\'s right and try again</string>
     <string name="fragment.home.error_no_election_for_address">We couldn\'t find any election information for the address you entered.</string>
@@ -53,6 +53,7 @@
     <string name="fragment.home.search_button_description">Search for results.</string>
     <string name="fragment.home.election_spinner_description">Please pick an election"</string>
     <string name="fragment.home.party_spinner_description">Please pick a party:</string>
+    <string name="fragment.home.all_parties">All Parties</string>
 
     <!-- Feedback Strings -->
     <string name="feedback.link">Report an Error</string>

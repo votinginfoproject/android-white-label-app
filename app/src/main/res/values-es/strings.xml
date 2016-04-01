@@ -38,7 +38,7 @@
     <string name="fragment.home.text_view_getting_started">Comience a suministrar la dirección en la que está registrado para votar.</string>
     <string name="fragment.home.text_view_election_spinner_text">Tome una elección:</string>
     <string name="fragment.home.text_view_party_spinner_text">Elija un partido para la elección primaria:</string>
-    <string name="fragment.home.status_loading">Cargando información…</string>
+    <string name="activity_home_status_loading">Cargando información…</string>
     <string name="fragment.home.error_address_not_found">Parece como si no fuese posible encontrar su dirección. Revise si es correcta e intente nuevamente.</string>
     <string name="fragment.home.error_parsing_address">No es posible leer la dirección que ingresó. Revise si es correcta e intente nuevamente.</string>
     <string name="fragment.home.error_no_election_for_address">No es posible encontrar ninguna información sobre la elección para la dirección que ingresó.</string>
@@ -51,6 +51,7 @@
     <string name="fragment.home.search_button_description">Buscar resultados.</string>
     <string name="fragment.home.election_spinner_description">Tome una elección:</string>
     <string name="fragment.home.party_spinner_description">Elija un partido:</string>
+    <string name="fragment.home.all_parties">Todas las partes</string>
 
     <!-- Feedback Strings -->
     <string name="feedback.link">Report an Error</string>

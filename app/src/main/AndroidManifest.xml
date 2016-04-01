@@ -12,12 +12,10 @@
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Vip_tab_bar"
-        android:versionCode="7"
-        android:versionName="3.4.0">
+        android:theme="@style/Theme.Vip_tab_bar">
 
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activities.homeActivity.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -31,11 +29,11 @@
             android:name=".activities.VIPTabBarActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/activity.vip.tab"
-            android:parentActivityName=".activities.HomeActivity"
+            android:parentActivityName=".activities.homeActivity.HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.HomeActivity"/>
+                android:value=".activities.homeActivity.HomeActivity"/>
         </activity>
 
         <activity

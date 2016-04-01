@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -10,7 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
@@ -32,7 +30,6 @@ public class VoterInfo {
     public List<PollingLocation> dropOffLocations;
     public List<Contest> contests;
     public List<State> state;
-    private CandidatePhotoCache candidatePhotoCache;
 
     private HashMap<String, Integer> locationIds;
     private ArrayList<PollingLocation> allLocations;
@@ -45,12 +42,27 @@ public class VoterInfo {
 
     /**
      * Default Constructor
-     * <p/>
+     * <p>
      * Ensures otherElections is never a null field, and create photo cache for candidate images
      */
     public VoterInfo() {
         this.otherElections = new ArrayList<>();
-        candidatePhotoCache = new CandidatePhotoCache();
+    }
+
+    public ArrayList<String> getUniqueParties() {
+        ArrayList<String> parties = new ArrayList<>();
+
+        if (contests != null) {
+            for (Contest contest : contests) {
+                for (Candidate candidate : contest.candidates) {
+                    if (!candidate.party.isEmpty() && !parties.contains(candidate.party)) {
+                        parties.add(candidate.party);
+                    }
+                }
+            }
+        }
+
+        return parties;
     }
 
     public List<Contest> getFilteredContestsForParty(String party) {
@@ -83,14 +95,6 @@ public class VoterInfo {
         }
 
         return filteredContests;
-    }
-
-    public Bitmap getImageFromCache(UUID key) {
-        return candidatePhotoCache.getBitmapFromMemoryCache(key);
-    }
-
-    public UUID addImageToCache(Bitmap bitmap) {
-        return candidatePhotoCache.addBitmapToMemoryCache(bitmap);
     }
 
     /**

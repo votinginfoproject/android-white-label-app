@@ -14,9 +14,9 @@ Dependencies:
 
 Min SDK Version: 15 (Ice Cream Sandwich 4.0.3)
 
-Target SDK Version: 22 (Android Lollipop 5.1)
+Target SDK Version: 23 (Android Marshmallow 6.0)
 
-Android Support Library v4 revision 22.2
+Android Support Library v4 revision 23.0.2
 
 
 Building/Running the app:
@@ -133,7 +133,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
  
  <b>This step is completely optional. If no spotlight API key is present the normal Google Civic API will be used instead.</b>
  
- Stoplight is a service that allows you to capture responses and it will generate the model based on the actual directionsResponse.
+ Stoplight is a service that allows you to capture responses and it will generate the model based on the actual response. 
  
 ####Create the service
   
@@ -149,7 +149,7 @@ Authentication; API Key, add the key you obtained from 'Updating the Civic Info 
  
  ```
  Under 'Responses' select "Add +"
- Select the 'Example' tab and paste in a JSON directionsResponse
+ Select the 'Example' tab and paste in a JSON response
  Click 'Generate definition from example'
  Click 'Save endpoint'
  Select 'Mocking' and pick the endpoint you created to activate

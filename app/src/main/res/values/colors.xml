@@ -5,6 +5,9 @@
     <color name="colorAccent">#ffffff</color>
     <color name="colorAccentDark">#55C7FD</color>
 
+    <color name="home.text">@android:color/white</color>
+    <color name="list.selected">#DCDCDC</color>
+
     <color name="background.blue">#0068AC</color>
     <color name="button_blue">#00234b</color>
     <color name="item_header_blue">#0067ab</color>
@@ -18,7 +21,7 @@
     <color name="detail_text_gray">#333333</color>
     <color name="list_divider_gray">#e6e6e6</color>
     <color name="home_button_background">#004071</color>
-    <color name="home_edittext_background">#137bbb</color>
+    <color name="home.edit.text.background">#48FFFFFF</color>
     <color name="home_warning_background">#042a42</color>
     <color name="brand">#60c9f8</color>
     <color name="dark_text">#dd000000</color>

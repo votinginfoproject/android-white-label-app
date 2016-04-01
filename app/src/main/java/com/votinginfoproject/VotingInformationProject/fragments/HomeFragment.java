@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.BuildConfig;
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.activities.HomeActivity;
+import com.votinginfoproject.VotingInformationProject.activities.homeActivity.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
@@ -116,10 +116,10 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
         homeEditTextAddress.setText(getAddress());
 
         homeElectionSpinner = (Spinner) rootView.findViewById(R.id.home_election_spinner);
-        homeElectionSpinnerWrapper = rootView.findViewById(R.id.home_election_spinner_wrapper);
+        homeElectionSpinnerWrapper = rootView.findViewById(R.id.home_election_selector_wrapper);
 
         homePartySpinner = (Spinner) rootView.findViewById(R.id.home_party_spinner);
-        homePartySpinnerWrapper = rootView.findViewById(R.id.home_party_spinner_wrapper);
+        homePartySpinnerWrapper = rootView.findViewById(R.id.home_party_selector_wrapper);
 
         setupViewListeners();
 
@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment implements CivicInfoInteractor.CivicI
     private void showLoadingState() {
         homeTextViewStatus.setVisibility(View.VISIBLE);
         homeSelectContactButton.setEnabled(false);
-        homeTextViewStatus.setText(R.string.fragment_home_status_loading);
+        homeTextViewStatus.setText(R.string.activity_home_status_loading);
         homeEditTextAddress.setEnabled(false);
     }
 

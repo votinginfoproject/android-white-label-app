@@ -15,7 +15,7 @@
     <bool name="ga_autoActivityTracking">true</bool>
 
     <!-- Readable names for the Activities to report -->
-    <screenName name="com.votinginfoproject.VotingInformationProject.activities.HomeActivity">
+    <screenName name="com.votinginfoproject.VotingInformationProject.activities.homeActivity.HomeActivity">
         VotingInfoProject HomeActivity
     </screenName>
 

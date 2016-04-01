@@ -1,16 +1,205 @@
-<android.support.design.widget.CoordinatorLayout android:id="@+id/container"
-                                                 xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 tools:context="com.votinginfoproject.VotingInformationProject.activities.HomeActivity"
-                                                 tools:ignore="MergeRootFrame">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background.blue"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingEnd="@dimen/activity.home.horizontal_margin"
+    android:paddingLeft="@dimen/activity.home.horizontal_margin"
+    android:paddingRight="@dimen/activity.home.horizontal_margin"
+    android:paddingStart="@dimen/activity.home.horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <fragment
-        android:id="@+id/home_fragment"
-        class="com.votinginfoproject.VotingInformationProject.fragments.HomeFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        tools:layout="@layout/fragment_home"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/home.text.view.brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:lines="1"
+            android:text="@string/fragment.home.text_view_brand_name"
+            android:textAllCaps="true"
+            android:textColor="@color/brand"
+            android:textIsSelectable="false"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/home_textview_votinginfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home.text.view.brand"
+            android:text="@string/fragment.home.text_view_voting_info"
+            android:textColor="@color/home.text"
+            android:textSize="28sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/home_textview_getting_started"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home_textview_votinginfo"
+            android:layout_marginTop="25dp"
+            android:labelFor="@+id/home_edittext_address"
+            android:text="@string/fragment.home.text_view_getting_started"
+            android:textColor="@color/home.text"
+            android:textSize="16sp"/>
+
+        <!-- Cannot preview EditText elements using API v20+
+        Fix by setting the API version in the design tab for this xml file to API <= v19
+        http://code.google.com/p/android/issues/detail?id=72902 -->
+        <RelativeLayout
+            android:id="@+id/home_edittext"
+            style="@style/fill_width_wrap_height"
+            android:layout_width="match_parent"
+            android:layout_below="@id/home_textview_getting_started">
+
+            <EditText
+                android:id="@+id/home_edittext_address"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/home_large_padding"
+                android:layout_toLeftOf="@+id/home_select_contact_button"
+                android:layout_toStartOf="@id/home_select_contact_button"
+                android:background="@color/home.edit.text.background"
+                android:imeOptions="actionSearch"
+                android:inputType="textPostalAddress|textCapWords"
+                android:padding="5sp"
+                android:paddingBottom="5sp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/home_edittext_size"/>
+
+            <ImageButton
+                android:id="@+id/home_select_contact_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignBottom="@+id/home_edittext_address"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/home_edittext_address"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/fragment.home.select_contact_button_description"
+                android:padding="10dp"
+                android:src="@drawable/ic_contacts"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/home_textview_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home_edittext"
+            android:layout_marginTop="@dimen/home_large_padding"
+            android:background="@color/home_warning_background"
+            android:drawableLeft="@drawable/ic_report_problem"
+            android:drawablePadding="15sp"
+            android:drawableStart="@drawable/ic_report_problem"
+            android:gravity="start"
+            android:padding="@dimen/home_large_padding"
+            android:textColor="@color/home.text"
+            android:textSize="@dimen/text_small"
+            android:textStyle="italic"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/home_election_selector_wrapper"
+            style="@style/fill_width_wrap_height"
+            android:layout_below="@id/home_textview_status"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/home_small_padding"
+            android:paddingTop="@dimen/home_small_padding"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/home_election_spinner_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment.home.text_view_election_spinner_text"
+                android:textColor="@color/home.text"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/home_election_text"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/home.edit.text.background"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:textColor="@color/home.text"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/home_party_selector_wrapper"
+            style="@style/fill_width_wrap_height"
+            android:layout_below="@id/home_election_selector_wrapper"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/home_small_padding"
+            android:paddingTop="@dimen/home_small_padding"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/home_party_description_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment.home.text_view_party_spinner_text"
+                android:textColor="@color/home.text"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/home_party_text"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="@color/home.edit.text.background"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:textColor="@color/home.text"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/home_go_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_button_height"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/home_view_button"
+            android:contentDescription="@string/fragment.home.go_button_accessibility_description"
+            android:text="@string/activity.home.go_button"
+            android:textColor="@drawable/home_view_button_text"
+            android:textSize="@dimen/text_large"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/home_about_us_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackground"
+            android:padding="18dp"
+            android:src="@drawable/ic_info"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/stars"/>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
