@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
@@ -22,7 +21,6 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.AboutActivity;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
-import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
@@ -30,7 +28,7 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.UserPref
 import java.util.ArrayList;
 
 
-public class HomeActivity extends FragmentActivity implements HomeView, HomeFragment.OnInteractionListener {
+public class HomeActivity extends FragmentActivity implements HomeView {
 
     private final String TAG = HomeActivity.class.getSimpleName();
 
@@ -45,7 +43,6 @@ public class HomeActivity extends FragmentActivity implements HomeView, HomeFrag
     private View mPartySelectorWrapper;
     private TextView mElectionsTextView;
     private TextView mPartyTextView;
-    private ImageButton mContactsButton;
     private ImageButton mAboutButton;
 
     public String getSelectedParty() {
@@ -66,17 +63,16 @@ public class HomeActivity extends FragmentActivity implements HomeView, HomeFrag
 
         this.mPresenter = new HomePresenterImpl(getBaseContext(), this);
 
-        mGoButton = (Button) findViewById(R.id.home_go_button);
-        mAddressEditText = (EditText) findViewById(R.id.home_edittext_address);
-        mStatusTextView = (TextView) findViewById(R.id.home_textview_status);
-        mElectionSelectorWrapper = findViewById(R.id.home_election_selector_wrapper);
-        mPartySelectorWrapper = findViewById(R.id.home_party_selector_wrapper);
+        mGoButton = (Button) findViewById(R.id.home_button_go);
+        mAddressEditText = (EditText) findViewById(R.id.home_edit_text_address);
+        mStatusTextView = (TextView) findViewById(R.id.home_label_status);
+        mElectionSelectorWrapper = findViewById(R.id.home_container_election_selector);
+        mPartySelectorWrapper = findViewById(R.id.home_container_party_selector);
 
-        mElectionsTextView = (TextView) findViewById(R.id.home_election_text);
-        mPartyTextView = (TextView) findViewById(R.id.home_party_text);
+        mElectionsTextView = (TextView) findViewById(R.id.home_selector_election);
+        mPartyTextView = (TextView) findViewById(R.id.home_selector_party);
 
-        mContactsButton = (ImageButton) findViewById(R.id.home_select_contact_button);
-        mAboutButton = (ImageButton) findViewById(R.id.home_about_us_button);
+        mAboutButton = (ImageButton) findViewById(R.id.home_button_about_us);
 
         selectedParty = "";
 
@@ -100,14 +96,6 @@ public class HomeActivity extends FragmentActivity implements HomeView, HomeFrag
             @Override
             public void onClick(View view) {
                 mPresenter.aboutButtonClicked();
-            }
-        });
-
-        // EditText image button onClick listener
-        mContactsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.contactsButtonClicked();
             }
         });
 
@@ -173,55 +161,6 @@ public class HomeActivity extends FragmentActivity implements HomeView, HomeFrag
         int id = item.getItemId();
 
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
-
-    public void onGoButtonPressed(View view) {
-        mPresenter.goButtonClicked();
-    }
-
-    @Override
-    public void onAboutUsButtonPressed() {
-        // Navigate to About us
-        mPresenter.aboutButtonClicked();
-    }
-
-    public void onSelectContactButtonPressed(View view) {
-        // contact picker intent to return an address; will only show contacts that have an address
-        mPresenter.contactsButtonClicked();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == PICK_CONTACT_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-                // Get the URI that points to the selected contact
-                mPresenter.contactSelected(getLoaderManager(), data.getData());
-            } else {
-                // PASS (user didn't pick an address)
-            }
-        }
-    }
-
-    public void searchedAddress(VoterInfo voterInfo) {
-        // set VoterInfo object on app singleton
-        if (voterInfo == null) {
-            mPresenter.selectedParty(0);
-            mPresenter.selectedElection(0);
-            UserPreferences.setVoterInfo(null);
-        } else {
-            UserPreferences.setSelectedParty(selectedParty);
-            UserPreferences.setVoterInfo(voterInfo);
-        }
-    }
-
-    @Override
-    public void navigateToContactsActivity() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT_REQUEST);
     }
 
     @Override

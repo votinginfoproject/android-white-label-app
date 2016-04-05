@@ -1,8 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
-import android.app.LoaderManager;
-import android.net.Uri;
-
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 
 /**
@@ -21,9 +18,5 @@ public interface HomePresenter extends BasePresenter {
 
     void aboutButtonClicked();
 
-    void contactsButtonClicked();
-
     void searchButtonClicked(String searchAddress);
-
-    void contactSelected(LoaderManager manager, Uri contactsUri);
 }

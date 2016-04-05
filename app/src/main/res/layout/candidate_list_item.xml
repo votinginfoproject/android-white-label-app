@@ -12,7 +12,6 @@
         android:layout_height="80sp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/accessibility.description.candidate"
-        android:src="@drawable/ic_avatar"
         android:visibility="gone"/>
 
     <LinearLayout

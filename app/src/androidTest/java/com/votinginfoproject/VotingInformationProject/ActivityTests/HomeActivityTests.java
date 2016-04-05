@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.homeActivity.HomeActivity;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.fragments.HomeFragment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -101,7 +100,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
 
         responseStr = null;
 
-        final EditText homeEditTextAddress = (EditText)homeActivity.findViewById(R.id.home_edittext_address);
+        final EditText homeEditTextAddress = (EditText)homeActivity.findViewById(R.id.home_edit_text_address);
 
         instrumentation.runOnMainSync(new Runnable() {
             @Override
@@ -126,7 +125,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
 
 
         instrumentation.waitForIdleSync();
-        final TextView statusView = (TextView)homeActivity.findViewById(R.id.home_textview_status);
+        final TextView statusView = (TextView)homeActivity.findViewById(R.id.home_label_status);
 
         // wait for status message to show up
         instrumentation.runOnMainSync(new Runnable() {
@@ -152,7 +151,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         instrumentation.waitForIdleSync();
 
         // wait for 'GO' button to show up
-        final Button go = (Button)homeActivity.findViewById(R.id.home_go_button);
+        final Button go = (Button)homeActivity.findViewById(R.id.home_button_go);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {

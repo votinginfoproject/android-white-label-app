@@ -24,8 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by marcvandehey on 3/31/16.
  */
-public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.CivicInfoCallback,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.CivicInfoCallback {
 
     private static final String TAG = HomePresenterImpl.class.getSimpleName();
     private HomeView mHomeView;
@@ -112,15 +111,6 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
     }
 
     @Override
-    public void contactsButtonClicked() {
-        Log.d(TAG, "Contacts Button Clicked");
-
-        if (mCivicInteractor == null) {
-            mHomeView.navigateToContactsActivity();
-        }
-    }
-
-    @Override
     public void searchButtonClicked(String searchAddress) {
         Log.d(TAG, "Search Button Clicked");
 
@@ -161,17 +151,6 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
 
             mCivicInteractor.enqueueRequest(request, this);
         }
-    }
-
-    @Override
-    public void contactSelected(LoaderManager manager, Uri contactsUri) {
-        mContactUri = contactsUri;
-
-        // restart loader, if a contact was already selected
-        manager.destroyLoader(HomeView.PICK_CONTACT_REQUEST);
-
-        // start async query to get contact info
-        manager.initLoader(HomeView.PICK_CONTACT_REQUEST, null, this);
     }
 
     private void cancelSearch() {
@@ -246,38 +225,5 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
         }
 
         cancelSearch();
-    }
-
-    // Contacts Loader Callback
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (mContactUri == null) {
-            return null;
-        }
-
-        String[] projection = {ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS};
-        return new CursorLoader(mContext, mContactUri, projection, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.getCount() > 0) {
-            data.moveToFirst();
-            // get result with single column, named data1
-            String address = data.getString(0);
-            Log.d(TAG, "Got cursor result: " + address);
-
-            // Initiate search with new address
-            mHomeView.overrideSearchAddress(address);
-            searchButtonClicked(address);
-        } else {
-            Log.e(TAG, "Cursor got no results!");
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // PASS
     }
 }

@@ -4,4 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="activity.home.horizontal_margin">32dp</dimen>
+    <dimen name="activity.home.editable_text_box_size">48dp</dimen>
+    <dimen name="activity.home.editable_text_size">16sp</dimen>
+    <dimen name="activity.home.label_text_size">16sp</dimen>
 </resources>

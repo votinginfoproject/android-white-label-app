@@ -10,8 +10,6 @@ import java.util.ArrayList;
 public interface HomeView {
     public static final int PICK_CONTACT_REQUEST = 1;
 
-    void navigateToContactsActivity();
-
     void navigateToAboutActivity();
 
     void navigateToVIPResultsActivity(VoterInfo voterInfo);
