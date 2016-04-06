@@ -1,9 +1,10 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.AboutActivity;
-import com.votinginfoproject.VotingInformationProject.activities.bottomBarActivity.BottomBarActivity;
+import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
@@ -27,11 +28,11 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.GATracke
 import java.util.ArrayList;
 
 
-public class HomeActivity extends FragmentActivity implements HomeView {
+public class HomeActivity extends Activity implements HomeView {
 
     private final String TAG = HomeActivity.class.getSimpleName();
 
-    private HomePresenter mPresenter;
+    private HomePresenterImpl mPresenter;
 
     private Button mGoButton;
     private EditText mAddressEditText;
@@ -48,7 +49,11 @@ public class HomeActivity extends FragmentActivity implements HomeView {
 
         setContentView(R.layout.activity_home);
 
-        this.mPresenter = new HomePresenterImpl(getBaseContext(), this);
+        if (mPresenter == null) {
+            mPresenter = new HomePresenterImpl(getBaseContext());
+        }
+
+        mPresenter.onCreate(savedInstanceState);
 
         mGoButton = (Button) findViewById(R.id.home_button_go);
         mAddressEditText = (EditText) findViewById(R.id.home_edit_text_address);
@@ -60,11 +65,74 @@ public class HomeActivity extends FragmentActivity implements HomeView {
         mPartyTextView = (TextView) findViewById(R.id.home_selector_party);
 
         mAboutButton = (ImageButton) findViewById(R.id.home_button_about_us);
-        
+
         setupViewListeners();
 
         // Get analytics tracker (should auto-report)
         GATracker.getTracker(GATracker.TrackerName.APP_TRACKER);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mPresenter != null) {
+            mPresenter.onSaveState(outState);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (mPresenter != null) {
+            mPresenter.onCreate(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mPresenter != null) {
+            mPresenter.onDestroy();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mPresenter != null) {
+            mPresenter.onDetachView();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mPresenter != null) {
+            mPresenter.onAttachView(this);
+        }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (mPresenter != null) {
+            mPresenter.onAttachView(this);
+        }
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        if (mPresenter != null) {
+            mPresenter.onDetachView();
+        }
     }
 
     private void setupViewListeners() {
@@ -90,7 +158,7 @@ public class HomeActivity extends FragmentActivity implements HomeView {
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                         (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    mPresenter.searchButtonClicked(mAddressEditText.getText().toString());
+                    mPresenter.searchButtonClicked(getBaseContext(), mAddressEditText.getText().toString());
                 }
 
                 // Return false to close the keyboard
@@ -155,8 +223,8 @@ public class HomeActivity extends FragmentActivity implements HomeView {
     }
 
     @Override
-    public void navigateToVIPResultsActivity(VoterInfo voterInfo) {
-        Intent intent = new Intent(this, BottomBarActivity.class);
+    public void navigateToVoterInformationActivity(VoterInfo voterInfo) {
+        Intent intent = new Intent(this, VoterInformationActivity.class);
         startActivity(intent);
     }
 
@@ -189,7 +257,7 @@ public class HomeActivity extends FragmentActivity implements HomeView {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-                mPresenter.selectedElection(which);
+                mPresenter.selectedElection(getBaseContext(), mAddressEditText.getText().toString(), which);
             }
         });
 
@@ -254,6 +322,13 @@ public class HomeActivity extends FragmentActivity implements HomeView {
 
         mStatusTextView.setVisibility(View.VISIBLE);
         mStatusTextView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+    }
+
+    @Override
+    public void showMessage(@StringRes int message) {
+        String stringMessage = getString(message);
+
+        showMessage(stringMessage);
     }
 
     @Override

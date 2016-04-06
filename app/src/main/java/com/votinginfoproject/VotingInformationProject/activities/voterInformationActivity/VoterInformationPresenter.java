@@ -1,9 +1,9 @@
-package com.votinginfoproject.VotingInformationProject.activities.bottomBarActivity;
+package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 /**
  * Created by marcvandehey on 4/5/16.
  */
-public interface BottomBarPresenter {
+public interface VoterInformationPresenter {
     void backNavigationBarButtonClicked();
 
     void ballotButtonClicked();

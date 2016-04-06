@@ -11,16 +11,15 @@ import java.util.Date;
  * Created by kathrynkillebrew on 7/14/14.
  */
 public class Election {
-    public String id;
-    public String name;
-    public String electionDay;
-
-    private SimpleDateFormat api_date_format;
-    private SimpleDateFormat api_date_display_format;
-
-    private Date currentDay;
-
     private final String TAG = Election.class.getSimpleName();
+    private String id;
+    private String name;
+    private String electionDay;
+
+    //Skip Gson Serialization for these fields
+    private transient SimpleDateFormat api_date_format;
+    private transient SimpleDateFormat api_date_display_format;
+    private transient Date currentDay;
 
     public Election() {
         this(null, null, null);

@@ -1,22 +1,25 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 
 /**
  * Created by marcvandehey on 3/31/16.
  */
-public interface HomePresenter extends BasePresenter {
-    void selectedElection(int election);
+public abstract class HomePresenter extends BasePresenter<HomeView> {
+    public abstract void selectedElection(Context context, String address, int election);
 
-    void selectedParty(int party);
+    public abstract void selectedParty(int party);
 
-    void electionTextViewClicked();
+    public abstract void electionTextViewClicked();
 
-    void partyTextViewClicked();
+    public abstract void partyTextViewClicked();
 
-    void goButtonClicked();
+    public abstract void goButtonClicked();
 
-    void aboutButtonClicked();
+    public abstract void aboutButtonClicked();
 
-    void searchButtonClicked(String searchAddress);
+    public abstract void searchButtonClicked(@NonNull Context context, @NonNull String searchAddress);
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="afterDescendants"
-    tools:context="com.votinginfoproject.VotingInformationProject.activities.bottomBarActivity.BottomBarActivity">
+    tools:context=".activities.voterInformationActivity.VoterInformationActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,114 +17,9 @@
     </android.support.v7.widget.Toolbar>
 
     <com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar
+        android:id="@+id/bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="56dp"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--&gt;-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="match_parent"-->
-
-    <!--android:layout_weight="0.33"-->
-
-    <!--&gt;-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/image_view"-->
-    <!--android:layout_width="24dp"-->
-    <!--android:layout_height="24dp"-->
-    <!--android:layout_above="@+id/text_view"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:src="@drawable/ic_arrow_back"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@id/text_view"-->
-    <!--style="@style/bottom_bar_title"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:text="Ballot"-->
-    <!--/>-->
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="12dp"-->
-    <!--android:layout_marginRight="12dp"-->
-    <!--android:layout_weight="0.33"-->
-    <!--android:background="?selectableItemBackgroundBorderless"-->
-    <!--android:clickable="true"-->
-    <!--android:gravity="center_horizontal"-->
-    <!--android:maxWidth="168dp"-->
-    <!--android:minWidth="104dp"-->
-    <!--android:orientation="vertical"-->
-    <!--android:paddingBottom="10dp"-->
-    <!--android:paddingTop="6dp">-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/image_view"-->
-    <!--android:layout_width="24dp"-->
-    <!--android:layout_height="24dp"-->
-    <!--android:layout_above="@+id/text_view"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:src="@drawable/ic_arrow_back"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@id/text_view"-->
-    <!--style="@style/bottom_bar_title"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:textSize="14sp"-->
-    <!--android:text="Ballot"-->
-    <!--/>-->
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="12dp"-->
-    <!--android:layout_marginRight="12dp"-->
-    <!--android:layout_weight="0.33"-->
-    <!--android:background="?selectableItemBackgroundBorderless"-->
-    <!--android:clickable="true"-->
-    <!--android:gravity="center_horizontal"-->
-    <!--android:maxWidth="168dp"-->
-    <!--android:minWidth="104dp"-->
-    <!--android:orientation="vertical"-->
-    <!--android:paddingBottom="10dp"-->
-    <!--android:paddingTop="6dp">-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/image_view"-->
-    <!--android:layout_width="24dp"-->
-    <!--android:layout_height="24dp"-->
-    <!--android:layout_above="@+id/text_view"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:src="@drawable/ic_arrow_back"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@id/text_view"-->
-    <!--style="@style/bottom_bar_title"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:text="Ballot"-->
-    <!--/>-->
-    <!--</RelativeLayout>-->
-    <!--</LinearLayout>-->
 
 </RelativeLayout>

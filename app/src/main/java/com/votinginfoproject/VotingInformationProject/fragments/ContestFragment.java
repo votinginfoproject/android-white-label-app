@@ -23,11 +23,10 @@ import java.util.ArrayList;
 import static butterknife.ButterKnife.findById;
 
 public class ContestFragment extends Fragment {
-    private final String TAG = ContestFragment.class.getSimpleName();
-
     private static final String CONTEST_NUM = "contest_number";
-    private int contestNum;
+    private final String TAG = ContestFragment.class.getSimpleName();
     Contest contest;
+    private int contestNum;
     private ViewGroup mContainer;
 
     private ListView mListView;
@@ -36,6 +35,10 @@ public class ContestFragment extends Fragment {
     private TextView mSubtitle;
     private TextView mHeaderTextView;
 
+
+    public ContestFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -84,10 +87,6 @@ public class ContestFragment extends Fragment {
         return inflaterView;
     }
 
-    public ContestFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -114,7 +113,7 @@ public class ContestFragment extends Fragment {
             // of type 'Referendum'; else title is office and subtitle is election name
             if (!contest.type.equals("Referendum")) {
                 mTitle.setText(contest.office);
-                mSubtitle.setText(voterInfo.election.name);
+                mSubtitle.setText(voterInfo.election.getName());
 
                 // add footer view for feedback
                 View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, mListView, false);

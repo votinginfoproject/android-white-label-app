@@ -29,13 +29,13 @@ public class BallotFragment extends Fragment {
     ArrayList<Contest> filteredContests;
     private ContestsAdapter mAdapter;
 
-    public static BallotFragment newInstance() {
-        return new BallotFragment();
-    }
-
     public BallotFragment() {
         // Required empty public constructor
         filteredContests = new ArrayList<>();
+    }
+
+    public static BallotFragment newInstance() {
+        return new BallotFragment();
     }
 
     @Override
@@ -47,14 +47,14 @@ public class BallotFragment extends Fragment {
         // election label
         TextView election_name_label = (TextView) rootView.findViewById(R.id.ballot_election_name);
         TextView election_date_label = (TextView) rootView.findViewById(R.id.ballot_election_date);
-        election_name_label.setText(voterInfo.election.name);
+        election_name_label.setText(voterInfo.election.getName());
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // fill list of contests
         filteredContests.clear();
         filteredContests.addAll(voterInfo.getFilteredContestsForParty(UserPreferences.getSelectedParty()));
 
-        mAdapter = new ContestsAdapter(myActivity, filteredContests, voterInfo.election.name);
+        mAdapter = new ContestsAdapter(myActivity, filteredContests, voterInfo.election.getName());
         mAdapter.sortList();
         ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
 
@@ -86,6 +86,6 @@ public class BallotFragment extends Fragment {
         super.onAttach(activity);
         // get election info
         voterInfo = UserPreferences.getVoterInfo();
-        Log.d(TAG, "Got election: " + voterInfo.election.name);
+        Log.d(TAG, "Got election: " + voterInfo.election.getName());
     }
 }

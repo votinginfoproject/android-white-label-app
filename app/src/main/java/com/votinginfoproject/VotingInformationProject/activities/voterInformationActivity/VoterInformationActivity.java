@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.activities.bottomBarActivity;
+package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,8 +7,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
 
-public class BottomBarActivity extends Activity {
+
+public class VoterInformationActivity extends Activity implements BottomNavigationBar.BottomNavigationBarCallback {
+
+    private VoterInformationPresenter mPresenter;
+    private BottomNavigationBar mBottomNavigationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +30,23 @@ public class BottomBarActivity extends Activity {
                 onBackPressed();
             }
         });
+
+        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
+        mBottomNavigationBar.setListener(this);
+    }
+
+    @Override
+    public void pollsButtonSelected() {
+
+    }
+
+    @Override
+    public void ballotButtonSelected() {
+
+    }
+
+    @Override
+    public void detailsButtonSelected() {
+
     }
 }

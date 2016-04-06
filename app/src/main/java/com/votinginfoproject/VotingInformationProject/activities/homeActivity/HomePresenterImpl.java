@@ -1,15 +1,11 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.BuildConfig;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
@@ -24,14 +20,13 @@ import java.util.ArrayList;
 /**
  * Created by marcvandehey on 3/31/16.
  */
-public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.CivicInfoCallback {
+public class HomePresenterImpl extends HomePresenter implements CivicInfoInteractor.CivicInfoCallback {
 
     private static final String TAG = HomePresenterImpl.class.getSimpleName();
-    private HomeView mHomeView;
-    private Context mContext;
+    private static final String VOTER_INFO_KEY = "VOTER_INFO";
+    private static final String ALL_PARTIES_KEY = "ALL_PARTIES";
     private CivicInfoInteractor mCivicInteractor;
     private boolean mTestRun = false;
-
     private VoterInfo mVoterInfo;
     private ArrayList<Election> mElections;
     private ArrayList<String> mParties;
@@ -39,17 +34,63 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
     private int mSelectedElection;
     private int mSelectedParty;
 
-    private Uri mContactUri;
+    private String allPartiesString;
 
-    public HomePresenterImpl(Context context, HomeView homeView) {
-        this.mContext = context;
-        this.mHomeView = homeView;
-
+    public HomePresenterImpl(Context context) {
         this.mVoterInfo = null;
-        this.mContactUri = null;
 
         mSelectedElection = 0;
         mSelectedParty = 0;
+
+        allPartiesString = context.getString(R.string.fragment_home_all_parties);
+    }
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        if (savedState != null) {
+            String voterInfoString = savedState.getString(VOTER_INFO_KEY);
+
+            Log.v(TAG, "Saved String: " + voterInfoString);
+
+            if (voterInfoString != null && voterInfoString.length() > 0) {
+                mVoterInfo = new Gson().fromJson(voterInfoString, VoterInfo.class);
+            }
+
+            allPartiesString = savedState.getString(ALL_PARTIES_KEY);
+        }
+    }
+
+    @Override
+    public void onAttachView(HomeView homeView) {
+        super.onAttachView(homeView);
+
+        //Recreate view with cached response
+        if (mVoterInfo != null) {
+            civicInfoResponse(mVoterInfo);
+        }
+    }
+
+    @Override
+    public void onDetachView() {
+        super.onDetachView();
+
+        cancelSearch();
+    }
+
+    @Override
+    public void onSaveState(@NonNull Bundle state) {
+        if (mVoterInfo != null) {
+            String voterInfoString = new Gson().toJson(mVoterInfo);
+            state.putString(VOTER_INFO_KEY, voterInfoString);
+            state.putString(ALL_PARTIES_KEY, allPartiesString);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        setView(null);
+
+        cancelSearch();
     }
 
     /**
@@ -60,11 +101,15 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
         mTestRun = true;
     }
 
+    // Home Presenter Protocol
+
     @Override
-    public void selectedElection(int election) {
+    public void selectedElection(Context context, String address, int election) {
         if (mElections.size() > election) {
             mSelectedElection = election;
-            mHomeView.setElectionText(mElections.get(mSelectedElection).getName());
+            getView().setElectionText(mElections.get(mSelectedElection).getName());
+
+            searchElection(context, address, mElections.get(election).getId());
         }
     }
 
@@ -72,7 +117,7 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
     public void selectedParty(int party) {
         if (mParties.size() > party) {
             mSelectedParty = party;
-            mHomeView.setPartyText(mParties.get(mSelectedParty));
+            getView().setPartyText(mParties.get(mSelectedParty));
         }
     }
 
@@ -84,12 +129,12 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
             list.add(election.getName());
         }
 
-        mHomeView.displayElectionPickerWithItems(list, mSelectedElection);
+        getView().displayElectionPickerWithItems(list, mSelectedElection);
     }
 
     @Override
     public void partyTextViewClicked() {
-        mHomeView.displayPartyPickerWithItems(mParties, mSelectedParty);
+        getView().displayPartyPickerWithItems(mParties, mSelectedParty);
     }
 
     @Override
@@ -97,7 +142,10 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
         Log.d(TAG, "Go Button Clicked");
 
         if (mVoterInfo != null && mVoterInfo.isSuccessful()) {
-            mHomeView.navigateToVIPResultsActivity(mVoterInfo);
+            //Filter Voting info and send to activity
+
+
+            getView().navigateToVoterInformationActivity(mVoterInfo);
         }
     }
 
@@ -106,25 +154,27 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
         Log.d(TAG, "About Button Clicked");
 
         if (mCivicInteractor == null) {
-            mHomeView.navigateToAboutActivity();
+            getView().navigateToAboutActivity();
         }
     }
 
     @Override
-    public void searchButtonClicked(String searchAddress) {
+    public void searchButtonClicked(@NonNull Context context, @NonNull String searchAddress) {
         Log.d(TAG, "Search Button Clicked");
 
+        searchElection(context, searchAddress, "");
+    }
+
+    private void searchElection(@NonNull Context context, @NonNull String searchAddress, @NonNull String electionId) {
         if (mCivicInteractor == null) {
-            mHomeView.hideElectionPicker();
-            mHomeView.hidePartyPicker();
-            mHomeView.hideGoButton();
+            getView().hideElectionPicker();
+            getView().hidePartyPicker();
+            getView().hideGoButton();
 
             mVoterInfo = null;
             mSelectedElection = 0;
 
-            mHomeView.showMessage(mContext.getString(R.string.activity_home_status_loading));
-
-            String electionId = "";
+            getView().showMessage(R.string.activity_home_status_loading);
 
             if (mTestRun) {
                 electionId = "2000"; // test election ID (for use only in testing)
@@ -137,16 +187,16 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
             CivicInfoRequest request;
 
             //Check if we are building with the Debug settings, if so attempt to use StopLight
-            if (BuildConfig.DEBUG && mContext.getResources().getBoolean(R.bool.use_stoplight)) {
-                searchAddress = mContext.getString(R.string.test_address);
+            if (BuildConfig.DEBUG && context.getResources().getBoolean(R.bool.use_stoplight)) {
+                searchAddress = context.getString(R.string.test_address);
 
-                request = new StopLightCivicInfoRequest(mContext, electionId, searchAddress);
+                request = new StopLightCivicInfoRequest(context, electionId, searchAddress);
 
                 //Set address to test string for directions api
 
-                mHomeView.overrideSearchAddress(searchAddress);
+                getView().overrideSearchAddress(searchAddress);
             } else {
-                request = new CivicInfoRequest(mContext, electionId, searchAddress);
+                request = new CivicInfoRequest(context, electionId, searchAddress);
             }
 
             mCivicInteractor.enqueueRequest(request, this);
@@ -162,13 +212,6 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
         }
     }
 
-    @Override
-    public void onDestroy() {
-        mHomeView = null;
-        mContext = null;
-        cancelSearch();
-    }
-
     // Interactor Callback
 
     @Override
@@ -177,8 +220,8 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
             if (response.isSuccessful()) {
                 mVoterInfo = response;
 
-                mHomeView.showGoButton();
-                mHomeView.hideStatusView();
+                getView().showGoButton();
+                getView().hideStatusView();
 
                 if (mVoterInfo.otherElections != null && mVoterInfo.otherElections.size() > 0) {
                     //Setup all elections data and show chooser
@@ -188,21 +231,21 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
                     //Add the default election to the front of the list.
                     mElections.add(0, mVoterInfo.election);
 
-                    mHomeView.showElectionPicker();
+                    getView().showElectionPicker();
                     mSelectedElection = 0;
-                    mHomeView.setElectionText(mVoterInfo.election.getName());
+                    getView().setElectionText(mVoterInfo.election.getName());
                 }
 
                 mParties = mVoterInfo.getUniqueParties();
-                mParties.add(0, mContext.getString(R.string.fragment_home_all_parties));
+                mParties.add(0, allPartiesString);
 
-                if (mParties.size() > 0) {
-                    mHomeView.setPartyText(mParties.get(0));
+                if (mParties.size() > 1) {
+                    getView().setPartyText(mParties.get(0));
                     mSelectedParty = 0;
-                    mHomeView.showPartyPicker();
+                    getView().showPartyPicker();
                 }
             } else {
-                mHomeView.hideGoButton();
+                getView().hideGoButton();
 
                 CivicApiError error = response.getError();
 
@@ -213,15 +256,15 @@ public class HomePresenterImpl implements HomePresenter, CivicInfoInteractor.Civ
 
                 if (CivicApiError.errorMessages.get(error1.reason) != null) {
                     int reason = CivicApiError.errorMessages.get(error1.reason);
-                    mHomeView.showMessage(mContext.getString(reason));
+                    getView().showMessage(reason);
                 } else {
                     Log.e(TAG, "Unknown API error reason: " + error1.reason);
-                    mHomeView.showMessage(mContext.getString(R.string.fragment_home_error_unknown));
+                    getView().showMessage(R.string.fragment_home_error_unknown);
                 }
             }
         } else {
             Log.d(TAG, "API returned null response");
-            mHomeView.showMessage(mContext.getString(R.string.fragment_home_error_unknown));
+            getView().showMessage(R.string.fragment_home_error_unknown);
         }
 
         cancelSearch();

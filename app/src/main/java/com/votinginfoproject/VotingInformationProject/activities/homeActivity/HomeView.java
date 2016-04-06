@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
+import android.support.annotation.StringRes;
+
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public interface HomeView {
 
     void navigateToAboutActivity();
 
-    void navigateToVIPResultsActivity(VoterInfo voterInfo);
+    void navigateToVoterInformationActivity(VoterInfo voterInfo);
 
     void showElectionPicker();
 
@@ -37,6 +39,8 @@ public interface HomeView {
     void overrideSearchAddress(String searchAddress);
 
     void showMessage(String message);
+
+    void showMessage(@StringRes int message);
 
     void hideStatusView();
 }

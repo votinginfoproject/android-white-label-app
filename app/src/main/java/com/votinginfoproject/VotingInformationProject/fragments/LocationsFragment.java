@@ -77,7 +77,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         // election labels
         TextView election_name_label = (TextView) rootView.findViewById(R.id.locations_election_title);
         TextView election_date_label = (TextView) rootView.findViewById(R.id.locations_election_subtitle);
-        election_name_label.setText(voterInfo.election.name);
+        election_name_label.setText(voterInfo.election.getName());
         election_date_label.setText(voterInfo.election.getFormattedDate());
 
         // clear directions polyline, if set from directions view

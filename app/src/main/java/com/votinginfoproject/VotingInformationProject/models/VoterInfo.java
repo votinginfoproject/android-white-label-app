@@ -17,9 +17,10 @@ import java.util.List;
  */
 public class VoterInfo {
     // limit drop box locations to first 50, and polling and early voting sites to first 25
-    private static final int MAX_VOTING_SITES = 25;
-    private static final int MAX_DROP_BOX_SITES = 50;
-    private final String TAG = VoterInfo.class.getSimpleName();
+    private transient static final int MAX_VOTING_SITES = 25;
+    private transient static final int MAX_DROP_BOX_SITES = 50;
+
+    private transient final String TAG = VoterInfo.class.getSimpleName();
 
     public String kind;
     public Election election;
@@ -42,7 +43,7 @@ public class VoterInfo {
 
     /**
      * Default Constructor
-     * <p>
+     * <p/>
      * Ensures otherElections is never a null field, and create photo cache for candidate images
      */
     public VoterInfo() {
