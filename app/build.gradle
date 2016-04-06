@@ -40,7 +40,10 @@ dependencies {
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.support:design:23.2.1'
-    compile 'com.google.android.gms:play-services:8.4.0'
+
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
 
     // use Google Maps utility library for polyline decoder
     // https://github.com/googlemaps/android-maps-utils

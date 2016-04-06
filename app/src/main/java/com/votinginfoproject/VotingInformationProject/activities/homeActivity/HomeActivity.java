@@ -19,11 +19,10 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.AboutActivity;
-import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
+import com.votinginfoproject.VotingInformationProject.activities.bottomBarActivity.BottomBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 
@@ -31,8 +30,6 @@ import java.util.ArrayList;
 public class HomeActivity extends FragmentActivity implements HomeView {
 
     private final String TAG = HomeActivity.class.getSimpleName();
-
-    private String selectedParty;
 
     private HomePresenter mPresenter;
 
@@ -44,16 +41,6 @@ public class HomeActivity extends FragmentActivity implements HomeView {
     private TextView mElectionsTextView;
     private TextView mPartyTextView;
     private ImageButton mAboutButton;
-
-    public String getSelectedParty() {
-        return selectedParty;
-    }
-
-    public void setSelectedParty(String selectedParty) {
-        this.selectedParty = selectedParty;
-
-        UserPreferences.setSelectedParty(selectedParty);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +60,7 @@ public class HomeActivity extends FragmentActivity implements HomeView {
         mPartyTextView = (TextView) findViewById(R.id.home_selector_party);
 
         mAboutButton = (ImageButton) findViewById(R.id.home_button_about_us);
-
-        selectedParty = "";
-
+        
         setupViewListeners();
 
         // Get analytics tracker (should auto-report)
@@ -171,7 +156,7 @@ public class HomeActivity extends FragmentActivity implements HomeView {
 
     @Override
     public void navigateToVIPResultsActivity(VoterInfo voterInfo) {
-        Intent intent = new Intent(this, VIPTabBarActivity.class);
+        Intent intent = new Intent(this, BottomBarActivity.class);
         startActivity(intent);
     }
 

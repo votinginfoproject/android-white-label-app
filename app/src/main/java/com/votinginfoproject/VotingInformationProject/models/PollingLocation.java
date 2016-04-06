@@ -13,8 +13,6 @@ public class PollingLocation {
     public String name;
     public String startDate;
     public String endDate;
-    public String notes;
     public String pollingHours;
-    public List<Source> sources;
     public String voterServices; // This field is not populated for polling locations.
 }

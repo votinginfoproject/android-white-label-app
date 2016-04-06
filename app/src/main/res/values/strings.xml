@@ -19,9 +19,9 @@
     <string name="error.no_browser">Web browser not installed</string>
 
     <!-- Tab Bar Strings -->
-    <string name="activity.vip.tab.ballot_title">Ballot</string>
-    <string name="activity.vip.tab.where_to_vote_title">Where to Vote</string>
-    <string name="activity.vip.tab.details_title">Details</string>
+    <string name="bottom.navigation.title.ballot">Ballot</string>
+    <string name="bottom.navigation.title.polls">Polling Sites</string>
+    <string name="bottom.navigation.title.details">Details</string>
 
     <!-- Directions origin dialog -->
     <string name="activity.vip.tab.directions_origin_prompt">Where do you want directions from?</string>

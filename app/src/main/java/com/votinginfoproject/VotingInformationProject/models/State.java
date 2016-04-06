@@ -13,5 +13,4 @@ public class State {
     public String name;
     public ElectionAdministrationBody electionAdministrationBody;
     public AdministrationRegion local_jurisdiction;
-    public List<Source> sources;
 }

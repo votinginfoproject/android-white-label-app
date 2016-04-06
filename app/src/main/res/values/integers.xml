@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="bottom_nav_text_size_unselected">12</integer>
+    <integer name="bottom_nav_text_size_selected">14</integer>
+
+    <!--Alpha Values, acceptable values range from 0 - 100 -->
+    <integer name="bottom_nav_text_alpha_unselected">60</integer>
+    <integer name="bottom_nav_text_alpha_selected">100</integer>
+    <integer name="bottom_nav_image_alpha_unselected">60</integer>
+    <integer name="bottom_nav_image_alpha_selected">100</integer>
+</resources>

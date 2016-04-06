@@ -1,15 +1,19 @@
 <!-- Base application theme. -->
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.Design.Light">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:colorEdgeEffect">@color/colorAccent</item>
 
-        <!-- enable window content transitions -->
-        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppThemeHome" parent="AppTheme.NoActionBar">
+        <item name="android:colorPrimaryDark">@color/colorPrimaryHome</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorEdgeEffect">@color/colorAccentDark</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -278,12 +282,8 @@
         <item name="android:paddingBottom">@dimen/home_xlarge_padding</item>
     </style>
 
-    <style name="home_view_button">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/home_button_height</item>
-        <item name="android:background">@drawable/home_view_button</item>
-        <item name="android:textColor">@drawable/home_view_button_text</item>
-        <item name="android:textSize">@dimen/text_large</item>
-        <item name="android:textStyle">bold</item>
+    <style name="bottom_navigation_bar">
+        <item name="android:elevation">8dp</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 </resources>

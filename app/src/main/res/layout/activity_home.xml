@@ -51,10 +51,10 @@
             android:textSize="@dimen/activity.home.label_text_size"/>
 
         <EditText
-            android:layout_below="@id/home.label.enter_address"
             android:id="@+id/home.edit.text.address"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/activity.home.editable_text_box_size"
+            android:layout_below="@id/home.label.enter_address"
             android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/home_large_padding"
             android:background="@color/home.edit.text.background"
@@ -151,11 +151,11 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:background="@drawable/home_view_button"
+            android:background="@drawable/button_ripple_primary"
             android:contentDescription="@string/fragment.home.go_button_accessibility_description"
             android:text="@string/activity.home.go_button"
-            android:textColor="@drawable/home_view_button_text"
-            android:textSize="@dimen/text_large"
+            android:textColor="@color/home.text"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:visibility="gone"/>
 

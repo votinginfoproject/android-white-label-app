@@ -6,7 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
+    <style name="AppThemeHome" parent="AppTheme.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryHome</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
@@ -262,12 +270,13 @@
         <item name="android:paddingBottom">@dimen/home_xlarge_padding</item>
     </style>
 
-    <style name="home_view_button">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/home_button_height</item>
-        <item name="android:background">@drawable/home_view_button</item>
-        <item name="android:textColor">@drawable/home_view_button_text</item>
-        <item name="android:textSize">@dimen/text_large</item>
-        <item name="android:textStyle">bold</item>
+    <style name="bottom_bar_title">
+        <item name="android:textSize">12sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="bottom_navigation_bar">
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 </resources>

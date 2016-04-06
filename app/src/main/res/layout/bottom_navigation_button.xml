@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:descendantFocusability="beforeDescendants"
+                android:gravity="center_horizontal"
+                android:maxWidth="168dp"
+                android:minWidth="104dp"
+                android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/bottom_nav_image_view"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_above="@+id/bottom_nav_text_view"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/contest.label.ballot_placement"
+        android:minHeight="24dp"
+        android:minWidth="24dp"
+        android:src="@drawable/ic_arrow_back"/>
+
+    <TextView
+        android:id="@id/bottom_nav_text_view"
+        style="@style/bottom_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/contest.label.ballot_placement"
+        android:textColor="@color/white"
+        android:alpha="0.6"/>
+</RelativeLayout>

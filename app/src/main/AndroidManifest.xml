@@ -12,19 +12,18 @@
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Vip_tab_bar">
-
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.homeActivity.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.VIPTabBarActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -35,7 +34,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.homeActivity.HomeActivity"/>
         </activity>
-
         <activity
             android:name=".activities.AboutActivity"
             android:label="@string/activity.title.about"
@@ -54,5 +52,9 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_api_android_key"/>
+
+        <activity android:name=".activities.bottomBarActivity.BottomBarActivity">
+        </activity>
     </application>
+
 </manifest>

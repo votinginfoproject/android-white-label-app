@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#004F91</color>
     <color name="colorAccent">#ffffff</color>
     <color name="colorAccentDark">#55C7FD</color>
+    <color name="colorPrimaryHome">#00183B</color>
 
     <color name="home.text">@android:color/white</color>
     <color name="list.selected">#DCDCDC</color>

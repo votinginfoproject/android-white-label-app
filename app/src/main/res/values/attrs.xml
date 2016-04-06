@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BottomNavigationButton">
+        <attr name="bottom_nav_src" format="reference"/>
+        <attr name="bottom_nav_text" format="string"/>
+        <attr name="bottom_nav_accessibility" format="string"/>
+    </declare-styleable>
+</resources>

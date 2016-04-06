@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/bottom_navigation_bar"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="56dp"
+              android:background="@color/colorPrimaryDark"
+              android:clickable="false"
+              android:descendantFocusability="afterDescendants"
+              android:focusable="false"
+              android:orientation="horizontal"
+              android:weightSum="1">
+
+    <com.votinginfoproject.VotingInformationProject.views.BottomNavigationButton
+        android:id="@+id/nav_button_polls"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.33"
+        app:bottom_nav_accessibility="@string/bottom.navigation.title.polls"
+        app:bottom_nav_src="@drawable/ic_place"
+        app:bottom_nav_text="@string/bottom.navigation.title.polls"/>
+
+    <com.votinginfoproject.VotingInformationProject.views.BottomNavigationButton
+        android:id="@+id/nav_button_ballot"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.33"
+        app:bottom_nav_accessibility="@string/bottom.navigation.title.ballot"
+        app:bottom_nav_src="@drawable/ic_ballot"
+        app:bottom_nav_text="@string/bottom.navigation.title.ballot"/>
+
+    <com.votinginfoproject.VotingInformationProject.views.BottomNavigationButton
+        android:id="@+id/nav_button_details"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.33"
+        app:bottom_nav_accessibility="@string/bottom.navigation.title.details"
+        app:bottom_nav_src="@drawable/ic_format_list"
+        app:bottom_nav_text="@string/bottom.navigation.title.details"/>
+</LinearLayout>
