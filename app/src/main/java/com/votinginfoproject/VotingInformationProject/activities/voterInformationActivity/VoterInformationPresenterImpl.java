@@ -16,9 +16,11 @@ public class VoterInformationPresenterImpl extends BasePresenter<VoterInformatio
     private static final String VOTER_INFO_KEY = "VOTER_INFO";
 
     private VoterInfo mVoterInfo;
+    private String mPartyFilter;
 
-    public VoterInformationPresenterImpl(@NonNull VoterInfo voterInfo) {
+    public VoterInformationPresenterImpl(@NonNull VoterInfo voterInfo, String partyFilter) {
         mVoterInfo = voterInfo;
+        mPartyFilter = partyFilter;
     }
 
     @Override

@@ -145,7 +145,14 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             //Filter Voting info and send to activity
 
 
-            getView().navigateToVoterInformationActivity(mVoterInfo);
+            String filter = "";
+
+            //If All Parties is not Selected
+            if (mSelectedParty > 0) {
+                filter = mParties.get(mSelectedParty);
+            }
+
+            getView().navigateToVoterInformationActivity(mVoterInfo, filter);
         }
     }
 

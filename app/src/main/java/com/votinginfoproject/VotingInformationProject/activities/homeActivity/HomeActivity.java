@@ -18,10 +18,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.AboutActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
+import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
 
@@ -223,8 +225,12 @@ public class HomeActivity extends Activity implements HomeView {
     }
 
     @Override
-    public void navigateToVoterInformationActivity(VoterInfo voterInfo) {
+    public void navigateToVoterInformationActivity(VoterInfo voterInfo, String filter) {
         Intent intent = new Intent(this, VoterInformationActivity.class);
+
+        intent.putExtra(ExtraConstants.VOTER_INFO, new Gson().toJson(voterInfo));
+        intent.putExtra(ExtraConstants.PARTY_FILTER, filter);
+
         startActivity(intent);
     }
 

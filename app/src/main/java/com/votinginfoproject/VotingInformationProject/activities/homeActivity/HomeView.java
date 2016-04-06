@@ -14,7 +14,7 @@ public interface HomeView {
 
     void navigateToAboutActivity();
 
-    void navigateToVoterInformationActivity(VoterInfo voterInfo);
+    void navigateToVoterInformationActivity(VoterInfo voterInfo, String partyFilter);
 
     void showElectionPicker();
 
