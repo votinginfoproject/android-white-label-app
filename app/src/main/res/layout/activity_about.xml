@@ -17,7 +17,7 @@
 
         <TextView
             style="@style/fragment_header"
-            android:text="@string/about.terms.title"/>
+            android:text="@string/about.title.terms"/>
 
         <TextView
             style="@style/fragment_description"

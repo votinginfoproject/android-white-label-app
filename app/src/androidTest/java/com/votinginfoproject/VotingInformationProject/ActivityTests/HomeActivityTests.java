@@ -37,7 +37,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
     protected void setUp() throws Exception {
         super.setUp();
 
-        // enable interaction with UI elements under test
+        // enable interaction with UI elements under AboutVIPActivity
         setActivityInitialTouchMode(true);
 
         refreshActivity();
@@ -64,7 +64,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         Resources resources = homeActivity.getResources();
         Instrumentation instrumentation = getInstrumentation();
 
-        // read test result from file
+        // read AboutVIPActivity result from file
         InputStream is = resources.openRawResource(R.raw.test_response);
         BufferedReader ir = new BufferedReader(new InputStreamReader(is));
         StringBuilder builder = new StringBuilder();
@@ -75,10 +75,10 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
             }
         } catch (IOException e) {
             e.printStackTrace();
-            assertFalse("IOException reading test file", true);
+            assertFalse("IOException reading AboutVIPActivity file", true);
         } catch (Exception ex) {
             ex.printStackTrace();
-            assertFalse("Failed to read test file", true);
+            assertFalse("Failed to read AboutVIPActivity file", true);
         } finally {
             try {
                 ir.close();
@@ -93,7 +93,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         String responseStr = builder.toString();
         builder = null;
 
-        // save test result to shared preferences
+        // save AboutVIPActivity result to shared preferences
         final String testAddress = "123 Main St, Richmond, VA";
 
         homeFragment.setAddress(testAddress);
@@ -116,7 +116,7 @@ public class HomeActivityTests extends ActivityInstrumentationTestCase2<HomeActi
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                // use test election
+                // use AboutVIPActivity election
                 homeFragment.doTestRun();
                 // load result from shared preferences
                 homeFragment.queryWithNewAddress(testAddress);

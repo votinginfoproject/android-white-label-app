@@ -6,6 +6,9 @@ package com.votinginfoproject.VotingInformationProject.activities.voterInformati
 public interface VoterInformationView {
     void showPollingSiteFragment();
 
+//    void inflatePollingSitesBackstack(ArrayList<FragmentManager.BackStackEntry> backStackEntries);
+
+
     void showBallotFragment();
 
     void showDetailsFragment();

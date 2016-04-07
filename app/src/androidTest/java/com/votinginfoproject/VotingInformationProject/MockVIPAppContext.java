@@ -73,7 +73,7 @@ public class MockVIPAppContext {
         address.line1 = "123 Foo St";
         address.city = "Springfield";
         address.state = "IL";
-        address.locationName = "test location";
+        address.locationName = "AboutVIPActivity location";
         address.latitude = 40.1;
         address.longitude = -75.5;
 

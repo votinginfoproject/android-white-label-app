@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 
 import com.votinginfoproject.VotingInformationProject.R;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by marcvandehey on 4/5/16.
  */
@@ -15,6 +17,8 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
     private BottomNavigationButton pollsNavigationButton;
     private BottomNavigationButton ballotNavigationButton;
     private BottomNavigationButton detailsNavigationButton;
+
+    private WeakReference<BottomNavigationBarCallback> mTabBarListener;
 
     public BottomNavigationBar(Context context) {
         super(context);
@@ -35,7 +39,12 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
     }
 
     public void setListener(BottomNavigationBarCallback callback) {
-
+        if (callback != null) {
+            mTabBarListener = new WeakReference<>(callback);
+        } else if (mTabBarListener != null) {
+            mTabBarListener.clear();
+            mTabBarListener = null;
+        }
     }
 
     private void styleUI(Context context) {
@@ -62,14 +71,21 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
             pollsNavigationButton.setSelected();
             ballotNavigationButton.setUnselected();
             detailsNavigationButton.setUnselected();
+
+
+            mTabBarListener.get().pollsButtonSelected();
         } else if (v.equals(ballotNavigationButton)) {
             pollsNavigationButton.setUnselected();
             ballotNavigationButton.setSelected();
             detailsNavigationButton.setUnselected();
+
+            mTabBarListener.get().ballotButtonSelected();
         } else if (v.equals(detailsNavigationButton)) {
             pollsNavigationButton.setUnselected();
             ballotNavigationButton.setUnselected();
             detailsNavigationButton.setSelected();
+
+            mTabBarListener.get().detailsButtonSelected();
         }
     }
 

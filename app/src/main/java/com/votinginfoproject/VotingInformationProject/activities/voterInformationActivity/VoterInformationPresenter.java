@@ -1,20 +1,22 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
+import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
+
 /**
  * Created by marcvandehey on 4/5/16.
  */
-public interface VoterInformationPresenter {
-    void backNavigationBarButtonClicked();
+public abstract class VoterInformationPresenter extends BasePresenter<VoterInformationView> {
+    abstract void backNavigationBarButtonClicked();
 
-    void ballotButtonClicked();
+    abstract void ballotButtonClicked();
 
-    void detailsButtonClicked();
+    abstract void detailsButtonClicked();
 
-    void pollintSitesButtonClicked();
+    abstract void pollingSitesButtonClicked();
 
-    void mapButtonClicked();
+    abstract void mapButtonClicked();
 
-    void overflowButtonClicked();
+    abstract void overflowButtonClicked();
 
-    void mapFilterButtonClicked(int filterItem);
+    abstract void mapFilterButtonClicked(int filterItem);
 }

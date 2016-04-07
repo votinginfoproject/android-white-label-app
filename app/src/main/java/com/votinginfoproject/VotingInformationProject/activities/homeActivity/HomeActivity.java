@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,8 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.activities.AboutActivity;
+import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
+import com.votinginfoproject.VotingInformationProject.activities.aboutActivity.AboutVIPActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
@@ -30,11 +30,9 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.GATracke
 import java.util.ArrayList;
 
 
-public class HomeActivity extends Activity implements HomeView {
+public class HomeActivity extends BaseActivity<HomePresenter> implements HomeView {
 
     private final String TAG = HomeActivity.class.getSimpleName();
-
-    private HomePresenterImpl mPresenter;
 
     private Button mGoButton;
     private EditText mAddressEditText;
@@ -51,11 +49,11 @@ public class HomeActivity extends Activity implements HomeView {
 
         setContentView(R.layout.activity_home);
 
-        if (mPresenter == null) {
-            mPresenter = new HomePresenterImpl(getBaseContext());
+        if (getPresenter() == null) {
+            setPresenter(new HomePresenterImpl(getBaseContext()));
         }
 
-        mPresenter.onCreate(savedInstanceState);
+        getPresenter().onCreate(savedInstanceState);
 
         mGoButton = (Button) findViewById(R.id.home_button_go);
         mAddressEditText = (EditText) findViewById(R.id.home_edit_text_address);
@@ -74,75 +72,12 @@ public class HomeActivity extends Activity implements HomeView {
         GATracker.getTracker(GATracker.TrackerName.APP_TRACKER);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (mPresenter != null) {
-            mPresenter.onSaveState(outState);
-        }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (mPresenter != null) {
-            mPresenter.onCreate(savedInstanceState);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (mPresenter != null) {
-            mPresenter.onDestroy();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (mPresenter != null) {
-            mPresenter.onDetachView();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (mPresenter != null) {
-            mPresenter.onAttachView(this);
-        }
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        if (mPresenter != null) {
-            mPresenter.onAttachView(this);
-        }
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-
-        if (mPresenter != null) {
-            mPresenter.onDetachView();
-        }
-    }
-
     private void setupViewListeners() {
         // Go Button onClick Listener
         mGoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.goButtonClicked();
+                getPresenter().goButtonClicked();
             }
         });
 
@@ -150,7 +85,7 @@ public class HomeActivity extends Activity implements HomeView {
         mAboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.aboutButtonClicked();
+                getPresenter().aboutButtonClicked();
             }
         });
 
@@ -160,7 +95,7 @@ public class HomeActivity extends Activity implements HomeView {
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                         (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    mPresenter.searchButtonClicked(getBaseContext(), mAddressEditText.getText().toString());
+                    getPresenter().searchButtonClicked(getBaseContext(), mAddressEditText.getText().toString());
                 }
 
                 // Return false to close the keyboard
@@ -172,14 +107,14 @@ public class HomeActivity extends Activity implements HomeView {
         mElectionsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.electionTextViewClicked();
+                getPresenter().electionTextViewClicked();
             }
         });
 
         mPartyTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.partyTextViewClicked();
+                getPresenter().partyTextViewClicked();
             }
         });
     }
@@ -220,7 +155,7 @@ public class HomeActivity extends Activity implements HomeView {
 
     @Override
     public void navigateToAboutActivity() {
-        Intent intent = new Intent(this, AboutActivity.class);
+        Intent intent = new Intent(this, AboutVIPActivity.class);
         startActivity(intent);
     }
 
@@ -263,7 +198,7 @@ public class HomeActivity extends Activity implements HomeView {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-                mPresenter.selectedElection(getBaseContext(), mAddressEditText.getText().toString(), which);
+                getPresenter().selectedElection(getBaseContext(), mAddressEditText.getText().toString(), which);
             }
         });
 
@@ -294,7 +229,7 @@ public class HomeActivity extends Activity implements HomeView {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-                mPresenter.selectedParty(which);
+                getPresenter().selectedParty(which);
             }
         });
 

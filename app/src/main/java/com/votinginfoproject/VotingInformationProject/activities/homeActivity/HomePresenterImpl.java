@@ -95,7 +95,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
     /**
      * For use when testing only.  Sets flag to indicate that we're testing the app, so it will
-     * use the special test election ID for the query.
+     * use the special AboutVIPActivity election ID for the query.
      */
     public void doTestRun() {
         mTestRun = true;
@@ -184,7 +184,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             getView().showMessage(R.string.activity_home_status_loading);
 
             if (mTestRun) {
-                electionId = "2000"; // test election ID (for use only in testing)
+                electionId = "2000"; // AboutVIPActivity election ID (for use only in testing)
             }
 
             //TODO Determine if we need to search available elections before this point
@@ -199,7 +199,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
                 request = new StopLightCivicInfoRequest(context, electionId, searchAddress);
 
-                //Set address to test string for directions api
+                //Set address to AboutVIPActivity string for directions api
 
                 getView().overrideSearchAddress(searchAddress);
             } else {

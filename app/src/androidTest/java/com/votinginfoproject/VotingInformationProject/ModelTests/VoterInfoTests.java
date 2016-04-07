@@ -58,7 +58,7 @@ public class VoterInfoTests extends AndroidTestCase {
 
         pollingLocations.add(loc1);
 
-        // test list of one polling location only
+        // AboutVIPActivity list of one polling location only
         info.pollingLocations = pollingLocations;
         info.earlyVoteSites = earlyLocations;
         info.setUpLocations();
@@ -68,7 +68,7 @@ public class VoterInfoTests extends AndroidTestCase {
         PollingLocation foundLocation = info.getLocationForId("1");
         assertNotNull(foundLocation);
 
-        // test multiple locations
+        // AboutVIPActivity multiple locations
 
         PollingLocation loc2 = new PollingLocation();
         loc2.name = "location two";
@@ -96,7 +96,7 @@ public class VoterInfoTests extends AndroidTestCase {
 
         earlyLocations.add(loc3);
 
-        // test date filter for early vote sites
+        // AboutVIPActivity date filter for early vote sites
 
         // location 4 already closed (should not use it)
         PollingLocation loc4 = new PollingLocation();
@@ -181,7 +181,7 @@ public class VoterInfoTests extends AndroidTestCase {
 
         // should be able to get admin body address
         CivicApiAddress gotAddress = info.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
-        assertEquals("test location", gotAddress.locationName);
+        assertEquals("AboutVIPActivity location", gotAddress.locationName);
 
         // should get null for admin body without physical address
         gotAddress = info.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);

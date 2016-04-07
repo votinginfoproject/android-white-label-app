@@ -1,19 +1,26 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+
+import java.util.ArrayList;
 
 /**
  * Created by marcvandehey on 4/6/16.
  */
-public class VoterInformationPresenterImpl extends BasePresenter<VoterInformationView> implements VoterInformationPresenter {
+public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     private static final String TAG = VoterInformationPresenterImpl.class.getSimpleName();
     private static final String VOTER_INFO_KEY = "VOTER_INFO";
+
+    private ArrayList<String> mBallotEntries;
+    private ArrayList<String> mPollsEntries;
+    private ArrayList<String> mDetailsEntries;
+
 
     private VoterInfo mVoterInfo;
     private String mPartyFilter;
@@ -21,6 +28,10 @@ public class VoterInformationPresenterImpl extends BasePresenter<VoterInformatio
     public VoterInformationPresenterImpl(@NonNull VoterInfo voterInfo, String partyFilter) {
         mVoterInfo = voterInfo;
         mPartyFilter = partyFilter;
+
+        mBallotEntries = new ArrayList<>();
+        mPollsEntries = new ArrayList<>();
+        mDetailsEntries = new ArrayList<>();
     }
 
     @Override
@@ -60,7 +71,9 @@ public class VoterInformationPresenterImpl extends BasePresenter<VoterInformatio
 
     @Override
     public void onDestroy() {
-
+        mBallotEntries.clear();
+        mPollsEntries.clear();
+        mDetailsEntries.clear();
     }
 
     // Voter Information Presenter Protocol
@@ -81,8 +94,8 @@ public class VoterInformationPresenterImpl extends BasePresenter<VoterInformatio
     }
 
     @Override
-    public void pollintSitesButtonClicked() {
-
+    public void pollingSitesButtonClicked() {
+        getView().showPollingSiteFragment();
     }
 
     @Override
