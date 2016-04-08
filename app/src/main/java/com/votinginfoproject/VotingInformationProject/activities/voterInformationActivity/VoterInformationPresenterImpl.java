@@ -1,14 +1,12 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-
-import java.util.ArrayList;
 
 /**
  * Created by marcvandehey on 4/6/16.
@@ -17,10 +15,11 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     private static final String TAG = VoterInformationPresenterImpl.class.getSimpleName();
     private static final String VOTER_INFO_KEY = "VOTER_INFO";
 
-    private ArrayList<String> mBallotEntries;
-    private ArrayList<String> mPollsEntries;
-    private ArrayList<String> mDetailsEntries;
+    private final int POLLS_TAB = 0x0;
+    private final int BALLOT_TAB = 0x1;
+    private final int DETAILS_TAB = 0x2;
 
+    private int mCurrentTab = 0x0;
 
     private VoterInfo mVoterInfo;
     private String mPartyFilter;
@@ -29,9 +28,6 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         mVoterInfo = voterInfo;
         mPartyFilter = partyFilter;
 
-        mBallotEntries = new ArrayList<>();
-        mPollsEntries = new ArrayList<>();
-        mDetailsEntries = new ArrayList<>();
     }
 
     @Override
@@ -71,31 +67,55 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     @Override
     public void onDestroy() {
-        mBallotEntries.clear();
-        mPollsEntries.clear();
-        mDetailsEntries.clear();
+
     }
 
     // Voter Information Presenter Protocol
 
     @Override
     public void backNavigationBarButtonClicked() {
-
+        getView().navigateBack();
     }
 
     @Override
     public void ballotButtonClicked() {
+        if (mCurrentTab != BALLOT_TAB) {
+            mCurrentTab = BALLOT_TAB;
 
+            getView().presentParentLevelFragment(TestFragment.newInstance("ballot", "nope"));
+        } else {
+            //If currently selected, reset the scroll position
+            getView().scrollCurrentFragmentToTop();
+            getView().presentChildLevelFragment(TestFragment.newInstance("ballot child", "nope"));
+
+        }
     }
 
     @Override
     public void detailsButtonClicked() {
+        if (mCurrentTab != DETAILS_TAB) {
+            mCurrentTab = DETAILS_TAB;
 
+            getView().presentParentLevelFragment(TestFragment.newInstance("details", "nope"));
+        } else {
+            //If currently selected, reset the scroll position
+            getView().scrollCurrentFragmentToTop();
+            getView().presentChildLevelFragment(TestFragment.newInstance("details child", "nope"));
+
+        }
     }
 
     @Override
     public void pollingSitesButtonClicked() {
-        getView().showPollingSiteFragment();
+        if (mCurrentTab != POLLS_TAB) {
+            mCurrentTab = POLLS_TAB;
+
+            getView().presentParentLevelFragment(TestFragment.newInstance("polling", "nope"));
+        } else {
+            //If currently selected, reset the scroll position
+//            getView().scrollCurrentFragmentToTop();
+            getView().presentChildLevelFragment(TestFragment.newInstance("polling child", "nope"));
+        }
     }
 
     @Override

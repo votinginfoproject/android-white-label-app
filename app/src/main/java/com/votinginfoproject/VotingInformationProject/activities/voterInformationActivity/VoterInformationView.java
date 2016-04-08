@@ -1,19 +1,20 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
+
+import com.votinginfoproject.VotingInformationProject.fragments.ScrollToTopFragment;
+
 /**
  * Created by marcvandehey on 4/6/16.
  */
 public interface VoterInformationView {
-    void showPollingSiteFragment();
 
-//    void inflatePollingSitesBackstack(ArrayList<FragmentManager.BackStackEntry> backStackEntries);
+    void presentParentLevelFragment(ScrollToTopFragment parentLevel);
 
+    void presentChildLevelFragment(ScrollToTopFragment childLevelFragment);
 
-    void showBallotFragment();
+    void navigateBack();
 
-    void showDetailsFragment();
+    void updatePollingSitesFilter();
 
-    void showMapDetailFragment();
-
-    void updateFilter();
+    void scrollCurrentFragmentToTop();
 }
