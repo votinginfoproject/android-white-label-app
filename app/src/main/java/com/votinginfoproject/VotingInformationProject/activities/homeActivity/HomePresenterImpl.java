@@ -58,6 +58,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         if (savedState != null) {
             String voterInfoString = savedState.getString(VOTER_INFO_KEY);
 
+
             Log.v(TAG, "Saved String: " + voterInfoString);
 
             if (voterInfoString != null && voterInfoString.length() > 0) {

@@ -42,9 +42,16 @@
                 <TextView
                     android:id="@+id/about_app"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/list_divider_gray"/>
 
                 <TextView
+                    android:layout_margin="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Additional Information"/>
@@ -56,6 +63,7 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="16sp"
                         android:text="@string/about.title.terms"/>
                 </LinearLayout>
 
@@ -66,6 +74,7 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="16sp"
                         android:text="@string/about.title.privacy"/>
                 </LinearLayout>
 
@@ -76,6 +85,7 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="16sp"
                         android:text="@string/about.title.legal_notices"/>
                 </LinearLayout>
 
