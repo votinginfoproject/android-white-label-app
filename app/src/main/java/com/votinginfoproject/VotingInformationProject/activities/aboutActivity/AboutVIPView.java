@@ -11,4 +11,6 @@ public interface AboutVIPView {
     void setInformationText(String informationText);
 
     void navigateToAboutVIPView(int infoTitleKey, int infoTextKey, float transitionPointX, float transitionPointY);
+
+    void navigateToAboutVIPLicenseVIew(int infoTitleKey, float transitionPointX, float transitionPointY);
 }

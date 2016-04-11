@@ -6,33 +6,31 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.view.MotionEvent;
 
-import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.api.interactors.BaseInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.OpenSourceLicenseInteractor;
+import com.votinginfoproject.VotingInformationProject.models.api.requests.RequestType;
 
 /**
- * Created by max on 4/8/16.
+ * Created by max on 4/11/16.
  */
-public class AboutVIPPresenterImpl extends AboutVIPPresenter {
-
-    private static final String TAG = AboutVIPPresenterImpl.class.getSimpleName();
+public class AboutVIPLicensePresenterImpl extends AboutVIPPresenter implements OpenSourceLicenseInteractor.OpenSourceLicenceCallback {
+    private static final String TAG = AboutVIPLicensePresenterImpl.class.getSimpleName();
 
     private static final String INFO_TITLE_KEY = "INFO_TITLE";
     private static final String INFO_TEXT_KEY = "INFO_TEXT";
 
-    private OpenSourceLicenseInteractor mOpenSourceLicenseInteractor;
-
     protected Integer mTitleStringID;
     protected String mTitle;
 
-    protected Integer mInfoTextStringID;
     protected String mInfoText;
 
-    public AboutVIPPresenterImpl(Context context, @StringRes int titleStringID, @StringRes int infoTextStringID) {
+    private OpenSourceLicenseInteractor mLicenseInteractor;
+
+    public AboutVIPLicensePresenterImpl(Context context, @StringRes int titleStringID) {
         mTitleStringID = titleStringID;
         mTitle = context.getString(mTitleStringID);
 
-        mInfoTextStringID = infoTextStringID;
-        mInfoText = context.getString(mInfoTextStringID);
+        kickoffLoading(context);
     }
 
     @Override
@@ -46,9 +44,7 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     @Override
     public void onAttachView(AboutVIPView aboutVIPView) {
         super.onAttachView(aboutVIPView);
-
-        aboutVIPView.setTitle(mTitle);
-        aboutVIPView.setInformationText(mInfoText);
+        updateView();
     }
 
     @Override
@@ -62,26 +58,43 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
         setView(null);
     }
 
+    private void kickoffLoading(Context context) {
+        mLicenseInteractor = new OpenSourceLicenseInteractor(context);
+
+        //No request needed
+        mLicenseInteractor.enqueueRequest(new RequestType() {
+            @Override
+            public String buildQueryString() {
+                return null;
+            }
+        }, this);
+    }
+
+    private void updateView() {
+        getView().setTitle(mTitle);
+        getView().setInformationText(mInfoText);
+    }
+
     @Override
     void termsOfUseClicked(MotionEvent event) {
-        getView().navigateToAboutVIPView(R.string.about_title_terms,
-                R.string.about_terms_description,
-                event.getX(),
-                event.getY());
+
     }
 
     @Override
     void privacyPolicyClicked(MotionEvent event) {
-        getView().navigateToAboutVIPView(R.string.about_title_privacy,
-                R.string.about_privacy_description,
-                event.getX(),
-                event.getY());
+
     }
 
     @Override
     void legalNoticesClicked(MotionEvent event) {
-        getView().navigateToAboutVIPLicenseVIew(R.string.about_title_legal_notices,
-                event.getX(),
-                event.getY());
+
+    }
+
+    // Interactor Callback
+
+    @Override
+    public void openSourceLicenseResponse(String licenseInfo) {
+        mInfoText = licenseInfo;
+        updateView();
     }
 }

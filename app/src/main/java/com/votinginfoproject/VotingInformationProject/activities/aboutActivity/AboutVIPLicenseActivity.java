@@ -3,24 +3,20 @@ package com.votinginfoproject.VotingInformationProject.activities.aboutActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 
-import org.w3c.dom.Text;
-
-
-public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements AboutVIPView {
-    private  final String TAG = AboutVIPActivity.class.getSimpleName();
+/**
+ * Created by max on 4/11/16.
+ */
+public class AboutVIPLicenseActivity extends BaseActivity<AboutVIPPresenter> implements AboutVIPView {
+    private  final String TAG = AboutVIPLicenseActivity.class.getSimpleName();
 
     private TextView mAboutTextView;
 
@@ -40,16 +36,13 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
         if (getPresenter() == null) {
             Bundle extras = getIntent().getExtras();
             int titleKey = R.string.about_app_title;
-            int descriptionKey = R.string.about_app_description;
 
             if (extras != null) {
                 titleKey = extras.getInt(ExtraConstants.TITLE_KEY, titleKey);
-                descriptionKey = extras.getInt(ExtraConstants.DESCRIPTION_KEY, descriptionKey);
             }
 
-            setPresenter(new AboutVIPPresenterImpl(getApplicationContext(),
-                    titleKey,
-                    descriptionKey));
+            setPresenter(new AboutVIPLicensePresenterImpl(getApplicationContext(),
+                    titleKey));
         }
 
         mAboutTextView = (TextView) findViewById(R.id.about_app);
