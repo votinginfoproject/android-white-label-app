@@ -26,6 +26,7 @@ public class Election implements Parcelable {
             return new Election[size];
         }
     };
+
     private final String TAG = Election.class.getSimpleName();
     private String id;
     private String name;

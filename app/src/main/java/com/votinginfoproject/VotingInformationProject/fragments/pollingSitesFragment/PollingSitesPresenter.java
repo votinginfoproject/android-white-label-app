@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 import android.support.annotation.LayoutRes;
 
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
+import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
  */
 public abstract class PollingSitesPresenter extends BasePresenter<PollingSitesView> {
     abstract ArrayList<PollingLocation> getAllLocations();
+
+    abstract Election getElection();
 
     abstract void sortTypeChanged(@LayoutRes int sortType);
 

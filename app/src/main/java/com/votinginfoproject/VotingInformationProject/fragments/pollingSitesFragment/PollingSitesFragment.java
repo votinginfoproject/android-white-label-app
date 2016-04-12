@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.dummy.DummyContent.DummyItem;
+import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 
 import java.util.ArrayList;
@@ -26,9 +27,9 @@ public class PollingSitesFragment extends BottomNavigationFragment {
 
     private static final String TAG = PollingSitesFragment.class.getSimpleName();
 
-    // TODO: Customize parameter argument names
     private static final String ARG_POLLING_ITEMS = "polling-locations";
-    // TODO: Customize parameters
+    private static final String ARG_ELECTION = "election";
+
     private OnListFragmentInteractionListener mListener;
 
     private PollingSitesPresenterImpl mPresenter;
@@ -40,10 +41,11 @@ public class PollingSitesFragment extends BottomNavigationFragment {
     public PollingSitesFragment() {
     }
 
-    public static PollingSitesFragment newInstance(ArrayList<PollingLocation> pollingLocations) {
+    public static PollingSitesFragment newInstance(Election election, ArrayList<PollingLocation> pollingLocations) {
         PollingSitesFragment fragment = new PollingSitesFragment();
         Bundle args = new Bundle();
 
+        args.putParcelable(ARG_ELECTION, election);
         args.putParcelableArrayList(ARG_POLLING_ITEMS, pollingLocations);
         fragment.setArguments(args);
 
@@ -61,7 +63,9 @@ public class PollingSitesFragment extends BottomNavigationFragment {
             //Setup
             ArrayList<PollingLocation> locations = getArguments().getParcelableArrayList(ARG_POLLING_ITEMS);
 
-            mPresenter = new PollingSitesPresenterImpl(locations);
+            Election election = getArguments().getParcelable(ARG_ELECTION);
+
+            mPresenter = new PollingSitesPresenterImpl(election, locations);
 
             Log.v(TAG, getArguments().get(ARG_POLLING_ITEMS) + "");
         }
@@ -78,7 +82,7 @@ public class PollingSitesFragment extends BottomNavigationFragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            recyclerView.setAdapter(new PollingSiteItemRecyclerViewAdapter(mPresenter.getAllLocations(), mListener));
+            recyclerView.setAdapter(new PollingSiteItemRecyclerViewAdapter(mPresenter.getElection(), mPresenter.getAllLocations(), mListener));
 
             recyclerView.invalidate();
         }

@@ -113,7 +113,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != POLLS_TAB) {
             mCurrentTab = POLLS_TAB;
 
-            getView().presentParentLevelFragment(PollingSitesFragment.newInstance(new ArrayList<>(mVoterInfo.getPollingLocations())));
+            getView().presentParentLevelFragment(PollingSitesFragment.newInstance(mVoterInfo.election, new ArrayList<>(mVoterInfo.getPollingLocations())));
         } else {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
+import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 
 import java.util.ArrayList;
@@ -13,18 +14,26 @@ import java.util.ArrayList;
  */
 public class PollingSitesPresenterImpl extends PollingSitesPresenter {
     private ArrayList<PollingLocation> mLocations;
+    private Election mElection;
 
-    public PollingSitesPresenterImpl(ArrayList<PollingLocation> locations) {
+    public PollingSitesPresenterImpl(Election election, ArrayList<PollingLocation> locations) {
         if (locations == null) {
             mLocations = new ArrayList<>();
         } else {
             mLocations = locations;
         }
+
+        mElection = election;
     }
 
     @Override
     public ArrayList<PollingLocation> getAllLocations() {
         return mLocations;
+    }
+
+    @Override
+    Election getElection() {
+        return mElection;
     }
 
     @Override

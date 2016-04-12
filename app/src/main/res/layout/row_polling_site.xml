@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?selectableItemBackground"
@@ -29,9 +30,9 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="24dp"
             android:layout_marginStart="8dp"
-            android:text="EARLY VOTE"
             android:textColor="@color/description.text.gray"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="EARLY VOTE"/>
 
     </LinearLayout>
 
@@ -44,9 +45,9 @@
         android:layout_below="@id/site_type_container"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:text="First Unitarian Church of Providence - 2nd flr Auditorium - B"
         android:textColor="@color/colorPrimary"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        tools:text="First Unitarian Church of Providence - 2nd flr Auditorium - B"/>
 
     <TextView
         android:id="@+id/site_address"
@@ -57,8 +58,8 @@
         android:layout_below="@id/site_title"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:text="1 Benevolent St, Providence, RI 02906"
-        android:textColor="@color/description.text.gray"/>
+        android:textColor="@color/description.text.gray"
+        tools:text="1 Benevolent St, Providence, RI 02906"/>
 
     <TextView
         android:id="@+id/site_hours"
@@ -69,8 +70,8 @@
         android:layout_below="@id/site_address"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:text="7am - 7pm"
-        android:textColor="@color/description.text.gray"/>
+        android:textColor="@color/description.text.gray"
+        tools:text="7am - 7pm"/>
 
 
     <ImageView
