@@ -9,4 +9,7 @@ public class ExtraConstants {
 
     public static final String TITLE_KEY = "Title_key";
     public static final String DESCRIPTION_KEY = "Description_key";
+
+    public static final String TRANSITION_START_KEY = "Transition_start_key";
 }
+

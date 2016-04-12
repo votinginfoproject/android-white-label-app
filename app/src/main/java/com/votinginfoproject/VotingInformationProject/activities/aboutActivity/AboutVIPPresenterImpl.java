@@ -1,12 +1,14 @@
 package com.votinginfoproject.VotingInformationProject.activities.aboutActivity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.view.MotionEvent;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.OpenSourceLicenseInteractor;
 
 /**
@@ -19,20 +21,22 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     private static final String INFO_TITLE_KEY = "INFO_TITLE";
     private static final String INFO_TEXT_KEY = "INFO_TEXT";
 
-    private OpenSourceLicenseInteractor mOpenSourceLicenseInteractor;
-
     protected Integer mTitleStringID;
     protected String mTitle;
 
     protected Integer mInfoTextStringID;
     protected String mInfoText;
 
-    public AboutVIPPresenterImpl(Context context, @StringRes int titleStringID, @StringRes int infoTextStringID) {
+    private CoordinatePair mTransitionPoint;
+
+    public AboutVIPPresenterImpl(Context context, @StringRes int titleStringID, @StringRes int infoTextStringID, CoordinatePair transitionPoint) {
         mTitleStringID = titleStringID;
         mTitle = context.getString(mTitleStringID);
 
         mInfoTextStringID = infoTextStringID;
         mInfoText = context.getString(mInfoTextStringID);
+
+        mTransitionPoint = transitionPoint;
     }
 
     @Override
@@ -41,6 +45,8 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
             mTitle = savedState.getString(INFO_TITLE_KEY);
             mInfoText = savedState.getString(INFO_TEXT_KEY);
         }
+
+
     }
 
     @Override
@@ -49,6 +55,10 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
 
         aboutVIPView.setTitle(mTitle);
         aboutVIPView.setInformationText(mInfoText);
+
+        if (mTransitionPoint != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getView().performCircularReveal(mTransitionPoint);
+        }
     }
 
     @Override
@@ -64,24 +74,24 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
 
     @Override
     void termsOfUseClicked(MotionEvent event) {
+        CoordinatePair transitionPoint = new CoordinatePair((int) event.getRawX(), (int) event.getRawY());
         getView().navigateToAboutVIPView(R.string.about_title_terms,
                 R.string.about_terms_description,
-                event.getX(),
-                event.getY());
+                transitionPoint);
     }
 
     @Override
     void privacyPolicyClicked(MotionEvent event) {
+        CoordinatePair transitionPoint = new CoordinatePair((int) event.getRawX(), (int) event.getRawY());
         getView().navigateToAboutVIPView(R.string.about_title_privacy,
                 R.string.about_privacy_description,
-                event.getX(),
-                event.getY());
+                transitionPoint);
     }
 
     @Override
     void legalNoticesClicked(MotionEvent event) {
-        getView().navigateToAboutVIPLicenseVIew(R.string.about_title_legal_notices,
-                event.getX(),
-                event.getY());
+        CoordinatePair transitionPoint = new CoordinatePair((int) event.getRawX(), (int) event.getRawY());
+        getView().navigateToAboutVIPLicenseView(R.string.about_title_legal_notices,
+                transitionPoint);
     }
 }

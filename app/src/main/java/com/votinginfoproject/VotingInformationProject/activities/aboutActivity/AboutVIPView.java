@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities.aboutActivity;
 
+import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
+
 /**
  * Created by max on 4/8/16.
  */
@@ -10,7 +12,9 @@ public interface AboutVIPView {
 
     void setInformationText(String informationText);
 
-    void navigateToAboutVIPView(int infoTitleKey, int infoTextKey, float transitionPointX, float transitionPointY);
+    void performCircularReveal(CoordinatePair transitionPoint);
 
-    void navigateToAboutVIPLicenseVIew(int infoTitleKey, float transitionPointX, float transitionPointY);
+    void navigateToAboutVIPView(int infoTitleKey, int infoTextKey, CoordinatePair transitionPoint);
+
+    void navigateToAboutVIPLicenseView(int infoTitleKey, CoordinatePair transitionPoint);
 }
