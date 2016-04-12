@@ -6,7 +6,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.TestFragment2;
+import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+
+import java.util.ArrayList;
 
 /**
  * Created by marcvandehey on 4/6/16.
@@ -87,7 +91,6 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();
             getView().presentChildLevelFragment(TestFragment.newInstance("ballot child", "nope"));
-
         }
     }
 
@@ -96,11 +99,11 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != DETAILS_TAB) {
             mCurrentTab = DETAILS_TAB;
 
-            getView().presentParentLevelFragment(TestFragment.newInstance("details", "nope"));
+            getView().presentParentLevelFragment(TestFragment2.newInstance("details", "nope"));
         } else {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();
-            getView().presentChildLevelFragment(TestFragment.newInstance("details child", "nope"));
+            getView().presentChildLevelFragment(TestFragment2.newInstance("details child", "nope"));
 
         }
     }
@@ -110,11 +113,10 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != POLLS_TAB) {
             mCurrentTab = POLLS_TAB;
 
-            getView().presentParentLevelFragment(TestFragment.newInstance("polling", "nope"));
+            getView().presentParentLevelFragment(PollingSitesFragment.newInstance(new ArrayList<>(mVoterInfo.getPollingLocations())));
         } else {
             //If currently selected, reset the scroll position
-//            getView().scrollCurrentFragmentToTop();
-            getView().presentChildLevelFragment(TestFragment.newInstance("polling child", "nope"));
+            getView().scrollCurrentFragmentToTop();
         }
     }
 

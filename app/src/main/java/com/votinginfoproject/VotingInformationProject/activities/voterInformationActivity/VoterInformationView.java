@@ -1,16 +1,16 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 
-import com.votinginfoproject.VotingInformationProject.fragments.ScrollToTopFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 
 /**
  * Created by marcvandehey on 4/6/16.
  */
 public interface VoterInformationView {
 
-    void presentParentLevelFragment(ScrollToTopFragment parentLevel);
+    void presentParentLevelFragment(BottomNavigationFragment parentLevel);
 
-    void presentChildLevelFragment(ScrollToTopFragment childLevelFragment);
+    void presentChildLevelFragment(BottomNavigationFragment childLevelFragment);
 
     void navigateBack();
 

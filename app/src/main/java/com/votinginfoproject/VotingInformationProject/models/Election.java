@@ -1,24 +1,39 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
  */
-public class Election {
+public class Election implements Parcelable {
+    /**
+     * Static field used to regenerate object, individually or as arrays
+     */
+    public static final Parcelable.Creator<Election> CREATOR = new Parcelable.Creator<Election>() {
+        public Election createFromParcel(Parcel pc) {
+            return new Election(pc);
+        }
+
+        public Election[] newArray(int size) {
+            return new Election[size];
+        }
+    };
     private final String TAG = Election.class.getSimpleName();
     private String id;
     private String name;
     private String electionDay;
 
     //Skip Gson Serialization for these fields
-    private transient SimpleDateFormat api_date_format;
-    private transient SimpleDateFormat api_date_display_format;
+    private transient SimpleDateFormat api_date_format = null;
+    private transient SimpleDateFormat api_date_display_format = null;
     private transient Date currentDay;
 
     public Election() {
@@ -29,15 +44,24 @@ public class Election {
         this.id = id;
         this.name = name;
         this.electionDay = electionDay;
-        api_date_format = new SimpleDateFormat("yyyy-MM-dd");
-        api_date_display_format = new SimpleDateFormat("MMMM d, yyyy");
     }
 
-    /* Helper function to convert date from API string to Date object
+    public Election(Parcel parcel) {
+        this.id = parcel.readString();
+        this.name = parcel.readString();
+        this.electionDay = parcel.readString();
+    }
+
+    /*
+     * Helper function to convert date from API string to Date object
      */
     public Date getDayFromString(String str_date) {
         if (str_date == null || str_date.isEmpty()) {
             return null;
+        }
+
+        if (api_date_format == null) {
+            api_date_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         }
 
         try {
@@ -80,8 +104,17 @@ public class Election {
             return "";
         }
 
+        if (api_date_format == null) {
+            api_date_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        }
+
+        if (api_date_display_format == null) {
+            api_date_display_format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+        }
+
         try {
             Date election_date = api_date_format.parse(electionDay);
+
             return api_date_display_format.format(election_date);
         } catch (ParseException e) {
             Log.e(TAG, "Failed to parse election date " + electionDay);
@@ -111,5 +144,17 @@ public class Election {
      */
     public String getId() {
         return (id != null) ? id : "";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(electionDay);
     }
 }

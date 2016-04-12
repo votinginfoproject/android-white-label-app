@@ -11,12 +11,15 @@ import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
-import com.votinginfoproject.VotingInformationProject.fragments.ScrollToTopFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
 
 
-public class VoterInformationActivity extends BaseActivity<VoterInformationPresenter> implements VoterInformationView, BottomNavigationBar.BottomNavigationBarCallback {
+public class VoterInformationActivity extends BaseActivity<VoterInformationPresenter> implements
+        VoterInformationView,
+        BottomNavigationBar.BottomNavigationBarCallback,
+        BottomNavigationFragment.OnBackPressedListener {
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
 
     private BottomNavigationBar mBottomNavigationBar;
@@ -50,7 +53,10 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             String voterInfoString = extras.getString(ExtraConstants.VOTER_INFO);
             String filter = extras.getString(ExtraConstants.PARTY_FILTER);
 
-            setPresenter(new VoterInformationPresenterImpl(new Gson().fromJson(voterInfoString, VoterInfo.class), filter));
+            //Inflate Voter Info from Home Activity
+            VoterInfo voterInfo = new Gson().fromJson(voterInfoString, VoterInfo.class);
+
+            setPresenter(new VoterInformationPresenterImpl(voterInfo, filter));
         }
     }
 
@@ -101,7 +107,9 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
-    public void presentParentLevelFragment(ScrollToTopFragment parentLevelFragment) {
+    public void presentParentLevelFragment(BottomNavigationFragment parentLevelFragment) {
+        parentLevelFragment.setOnBackPressedListener(this);
+
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
@@ -115,8 +123,11 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
-    public void presentChildLevelFragment(ScrollToTopFragment childLevelFragment) {
+    public void presentChildLevelFragment(BottomNavigationFragment childLevelFragment) {
+        childLevelFragment.setOnBackPressedListener(this);
+
         FragmentManager manager = getFragmentManager();
+
         FragmentTransaction transaction = manager.beginTransaction();
 
         transaction.replace(R.id.layout_content, childLevelFragment);

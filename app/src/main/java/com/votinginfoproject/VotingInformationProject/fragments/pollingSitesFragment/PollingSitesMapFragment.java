@@ -1,14 +1,19 @@
-package com.votinginfoproject.VotingInformationProject.fragments;
+package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 
 
@@ -20,7 +25,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigation
  * Use the {@link TestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment extends BottomNavigationFragment {
+public class PollingSitesMapFragment extends BottomNavigationFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +39,7 @@ public class TestFragment extends BottomNavigationFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TestFragment() {
+    public PollingSitesMapFragment() {
         // Required empty public constructor
     }
 
@@ -47,8 +52,8 @@ public class TestFragment extends BottomNavigationFragment {
      * @return A new instance of fragment TestFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TestFragment newInstance(String param1, String param2) {
-        TestFragment fragment = new TestFragment();
+    public static PollingSitesMapFragment newInstance(String param1, String param2) {
+        PollingSitesMapFragment fragment = new PollingSitesMapFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -58,7 +63,11 @@ public class TestFragment extends BottomNavigationFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        this.setHasOptionsMenu(true);
+
         if (getArguments() != null) {
             if (mParam1 == null) {
                 mParam1 = getArguments().getString(ARG_PARAM1);
@@ -66,6 +75,12 @@ public class TestFragment extends BottomNavigationFragment {
 
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     public void updateLabel(String text) {
@@ -77,19 +92,63 @@ public class TestFragment extends BottomNavigationFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        setHasOptionsMenu(true);
+        setMenuVisibility(true);
+
         View inflaterView = inflater.inflate(R.layout.fragment_test, container, false);
 
         mTextView = (TextView) inflaterView.findViewById(R.id.text_view);
         mTextView.setText(mParam1);
 
-        setHasOptionsMenu(true);
 
         return inflaterView;
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
     @Override
-    public int getMenu() {
-        return R.menu.polling_sites_map;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+    }
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        super.onOptionsMenuClosed(menu);
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+    }
+
+    @Override
+    public void registerForContextMenu(View view) {
+        super.registerForContextMenu(view);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        Log.v("here", "preparing menu");
+
+        menu.getItem(0).getActionView().setBackgroundColor(getContext().getColor(R.color.background_blue));
+
     }
 
     @Override
@@ -105,7 +164,12 @@ public class TestFragment extends BottomNavigationFragment {
 
     @Override
     public int getTitle() {
-        return R.string.common_google_play_services_install_title;
+        return R.string.about_app_title;
+    }
+
+    @Override
+    public int getMenu() {
+        return R.menu.polling_sites_list;
     }
 
     /**

@@ -72,7 +72,6 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
             ballotNavigationButton.setUnselected();
             detailsNavigationButton.setUnselected();
 
-
             mTabBarListener.get().pollsButtonSelected();
         } else if (v.equals(ballotNavigationButton)) {
             pollsNavigationButton.setUnselected();

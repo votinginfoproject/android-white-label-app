@@ -4,11 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.ItemFragment.OnListFragmentInteractionListener;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.dummy.DummyContent.DummyItem;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 
 import java.util.List;
 
@@ -17,12 +18,12 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<PollingSiteItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<PollingLocation> mValues;
+    private final PollingSitesFragment.OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public PollingSiteItemRecyclerViewAdapter(List<PollingLocation> items, PollingSitesFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,15 +31,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.row_polling_site, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        PollingLocation location = mValues.get(position);
+
+        holder.mItem = location;
+        holder.mSiteType.setText("Site type here");
+        holder.mSiteTitle.setText(location.address.locationName);
+        holder.mSiteAddress.setText(location.address.line1);
+        holder.mSiteHours.setText(location.pollingHours);
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +52,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+//                    mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -59,20 +65,27 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final ImageView mColorKeyImageView;
+        public final TextView mSiteType;
+        public final TextView mSiteTitle;
+        public final TextView mSiteAddress;
+        public final TextView mSiteHours;
+
+        public PollingLocation mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mColorKeyImageView = (ImageView) view.findViewById(R.id.color_key);
+            mSiteType = (TextView) view.findViewById(R.id.site_type);
+            mSiteTitle = (TextView) view.findViewById(R.id.site_title);
+            mSiteAddress = (TextView) view.findViewById(R.id.site_address);
+            mSiteHours = (TextView) view.findViewById(R.id.site_hours);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mSiteTitle.getText() + "'";
         }
     }
 }

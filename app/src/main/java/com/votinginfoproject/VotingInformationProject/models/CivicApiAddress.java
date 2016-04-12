@@ -1,9 +1,25 @@
 package com.votinginfoproject.VotingInformationProject.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by kathrynkillebrew on 7/14/14.
  */
-public class CivicApiAddress {
+public class CivicApiAddress implements Parcelable {
+    /**
+     * Static field used to regenerate object, individually or as arrays
+     */
+    public static final Parcelable.Creator<CivicApiAddress> CREATOR = new Parcelable.Creator<CivicApiAddress>() {
+        public CivicApiAddress createFromParcel(Parcel pc) {
+            return new CivicApiAddress(pc);
+        }
+
+        public CivicApiAddress[] newArray(int size) {
+            return new CivicApiAddress[size];
+        }
+    };
+
     public String locationName;
     public String line1;
     public String line2;
@@ -11,11 +27,26 @@ public class CivicApiAddress {
     public String city;
     public String state;
     public String zip;
-
     // the co-ordinates are not in the API response; the app will set them when geocoded
     public double latitude;
     public double longitude;
     public double distance;
+
+    /**
+     * Creator from Parcel, reads back fields IN THE ORDER they were written
+     */
+    public CivicApiAddress(Parcel parcel) {
+        locationName = parcel.readString();
+        line1 = parcel.readString();
+        line2 = parcel.readString();
+        line3 = parcel.readString();
+        city = parcel.readString();
+        state = parcel.readString();
+        zip = parcel.readString();
+        latitude = parcel.readDouble();
+        longitude = parcel.readDouble();
+        distance = parcel.readDouble();
+    }
 
     @Override
     public String toString() {
@@ -91,5 +122,24 @@ public class CivicApiAddress {
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(locationName);
+        dest.writeString(line1);
+        dest.writeString(line2);
+        dest.writeString(line3);
+        dest.writeString(city);
+        dest.writeString(state);
+        dest.writeString(zip);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeDouble(distance);
     }
 }

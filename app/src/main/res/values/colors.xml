@@ -9,6 +9,8 @@
     <color name="home.text">@android:color/white</color>
     <color name="list.selected">#DCDCDC</color>
 
+    <color name="description.text.gray">#757575</color>
+
     <color name="background.blue">#0068AC</color>
     <color name="button_blue">#00234b</color>
     <color name="item_header_blue">#0067ab</color>

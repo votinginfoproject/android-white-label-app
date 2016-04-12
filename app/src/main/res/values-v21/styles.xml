@@ -18,6 +18,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorEdgeEffect">@color/colorAccentDark</item>
 
+        <item name="android:panelColorBackground">@drawable/selector_overflow_menu</item>
+        <!--<item name="android:panelFullBackground">@drawable/selector_overflow_menu</item>-->
+
+
         <item name="android:windowIsTranslucent">false</item>
 
         <!-- enable window content transitions -->

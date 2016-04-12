@@ -145,6 +145,14 @@ public class VoterInfo {
         }
     }
 
+    public ArrayList<PollingLocation> getPollingLocations() {
+        if (allLocations == null || allLocations.isEmpty()) {
+            setUpLocations();
+        }
+
+        return allLocations;
+    }
+
     /**
      * Helper function to build a list of open polling locations from a given list
      *
@@ -187,10 +195,6 @@ public class VoterInfo {
 
     public List<PollingLocation> getOpenEarlyVoteSites() {
         return openEarlyVoteSites;
-    }
-
-    public List<PollingLocation> getPollingLocations() {
-        return usePollingLocations;
     }
 
     /**

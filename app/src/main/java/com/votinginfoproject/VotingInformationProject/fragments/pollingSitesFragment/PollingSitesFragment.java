@@ -2,17 +2,19 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.fragments.ScrollToTopFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.dummy.DummyContent;
+import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.dummy.DummyContent.DummyItem;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -20,28 +22,34 @@ import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFrag
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ItemFragment extends ScrollToTopFragment {
+public class PollingSitesFragment extends BottomNavigationFragment {
+
+    private static final String TAG = PollingSitesFragment.class.getSimpleName();
 
     // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String ARG_POLLING_ITEMS = "polling-locations";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private PollingSitesPresenterImpl mPresenter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ItemFragment() {
+    public PollingSitesFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ItemFragment newInstance(int columnCount) {
-        ItemFragment fragment = new ItemFragment();
+    public static PollingSitesFragment newInstance(ArrayList<PollingLocation> pollingLocations) {
+        PollingSitesFragment fragment = new PollingSitesFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+
+        args.putParcelableArrayList(ARG_POLLING_ITEMS, pollingLocations);
         fragment.setArguments(args);
+
+        Log.v(TAG, pollingLocations + "");
+
+
         return fragment;
     }
 
@@ -50,26 +58,31 @@ public class ItemFragment extends ScrollToTopFragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            //Setup
+            ArrayList<PollingLocation> locations = getArguments().getParcelableArrayList(ARG_POLLING_ITEMS);
+
+            mPresenter = new PollingSitesPresenterImpl(locations);
+
+            Log.v(TAG, getArguments().get(ARG_POLLING_ITEMS) + "");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_pollingsiteitem_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+            recyclerView.setAdapter(new PollingSiteItemRecyclerViewAdapter(mPresenter.getAllLocations(), mListener));
+
+            recyclerView.invalidate();
         }
+
         return view;
     }
 
@@ -77,18 +90,23 @@ public class ItemFragment extends ScrollToTopFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
+//        if (context instanceof OnListFragmentInteractionListener) {
+//            mListener = (OnListFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnListFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.bottom_navigation_title_polls;
     }
 
     @Override

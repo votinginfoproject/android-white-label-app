@@ -115,8 +115,8 @@
     <string name="locations.button.list_map">map</string>
     <string name="locations.list.label.all_sites">All Sites</string>
     <string name="locations.list.label.early_voting">Early Voting</string>
-    <string name="locations.list.label.polling_sites">Polling Sites</string>
-    <string name="locations.list.label.drop_off">Drop Off</string>
+    <string name="locations.list.label.polling_sites">Polling Locations</string>
+    <string name="locations.list.label.drop_off">Drop Boxes</string>
     <string name="locations.list.none_found">No locations found.</string>
     <string name="locations.distance_suffix_imperial">mi.</string>
     <string name="locations.distance_suffix_metric">km</string>
