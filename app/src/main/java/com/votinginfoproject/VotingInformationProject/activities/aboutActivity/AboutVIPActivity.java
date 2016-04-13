@@ -1,179 +1,140 @@
 package com.votinginfoproject.VotingInformationProject.activities.aboutActivity;
 
 import android.animation.Animator;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
+
+import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
-import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
+import com.votinginfoproject.VotingInformationProject.fragments.AboutVIPFragment;
 import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
-
-import org.w3c.dom.Text;
-
 
 public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements AboutVIPView {
     private  final String TAG = AboutVIPActivity.class.getSimpleName();
 
-    private TextView mAboutTextView;
-
-    private View mAdditionalInformationView;
-
-    private View mTermsOfUseButton;
-    private View mPrivacyPolicyButton;
-    private View mLegalNoticesbutton;
+    private View mFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_about_vip);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setPresenter(new AboutVIPPresenterImpl(getApplicationContext()));
 
-        int baseTitleKey = R.string.about_app_title;
-        int titleKey = baseTitleKey;
-        int descriptionKey = R.string.about_app_description;
-        CoordinatePair transitionPoint = null;
-
-        if (getPresenter() == null) {
-            Bundle extras = getIntent().getExtras();
-
-            if (extras != null) {
-                titleKey = extras.getInt(ExtraConstants.TITLE_KEY, titleKey);
-                descriptionKey = extras.getInt(ExtraConstants.DESCRIPTION_KEY, descriptionKey);
-                transitionPoint = extras.getParcelable(ExtraConstants.TRANSITION_START_KEY);
-            }
-        }
-
-        setPresenter(new AboutVIPPresenterImpl(getApplicationContext(),
-                titleKey,
-                descriptionKey,
-                transitionPoint));
-
-        if (transitionPoint != null) {
-            findViewById(android.R.id.content).setVisibility(View.INVISIBLE);
-        }
-
-        mAboutTextView = (TextView) findViewById(R.id.about_app);
-        mAdditionalInformationView = findViewById(R.id.additional_information);
-        mTermsOfUseButton = findViewById(R.id.button_terms_of_use);
-        mPrivacyPolicyButton = findViewById(R.id.button_privacy_policy);
-        mLegalNoticesbutton = findViewById(R.id.button_legal_notices);
-
-        //We only show additional information when on the base AboutVIP screen
-        if(titleKey == baseTitleKey) {
-            mAdditionalInformationView.setVisibility(View.VISIBLE);
-        }
-
-        setupViewListeners();
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
+        mFragmentContainer = findViewById(R.id.fragment_container);
     }
 
-    private void setupViewListeners() {
-        mTermsOfUseButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    getPresenter().termsOfUseClicked(event);
-                }
-                return false;
-            }
-        });
-
-        mPrivacyPolicyButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    getPresenter().privacyPolicyClicked(event);
-                }
-                return false;
-            }
-        });
-
-        mLegalNoticesbutton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    getPresenter().legalNoticesClicked(event);
-                }
-                return false;
-            }
-        });
-    }
-
-    @TargetApi(21)
-    public void performCircularReveal(final CoordinatePair transitionPoint) {
-        final View rootView = findViewById(android.R.id.content);
-        if (rootView != null) {
-            rootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    v.removeOnLayoutChangeListener(this);
-
-                    int cx = transitionPoint.x;
-                    int cy = transitionPoint.y;
-
-                    Log.e(TAG, v.getHeight() + " (" + cx + ", " + cy + ")");
-
-                    int radius = (int) Math.hypot(right, bottom);
-
-                    Animator reveal = ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, radius);
-                    reveal.setInterpolator(new DecelerateInterpolator(2f));
-                    reveal.setDuration(1000);
-                    rootView.setVisibility(View.VISIBLE);
-                    reveal.start();
-                }
-            });
-        }
+    @Override
+    public void onBackPressed() {
+        getPresenter().onBackPressed();
     }
 
     @Override
     public void setTitle(String title) {
-        super.setTitle(title);
+        if (getTopFragment() != null) {
+            getTopFragment().setTitle(title);
+        }
     }
 
     @Override
     public void setInformationText(String informationText) {
-        mAboutTextView.setText(informationText);
+        if (getTopFragment() != null) {
+            getTopFragment().setInfoText(informationText);
+        }
     }
 
     @Override
-    public void navigateToAboutVIPView(int infoTitleKey, int infoTextKey, CoordinatePair transitionPoint) {
-        Intent intent = new Intent(this, AboutVIPActivity.class);
-        intent.putExtra(ExtraConstants.TITLE_KEY, infoTitleKey);
-        intent.putExtra(ExtraConstants.DESCRIPTION_KEY, infoTextKey);
-        intent.putExtra(ExtraConstants.TRANSITION_START_KEY, transitionPoint);
-
-        startActivity(intent);
+    public void navigateToAboutView(String title, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
+        showNewAboutScreen(title, infoText, showsAdditionalInfoButtons, transitionPoint);
     }
 
     @Override
-    public void navigateToAboutVIPLicenseView(int infoTitleKey, CoordinatePair transitionPoint) {
-        Intent intent = new Intent(this, AboutVIPLicenseActivity.class);
+    public void navigateToPreviousView() {
+        if (getFragmentCount() > 1) {
+            AboutVIPFragment toRemove = getTopFragment();
+            navigateToPreviousFragment(toRemove);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-        intent.putExtra(ExtraConstants.TITLE_KEY, infoTitleKey);
-        intent.putExtra(ExtraConstants.TRANSITION_START_KEY, transitionPoint);
+    private int getFragmentCount() {
+        FragmentManager manager = getFragmentManager();
+        return manager.getBackStackEntryCount();
+    }
 
-        startActivity(intent);
+    @Nullable
+    private AboutVIPFragment getTopFragment() {
+        FragmentManager manager = getFragmentManager();
+        int entryCount = manager.getBackStackEntryCount();
+
+        if (entryCount > 0) {
+            FragmentManager.BackStackEntry entry = manager.getBackStackEntryAt(entryCount - 1);
+            Fragment topFragment = manager.findFragmentByTag(entry.getName());
+
+            if (topFragment instanceof AboutVIPFragment) {
+                return (AboutVIPFragment) topFragment;
+            }
+        }
+        return null;
+    }
+
+    public void showNewAboutScreen(String title, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
+        AboutVIPFragment newFragment = AboutVIPFragment.newInstance(title, infoText, showsAdditionalInfoButtons, transitionPoint);
+
+        String fragmentTag = newFragment.hashCode() + "";
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(mFragmentContainer.getId(), newFragment, fragmentTag);
+        transaction.addToBackStack(fragmentTag);
+        transaction.commit();
+    }
+
+    private void navigateToPreviousFragment(final AboutVIPFragment fragmentToRemove) {
+        Animator unreveal = fragmentToRemove.prepareUnrevealAnimator();
+        unreveal.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                //Required onAnimationStart override
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                getFragmentManager().popBackStackImmediate();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                //Required onAnimationCancel override
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                //Required onAnimationRepeat override
+            }
+        });
+        unreveal.start();
+    }
+
+    public void termsOfUseClicked(MotionEvent event) {
+        getPresenter().termsOfUseClicked(event);
+    }
+
+    public void privacyPolicyClicked(MotionEvent event) {
+        getPresenter().privacyPolicyClicked(event);
+    }
+
+    public void legalNoticesClicked(MotionEvent event) {
+        getPresenter().legalNoticesClicked(event);
+    }
+
+    public void viewTransitionEnded() {
+        getPresenter().viewTransitionEnded();
     }
 }

@@ -58,12 +58,6 @@
         <activity
             android:parentActivityName=".activities.homeActivity.HomeActivity"
             android:name=".activities.aboutActivity.AboutVIPActivity"
-            android:theme="@style/Theme.Transparent"
-            android:label="@string/about.app.title">
-        </activity>
-        <activity
-            android:parentActivityName=".activities.homeActivity.HomeActivity"
-            android:name=".activities.aboutActivity.AboutVIPLicenseActivity"
             android:label="@string/about.app.title">
         </activity>
     </application>

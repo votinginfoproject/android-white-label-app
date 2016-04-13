@@ -9,9 +9,13 @@ import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
  */
 public abstract class AboutVIPPresenter extends BasePresenter<AboutVIPView> {
 
+    abstract void viewTransitionEnded();
+
     abstract void termsOfUseClicked(MotionEvent event);
 
     abstract void privacyPolicyClicked(MotionEvent event);
 
     abstract void legalNoticesClicked(MotionEvent event);
+
+    abstract void onBackPressed();
 }

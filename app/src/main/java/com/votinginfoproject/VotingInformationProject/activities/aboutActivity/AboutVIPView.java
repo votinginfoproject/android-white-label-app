@@ -12,9 +12,7 @@ public interface AboutVIPView {
 
     void setInformationText(String informationText);
 
-    void performCircularReveal(CoordinatePair transitionPoint);
+    void navigateToAboutView(String title, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint);
 
-    void navigateToAboutVIPView(int infoTitleKey, int infoTextKey, CoordinatePair transitionPoint);
-
-    void navigateToAboutVIPLicenseView(int infoTitleKey, CoordinatePair transitionPoint);
+    void navigateToPreviousView();
 }
