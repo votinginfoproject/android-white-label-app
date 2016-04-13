@@ -95,7 +95,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                         (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    getPresenter().searchButtonClicked(getBaseContext(), mAddressEditText.getText().toString());
+                    getPresenter().searchButtonClicked(mAddressEditText.getText().toString());
                 }
 
                 // Return false to close the keyboard

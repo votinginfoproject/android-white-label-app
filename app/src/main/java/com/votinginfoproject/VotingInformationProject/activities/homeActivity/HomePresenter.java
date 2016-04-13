@@ -21,5 +21,5 @@ public abstract class HomePresenter extends BasePresenter<HomeView> {
 
     public abstract void aboutButtonClicked();
 
-    public abstract void searchButtonClicked(@NonNull Context context, @NonNull String searchAddress);
+    public abstract void searchButtonClicked(@NonNull String searchAddress);
 }

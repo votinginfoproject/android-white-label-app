@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models.singletons;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 import java.util.Locale;
@@ -20,15 +21,15 @@ public class UserPreferences {
     private Location homeLocation;
     private VoterInfo voterInfo;
 
-    private static UserPreferences getInstance() {
-        return ourInstance;
-    }
-
     private UserPreferences() {
         this.useMetric = !Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country());
         this.homeLocation = null;
         this.voterInfo = null;
         this.selectedParty = "";
+    }
+
+    private static UserPreferences getInstance() {
+        return ourInstance;
     }
 
     public static Location getHomeLocation() {
@@ -39,12 +40,24 @@ public class UserPreferences {
         getInstance().homeLocation = homeLocation;
     }
 
+    public static LatLng getHomeLatLong() {
+        double latitude = 0.0;
+        double longitude = 0.0;
+
+        if (getInstance().homeLocation != null) {
+            latitude = getInstance().homeLocation.getLatitude();
+            longitude = getInstance().homeLocation.getLongitude();
+        }
+
+        return new LatLng(latitude, longitude);
+    }
+
     public static boolean useMetric() {
         return getInstance().useMetric;
     }
 
-    public static boolean setUseMetric(boolean useMetric) {
-        return getInstance().useMetric = useMetric;
+    public static VoterInfo getVoterInfo() {
+        return getInstance().voterInfo;
     }
 
     public static void setVoterInfo(VoterInfo voterInfo) {
@@ -52,15 +65,11 @@ public class UserPreferences {
         getInstance().voterInfo = voterInfo;
     }
 
-    public static VoterInfo getVoterInfo() {
-        return getInstance().voterInfo;
+    public static String getSelectedParty() {
+        return ourInstance.selectedParty;
     }
 
     public static void setSelectedParty(String selectedParty) {
         ourInstance.selectedParty = selectedParty;
-    }
-
-    public static String getSelectedParty() {
-        return ourInstance.selectedParty;
     }
 }

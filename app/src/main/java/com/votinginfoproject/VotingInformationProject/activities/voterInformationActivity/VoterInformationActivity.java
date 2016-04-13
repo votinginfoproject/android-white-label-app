@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
+import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -157,9 +158,9 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void scrollCurrentFragmentToTop() {
-//        if (lastFragment != null) {
-//            lastFragment.resetView();
-//        }
+        if (lastFragment != null && lastFragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) lastFragment).resetView();
+        }
     }
 
     @Override

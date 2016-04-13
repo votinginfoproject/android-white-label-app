@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
-
 import android.app.Fragment;
 
 /**

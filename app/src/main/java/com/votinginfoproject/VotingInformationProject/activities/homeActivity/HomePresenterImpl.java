@@ -1,19 +1,27 @@
 package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.BuildConfig;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.asynctasks.GeocodeQuery;
+import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.CivicInfoInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.CivicInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.StopLightCivicInfoRequest;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 
@@ -31,13 +39,16 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     private ArrayList<Election> mElections;
     private ArrayList<String> mParties;
 
+    private Context mContext;
+
     private int mSelectedElection;
     private int mSelectedParty;
 
     private String allPartiesString;
 
-    public HomePresenterImpl(Context context) {
+    public HomePresenterImpl(@NonNull Context context) {
         this.mVoterInfo = null;
+        mContext = context;
 
         mSelectedElection = 0;
         mSelectedParty = 0;
@@ -89,6 +100,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     @Override
     public void onDestroy() {
         setView(null);
+        mContext = null;
 
         cancelSearch();
     }
@@ -109,7 +121,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             mSelectedElection = election;
             getView().setElectionText(mElections.get(mSelectedElection).getName());
 
-            searchElection(context, address, mElections.get(election).getId());
+            searchElection(address, mElections.get(election).getId());
         }
     }
 
@@ -166,13 +178,13 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     }
 
     @Override
-    public void searchButtonClicked(@NonNull Context context, @NonNull String searchAddress) {
+    public void searchButtonClicked(@NonNull String searchAddress) {
         Log.d(TAG, "Search Button Clicked");
 
-        searchElection(context, searchAddress, "");
+        searchElection(searchAddress, "");
     }
 
-    private void searchElection(@NonNull Context context, @NonNull String searchAddress, @NonNull String electionId) {
+    private void searchElection(@NonNull String searchAddress, @NonNull String electionId) {
         if (mCivicInteractor == null) {
             getView().hideElectionPicker();
             getView().hidePartyPicker();
@@ -194,16 +206,16 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             CivicInfoRequest request;
 
             //Check if we are building with the Debug settings, if so attempt to use StopLight
-            if (BuildConfig.DEBUG && context.getResources().getBoolean(R.bool.use_stoplight)) {
-                searchAddress = context.getString(R.string.test_address);
+            if (BuildConfig.DEBUG && mContext.getResources().getBoolean(R.bool.use_stoplight)) {
+                searchAddress = mContext.getString(R.string.test_address);
 
-                request = new StopLightCivicInfoRequest(context, electionId, searchAddress);
+                request = new StopLightCivicInfoRequest(mContext, electionId, searchAddress);
 
                 //Set address to AboutVIPActivity string for directions api
 
                 getView().overrideSearchAddress(searchAddress);
             } else {
-                request = new CivicInfoRequest(context, electionId, searchAddress);
+                request = new CivicInfoRequest(mContext, electionId, searchAddress);
             }
 
             mCivicInteractor.enqueueRequest(request, this);
@@ -221,35 +233,33 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
     // Interactor Callback
 
+    /**
+     * This chain preloads all the needed data before we load into the app, Currently chained loading calls
+     * Get Civic Info > Geocode Address Entered > Geocode Polling Locations > Geocode State Admin Addresses > Geocode Local Admin Addresses
+     *
+     * @param response
+     */
+
     @Override
     public void civicInfoResponse(VoterInfo response) {
         if (response != null) {
             if (response.isSuccessful()) {
                 mVoterInfo = response;
 
-                getView().showGoButton();
-                getView().hideStatusView();
+                //If this succeeds, it is assumed Play services is available for the rest of the app
+                GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+                int code = api.isGooglePlayServicesAvailable(mContext);
+                if (code == ConnectionResult.SUCCESS) {
+                    //Start loading up location overhead data
 
-                if (mVoterInfo.otherElections != null && mVoterInfo.otherElections.size() > 0) {
-                    //Setup all elections data and show chooser
+                    mVoterInfo.setUpLocations();
 
-                    mElections = new ArrayList<>(mVoterInfo.otherElections);
+                    geocodeHomeAddress(mVoterInfo.normalizedInput.toGeocodeString());
+                } else {
+                    Log.e(TAG, "Play Services Unavailable");
+                    updateViewWithVoterInfo();
 
-                    //Add the default election to the front of the list.
-                    mElections.add(0, mVoterInfo.election);
-
-                    getView().showElectionPicker();
-                    mSelectedElection = 0;
-                    getView().setElectionText(mVoterInfo.election.getName());
-                }
-
-                mParties = mVoterInfo.getUniqueParties();
-                mParties.add(0, allPartiesString);
-
-                if (mParties.size() > 1) {
-                    getView().setPartyText(mParties.get(0));
-                    mSelectedParty = 0;
-                    getView().showPartyPicker();
+                    getView().showMessage(R.string.locations_map_error_play_services_unavailable);
                 }
             } else {
                 getView().hideGoButton();
@@ -275,5 +285,177 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         }
 
         cancelSearch();
+    }
+
+    private void geocodeHomeAddress(String address) {
+        Log.v(TAG, "Attempting to geocode home address");
+        new GeocodeQuery(mContext, new GeocodeQuery.GeocodeCallBackListener() {
+            @Override
+            public void callback(String key, double latitude, double longitude, double distance) {
+                if (key.equals("error")) {
+                    Log.e(TAG, "Failed to geocode home address!");
+                } else {
+                    Location homeLocation = new Location("home");
+                    homeLocation.setLatitude(latitude);
+                    homeLocation.setLongitude(longitude);
+                    UserPreferences.setHomeLocation(homeLocation);
+                }
+
+                //Chain polling locations geocoding, continue even if home location failed
+                geocodePollingLocations();
+            }
+        }, "home", address, null, UserPreferences.useMetric(), null).execute();
+    }
+
+    private void geocodePollingLocations() {
+        if (UserPreferences.getHomeLocation() == null) {
+            Log.e(TAG, "No home address available in Geocode Polling Locations canceling");
+
+            updateViewWithVoterInfo();
+
+            return;
+        }
+
+        // start background geocode tasks for polling locations
+        final ArrayList<PollingLocation> allLocations = mVoterInfo.getAllLocations();
+        for (final PollingLocation location : allLocations) {
+            // key by address, if location has no ID
+            String id = (location.id != null) ? location.id : location.address.toGeocodeString();
+
+            Log.v(TAG, "Attempting to geocode Polling address with id: " + id);
+
+            //TODO not sure if this was ever used.
+            new GeocodeQuery(mContext, new GeocodeQuery.GeocodeCallBackListener() {
+                @Override
+                public void callback(String key, double latitude, double longitude, double distance) {
+                    if (key.equals("error")) {
+                        Log.e(TAG, "Failed to geocode Polling Locations");
+                    } else {
+                        // find object and set values on it
+                        PollingLocation foundLoc = mVoterInfo.getLocationForId(key);
+                        if (foundLoc != null) {
+                            foundLoc.address.latitude = latitude;
+                            foundLoc.address.longitude = longitude;
+                            foundLoc.address.distance = distance;
+                        } else {
+                            Log.e(TAG, "Could not find location " + key + " to set geocoding result!");
+                        }
+                    }
+                }
+            }, id, location.address.toGeocodeString(), UserPreferences.getHomeLocation(), UserPreferences.useMetric(), null).execute();
+        }
+
+        //Proceeding while Polling locations are loading
+        geoCodeStateAdminAddress();
+    }
+
+    private void geoCodeStateAdminAddress() {
+        if (UserPreferences.getHomeLocation() == null) {
+            Log.e(TAG, "No home address available in Geocode State Admin - Exiting");
+
+            updateViewWithVoterInfo();
+
+            return;
+        }
+
+        Log.v(TAG, "Attempting to geocode state admin address");
+
+        // state
+        CivicApiAddress stateAdminAddress = mVoterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
+        if (stateAdminAddress != null) {
+            new GeocodeQuery(mContext, new GeocodeQuery.GeocodeCallBackListener() {
+                @Override
+                public void callback(String key, double latitude, double longitude, double distance) {
+                    if (key.equals("error")) {
+                        Log.e(TAG, "Failed to geocode administrative body physical address!");
+                    } else {
+                        CivicApiAddress address = mVoterInfo.getAdminAddress(key);
+                        if (address != null) {
+                            address.latitude = latitude;
+                            address.longitude = longitude;
+                            address.distance = distance;
+                        } else {
+                            Log.e(TAG, "Failed to set geocode result on election admin body!");
+                        }
+                    }
+
+                    geocodeLocalAdminAddress();
+                }
+            }, ElectionAdministrationBody.AdminBody.STATE,
+                    stateAdminAddress.toGeocodeString(), UserPreferences.getHomeLocation(), UserPreferences.useMetric(), null).execute();
+        } else {
+            Log.e(TAG, "State Admin Address is Null");
+            geocodeLocalAdminAddress();
+        }
+    }
+
+    private void geocodeLocalAdminAddress() {
+        if (UserPreferences.getHomeLocation() == null) {
+            Log.e(TAG, "No home address available in Geocode Local Admin - Exiting");
+
+            updateViewWithVoterInfo();
+
+            return;
+        }
+
+        Log.v(TAG, "Attempting to geocode local admin address");
+
+        // local
+        CivicApiAddress localAdminAddress = mVoterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
+        if (localAdminAddress != null) {
+            new GeocodeQuery(mContext, new GeocodeQuery.GeocodeCallBackListener() {
+                @Override
+                public void callback(String key, double latitude, double longitude, double distance) {
+                    if (key.equals("error")) {
+                        Log.e(TAG, "Failed to geocode administrative body physical address!");
+                    } else {
+                        CivicApiAddress address = mVoterInfo.getAdminAddress(key);
+                        if (address != null) {
+                            address.latitude = latitude;
+                            address.longitude = longitude;
+                            address.distance = distance;
+                        } else {
+                            Log.e(TAG, "Failed to set geocode result on election admin body!");
+                        }
+                    }
+
+                    //Callback to View to show downloaded contents
+                    updateViewWithVoterInfo();
+                }
+            }, ElectionAdministrationBody.AdminBody.LOCAL,
+                    localAdminAddress.toGeocodeString(), UserPreferences.getHomeLocation(), UserPreferences.useMetric(), null).execute();
+        } else {
+            Log.e(TAG, "Local Admin Address is NULL");
+
+            //Callback to View to show downloaded contents
+            updateViewWithVoterInfo();
+        }
+    }
+
+    private void updateViewWithVoterInfo() {
+        getView().hideStatusView();
+        getView().showGoButton();
+
+        if (mVoterInfo.otherElections != null && mVoterInfo.otherElections.size() > 0) {
+            //Setup all elections data and show chooser
+
+            mElections = new ArrayList<>(mVoterInfo.otherElections);
+
+            //Add the default election to the front of the list.
+            mElections.add(0, mVoterInfo.election);
+
+            getView().showElectionPicker();
+            mSelectedElection = 0;
+            getView().setElectionText(mVoterInfo.election.getName());
+        }
+
+        mParties = mVoterInfo.getUniqueParties();
+        mParties.add(0, allPartiesString);
+
+        if (mParties.size() > 1) {
+            getView().setPartyText(mParties.get(0));
+            mSelectedParty = 0;
+            getView().showPartyPicker();
+        }
     }
 }

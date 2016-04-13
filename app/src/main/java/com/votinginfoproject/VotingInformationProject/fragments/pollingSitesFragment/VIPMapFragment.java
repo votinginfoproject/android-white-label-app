@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
@@ -42,7 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSelectedListener, Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment {
+public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSelectedListener, Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener {
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
     private static final String HOME = "home";
@@ -197,7 +195,8 @@ public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSel
 
         voterInfo = UserPreferences.getVoterInfo();
         allLocations = voterInfo.getAllLocations();
-//        homeLocation = mActivity.getHomeLatLng();
+
+        homeLocation = UserPreferences.getHomeLatLong();
 //        currentLocation = mActivity.getUserLocation();
 //        currentAddress = mActivity.getUserLocationAddress();
         homeAddress = voterInfo.normalizedInput.toGeocodeString();
@@ -227,44 +226,31 @@ public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSel
         // check if already instantiated
         if (map == null) {
             map = getMap();
-            map.setMyLocationEnabled(true);
+            //TODO enable my location in M
+//            map.setMyLocationEnabled(true);
+
+            map.setOnMarkerClickListener(this);
+            map.getUiSettings().setMapToolbarEnabled(false);
             map.setInfoWindowAdapter(new LocationInfoWindow(inflater));
 
             // start asynchronous task to add markers to map
             new AddMarkersTask().execute(locationId);
 
-            // wait for map layout to occur before zooming to location
-            final ViewTreeObserver observer = mapView.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    if (observer.isAlive()) {
+            addNonPollingToMap();
 
-                        // deal with SDK compatibility
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            //noinspection deprecation
-                            observer.removeGlobalOnLayoutListener(this);
-                        } else {
-                            observer.removeOnGlobalLayoutListener(this);
-                        }
-                    }
-
-                    addNonPollingToMap();
-
-                    if (polylineBounds != null) {
-                        map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 60));
-                    } else if (thisLocation != null) {
-                        // zoom to selected location
-                        if (thisLocation == homeLocation) {
-                            // zoom out further when viewing general map centered on home
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 8));
-                        } else {
-                            // zom to specific polling location or other point of interest
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
-                        }
-                    }
+            //This will be the same as reset View, but not animated
+            if (polylineBounds != null) {
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 60));
+            } else if (thisLocation != null) {
+                // zoom to selected location
+                if (thisLocation == homeLocation) {
+                    // move out further when viewing general map centered on home
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 8));
+                } else {
+                    // move to specific polling location or other point of interest
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
                 }
-            });
+            }
         } else {
             map.clear();
         }
@@ -454,8 +440,6 @@ public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSel
 
         return new MarkerOptions()
                 .position(new LatLng(location.address.latitude, location.address.longitude))
-                .title(showTitle)
-                .snippet(showSnippet.toString())
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
     }
 
@@ -494,7 +478,24 @@ public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSel
 
     @Override
     public void resetView() {
+        if (polylineBounds != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(polylineBounds, 60));
+        } else if (thisLocation != null) {
+            // zoom to selected location
+            if (thisLocation == homeLocation) {
+                // move out further when viewing general map centered on home
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 8));
+            } else {
+                // move to specific polling location or other point of interest
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 15));
+            }
+        }
+    }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        //TODO handle layout here
+        return true;
     }
 
     private class AddMarkersTask extends AsyncTask<String, Integer, String> {

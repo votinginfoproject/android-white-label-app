@@ -410,26 +410,28 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             }
         };
 
-        // Callback for polling location geocode result
-        pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
-            @Override
-            public void callback(String key, double lat, double lon, double distance) {
-                if (key.equals("error")) {
-                    Log.e(TAG, "Geocode failed!");
-                    return;
-                }
 
-                // find object and set values on it
-                PollingLocation foundLoc = voterInfo.getLocationForId(key);
-                if (foundLoc != null) {
-                    foundLoc.address.latitude = lat;
-                    foundLoc.address.longitude = lon;
-                    foundLoc.address.distance = distance;
-                } else {
-                    Log.e(TAG, "Could not find location " + key + " to set geocoding result!");
-                }
-            }
-        };
+
+//        // Callback for polling location geocode result
+//        pollingCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
+//            @Override
+//            public void callback(String key, double lat, double lon, double distance) {
+//                if (key.equals("error")) {
+//                    Log.e(TAG, "Geocode failed!");
+//                    return;
+//                }
+//
+//                // find object and set values on it
+//                PollingLocation foundLoc = voterInfo.getLocationForId(key);
+//                if (foundLoc != null) {
+//                    foundLoc.address.latitude = lat;
+//                    foundLoc.address.longitude = lon;
+//                    foundLoc.address.distance = distance;
+//                } else {
+//                    Log.e(TAG, "Could not find location " + key + " to set geocoding result!");
+//                }
+//            }
+//        };
 
         // callback for home address geocode result
         homeCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
@@ -481,30 +483,31 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         adminBodyCallBackListener = new GeocodeQuery.GeocodeCallBackListener() {
             @Override
             public void callback(String key, double lat, double lon, double distance) {
-                if (key.equals("error")) {
-                    Log.e(TAG, "Failed to geocode administrative body physical address!");
-
-                    return;
-                }
-
-                CivicApiAddress address = voterInfo.getAdminAddress(key);
-                if (address != null) {
-                    address.latitude = lat;
-                    address.longitude = lon;
-                    address.distance = distance;
-                } else {
-                    Log.e(TAG, "Failed to set geocode result on election admin body!");
-                }
+//                if (key.equals("error")) {
+//                    Log.e(TAG, "Failed to geocode administrative body physical address!");
+//
+//                    return;
+//                }
+//
+//                CivicApiAddress address = voterInfo.getAdminAddress(key);
+//                if (address != null) {
+//                    address.latitude = lat;
+//                    address.longitude = lon;
+//                    address.distance = distance;
+//                } else {
+//                    Log.e(TAG, "Failed to set geocode result on election admin body!");
+//                }
             }
         };
 
         if (playServicesAvailable()) {
             // geocode home address; once result returned, geocode polling and admin body locations
-            new GeocodeQuery(getBaseContext(), homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
-                    null, useMetric, null).execute();
+//            new GeocodeQuery(getBaseContext(), homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
+//                    null, useMetric, null).execute();
         }
     }
 
+    //TODO when getting driving directions
     public LatLng getUserLocation(boolean showPrompt) {
         // check for play services first
         if (!playServicesAvailable()) {
