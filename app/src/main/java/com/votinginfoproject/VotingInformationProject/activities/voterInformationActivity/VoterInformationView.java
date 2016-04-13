@@ -1,16 +1,16 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 
-import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
+import android.app.Fragment;
 
 /**
  * Created by marcvandehey on 4/6/16.
  */
 public interface VoterInformationView {
 
-    void presentParentLevelFragment(BottomNavigationFragment parentLevel);
+    void presentParentLevelFragment(Fragment parentLevel);
 
-    void presentChildLevelFragment(BottomNavigationFragment childLevelFragment);
+    void presentChildLevelFragment(Fragment childLevelFragment);
 
     void navigateBack();
 

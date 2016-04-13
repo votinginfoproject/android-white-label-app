@@ -27,7 +27,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.votinginfoproject.VotingInformationProject.R;
@@ -40,7 +40,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.DirectionsFragme
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.SupportWebViewFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.VIPMapFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
@@ -326,14 +326,14 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         }
 
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        SupportMapFragment mapFragment = VIPMapFragment.newInstance(getBaseContext(), destinationLocationIndex, encodedDirectionsPolyline);
+        MapFragment mapFragment = VIPMapFragment.newInstance(getBaseContext(), destinationLocationIndex, encodedDirectionsPolyline);
         if (destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.STATE) ||
                 destinationLocationIndex.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
             // got here from details tab
-            fragmentTransaction.replace(R.id.election_details_fragment, mapFragment);
+//            fragmentTransaction.replace(R.id.election_details_fragment, mapFragment);
         } else {
             // got here from locations tab
-            fragmentTransaction.replace(R.id.locations_list_fragment, mapFragment);
+//            fragmentTransaction.replace(R.id.locations_list_fragment, mapFragment);
         }
         fragmentTransaction.addToBackStack("map");
         fragmentTransaction.commit();

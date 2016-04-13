@@ -137,11 +137,11 @@ public class VoterInfo {
         openEarlyVoteSites = buildOpenSitesList(earlyVoteSites, MAX_VOTING_SITES);
         openDropOffLocations = buildOpenSitesList(dropOffLocations, MAX_DROP_BOX_SITES);
 
-        Log.d(TAG, "Using " + earlyVoteSites.size() + " open early voting sites");
+        Log.d(TAG, "Using " + openEarlyVoteSites.size() + " open early voting sites");
         Log.d(TAG, "Using " + openDropOffLocations.size() + " open drop-off locations");
 
-        allLocations.addAll(earlyVoteSites);
-        allLocations.addAll(dropOffLocations);
+        allLocations.addAll(openDropOffLocations);
+        allLocations.addAll(openEarlyVoteSites);
 
         // Build map of PollingLocation id to its offset in the list of all locations,
         // to find it later when the distance calculation comes back.
@@ -191,7 +191,7 @@ public class VoterInfo {
                     returnList.add(loc);
                 } else if (!end.before(today)) {
                     //  closes today or later
-                returnList.add(loc);
+                    returnList.add(loc);
                 }
             }
         }

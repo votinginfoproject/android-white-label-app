@@ -20,7 +20,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigation
  * Use the {@link TestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment extends BottomNavigationFragment {
+public class TestFragment extends Fragment implements BottomNavigationFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -86,11 +86,11 @@ public class TestFragment extends BottomNavigationFragment {
 
         return inflaterView;
     }
-
-    @Override
-    public int getMenu() {
-        return R.menu.polling_sites_map;
-    }
+//
+//    @Override
+//    public int getMenu() {
+//        return R.menu.polling_sites_map;
+//    }
 
     @Override
     public void onDetach() {
@@ -101,11 +101,6 @@ public class TestFragment extends BottomNavigationFragment {
     @Override
     public void resetView() {
 
-    }
-
-    @Override
-    public int getTitle() {
-        return R.string.common_google_play_services_install_title;
     }
 
     /**

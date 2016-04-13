@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/map_fragment"
-    style="@style/fragment_style" >
+<RelativeLayout android:id="@+id/map_fragment"
+                style="@style/fragment_style"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Spinner
-        android:id="@+id/locations_map_spinner"
-        android:layout_below="@+id/locations_election_subtitle"
-        android:layout_alignLeft="@+id/locations_election_subtitle"
-        android:layout_toRightOf="@+id/locations_list_map_button"
-        style="@style/spinner_locations" />
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </android.support.design.widget.AppBarLayout>
 
 </RelativeLayout>

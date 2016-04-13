@@ -1,13 +1,16 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment2;
-import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
@@ -114,7 +117,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != POLLS_TAB) {
             mCurrentTab = POLLS_TAB;
 
-            getView().presentParentLevelFragment(PollingSitesFragment.newInstance());
+            getView().presentParentLevelFragment(PollingSitesListFragment.newInstance());
         } else {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();
@@ -122,8 +125,14 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     }
 
     @Override
-    public void mapButtonClicked() {
+    void mapButtonClicked(@LayoutRes int currentSort) {
+        getView().presentChildLevelFragment(VIPMapFragment.newInstance((Activity) getView(), "home", currentSort));
+    }
 
+    @Override
+    void listButtonClicked(@LayoutRes int currentSort) {
+        //Kill all back navigation since we are going to the default view
+        getView().presentParentLevelFragment(PollingSitesListFragment.newInstance(currentSort));
     }
 
     @Override

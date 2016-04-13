@@ -20,7 +20,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigation
  * Use the {@link TestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment2 extends BottomNavigationFragment {
+public class TestFragment2 extends Fragment implements BottomNavigationFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -102,16 +102,6 @@ public class TestFragment2 extends BottomNavigationFragment {
     @Override
     public void resetView() {
 
-    }
-
-    @Override
-    public int getMenu() {
-        return 0;
-    }
-
-    @Override
-    public int getTitle() {
-        return R.string.fragment_home_error_no_internet;
     }
 
     /**

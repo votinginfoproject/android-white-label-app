@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
+import android.support.annotation.LayoutRes;
+
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ public interface PollingSitesView {
 
     void navigateToErrorForm();
 
-    void navigateToMap();
+    void navigateToMap(@LayoutRes int currentSort);
+
+    void navigateToList(@LayoutRes int currentSort);
 
     void updateList(ArrayList<PollingLocation> locations);
 }

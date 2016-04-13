@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.dummy.DummyContent.DummyItem;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
@@ -28,7 +27,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private static final int POLLING_LOCATION_VIEW_HOLDER = 0x1;
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x2;
     private final Election mElection;
-    private final PollingSitesFragment.PollingSiteOnClickListener mListener;
+    private final PollingSitesListFragment.PollingSiteOnClickListener mListener;
     private ArrayList<PollingLocation> mPollingLocations;
     private boolean hasHeader;
 
@@ -37,7 +36,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     public PollingSiteItemRecyclerViewAdapter(Context context,
                                               Election election,
                                               List<PollingLocation> items,
-                                              PollingSitesFragment.PollingSiteOnClickListener listener) {
+                                              PollingSitesListFragment.PollingSiteOnClickListener listener) {
         mElection = election;
         mPollingLocations = new ArrayList<>(items);
         mListener = listener;

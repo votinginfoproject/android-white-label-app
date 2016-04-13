@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Election;
@@ -15,72 +16,84 @@ import java.util.ArrayList;
  * Created by marcvandehey on 4/11/16.
  */
 public class PollingSitesPresenterImpl extends PollingSitesPresenter {
+    private static final String TAG = PollingSitesPresenterImpl.class.getSimpleName();
     private
     @LayoutRes
-    int currentSort = R.id.all_sites;
+    int currentSort = R.id.sort_all;
 
     public PollingSitesPresenterImpl(PollingSitesView pollingSitesView) {
         setView(pollingSitesView);
     }
 
-    @Override
-    public ArrayList<PollingLocation> getAllLocations() {
-        return UserPreferences.getVoterInfo().getAllLocations();
+    public PollingSitesPresenterImpl(PollingSitesView pollingSitesView, @LayoutRes int selectedSort) {
+        setView(pollingSitesView);
+        currentSort = selectedSort;
     }
 
     @Override
-    Election getElection() {
+    public ArrayList<PollingLocation> getSortedLocations() {
+        switch (currentSort) {
+            case R.id.sort_all:
+                return UserPreferences.getVoterInfo().getAllLocations();
+            case R.id.sort_polling_locations:
+                return UserPreferences.getVoterInfo().getPollingLocations();
+            case R.id.sort_early_vote:
+                return UserPreferences.getVoterInfo().getOpenEarlyVoteSites();
+            case R.id.sort_drop_boxes:
+                return UserPreferences.getVoterInfo().getOpenDropOffLocations();
+        }
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Election getElection() {
         return UserPreferences.getVoterInfo().election;
     }
 
     @Override
     public void menuItemClicked(@LayoutRes int sortType) {
         switch (sortType) {
-            case R.id.all_sites:
-                getView().updateList(UserPreferences.getVoterInfo().getAllLocations());
-                currentSort = sortType;
-
-                break;
-            case R.id.polling_locations:
-                getView().updateList(UserPreferences.getVoterInfo().getPollingLocations());
-                currentSort = sortType;
-                break;
-            case R.id.early_vote:
-                getView().updateList(UserPreferences.getVoterInfo().getOpenEarlyVoteSites());
-                currentSort = sortType;
-                break;
-            case R.id.drop_boxes:
-                getView().updateList(UserPreferences.getVoterInfo().getOpenDropOffLocations());
-                currentSort = sortType;
-                break;
             case R.id.map_view:
-                getView().navigateToMap();
+                getView().navigateToMap(currentSort);
                 break;
+            case R.id.list_view:
+                getView().navigateToList(currentSort);
+            default:
+                currentSort = sortType;
+                getView().updateList(getSortedLocations());
         }
     }
 
     @Override
     public void itemClickedAtIndex(int index) {
-        ArrayList<PollingLocation> sortedList = null;
+        ArrayList<PollingLocation> sortedList = getSortedLocations();
 
-        switch (currentSort) {
-            case R.id.all_sites:
-                sortedList = UserPreferences.getVoterInfo().getAllLocations();
-                break;
-            case R.id.polling_locations:
-                sortedList = UserPreferences.getVoterInfo().getPollingLocations();
-                break;
-            case R.id.early_vote:
-                sortedList = UserPreferences.getVoterInfo().getOpenEarlyVoteSites();
-                break;
-            case R.id.drop_boxes:
-                sortedList = UserPreferences.getVoterInfo().getOpenDropOffLocations();
-                break;
-        }
-
-        if (sortedList != null) {
+        if (sortedList.size() > index) {
             getView().navigateToDirections(sortedList.get(index));
+        } else {
+            Log.e(TAG, "Cannot retrieve data for item selected: " + index);
         }
+    }
+
+    @Override
+    public int getCurrentSort() {
+        return currentSort;
+    }
+
+    @Override
+    public boolean hasPollingLocations() {
+        return !UserPreferences.getVoterInfo().getPollingLocations().isEmpty();
+    }
+
+    @Override
+    public boolean hasEarlyVotingLocations() {
+        return !UserPreferences.getVoterInfo().getOpenEarlyVoteSites().isEmpty();
+    }
+
+    @Override
+    public boolean hasDropBoxLocations() {
+        return !UserPreferences.getVoterInfo().getOpenDropOffLocations().isEmpty();
     }
 
     @Override

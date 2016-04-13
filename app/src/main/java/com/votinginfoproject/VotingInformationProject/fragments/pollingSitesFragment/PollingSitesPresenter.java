@@ -12,11 +12,20 @@ import java.util.ArrayList;
  * Created by marcvandehey on 4/11/16.
  */
 public abstract class PollingSitesPresenter extends BasePresenter<PollingSitesView> {
-    abstract ArrayList<PollingLocation> getAllLocations();
+    public abstract ArrayList<PollingLocation> getSortedLocations();
 
-    abstract Election getElection();
+    public abstract Election getElection();
 
-    abstract void menuItemClicked(@LayoutRes int sortType);
+    public abstract void menuItemClicked(@LayoutRes int sortType);
 
-    abstract void itemClickedAtIndex(int index);
+    public abstract void itemClickedAtIndex(int index);
+
+    @LayoutRes
+    public abstract int getCurrentSort();
+
+    public abstract boolean hasPollingLocations();
+
+    public abstract boolean hasEarlyVotingLocations();
+
+    public abstract boolean hasDropBoxLocations();
 }
