@@ -28,4 +28,9 @@
     <color name="home_warning_background">#042a42</color>
     <color name="brand">#60c9f8</color>
     <color name="dark_text">#dd000000</color>
+
+    <!--Polling location colors-->
+    <color name="polling_location_early_vote">#FF00ADFF</color>
+    <color name="polling_location_drop_box">#FF757575</color>
+    <color name="polling_location_polling_location">#FFD61920</color>
 </resources>

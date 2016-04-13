@@ -2,38 +2,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/map_view"
-        android:icon="@drawable/ic_map"
-        android:panelFullBackground="@drawable/selector_overflow_menu"
-        android:title="@string/locations.button.list_map"
-        app:showAsAction="always"/>
-
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/all_sites"
-            android:enabled="true"
-            android:icon="@drawable/selector_overflow_menu"
+            android:checked="true"
+            android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.all_sites"
             app:showAsAction="never|withText"/>
-
         <item
             android:id="@+id/polling_locations"
-            android:icon="@drawable/ic_map"
+            android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.polling_sites"
             app:showAsAction="never|withText"/>
 
         <item
             android:id="@+id/early_vote"
-            android:icon="@drawable/ic_map"
+            android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.early_voting"
             app:showAsAction="never|withText"/>
 
         <item
             android:id="@+id/drop_boxes"
-            android:icon="@drawable/ic_map"
+            android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.drop_off"
             app:showAsAction="never|withText"/>
     </group>
 
+    <item
+        android:id="@+id/map_view"
+        android:icon="@drawable/ic_map"
+        android:panelFullBackground="@drawable/selector_overflow_menu"
+        android:title="@string/locations.button.list_map"
+        app:showAsAction="ifRoom"/>
 </menu>

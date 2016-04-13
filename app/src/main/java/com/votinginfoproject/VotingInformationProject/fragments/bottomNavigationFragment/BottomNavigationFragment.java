@@ -4,11 +4,8 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -33,7 +30,7 @@ public abstract class BottomNavigationFragment extends Fragment {
     }
 
     //Handle everything needed to reset the task
-    public abstract void scrollToTop();
+    public abstract void resetView();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -56,42 +53,20 @@ public abstract class BottomNavigationFragment extends Fragment {
                     }
                 });
 
-                mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        item.setChecked(true);
-                        return false;
-                    }
-                });
-
                 if (getMenu() != 0) {
                     mToolbar.inflateMenu(getMenu());
-
-                    highlightMenuItem(0);
                 }
             }
         }
     }
 
-    public void highlightMenuItem(int item) {
-        Menu menu = mToolbar.getMenu();
-
-        MenuItem menuItem = menu.getItem(0);
-        menuItem.setCheckable(true);
-        menuItem.setChecked(true);
-
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menuItem.setActionView(android.R.layout.simple_list_item_1);
-        menuItem.getActionView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.background_blue));
-        MenuItem view = menu.findItem(R.id.all_sites);
-        view.setChecked(true);
-
-//        if (menuItem != null) {
-//            menuItem.getActionView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.background_blue));
-//        } else {
-//            Log.v(TAG, "was null :(");
-//        }
-
+    /**
+     * Call onViewCreated after toolbar is inflated
+     *
+     * @param listener
+     */
+    public void setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener listener) {
+        mToolbar.setOnMenuItemClickListener(listener);
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {

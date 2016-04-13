@@ -1,9 +1,10 @@
 package com.votinginfoproject.VotingInformationProject.views.viewHolders;
 
-import android.graphics.PorterDuff;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -14,7 +15,6 @@ import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
  */
 public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
     private final View mView;
-    private final ImageView mColorKeyImageView;
     private final TextView mSiteType;
     private final TextView mSiteTitle;
     private final TextView mSiteAddress;
@@ -29,22 +29,27 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
         super(view);
 
         mView = view;
-        mColorKeyImageView = (ImageView) view.findViewById(R.id.color_key);
-        mSiteType = (TextView) view.findViewById(R.id.site_type);
+        mSiteType = (TextView) view.findViewById(R.id.text_view_polling_site_type);
         mSiteTitle = (TextView) view.findViewById(R.id.site_title);
         mSiteAddress = (TextView) view.findViewById(R.id.site_address);
         mSiteHours = (TextView) view.findViewById(R.id.site_hours);
     }
 
-    public void setPollingLocation(PollingLocation pollingLocation) {
+    public void setPollingLocation(Context context, PollingLocation pollingLocation) {
         mLocation = pollingLocation;
 
-        mColorKeyImageView.setColorFilter(0xffff0000, PorterDuff.Mode.MULTIPLY);
+        Drawable dot = ContextCompat.getDrawable(context, mLocation.getDrawableDot());
 
-        mSiteType.setText("Site type here");
+        String siteType = context.getText(mLocation.getPollingTypeString()).toString();
+        mSiteType.setText(siteType.toUpperCase());
+        mSiteType.setCompoundDrawablesWithIntrinsicBounds(dot, null, null, null);
         mSiteTitle.setText(mLocation.address.locationName);
         mSiteAddress.setText(mLocation.address.line1);
         mSiteHours.setText(mLocation.pollingHours);
+    }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        mView.setOnClickListener(listener);
     }
 
     @Override

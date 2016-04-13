@@ -4,18 +4,19 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.dummy.DummyContent.DummyItem;
-import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.DividerItemDecoration;
 
 import java.util.ArrayList;
+
 
 /**
  * A fragment representing a list of Items.
@@ -23,16 +24,19 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PollingSitesFragment extends BottomNavigationFragment {
+public class PollingSitesFragment extends BottomNavigationFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView {
 
     private static final String TAG = PollingSitesFragment.class.getSimpleName();
 
-    private static final String ARG_POLLING_ITEMS = "polling-locations";
     private static final String ARG_ELECTION = "election";
 
-    private OnListFragmentInteractionListener mListener;
-
     private PollingSitesPresenterImpl mPresenter;
+
+    private PollingSiteOnClickListener mListener;
+
+    private PollingSiteItemRecyclerViewAdapter mAdapter;
+
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -41,16 +45,8 @@ public class PollingSitesFragment extends BottomNavigationFragment {
     public PollingSitesFragment() {
     }
 
-    public static PollingSitesFragment newInstance(Election election, ArrayList<PollingLocation> pollingLocations) {
+    public static PollingSitesFragment newInstance() {
         PollingSitesFragment fragment = new PollingSitesFragment();
-        Bundle args = new Bundle();
-
-        args.putParcelable(ARG_ELECTION, election);
-        args.putParcelableArrayList(ARG_POLLING_ITEMS, pollingLocations);
-        fragment.setArguments(args);
-
-        Log.v(TAG, pollingLocations + "");
-
 
         return fragment;
     }
@@ -59,47 +55,45 @@ public class PollingSitesFragment extends BottomNavigationFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            //Setup
-            ArrayList<PollingLocation> locations = getArguments().getParcelableArrayList(ARG_POLLING_ITEMS);
-
-            Election election = getArguments().getParcelable(ARG_ELECTION);
-
-            mPresenter = new PollingSitesPresenterImpl(election, locations);
-
-            Log.v(TAG, getArguments().get(ARG_POLLING_ITEMS) + "");
-        }
+        mPresenter = new PollingSitesPresenterImpl(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pollingsiteitem_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_pollings_sites_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.polling_locations_list);
 
-            recyclerView.setAdapter(new PollingSiteItemRecyclerViewAdapter(mPresenter.getElection(), mPresenter.getAllLocations(), mListener));
+        Context context = view.getContext();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-            recyclerView.invalidate();
-        }
+        mAdapter = new PollingSiteItemRecyclerViewAdapter(context, mPresenter.getElection(), mPresenter.getAllLocations(), mListener);
+
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.invalidate();
 
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setOnMenuItemClickListener(this);
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnListFragmentInteractionListener) {
-//            mListener = (OnListFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnListFragmentInteractionListener");
-//        }
+
+        if (context instanceof PollingSiteOnClickListener) {
+            mListener = (PollingSiteOnClickListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -114,22 +108,55 @@ public class PollingSitesFragment extends BottomNavigationFragment {
     }
 
     @Override
-    public void scrollToTop() {
+    public int getMenu() {
+        return R.menu.polling_sites_list;
+    }
 
+    @Override
+    public void resetView() {
+        mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        mPresenter.menuItemClicked(item.getItemId());
+        item.setChecked(true);
+
+        return true;
+    }
+
+    @Override
+    public void navigateToDirections(PollingLocation pollingLocation) {
+        mListener.pollingSiteClicked(pollingLocation);
+    }
+
+    @Override
+    public void navigateToErrorForm() {
+        mListener.reportErrorClicked();
+    }
+
+    @Override
+    public void navigateToMap() {
+        mListener.navigateToMap();
+    }
+
+    @Override
+    public void updateList(ArrayList<PollingLocation> locations) {
+        mAdapter.updatePollingLocations(locations);
+        mRecyclerView.invalidate();
+        mRecyclerView.invalidateItemDecorations();
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
+     * Recycler View Interaction methods
      * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Must be implemented by the Activity
      */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+    public interface PollingSiteOnClickListener {
+        void navigateToMap();
+
+        void pollingSiteClicked(PollingLocation location);
+
+        void reportErrorClicked();
     }
 }

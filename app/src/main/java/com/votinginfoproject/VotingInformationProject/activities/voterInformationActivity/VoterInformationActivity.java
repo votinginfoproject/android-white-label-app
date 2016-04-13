@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.gson.Gson;
@@ -12,6 +13,8 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesFragment;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
 
@@ -19,10 +22,13 @@ import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
 public class VoterInformationActivity extends BaseActivity<VoterInformationPresenter> implements
         VoterInformationView,
         BottomNavigationBar.BottomNavigationBarCallback,
-        BottomNavigationFragment.OnBackPressedListener {
+        BottomNavigationFragment.OnBackPressedListener, PollingSitesFragment.PollingSiteOnClickListener {
+
+    private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
 
     private BottomNavigationBar mBottomNavigationBar;
+    private BottomNavigationFragment lastFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +114,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void presentParentLevelFragment(BottomNavigationFragment parentLevelFragment) {
+        lastFragment = parentLevelFragment;
         parentLevelFragment.setOnBackPressedListener(this);
 
         FragmentManager manager = getFragmentManager();
@@ -124,6 +131,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void presentChildLevelFragment(BottomNavigationFragment childLevelFragment) {
+        lastFragment = childLevelFragment;
+
         childLevelFragment.setOnBackPressedListener(this);
 
         FragmentManager manager = getFragmentManager();
@@ -149,6 +158,25 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void scrollCurrentFragmentToTop() {
+        if (lastFragment != null) {
+            lastFragment.resetView();
+        }
+    }
+
+    @Override
+    public void navigateToMap() {
+
+    }
+
+    //Polling Site List Interface
+    @Override
+    public void pollingSiteClicked(PollingLocation location) {
+        Log.v(TAG, "Polling locaiton Clicked: ");
+    }
+
+    @Override
+    public void reportErrorClicked() {
+        Log.v(TAG, "Report Error Clicked()");
 
     }
 }

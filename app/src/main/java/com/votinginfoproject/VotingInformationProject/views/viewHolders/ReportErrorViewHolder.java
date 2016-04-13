@@ -17,4 +17,8 @@ public class ReportErrorViewHolder extends RecyclerView.ViewHolder {
 
         mView = itemView;
     }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        mView.setOnClickListener(listener);
+    }
 }

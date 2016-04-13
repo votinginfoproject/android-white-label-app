@@ -16,7 +16,7 @@ public abstract class PollingSitesPresenter extends BasePresenter<PollingSitesVi
 
     abstract Election getElection();
 
-    abstract void sortTypeChanged(@LayoutRes int sortType);
+    abstract void menuItemClicked(@LayoutRes int sortType);
 
     abstract void itemClickedAtIndex(int index);
 }

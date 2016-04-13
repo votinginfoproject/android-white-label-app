@@ -9,8 +9,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment2;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-
-import java.util.ArrayList;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 /**
  * Created by marcvandehey on 4/6/16.
@@ -30,8 +29,10 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     public VoterInformationPresenterImpl(@NonNull VoterInfo voterInfo, String partyFilter) {
         mVoterInfo = voterInfo;
-        mPartyFilter = partyFilter;
 
+        UserPreferences.setVoterInfo(voterInfo);
+
+        mPartyFilter = partyFilter;
     }
 
     @Override
@@ -113,7 +114,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != POLLS_TAB) {
             mCurrentTab = POLLS_TAB;
 
-            getView().presentParentLevelFragment(PollingSitesFragment.newInstance(mVoterInfo.election, new ArrayList<>(mVoterInfo.getPollingLocations())));
+            getView().presentParentLevelFragment(PollingSitesFragment.newInstance());
         } else {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();

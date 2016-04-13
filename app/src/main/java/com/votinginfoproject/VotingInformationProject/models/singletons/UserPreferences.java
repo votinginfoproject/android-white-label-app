@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.models.singletons;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
@@ -15,7 +14,7 @@ public class UserPreferences {
 
     private static UserPreferences ourInstance = new UserPreferences();
 
-    private String selectedParty ;
+    private String selectedParty;
 
     private boolean useMetric;
     private Location homeLocation;
@@ -49,6 +48,7 @@ public class UserPreferences {
     }
 
     public static void setVoterInfo(VoterInfo voterInfo) {
+        voterInfo.setUpLocations();
         getInstance().voterInfo = voterInfo;
     }
 

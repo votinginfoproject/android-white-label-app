@@ -26,8 +26,8 @@ public class VoterInfo {
     public Election election;
     public List<Election> otherElections;
     public CivicApiAddress normalizedInput;
-    public List<PollingLocation> pollingLocations;
-    public List<PollingLocation> earlyVoteSites;
+    public ArrayList<PollingLocation> pollingLocations;
+    public ArrayList<PollingLocation> earlyVoteSites;
     public List<PollingLocation> dropOffLocations;
     public List<Contest> contests;
     public List<State> state;
@@ -111,6 +111,7 @@ public class VoterInfo {
                 usePollingLocations = new ArrayList<>(pollingLocations.subList(0, MAX_VOTING_SITES));
             } else {
                 usePollingLocations = new ArrayList<>(pollingLocations);
+
                 Collections.copy(usePollingLocations, pollingLocations);
             }
 
@@ -119,16 +120,28 @@ public class VoterInfo {
             usePollingLocations = new ArrayList<>();
         }
 
+        if (earlyVoteSites != null) {
+            for (PollingLocation location : earlyVoteSites) {
+                location.setPollingLocationType(PollingLocation.POLLING_TYPE_EARLY_VOTE);
+            }
+        }
+
+        if (dropOffLocations != null) {
+            for (PollingLocation location : dropOffLocations) {
+                location.setPollingLocationType(PollingLocation.POLLING_TYPE_DROP_BOX);
+            }
+        }
+
         // only display early voting sites and drop-off locations that haven't closed yet
         // only show first 25 early voting sites found, and first 50 drop-boxes
         openEarlyVoteSites = buildOpenSitesList(earlyVoteSites, MAX_VOTING_SITES);
         openDropOffLocations = buildOpenSitesList(dropOffLocations, MAX_DROP_BOX_SITES);
 
-        Log.d(TAG, "Using " + openEarlyVoteSites.size() + " open early voting sites");
+        Log.d(TAG, "Using " + earlyVoteSites.size() + " open early voting sites");
         Log.d(TAG, "Using " + openDropOffLocations.size() + " open drop-off locations");
 
-        allLocations.addAll(openEarlyVoteSites);
-        allLocations.addAll(openDropOffLocations);
+        allLocations.addAll(earlyVoteSites);
+        allLocations.addAll(dropOffLocations);
 
         // Build map of PollingLocation id to its offset in the list of all locations,
         // to find it later when the distance calculation comes back.
@@ -146,11 +159,7 @@ public class VoterInfo {
     }
 
     public ArrayList<PollingLocation> getPollingLocations() {
-        if (allLocations == null || allLocations.isEmpty()) {
-            setUpLocations();
-        }
-
-        return allLocations;
+        return usePollingLocations;
     }
 
     /**
@@ -182,18 +191,18 @@ public class VoterInfo {
                     returnList.add(loc);
                 } else if (!end.before(today)) {
                     //  closes today or later
-                    returnList.add(loc);
+                returnList.add(loc);
                 }
             }
         }
         return returnList;
     }
 
-    public List<PollingLocation> getOpenDropOffLocations() {
+    public ArrayList<PollingLocation> getOpenDropOffLocations() {
         return openDropOffLocations;
     }
 
-    public List<PollingLocation> getOpenEarlyVoteSites() {
+    public ArrayList<PollingLocation> getOpenEarlyVoteSites() {
         return openEarlyVoteSites;
     }
 

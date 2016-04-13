@@ -99,7 +99,7 @@ public class TestFragment extends BottomNavigationFragment {
     }
 
     @Override
-    public void scrollToTop() {
+    public void resetView() {
 
     }
 

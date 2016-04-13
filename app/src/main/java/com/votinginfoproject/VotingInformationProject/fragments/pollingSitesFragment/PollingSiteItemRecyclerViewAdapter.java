@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.Election
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingSiteViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,17 +28,20 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private static final int POLLING_LOCATION_VIEW_HOLDER = 0x1;
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x2;
     private final Election mElection;
-    private final List<PollingLocation> mValues;
-    private final PollingSitesFragment.OnListFragmentInteractionListener mListener;
+    private final PollingSitesFragment.PollingSiteOnClickListener mListener;
+    private ArrayList<PollingLocation> mPollingLocations;
     private boolean hasHeader;
 
-    public PollingSiteItemRecyclerViewAdapter(Election election,
-                                              List<PollingLocation> items,
-                                              PollingSitesFragment.OnListFragmentInteractionListener listener) {
-        mElection = election;
-        mValues = items;
-        mListener = listener;
+    private Context mContext;
 
+    public PollingSiteItemRecyclerViewAdapter(Context context,
+                                              Election election,
+                                              List<PollingLocation> items,
+                                              PollingSitesFragment.PollingSiteOnClickListener listener) {
+        mElection = election;
+        mPollingLocations = new ArrayList<>(items);
+        mListener = listener;
+        mContext = context;
         hasHeader = mElection != null;
     }
 
@@ -66,11 +71,18 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         return viewHolder;
     }
 
+    public void updatePollingLocations(List<PollingLocation> newPollingLocations) {
+        mPollingLocations.clear();
+        mPollingLocations.addAll(newPollingLocations);
+
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
             return ELECTION_VIEW_HOLDER;
-        } else if (position < mValues.size() + (hasHeader ? 1 : 0)) {
+        } else if (position < mPollingLocations.size() + (hasHeader ? 1 : 0)) {
             return POLLING_LOCATION_VIEW_HOLDER;
         } else {
             return REPORT_ERROR_VIEW_HOLDER;
@@ -81,32 +93,34 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PollingSiteViewHolder) {
             PollingSiteViewHolder pollingSiteViewHolder = (PollingSiteViewHolder) holder;
-            PollingLocation location = mValues.get(position - (hasHeader ? 1 : 0));
+            final PollingLocation location = mPollingLocations.get(position - (hasHeader ? 1 : 0));
 
-            pollingSiteViewHolder.setPollingLocation(location);
+            pollingSiteViewHolder.setPollingLocation(mContext, location);
 
-//            pollingSiteViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (null != mListener) {
-//                        // Notify the active callbacks interface (the activity, if the
-//                        // fragment is attached to one) that an item has been selected.
-////                    mListener.onListFragmentInteraction(holder.mItem);
-//                    }
-//                }
-//            });
+            pollingSiteViewHolder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.pollingSiteClicked(location);
+                }
+            });
+
         } else if (holder instanceof ElectionInformationViewHolder) {
             ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
             electionInformationViewHolder.setElection(mElection);
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
-
+            errorViewHolder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.reportErrorClicked();
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
         //Add two here for the header and the footer
-        return mValues.size() + (hasHeader ? 1 : 0) + 1;
+        return mPollingLocations.size() + (hasHeader ? 1 : 0) + 1;
     }
 }
