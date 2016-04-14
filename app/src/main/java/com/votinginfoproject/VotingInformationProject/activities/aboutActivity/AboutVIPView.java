@@ -7,12 +7,13 @@ import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
  */
 
 public interface AboutVIPView {
-
     void setTitle(String title);
 
     void setInformationText(String informationText);
 
-    void navigateToAboutView(String title, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint);
+    void setLoading(boolean loading);
+
+    void navigateToAboutView(String title, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint);
 
     void navigateToPreviousView();
 }

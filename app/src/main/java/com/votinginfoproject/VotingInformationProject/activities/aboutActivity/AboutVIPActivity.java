@@ -50,8 +50,15 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
     }
 
     @Override
-    public void navigateToAboutView(String title, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
-        showNewAboutScreen(title, infoText, showsAdditionalInfoButtons, transitionPoint);
+    public void setLoading(boolean loading) {
+        if (getTopFragment() != null) {
+            getTopFragment().setLoading(loading);
+        }
+    }
+
+    @Override
+    public void navigateToAboutView(String title, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
+        showNewAboutScreen(title, infoText, isLoading, showsAdditionalInfoButtons, transitionPoint);
     }
 
     @Override
@@ -82,11 +89,12 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
                 return (AboutVIPFragment) topFragment;
             }
         }
+
         return null;
     }
 
-    public void showNewAboutScreen(String title, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
-        AboutVIPFragment newFragment = AboutVIPFragment.newInstance(title, infoText, showsAdditionalInfoButtons, transitionPoint);
+    public void showNewAboutScreen(String title, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
+        AboutVIPFragment newFragment = AboutVIPFragment.newInstance(title, infoText, isLoading, showsAdditionalInfoButtons, transitionPoint);
 
         String fragmentTag = newFragment.hashCode() + "";
 
@@ -111,6 +119,7 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
 
             @Override
             public void onAnimationCancel(Animator animation) {
+                getFragmentManager().popBackStackImmediate();
                 //Required onAnimationCancel override
             }
 
@@ -136,5 +145,9 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
 
     public void viewTransitionEnded() {
         getPresenter().viewTransitionEnded();
+    }
+
+    public void upButtonPressed() {
+        super.onBackPressed();
     }
 }

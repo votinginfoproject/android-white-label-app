@@ -28,13 +28,14 @@ import java.util.Collections;
  * Created by max on 4/12/16.
  */
 
-public class AboutVIPFragment extends Fragment {
+public class AboutVIPFragment extends Fragment  {
     private static final String TAG = AboutVIPFragment.class.getSimpleName();
 
     private static final String ARG_TITLE = "mTitle";
     private static final String ARG_INFO_TEXT = "mInfoText";
     private static final String ARG_SHOWS_INFO_BUTTONS = "mShowsAdditionalInfoButtons";
     private static final String ARG_TRANSITION_POINT = "mTransitionPoint";
+    private static final String ARG_IS_LOADING = "mIsLoading";
 
     private AboutVIPActivity myActivity;
 
@@ -42,6 +43,7 @@ public class AboutVIPFragment extends Fragment {
     private String mTitle;
     private CoordinatePair mTransitionPoint;
     private boolean mShowsAdditionalInfoButtons;
+    private boolean mIsLoading;
 
     private TextView mAboutTextView;
     private View mAdditionalInformationView;
@@ -49,11 +51,12 @@ public class AboutVIPFragment extends Fragment {
     private View mPrivacyPolicyButton;
     private View mLegalNoticesButton;
     private Toolbar mToolbar;
+    private View mProgressBarContainer;
 
-    private int mAnimationDurationMillis = 1000;
+    private int mAnimationDurationMillis = 400;
     private float mAnimationSmoothing = 2f;
 
-    public static AboutVIPFragment newInstance(String titleText, String infoText, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
+    public static AboutVIPFragment newInstance(String titleText, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
         AboutVIPFragment fragment = new AboutVIPFragment();
         Bundle args = new Bundle();
 
@@ -61,6 +64,7 @@ public class AboutVIPFragment extends Fragment {
         args.putParcelable(ARG_TRANSITION_POINT, transitionPoint);
         args.putString(ARG_INFO_TEXT, infoText);
         args.putBoolean(ARG_SHOWS_INFO_BUTTONS, showsAdditionalInfoButtons);
+        args.putBoolean(ARG_IS_LOADING, isLoading);
         fragment.setArguments(args);
 
         return fragment;
@@ -75,6 +79,7 @@ public class AboutVIPFragment extends Fragment {
                 mInfoText = getArguments().getString(ARG_INFO_TEXT);
             }
             mTitle = getArguments().getString(ARG_TITLE);
+            mIsLoading = getArguments().getBoolean(ARG_IS_LOADING);
             mShowsAdditionalInfoButtons = getArguments().getBoolean(ARG_SHOWS_INFO_BUTTONS);
             mTransitionPoint = getArguments().getParcelable(ARG_TRANSITION_POINT);
         }
@@ -92,6 +97,7 @@ public class AboutVIPFragment extends Fragment {
         mTermsOfUseButton = view.findViewById(R.id.button_terms_of_use);
         mPrivacyPolicyButton = view.findViewById(R.id.button_privacy_policy);
         mLegalNoticesButton = view.findViewById(R.id.button_legal_notices);
+        mProgressBarContainer = view.findViewById(R.id.progress_bar_container);
 
         setupViewListeners();
         updateView();
@@ -101,6 +107,14 @@ public class AboutVIPFragment extends Fragment {
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 v.removeOnLayoutChangeListener(this);
                 performRevealAnimation();
+            }
+        });
+
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myActivity.upButtonPressed();
             }
         });
 
@@ -116,6 +130,13 @@ public class AboutVIPFragment extends Fragment {
         }
         if (mAdditionalInformationView != null) {
             mAdditionalInformationView.setVisibility(showsAdditionalInfoButtons() ? View.VISIBLE : View.GONE);
+        }
+        if (mProgressBarContainer != null) {
+            if (mIsLoading) {
+                mProgressBarContainer.setVisibility(View.VISIBLE);
+            } else {
+                mProgressBarContainer.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -157,7 +178,7 @@ public class AboutVIPFragment extends Fragment {
             reveal.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
+                    //Required onAnimationStart override
                 }
 
                 @Override
@@ -167,12 +188,12 @@ public class AboutVIPFragment extends Fragment {
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
-
+                    //Required onAnimationCancel override
                 }
 
                 @Override
                 public void onAnimationRepeat(Animator animation) {
-
+                    //Required onAnimationRepeat override
                 }
             });
             reveal.start();
@@ -256,12 +277,22 @@ public class AboutVIPFragment extends Fragment {
         updateView();
     }
 
+
     public boolean showsAdditionalInfoButtons() {
         return mShowsAdditionalInfoButtons;
     }
 
     public void setShowsAdditionalInfoButtons(boolean showsAdditionalInfoButtons) {
         this.mShowsAdditionalInfoButtons = showsAdditionalInfoButtons;
+        updateView();
+    }
+
+    public boolean isLoading() {
+        return mIsLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        mIsLoading = loading;
         updateView();
     }
 }

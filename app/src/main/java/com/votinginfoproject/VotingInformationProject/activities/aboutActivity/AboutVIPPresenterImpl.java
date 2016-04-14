@@ -16,18 +16,6 @@ import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
 public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     private static final String TAG = AboutVIPPresenterImpl.class.getSimpleName();
 
-    private final int ABOUT_APP_TITLE_KEY = R.string.about_app_title;
-    private final int ABOUT_APP_DESCRIPTION_KEY = R.string.about_app_description;
-
-    private final int TERMS_TITLE_KEY = R.string.about_title_terms;
-    private final int TERMS_DESCRIPTION_KEY = R.string.about_terms_description;
-
-    private final int PRIVACY_TITLE_KEY = R.string.about_title_privacy;
-    private final int PRIVACY_DESCRIPTION_KEY = R.string.about_privacy_description;
-
-    private final int LEGAL_NOTICES_TITLE_KEY = R.string.about_title_legal_notices;
-    private final int LEGAL_NOTICES_LOADING_KEY = R.string.about_loading_legal_notices;
-
     private Context mContext;
 
     private boolean mHasAttachedView = false;
@@ -55,6 +43,7 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     @Override
     public void onAttachView(AboutVIPView aboutVIPView) {
         super.onAttachView(aboutVIPView);
+
         if (!mHasAttachedView) {
             mHasAttachedView = true;
             navigateToInitialAboutView();
@@ -63,15 +52,17 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
 
     @Override
     void termsOfUseClicked(MotionEvent event) {
-        navigateToNewAboutView(TERMS_TITLE_KEY,
-                TERMS_DESCRIPTION_KEY,
+        navigateToNewAboutView(R.string.about_title_terms,
+                R.string.about_terms_description,
+                false,
                 new CoordinatePair((int) event.getRawX(), (int) event.getRawY()));
     }
 
     @Override
     void privacyPolicyClicked(MotionEvent event) {
-        navigateToNewAboutView(PRIVACY_TITLE_KEY,
-                PRIVACY_DESCRIPTION_KEY,
+        navigateToNewAboutView(R.string.about_title_privacy,
+                R.string.about_privacy_description,
+                false,
                 new CoordinatePair((int) event.getRawX(), (int) event.getRawY()));
     }
 
@@ -79,8 +70,9 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     void legalNoticesClicked(MotionEvent event) {
         mPresentingLegalNotices = true;
 
-        navigateToNewAboutView(LEGAL_NOTICES_TITLE_KEY,
-                LEGAL_NOTICES_LOADING_KEY,
+        navigateToNewAboutView(R.string.about_title_legal_notices,
+                R.string.about_loading_legal_notices,
+                true,
                 new CoordinatePair((int) event.getRawX(), (int) event.getRawY()));
     }
 
@@ -92,27 +84,30 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
 
     @Override
     void viewTransitionEnded() {
+
         if(mPresentingLegalNotices) {
             GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
             getView().setInformationText(apiAvailability.getOpenSourceSoftwareLicenseInfo(mContext));
+            getView().setLoading(false);
         }
     }
 
-    private void navigateToNewAboutView(@StringRes int titleTextKey, @StringRes int descriptionTextKey, CoordinatePair transitionPoint) {
+    private void navigateToNewAboutView(@StringRes int titleTextKey, @StringRes int descriptionTextKey, boolean isLoading, CoordinatePair transitionPoint) {
         navigateToNewAboutView(
                 mContext.getString(titleTextKey),
                 mContext.getString(descriptionTextKey),
+                isLoading,
                 transitionPoint);
     }
 
     private void navigateToInitialAboutView() {
-        String defaultTitle = mContext.getString(ABOUT_APP_TITLE_KEY);
-        String defaultInfoText = mContext.getString(ABOUT_APP_DESCRIPTION_KEY);
+        String defaultTitle = mContext.getString(R.string.about_app_title);
+        String defaultInfoText = mContext.getString(R.string.about_app_description);
 
-        getView().navigateToAboutView(defaultTitle, defaultInfoText, true, null);
+        getView().navigateToAboutView(defaultTitle, defaultInfoText, false, true, null);
     }
 
-    private void navigateToNewAboutView(String titleText, String infoText, CoordinatePair transitionPoint) {
-        getView().navigateToAboutView(titleText, infoText, false, transitionPoint);
+    private void navigateToNewAboutView(String titleText, String infoText, boolean isLoading, CoordinatePair transitionPoint) {
+        getView().navigateToAboutView(titleText, infoText, isLoading, false, transitionPoint);
     }
 }

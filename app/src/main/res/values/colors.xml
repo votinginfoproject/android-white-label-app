@@ -22,6 +22,7 @@
     <color name="text_gray">#808080</color>
     <color name="section_header_gray">#ebeef0</color>
     <color name="detail_text_gray">#333333</color>
+    <color name="secondary_text">#757575</color>
     <color name="list_divider_gray">#e6e6e6</color>
     <color name="home_button_background">#004071</color>
     <color name="home.edit.text.background">#48FFFFFF</color>
