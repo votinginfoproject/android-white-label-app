@@ -350,7 +350,7 @@ public class VIPMapFragment extends MapFragment implements AdapterView.OnItemSel
      */
     private void addNonPollingToMap() {
         // add marker for user-entered address
-        if (homeLocation != null) {
+        if (homeLocation != null && markerIds != null) {
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(homeLocation)
                     .title(getContext().getString(R.string.locations_map_label_user_address))

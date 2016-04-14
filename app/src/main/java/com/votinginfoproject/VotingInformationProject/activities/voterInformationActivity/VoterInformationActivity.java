@@ -29,7 +29,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
 
     private BottomNavigationBar mBottomNavigationBar;
-    private Fragment lastFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +113,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void presentParentLevelFragment(Fragment parentLevelFragment) {
-        lastFragment = parentLevelFragment;
-//        parentLevelFragment.setOnBackPressedListener(this);
-
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
@@ -125,23 +121,19 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
         transaction.addToBackStack(TOP_LEVEL_TAG);
 
-
         transaction.commit();
     }
 
     @Override
     public void presentChildLevelFragment(Fragment childLevelFragment) {
-        lastFragment = childLevelFragment;
-
-//        childLevelFragment.setOnBackPressedListener(this);
-
         FragmentManager manager = getFragmentManager();
 
         FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction.replace(R.id.layout_content, childLevelFragment);
+        String fragmentTag = String.valueOf(childLevelFragment.hashCode());
+        transaction.replace(R.id.layout_content, childLevelFragment, fragmentTag);
 
-        transaction.addToBackStack(childLevelFragment.getClass().getSimpleName());
+        transaction.addToBackStack(fragmentTag);
 
         transaction.commit();
     }
@@ -158,8 +150,16 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void scrollCurrentFragmentToTop() {
-        if (lastFragment != null && lastFragment instanceof BottomNavigationFragment) {
-            ((BottomNavigationFragment) lastFragment).resetView();
+        FragmentManager manager = getFragmentManager();
+        int entryCount = manager.getBackStackEntryCount();
+
+        if (entryCount > 0) {
+            FragmentManager.BackStackEntry entry = manager.getBackStackEntryAt(entryCount - 1);
+            Fragment lastFragment = manager.findFragmentByTag(entry.getName());
+
+            if (lastFragment instanceof BottomNavigationFragment) {
+                ((BottomNavigationFragment) lastFragment).resetView();
+            }
         }
     }
 
