@@ -31,7 +31,6 @@ import com.votinginfoproject.VotingInformationProject.activities.voterInformatio
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
-import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
@@ -452,20 +451,23 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             markers = new HashMap<>(allLocations.size());
             markerIds = new HashMap<>(allLocations.size());
 
-            // use red markers for early voting sites
-            if (showEarly) {
-                addLocationsToMap(voterInfo.getOpenEarlyVoteSites(), R.drawable.ic_website_active);
+            for (PollingLocation location : mPresenter.getSortedLocations()) {
+                switch (location.pollingLocationType) {
+                    case PollingLocation.POLLING_TYPE_DROP_BOX:
+                        markers.put(location.address.toGeocodeString(), createMarkerOptions(location, R.drawable.ic_marker_drop_box));
+
+                        break;
+                    case PollingLocation.POLLING_TYPE_EARLY_VOTE:
+                        markers.put(location.address.toGeocodeString(), createMarkerOptions(location, R.drawable.ic_marker_early_voting));
+
+                        break;
+                    case PollingLocation.POLLING_TYPE_LOCATION:
+                        markers.put(location.address.toGeocodeString(), createMarkerOptions(location, R.drawable.ic_marker_poll));
+
+                        break;
+                }
             }
 
-            // use blue markers for polling locations
-            if (!voterInfo.getPollingLocations().isEmpty() && showPolling) {
-                addLocationsToMap(voterInfo.getPollingLocations(), R.drawable.ic_website_active);
-            }
-
-            // use green markers for drop boxes
-            if (showDropBox) {
-                addLocationsToMap(voterInfo.getOpenDropOffLocations(), R.drawable.ic_website_active);
-            }
 
             return locationId;
         }
