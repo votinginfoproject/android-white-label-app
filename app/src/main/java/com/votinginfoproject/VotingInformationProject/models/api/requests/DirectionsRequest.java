@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.models.api.requests;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -14,10 +13,8 @@ public class DirectionsRequest implements RequestType {
     private String destinationCoordinates;
     private String directionsKey;
     private String travelMode;
-    private Context mContext;
 
-    public DirectionsRequest(@NonNull Context context,
-                             @NonNull String directionsKey,
+    public DirectionsRequest(@NonNull String directionsKey,
                              @NonNull String travelMode,
                              @NonNull String originCoordinates,
                              @NonNull String destinationCoordinates) {
@@ -26,7 +23,6 @@ public class DirectionsRequest implements RequestType {
         this.originCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
         this.directionsKey = directionsKey;
-        this.mContext = context;
     }
 
     public String getTravelMode() {

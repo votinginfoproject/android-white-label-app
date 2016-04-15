@@ -275,7 +275,7 @@ public class DirectionsFragment extends Fragment implements DirectionsInteractor
         String destinationCoordinates = locationAddress.latitude + "," + locationAddress.longitude;
 
         String key = getActivity().getResources().getString(R.string.google_api_browser_key);
-        DirectionsRequest request = new DirectionsRequest(getActivity().getBaseContext(), key, directionsMode, originCoordinates, destinationCoordinates);
+        DirectionsRequest request = new DirectionsRequest(key, directionsMode, originCoordinates, destinationCoordinates);
 
         if (directionsInteractor != null) {
             directionsInteractor.cancel(true);
