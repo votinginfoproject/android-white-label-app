@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment2;
+import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -103,12 +104,10 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != DETAILS_TAB) {
             mCurrentTab = DETAILS_TAB;
 
-            getView().presentParentLevelFragment(TestFragment2.newInstance("details", "nope"));
+            getView().presentParentLevelFragment(ElectionDetailsListFragment.newInstance());
         } else {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();
-            getView().presentChildLevelFragment(TestFragment2.newInstance("details child", "nope"));
-
         }
     }
 
