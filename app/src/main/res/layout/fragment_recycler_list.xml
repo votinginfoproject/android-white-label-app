@@ -29,13 +29,10 @@
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/polling_locations_list"
-            android:name="com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesFragment"
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            tools:context=".fragments.pollingSitesFragment.PollingSitesListFragment"
-            tools:listitem="@layout/fragment_pollingsiteitem"/>
+            app:layoutManager="LinearLayoutManager"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

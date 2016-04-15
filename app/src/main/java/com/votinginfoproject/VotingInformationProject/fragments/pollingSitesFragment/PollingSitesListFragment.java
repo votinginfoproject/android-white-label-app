@@ -77,9 +77,10 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
             mPresenter = new PollingSitesPresenterImpl(this);
         }
 
-        View view = inflater.inflate(R.layout.fragment_pollings_sites_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler_list, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.polling_locations_list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
 
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
