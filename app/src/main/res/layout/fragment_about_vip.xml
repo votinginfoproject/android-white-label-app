@@ -42,61 +42,61 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"/>
 
-                    <LinearLayout
-                        android:id="@+id/additional_information"
+                <LinearLayout
+                    android:id="@+id/additional_information"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_below="@id/about_app">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/list_divider_gray"/>
+
+                    <TextView
+                        android:layout_margin="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:orientation="vertical"
-                        android:layout_below="@id/about_app">
+                        android:text="Additional Information"/>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/list_divider_gray"/>
-
+                    <LinearLayout
+                        android:id="@+id/button.terms_of_use"
+                        style="@style/about_additional_into_button">
                         <TextView
-                            android:layout_margin="16dp"
-                            android:layout_width="match_parent"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Additional Information"/>
+                            android:textSize="16sp"
+                            android:text="@string/about.title.terms"/>
+                    </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/button.terms_of_use"
-                            style="@style/about_additional_into_button">
-                            <TextView
-                                android:textColor="@color/colorPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="16sp"
-                                android:text="@string/about.title.terms"/>
-                        </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/button.privacy_policy"
+                        style="@style/about_additional_into_button">
+                        <TextView
+                            android:textColor="@color/colorPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/about.title.privacy"/>
+                    </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/button.privacy_policy"
-                            style="@style/about_additional_into_button">
-                            <TextView
-                                android:textColor="@color/colorPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="16sp"
-                                android:text="@string/about.title.privacy"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/button.legal_notices"
-                            style="@style/about_additional_into_button">
-                            <TextView
-                                android:textColor="@color/colorPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="16sp"
-                                android:text="@string/about.title.legal_notices"/>
-                        </LinearLayout>
-
+                    <LinearLayout
+                        android:id="@+id/button.legal_notices"
+                        style="@style/about_additional_into_button">
+                        <TextView
+                            android:textColor="@color/colorPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/about.title.legal_notices"/>
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
 
         </ScrollView>
 

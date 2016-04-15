@@ -75,9 +75,11 @@ public class AboutVIPFragment extends Fragment  {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
+
             if (mInfoText == null) {
                 mInfoText = getArguments().getString(ARG_INFO_TEXT);
             }
+
             mTitle = getArguments().getString(ARG_TITLE);
             mIsLoading = getArguments().getBoolean(ARG_IS_LOADING);
             mShowsAdditionalInfoButtons = getArguments().getBoolean(ARG_SHOWS_INFO_BUTTONS);
@@ -125,13 +127,17 @@ public class AboutVIPFragment extends Fragment  {
         if (mAboutTextView != null) {
             mAboutTextView.setText(getInfoText());
         }
+
         if (mTitle != null) {
             mToolbar.setTitle(mTitle);
         }
+
         if (mAdditionalInformationView != null) {
             mAdditionalInformationView.setVisibility(showsAdditionalInfoButtons() ? View.VISIBLE : View.GONE);
         }
+
         if (mProgressBarContainer != null) {
+
             if (mIsLoading) {
                 mProgressBarContainer.setVisibility(View.VISIBLE);
             } else {
@@ -206,6 +212,7 @@ public class AboutVIPFragment extends Fragment  {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             return prepareCircularAnimator(true, mTransitionPoint);
         }
+
         return prepareSlidingAnimator(true);
     }
 
@@ -213,6 +220,7 @@ public class AboutVIPFragment extends Fragment  {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             return prepareCircularAnimator(false, mTransitionPoint);
         }
+
         return prepareSlidingAnimator(false);
     }
 
@@ -246,6 +254,7 @@ public class AboutVIPFragment extends Fragment  {
         if (isRevealing) {
             return new DecelerateInterpolator(mAnimationSmoothing);
         }
+
         return new AccelerateInterpolator(mAnimationSmoothing);
     }
 

@@ -274,16 +274,13 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
-    <style name="about_additional_into_button" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:paddingLeft">23dp</item>
-        <item name="android:layout_marginLeft">-8dp</item>
-        <item name="android:layout_marginRight">-8dp</item>
-        <item name="android:layout_marginTop">-6dp</item>
-        <item name="android:layout_marginBottom">-6dp</item>
+    <style name="about_additional_into_button">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">?selectableItemBackground</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:clickable">true</item>
         <item name="android:gravity">start|left|center_vertical</item>
     </style>
 </resources>

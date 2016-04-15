@@ -106,6 +106,7 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
 
     private void navigateToPreviousFragment(final AboutVIPFragment fragmentToRemove) {
         Animator unreveal = fragmentToRemove.prepareUnrevealAnimator();
+
         unreveal.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
