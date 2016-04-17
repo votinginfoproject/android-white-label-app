@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.models;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.votinginfoproject.VotingInformationProject.models.api.requests.RequestType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +16,7 @@ import java.util.List;
  * DirectionsResponse object for voterInfoQuery:
  * https://developers.google.com/civic-information/docs/v1/voterinfo/voterInfoQuery
  */
-public class VoterInfo {
+public class VoterInfo implements RequestType {
     // limit drop box locations to first 50, and polling and early voting sites to first 25
     private transient static final int MAX_VOTING_SITES = 25;
     private transient static final int MAX_DROP_BOX_SITES = 50;
@@ -368,5 +369,10 @@ public class VoterInfo {
      */
     public boolean isSuccessful() {
         return error == null;
+    }
+
+    @Override
+    public String buildQueryString() {
+        return null;
     }
 }

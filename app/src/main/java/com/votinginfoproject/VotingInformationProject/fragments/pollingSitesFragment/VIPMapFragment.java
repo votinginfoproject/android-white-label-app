@@ -32,7 +32,6 @@ import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigation
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     private static final String ARG_CURRENT_SORT = "current_sort";
     private static final String CURRENT_LOCATION = "current";
     private final String TAG = VIPMapFragment.class.getSimpleName();
-    VoterInfo voterInfo;
+
     View mapView;
     RelativeLayout rootView;
     ArrayList<PollingLocation> allLocations;
@@ -160,13 +159,12 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
         mPresenter = new PollingSitesPresenterImpl(this, selectedSort);
 
-        voterInfo = UserPreferences.getVoterInfo();
-        allLocations = voterInfo.getAllLocations();
+        allLocations = UserPreferences.getAllPollingLocations();
 
         homeLocation = UserPreferences.getHomeLatLong();
 //        currentLocation = mActivity.getUserLocation();
 //        currentAddress = mActivity.getUserLocationAddress();
-        homeAddress = voterInfo.normalizedInput.toGeocodeString();
+        homeAddress = UserPreferences.getVoterInfo().normalizedInput.toGeocodeString();
 
 //        polylineBounds = mActivity.getPolylineBounds();
 
@@ -182,11 +180,13 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         if (locationId.equals(HOME)) {
             thisLocation = homeLocation;
         } else if (haveElectionAdminBody) {
-            thisLocation = voterInfo.getAdminBodyLatLng(locationId);
+            //TODO rework this
+            thisLocation = UserPreferences.getVoterInfo().getAdminBodyLatLng(locationId);
         } else {
             Log.d(TAG, "Have location ID: " + locationId);
 
-            selectedLocation = voterInfo.getLocationForId(locationId);
+            //TODO rework this
+            selectedLocation = UserPreferences.getVoterInfo().getLocationForId(locationId);
 
             CivicApiAddress address = selectedLocation.address;
             thisLocation = new LatLng(address.latitude, address.longitude);
@@ -275,8 +275,6 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             // add marker for state or local election administration body
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(thisLocation)
-                    .title(getContext().getString(R.string.locations_map_label_election_administration_body))
-                    .snippet(voterInfo.getAdminAddress(locationId).toString())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
             );
 

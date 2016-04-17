@@ -14,10 +14,11 @@ public class DirectionsRequest implements RequestType {
     private String directionsKey;
     private String travelMode;
 
-    public DirectionsRequest(@NonNull String directionsKey,
-                             @NonNull String travelMode,
-                             @NonNull String originCoordinates,
-                             @NonNull String destinationCoordinates) {
+    public DirectionsRequest(
+            @NonNull String directionsKey,
+            @NonNull String travelMode,
+            @NonNull String originCoordinates,
+            @NonNull String destinationCoordinates) {
 
         this.travelMode = travelMode;
         this.originCoordinates = originCoordinates;

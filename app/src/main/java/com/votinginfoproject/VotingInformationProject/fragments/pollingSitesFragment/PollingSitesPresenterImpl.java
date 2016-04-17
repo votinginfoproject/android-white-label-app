@@ -34,13 +34,13 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
     public ArrayList<PollingLocation> getSortedLocations() {
         switch (currentSort) {
             case R.id.sort_all:
-                return UserPreferences.getVoterInfo().getAllLocations();
+                return UserPreferences.getAllPollingLocations();
             case R.id.sort_polling_locations:
-                return UserPreferences.getVoterInfo().getPollingLocations();
+                return UserPreferences.getPollingLocations();
             case R.id.sort_early_vote:
-                return UserPreferences.getVoterInfo().getOpenEarlyVoteSites();
+                return UserPreferences.getEarlyVotingLocations();
             case R.id.sort_drop_boxes:
-                return UserPreferences.getVoterInfo().getOpenDropOffLocations();
+                return UserPreferences.getDropBoxLocations();
         }
 
         return new ArrayList<>();

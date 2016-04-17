@@ -9,14 +9,16 @@ import java.util.List;
 /**
  * Created by marcvandehey on 4/15/16.
  */
-public class GeocodeResults {
-
+public class GeocodeLocationResult {
     @SerializedName("results")
     @Expose
     private List<Result> results = new ArrayList<Result>();
     @SerializedName("status")
     @Expose
     private String status;
+
+    @SerializedName("error_message")
+    private String errorMessage;
 
     public List<Result> getResults() {
         return results;
@@ -32,5 +34,9 @@ public class GeocodeResults {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }

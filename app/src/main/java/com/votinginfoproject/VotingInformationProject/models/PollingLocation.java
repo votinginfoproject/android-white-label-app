@@ -6,6 +6,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
@@ -37,6 +38,8 @@ public class PollingLocation implements Parcelable {
     public String endDate;
     public String pollingHours;
     public String voterServices; // This field is not populated for polling locations.
+    public Location location;
+    public float distance = 0.f;
 
     public int pollingLocationType = POLLING_TYPE_LOCATION;
 
@@ -52,6 +55,8 @@ public class PollingLocation implements Parcelable {
         pollingHours = parcel.readString();
         voterServices = parcel.readString();
         pollingLocationType = parcel.readInt();
+        location = parcel.readParcelable(Location.class.getClassLoader());
+        distance = parcel.readFloat();
     }
 
     /**
@@ -105,5 +110,7 @@ public class PollingLocation implements Parcelable {
         dest.writeString(pollingHours);
         dest.writeString(voterServices);
         dest.writeInt(pollingLocationType);
+        dest.writeParcelable(location, 0);
+        dest.writeFloat(distance);
     }
 }
