@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
