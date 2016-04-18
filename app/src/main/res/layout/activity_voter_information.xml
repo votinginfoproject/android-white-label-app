@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_navigation_bar"
-            android:layout_below="@id/toolbar_wrapper"/>
+            android:layout_below="@+id/toolbar_wrapper"/>
 
         <com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar
             android:id="@id/bottom_navigation_bar"
