@@ -12,6 +12,10 @@ import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.ElectionOfficial;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyLinkViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodySubtitleViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTextViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTitleViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
@@ -72,18 +76,25 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                         .inflate(R.layout.row_report_error, parent, false);
                 viewHolder = new ReportErrorViewHolder(view);
                 break;
-            case BODY_CHILD_LINK_VIEW_HOLDER:
-            case BODY_CHILD_TEXT_VIEW_HOLDER:
-            case BODY_PARENT_VIEW_HOLDER:
             case BODY_TITLE_VIEW_HOLDER:
-                TextView itemTextView = new TextView(mContext);
-
-                itemTextView.setLayoutParams(
-                        new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                viewHolder = new RecyclerView.ViewHolder(itemTextView) {
-                };
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_election_body_title, parent, false);
+                viewHolder = new ElectionBodyTitleViewHolder(view);
+                break;
+            case BODY_PARENT_VIEW_HOLDER:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_election_body_subtitle, parent, false);
+                viewHolder = new ElectionBodySubtitleViewHolder(view);
+                break;
+            case BODY_CHILD_LINK_VIEW_HOLDER:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_election_body_link, parent, false);
+                viewHolder = new ElectionBodyLinkViewHolder(view);
+                break;
+            case BODY_CHILD_TEXT_VIEW_HOLDER:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_election_body_text, parent, false);
+                viewHolder = new ElectionBodyTextViewHolder(view);
                 break;
             default:
                 viewHolder = null;
@@ -99,22 +110,36 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             electionInformationViewHolder.setElection(mElection);
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
-        } else {
+        } else if (holder instanceof ElectionBodySubtitleViewHolder) {
+
             final ListItem item = itemForListPosition(position);
-            TextView itemTextView = (TextView) holder.itemView;
-            itemTextView.setText(item.mText);
-            if (!item.isChild()) {
-                itemTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (item.isExpanded) {
-                            collapseListItem(item);
-                        } else {
-                            expandListItem(item);
-                        }
-                    }
-                });
-            }
+            ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
+
+            viewHolder.setTitle(item.mText);
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClicked(item);
+                }
+            });
+
+        } else if (holder instanceof  ElectionBodyTitleViewHolder) {
+
+            ListItem item = itemForListPosition(position);
+            ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
+            viewHolder.setTitle(item.mText);
+
+        } else if (holder instanceof  ElectionBodyLinkViewHolder) {
+
+            ListItem item = itemForListPosition(position);
+            ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
+            viewHolder.setTitle(item.mText);
+
+        } else if (holder instanceof  ElectionBodyTextViewHolder) {
+
+            ListItem item = itemForListPosition(position);
+            ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
+            viewHolder.setTitle(item.mText);
         }
     }
 
@@ -185,6 +210,16 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
 
         return toReturn;
+    }
+
+    private void itemClicked(ListItem item) {
+        if (!item.isChild()) {
+            if (item.isExpanded) {
+                collapseListItem(item);
+            } else {
+                expandListItem(item);
+            }
+        }
     }
 
     private void expandListItem(ListItem item) {
