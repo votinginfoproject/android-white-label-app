@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,18 +233,18 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         item.isExpanded = true;
 
-        notifyItemRangeChanged(position + 1, item.mHiddenListItems.size());
+        notifyItemRangeInserted(position + 1, item.mHiddenListItems.size());
     }
 
     private void collapseListItem(ListItem item) {
         int position = parentListNodes.indexOf(item);
-        while (parentListNodes.size() > position + 1 && parentListNodes.get(position + 1).isChild()) {
-            parentListNodes.remove(position + 1);
+        for(ListItem child : item.mHiddenListItems) {
+            parentListNodes.remove(child);
         }
 
         item.isExpanded = false;
 
-        notifyItemRangeChanged(position + 1, item.mHiddenListItems.size());
+        notifyItemRangeRemoved(position + 1, item.mHiddenListItems.size());
     }
 
     class ListItem {

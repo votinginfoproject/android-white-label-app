@@ -2,10 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
+    android:paddingRight="@dimen/fragment.election_details.subtitle_horizontal_padding"
+    android:paddingTop="@dimen/fragment.election_details.subtitle_vertical_padding"
+    android:paddingBottom="@dimen/fragment.election_details.subtitle_vertical_padding">
 
     <TextView
         android:id="@+id/body_link_text"
+        android:textColor="@color/item_header_blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
