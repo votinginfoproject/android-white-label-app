@@ -5,16 +5,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
+import com.votinginfoproject.VotingInformationProject.models.ElectionOfficial;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
-import java.net.URL;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,6 +28,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private static final int ELECTION_VIEW_HOLDER = 0x0;
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x1;
+    private static final int BODY_TITLE_VIEW_HOLDER = 0x2;
+    private static final int BODY_PARENT_VIEW_HOLDER = 0x4;
+    private static final int BODY_CHILD_TEXT_VIEW_HOLDER = 0x5;
+    private static final int BODY_CHILD_LINK_VIEW_HOLDER = 0x6;
 
     private final Context mContext;
     private boolean hasHeader;
@@ -33,12 +41,17 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private final ElectionAdministrationBody mLocalAdmin;
     private final ElectionAdministrationBody mStateAdmin;
 
+    private List<ListItem> parentListNodes;
+
     public ElectionDetailsRecyclerViewAdapter(Context context, VoterInfo voterInfo) {
         mContext = context;
         mVoterInfo = voterInfo;
         mElection = mVoterInfo.election;
         mLocalAdmin = mVoterInfo.getLocalAdmin();
         mStateAdmin = mVoterInfo.getStateAdmin();
+
+        parentListNodes = getListNodesForBody(mLocalAdmin, "Local");
+        parentListNodes.addAll(getListNodesForBody(mStateAdmin, "State"));
 
         hasHeader = (mElection != null);
     }
@@ -59,6 +72,19 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                         .inflate(R.layout.row_report_error, parent, false);
                 viewHolder = new ReportErrorViewHolder(view);
                 break;
+            case BODY_CHILD_LINK_VIEW_HOLDER:
+            case BODY_CHILD_TEXT_VIEW_HOLDER:
+            case BODY_PARENT_VIEW_HOLDER:
+            case BODY_TITLE_VIEW_HOLDER:
+                TextView itemTextView = new TextView(mContext);
+
+                itemTextView.setLayoutParams(
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new RecyclerView.ViewHolder(itemTextView) {
+                };
+                break;
             default:
                 viewHolder = null;
         }
@@ -67,13 +93,41 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ElectionInformationViewHolder) {
             ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
             electionInformationViewHolder.setElection(mElection);
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
+        } else {
+            final ListItem item = itemForListPosition(position);
+            TextView itemTextView = (TextView) holder.itemView;
+            itemTextView.setText(item.mText);
+            if (!item.isChild()) {
+                itemTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (item.isExpanded) {
+                            collapseListItem(item);
+                        } else {
+                            expandListItem(item);
+                        }
+                    }
+                });
+            }
         }
+    }
+
+    private ListItem itemForListPosition(int position) {
+        if (hasHeader) {
+            position--;
+        }
+
+        if (position < 0 || position >= parentListNodes.size()) {
+            return null;
+        }
+
+        return parentListNodes.get(position);
     }
 
     @Override
@@ -81,38 +135,98 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         if (position == 0 && hasHeader) {
             return ELECTION_VIEW_HOLDER;
         } else {
-            return REPORT_ERROR_VIEW_HOLDER;
+            if (hasHeader) {
+                position--;
+            }
+            if (position < parentListNodes.size()) {
+                return parentListNodes.get(position).mViewType;
+            }
         }
+        return REPORT_ERROR_VIEW_HOLDER;
     }
 
 
     @Override
     public int getItemCount() {
-        return 1 + (hasHeader ? 1 : 0);
+        return 1 + (hasHeader ? 1 : 0) + parentListNodes.size();
     }
 
-    public List<ParentListNode> getListNodesForBody(ElectionAdministrationBody body, String sectionName) {
-        List<ParentListNode> toReturn = new ArrayList<>();
+    public List<ListItem> getListNodesForBody(ElectionAdministrationBody body, String sectionName) {
+        List<ListItem> toReturn = new ArrayList<>();
 
-        ParentListNode sectionTitleNode = new ParentListNode();
-        sectionTitleNode.isSectionTitle = true;
-        sectionTitleNode.mText = sectionName;
-        toReturn.add(sectionTitleNode);
+        if (body != null) {
+            ListItem sectionTitleNode = new ListItem(BODY_TITLE_VIEW_HOLDER, sectionName);
+            toReturn.add(sectionTitleNode);
+
+            ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
+            toReturn.add(websitesParent);
+
+            ListItem[] children = {
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voter_registration_url)),
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_absentee_voting_url)),
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voting_location_finder_url)),
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_election_rules_url))
+            };
+            websitesParent.mHiddenListItems.addAll(Arrays.asList(children));
+
+            ListItem hoursParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_hours_of_operation));
+            toReturn.add(hoursParent);
+            hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
+
+            ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
+            toReturn.add(addressParent);
+            addressParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString()));
+
+            ListItem officialsParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_election_officials));
+            toReturn.add(officialsParent);
+            for (ElectionOfficial official : body.electionOfficials) {
+                officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
+            }
+        }
 
         return toReturn;
     }
 
-}
+    private void expandListItem(ListItem item) {
+        int position = parentListNodes.indexOf(item);
+        int index = position + 1;
+        for (ListItem child : item.mHiddenListItems) {
+            parentListNodes.add(index, child);
+            index++;
+        }
 
-class ParentListNode {
-    public String mText = "";
-    public int mImageId = 0;
-    public boolean isSectionTitle = false;
-    public ArrayList<ChildListNode> mChildListNodes = new ArrayList<>();
-}
+        item.isExpanded = true;
 
-class ChildListNode {
-    public String mText;
-    public String mURL;
-}
+        notifyItemRangeChanged(position + 1, item.mHiddenListItems.size());
+    }
 
+    private void collapseListItem(ListItem item) {
+        int position = parentListNodes.indexOf(item);
+        while (parentListNodes.size() > position + 1 && parentListNodes.get(position + 1).isChild()) {
+            parentListNodes.remove(position + 1);
+        }
+
+        item.isExpanded = false;
+
+        notifyItemRangeChanged(position + 1, item.mHiddenListItems.size());
+    }
+
+    class ListItem {
+        public final int mViewType;
+        public String mText;
+        public int mImageId = 0;
+        public boolean isExpanded = false;
+        public List<ListItem> mHiddenListItems = new ArrayList<>();
+
+        public ListItem(int viewType, String text) {
+            mViewType = viewType;
+            mText= text;
+        }
+
+        public boolean isChild() {
+            return (mViewType == BODY_CHILD_LINK_VIEW_HOLDER)
+                    || (mViewType == BODY_CHILD_TEXT_VIEW_HOLDER);
+        }
+
+    }
+}
