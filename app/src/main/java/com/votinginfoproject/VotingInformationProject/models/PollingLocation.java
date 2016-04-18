@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 
@@ -57,6 +58,10 @@ public class PollingLocation implements Parcelable {
         pollingLocationType = parcel.readInt();
         location = parcel.readParcelable(Location.class.getClassLoader());
         distance = parcel.readFloat();
+    }
+
+    public LatLng getLatLongLocation() {
+        return new LatLng(location.lat, location.lng);
     }
 
     /**

@@ -153,8 +153,6 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
         if (mVoterInfo != null && mVoterInfo.isSuccessful()) {
             //Filter Voting info and send to activity
-
-
             String filter = "";
 
             //If All Parties is not Selected
@@ -253,6 +251,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
                     mVoterInfo.setUpLocations();
 
                     GeocodeInteractor interactor = new GeocodeInteractor();
+                    //TODO use key here when it is hooked up correctly
                     GeocodeVoterInfoRequest request = new GeocodeVoterInfoRequest(/*mContext.getString(R.string.google_api_browser_key)*/"", mVoterInfo);
 
                     interactor.enqueueRequest(request, this);

@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
@@ -60,14 +59,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     String encodedPolyline;
     LatLngBounds polylineBounds;
     boolean haveElectionAdminBody;
-    HashMap<String, MarkerOptions> markers;
-    // track the internally-assigned ID for each marker and map it to the location's key
-    HashMap<String, String> markerIds;
-    // track which location filter was last selected, and only refresh list if it changed
 
-    boolean showPolling = true;
-    boolean showEarly = true;
-    boolean showDropBox = true;
+    HashMap<Marker, PollingLocation> mappedPollingLocations;
 
     private PollingSitesListFragment.PollingSiteOnClickListener mListener;
     private PollingSitesPresenter mPresenter;
@@ -162,10 +155,14 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         allLocations = UserPreferences.getAllPollingLocations();
 
         homeLocation = UserPreferences.getHomeLatLong();
+
+        //TODO get current location
 //        currentLocation = mActivity.getUserLocation();
 //        currentAddress = mActivity.getUserLocationAddress();
+
         homeAddress = UserPreferences.getVoterInfo().normalizedInput.toGeocodeString();
 
+        //TODO rework how we are getting polylines
 //        polylineBounds = mActivity.getPolylineBounds();
 
         // check if this map view is for an election administration body
@@ -249,14 +246,12 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
      */
     private void addNonPollingToMap() {
         // add marker for user-entered address
-        if (homeLocation != null && markerIds != null) {
+        if (homeLocation != null) {
             Marker marker = map.addMarker(new MarkerOptions()
-                    .position(homeLocation)
+                    .position(UserPreferences.getHomeLatLong())
                     .title(getContext().getString(R.string.locations_map_label_user_address))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_map))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_address))
             );
-
-            markerIds.put(marker.getId(), HOME);
         }
 
         if (currentLocation != null) {
@@ -267,8 +262,6 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
                     .snippet(currentAddress)
                     .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
             );
-
-            markerIds.put(marker.getId(), CURRENT_LOCATION);
         }
 
         if (haveElectionAdminBody) {
@@ -280,7 +273,6 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
             marker.showInfoWindow();
             // allow for getting directions from election admin body location
-            markerIds.put(marker.getId(), locationId);
         }
 
         if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
@@ -343,7 +335,44 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
     @Override
     public void updateList(ArrayList<PollingLocation> locations) {
+        if (map != null) {
+            map.clear();
+            updateMapWithLocations(locations);
+            addNonPollingToMap();
+        }
+    }
 
+    private void updateMapWithLocations(ArrayList<PollingLocation> locations) {
+        mappedPollingLocations = new HashMap<>();
+
+        for (PollingLocation location : locations) {
+            MarkerOptions markerOptions;
+            switch (location.pollingLocationType) {
+                case PollingLocation.POLLING_TYPE_DROP_BOX:
+
+                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_drop_box);
+
+                    break;
+                case PollingLocation.POLLING_TYPE_EARLY_VOTE:
+                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_early_voting);
+
+                    break;
+                case PollingLocation.POLLING_TYPE_LOCATION:
+                default:
+                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_poll);
+
+                    break;
+            }
+
+            markerOptions.title(location.address.locationName);
+
+            if (location.address != null) {
+                markerOptions.position(location.getLatLongLocation());
+                Marker marker = map.addMarker(markerOptions);
+
+                mappedPollingLocations.put(marker, location);
+            }
+        }
     }
 
     @Override
@@ -382,10 +411,9 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
         setupMapView(googleMap);
 
-        mPresenter.getSortedLocations();
+        updateMapWithLocations(mPresenter.getSortedLocations());
 
-        // start asynchronous task to add markers to map
-        new AddMarkersTask().execute(locationId);
+        addNonPollingToMap();
 
         //This will be the same as reset View, but not animated
         if (polylineBounds != null) {
@@ -411,81 +439,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                // get location key for this marker's ID
-                String key = markerIds.get(marker.getId());
-
-                // do nothing for taps on user address or current location info window
-                if (key.equals(HOME) || key.equals((CURRENT_LOCATION))) {
-                    return;
-                }
-
-                Log.d(TAG, "Clicked marker for " + key);
-//                mActivity.showDirections(key);
+//TODO do this
             }
         });
-    }
-
-    private class AddMarkersTask extends AsyncTask<String, Integer, String> {
-
-        /**
-         * Helper function to add collection of polling locations to map.
-         *
-         * @param locations
-         * @param drawable
-         */
-        private void addLocationsToMap(List<PollingLocation> locations, @DrawableRes int drawable) {
-            for (PollingLocation location : locations) {
-                if (location.address.latitude == 0) {
-                    Log.d(TAG, "Skipping adding to map location " + location.name);
-                    continue;
-                }
-
-                markers.put(location.address.toGeocodeString(), createMarkerOptions(location, drawable));
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... select_locations) {
-            markers = new HashMap<>(allLocations.size());
-            markerIds = new HashMap<>(allLocations.size());
-
-            for (PollingLocation location : mPresenter.getSortedLocations()) {
-                switch (location.pollingLocationType) {
-                    case PollingLocation.POLLING_TYPE_DROP_BOX:
-                        markers.put(location.address.toGeocodeString(), createMarkerOptions(location, R.drawable.ic_marker_drop_box));
-
-                        break;
-                    case PollingLocation.POLLING_TYPE_EARLY_VOTE:
-                        markers.put(location.address.toGeocodeString(), createMarkerOptions(location, R.drawable.ic_marker_early_voting));
-
-                        break;
-                    case PollingLocation.POLLING_TYPE_LOCATION:
-                        markers.put(location.address.toGeocodeString(), createMarkerOptions(location, R.drawable.ic_marker_poll));
-
-                        break;
-                }
-            }
-
-
-            return locationId;
-        }
-
-        @Override
-        protected void onPostExecute(String checkId) {
-            for (String key : markers.keySet()) {
-                if (map != null) {
-
-                    Marker marker = map.addMarker(markers.get(key));
-                    markerIds.put(marker.getId(), key);
-
-                    if (key.equals(locationId)) {
-                        // show popup for marker at selected location
-                        marker.showInfoWindow();
-                    }
-
-                    addNonPollingToMap();
-                }
-            }
-        }
     }
 }
