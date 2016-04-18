@@ -8,8 +8,14 @@ import android.view.ViewGroup;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by max on 4/15/16.
@@ -20,12 +26,20 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x1;
 
     private final Context mContext;
-    private final Election mElection;
     private boolean hasHeader;
 
-    public ElectionDetailsRecyclerViewAdapter(Context context, Election election) {
+    private final VoterInfo mVoterInfo;
+    private final Election mElection;
+    private final ElectionAdministrationBody mLocalAdmin;
+    private final ElectionAdministrationBody mStateAdmin;
+
+    public ElectionDetailsRecyclerViewAdapter(Context context, VoterInfo voterInfo) {
         mContext = context;
-        mElection = election;
+        mVoterInfo = voterInfo;
+        mElection = mVoterInfo.election;
+        mLocalAdmin = mVoterInfo.getLocalAdmin();
+        mStateAdmin = mVoterInfo.getStateAdmin();
+
         hasHeader = (mElection != null);
     }
 
@@ -71,8 +85,34 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
     }
 
+
     @Override
     public int getItemCount() {
         return 1 + (hasHeader ? 1 : 0);
     }
+
+    public List<ParentListNode> getListNodesForBody(ElectionAdministrationBody body, String sectionName) {
+        List<ParentListNode> toReturn = new ArrayList<>();
+
+        ParentListNode sectionTitleNode = new ParentListNode();
+        sectionTitleNode.isSectionTitle = true;
+        sectionTitleNode.mText = sectionName;
+        toReturn.add(sectionTitleNode);
+
+        return toReturn;
+    }
+
 }
+
+class ParentListNode {
+    public String mText = "";
+    public int mImageId = 0;
+    public boolean isSectionTitle = false;
+    public ArrayList<ChildListNode> mChildListNodes = new ArrayList<>();
+}
+
+class ChildListNode {
+    public String mText;
+    public String mURL;
+}
+
