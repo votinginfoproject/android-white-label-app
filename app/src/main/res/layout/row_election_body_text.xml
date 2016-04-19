@@ -3,7 +3,6 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
-    android:paddingRight="@dimen/fragment.election_details.subtitle_horizontal_padding"
     android:paddingTop="@dimen/fragment.election_details.subtitle_vertical_padding"
     android:paddingBottom="@dimen/fragment.election_details.subtitle_vertical_padding">
 

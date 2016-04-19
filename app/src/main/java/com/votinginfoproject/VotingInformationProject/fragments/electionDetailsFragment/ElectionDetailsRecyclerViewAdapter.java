@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -117,6 +119,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
 
             viewHolder.setTitle(item.mText);
+            viewHolder.setImage(item.mImageId);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -135,6 +138,8 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             ListItem item = itemForListPosition(position);
             ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
             viewHolder.setTitle(item.mText);
+            //setAnimation(viewHolder.itemView, position);
+
 
         } else if (holder instanceof  ElectionBodyTextViewHolder) {
 
@@ -142,6 +147,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
             viewHolder.setTitle(item.mText);
         }
+
     }
 
     private ListItem itemForListPosition(int position) {
@@ -171,6 +177,19 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         return REPORT_ERROR_VIEW_HOLDER;
     }
 
+    private int lastPosition = -1;
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
+
 
     @Override
     public int getItemCount() {
@@ -185,6 +204,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             toReturn.add(sectionTitleNode);
 
             ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
+            websitesParent.mImageId = R.drawable.ic_website_active;
             toReturn.add(websitesParent);
 
             ListItem[] children = {
@@ -196,14 +216,17 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             websitesParent.mHiddenListItems.addAll(Arrays.asList(children));
 
             ListItem hoursParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_hours_of_operation));
+            hoursParent.mImageId = R.drawable.ic_hours_active;
             toReturn.add(hoursParent);
             hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
 
             ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
+            addressParent.mImageId = R.drawable.ic_address_active;
             toReturn.add(addressParent);
             addressParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString()));
 
             ListItem officialsParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_election_officials));
+            officialsParent.mImageId = R.drawable.ic_officials_active;
             toReturn.add(officialsParent);
             for (ElectionOfficial official : body.electionOfficials) {
                 officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
@@ -233,6 +256,9 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         item.isExpanded = true;
 
+        if (hasHeader) {
+            position++;
+        }
         notifyItemRangeInserted(position + 1, item.mHiddenListItems.size());
     }
 
@@ -243,6 +269,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
 
         item.isExpanded = false;
+
+        if (hasHeader) {
+            position++;
+        }
 
         notifyItemRangeRemoved(position + 1, item.mHiddenListItems.size());
     }
