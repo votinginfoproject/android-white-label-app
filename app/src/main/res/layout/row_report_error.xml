@@ -8,6 +8,7 @@
               android:padding="16dp">
 
     <TextView
+        android:id="@+id/report_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/feedback.link"

@@ -42,6 +42,10 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
         mChevronImageView.setImageResource(resId);
     }
 
+    public int getLeftDividerMargin() {
+        return mTextView.getLeft();
+    }
+
     public boolean isExpanded() {
         return mIsExpanded;
     }

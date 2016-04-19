@@ -76,7 +76,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
-            int top = child.getBottom() + params.bottomMargin;
+            int top = child.getBottom() + params.bottomMargin + (int) (child.getTranslationY() + 0.5);
             int bottom = top + mDivider.getIntrinsicHeight();
 
             //Line up divider with left padding

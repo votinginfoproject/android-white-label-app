@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
+import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemDecoration;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.DividerItemDecoration;
 
 import java.net.URI;
 
@@ -47,9 +49,10 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
+
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new ElectionDetailsItemDecoration(getActivity(), ElectionDetailsItemDecoration.VERTICAL_LIST));
 
         mAdapter = new ElectionDetailsRecyclerViewAdapter(context, mPresenter.getVoterInfo(), mPresenter);
 
