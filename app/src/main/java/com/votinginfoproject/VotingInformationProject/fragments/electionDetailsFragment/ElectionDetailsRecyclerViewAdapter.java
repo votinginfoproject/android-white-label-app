@@ -60,6 +60,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         mStateAdmin = mVoterInfo.getStateAdmin();
 
         parentListNodes = getListNodesForBody(mLocalAdmin, "Local");
+
         parentListNodes.addAll(getListNodesForBody(mStateAdmin, "State"));
 
         hasHeader = (mElection != null);

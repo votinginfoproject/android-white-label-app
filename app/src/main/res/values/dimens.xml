@@ -10,6 +10,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <dimen name="fragment.election_details.item_min_height">48dp</dimen>
     <dimen name="fragment.election_details.subtitle_horizontal_padding">72dp</dimen>
+    <dimen name="fragment.election_details.subtitle_image_size">24dp</dimen>
+    <dimen name="fragment.election_details.subtitle_image_horizontal_padding_edge">16dp</dimen>
+    <dimen name="fragment.election_details.subtitle_image_horizontal_padding_internal">32dp</dimen>
     <dimen name="fragment.election_details.subtitle_vertical_padding">10dp</dimen>
 </resources>

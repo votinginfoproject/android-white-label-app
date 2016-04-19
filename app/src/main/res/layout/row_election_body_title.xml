@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:minHeight="@dimen/fragment.election_details.item_min_height"
+    android:paddingLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/body_title"

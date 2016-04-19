@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/fragment.election_details.item_min_height"
     android:gravity="center_vertical">
     
     <ImageView
         android:id="@+id/body_subtitle_image"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"/>
+        android:layout_width="@dimen/fragment.election_details.subtitle_image_size"
+        android:layout_height="@dimen/fragment.election_details.subtitle_image_size"
+        android:layout_marginLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
+        android:layout_marginRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_internal"/>
 
     <TextView
         android:id="@+id/body_subtitle"
@@ -20,10 +21,10 @@
 
     <ImageView
         android:id="@+id/body_subtitle_arrow"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_width="@dimen/fragment.election_details.subtitle_image_size"
+        android:layout_height="@dimen/fragment.election_details.subtitle_image_size"
+        android:layout_marginRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
+        android:layout_marginLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_internal"
         android:layout_gravity="right|center_vertical"
         android:src="@drawable/ic_arrow_down"/>
 

@@ -4,9 +4,10 @@
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:clickable="true"
+    android:minHeight="@dimen/fragment.election_details.item_min_height"
     android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
-    android:paddingTop="@dimen/fragment.election_details.subtitle_vertical_padding"
-    android:paddingBottom="@dimen/fragment.election_details.subtitle_vertical_padding">
+    android:gravity="center_vertical">
+
 
     <TextView
         android:id="@+id/body_link_text"

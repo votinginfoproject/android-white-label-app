@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodySubtitleViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTitleViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
@@ -98,14 +99,14 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
                     foundFirstSubtitleInElection = true;
                     continue;
                 }
-                
+
                 ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) viewHolder;
 
                 mDivider.setBounds(left + subtitleViewHolder.getLeftDividerMargin(), top, right, bottom);
                 mDivider.draw(c);
 
             } else if ((viewHolder instanceof ElectionInformationViewHolder) ||
-                    (viewHolder instanceof ReportErrorViewHolder)) {
+                    (viewHolder instanceof ElectionBodyTitleViewHolder)) {
 
                 foundFirstSubtitleInElection = false;
 

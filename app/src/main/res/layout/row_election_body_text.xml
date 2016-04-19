@@ -3,8 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
-    android:paddingTop="@dimen/fragment.election_details.subtitle_vertical_padding"
-    android:paddingBottom="@dimen/fragment.election_details.subtitle_vertical_padding">
+    android:minHeight="@dimen/fragment.election_details.item_min_height"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/body_text"
