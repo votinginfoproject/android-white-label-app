@@ -116,13 +116,14 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         } else if (holder instanceof ElectionBodySubtitleViewHolder) {
 
             final ListItem item = itemForListPosition(position);
-            ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
+            final ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
 
             viewHolder.setTitle(item.mText);
             viewHolder.setImage(item.mImageId);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    viewHolder.setExpanded(!viewHolder.isExpanded());
                     itemClicked(item);
                 }
             });
@@ -176,20 +177,6 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
         return REPORT_ERROR_VIEW_HOLDER;
     }
-
-    private int lastPosition = -1;
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
-    }
-
-
 
     @Override
     public int getItemCount() {
