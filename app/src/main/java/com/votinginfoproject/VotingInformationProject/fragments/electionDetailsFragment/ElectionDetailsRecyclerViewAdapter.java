@@ -41,6 +41,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private static final int BODY_CHILD_LINK_VIEW_HOLDER = 0x6;
 
     private final Context mContext;
+    private final ElectionDetailsPresenter mPresenter;
     private boolean hasHeader;
 
     private final VoterInfo mVoterInfo;
@@ -50,8 +51,9 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private List<ListItem> parentListNodes;
 
-    public ElectionDetailsRecyclerViewAdapter(Context context, VoterInfo voterInfo) {
+    public ElectionDetailsRecyclerViewAdapter(Context context, VoterInfo voterInfo, ElectionDetailsPresenter presenter) {
         mContext = context;
+        mPresenter = presenter;
         mVoterInfo = voterInfo;
         mElection = mVoterInfo.election;
         mLocalAdmin = mVoterInfo.getLocalAdmin();
@@ -136,11 +138,15 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         } else if (holder instanceof  ElectionBodyLinkViewHolder) {
 
-            ListItem item = itemForListPosition(position);
+            final ListItem item = itemForListPosition(position);
             ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
             viewHolder.setTitle(item.mText);
-            //setAnimation(viewHolder.itemView, position);
-
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.linkSelected(item.mURLString);
+                }
+            });
 
         } else if (holder instanceof  ElectionBodyTextViewHolder) {
 
@@ -195,10 +201,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             toReturn.add(websitesParent);
 
             ListItem[] children = {
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voter_registration_url)),
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_absentee_voting_url)),
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voting_location_finder_url)),
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_election_rules_url))
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voter_registration_url), body.electionRegistrationUrl),
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_absentee_voting_url), body.absenteeVotingInfoUrl),
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voting_location_finder_url), body.votingLocationFinderUrl),
+                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_election_rules_url), body.electionRulesUrl)
             };
             websitesParent.mHiddenListItems.addAll(Arrays.asList(children));
 
@@ -267,6 +273,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     class ListItem {
         public final int mViewType;
         public String mText;
+        public String mURLString;
         public int mImageId = 0;
         public boolean isExpanded = false;
         public List<ListItem> mHiddenListItems = new ArrayList<>();
@@ -274,6 +281,12 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public ListItem(int viewType, String text) {
             mViewType = viewType;
             mText= text;
+        }
+
+        public ListItem (int viewType, String text, String urlString) {
+            mText = text;
+            mViewType = viewType;
+            mURLString = urlString;
         }
 
         public boolean isChild() {

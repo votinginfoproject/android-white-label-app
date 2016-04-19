@@ -10,4 +10,5 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 public abstract class ElectionDetailsPresenter extends BasePresenter<ElectionDetailsView> {
     public abstract VoterInfo getVoterInfo();
 
+    public abstract void linkSelected(String urlString);
 }

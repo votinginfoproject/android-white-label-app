@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.Election;
@@ -30,5 +31,12 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
     @Override
     public VoterInfo getVoterInfo() {
         return UserPreferences.getVoterInfo();
+    }
+
+    @Override
+    public void linkSelected(String urlString) {
+        if (urlString != null) {
+            getView().navigateToURL(urlString);
+        }
     }
 }
