@@ -19,6 +19,8 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextView;
     private boolean mIsExpanded;
 
+    private int mImageResource;
+
     public ElectionBodySubtitleViewHolder(View v) {
         super(v);
 
@@ -32,8 +34,15 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
         mTextView.setText(title);
     }
 
-    public void setImage(@DrawableRes int id) {
-        mImageView.setImageResource(id);
+    public void setImageResource(@DrawableRes int id) {
+        if (id != mImageResource) {
+            mImageResource = id;
+            updateImage();
+        }
+    }
+
+    private void updateImage() {
+        mImageView.setImageResource(mImageResource);
     }
 
     public void setExpanded(boolean expanded) {

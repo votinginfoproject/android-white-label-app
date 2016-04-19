@@ -11,4 +11,6 @@ public abstract class ElectionDetailsPresenter extends BasePresenter<ElectionDet
     public abstract VoterInfo getVoterInfo();
 
     public abstract void linkSelected(String urlString);
+
+    public abstract void reportErrorClicked();
 }

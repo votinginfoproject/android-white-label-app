@@ -4,5 +4,5 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
  * Created by max on 4/15/16.
  */
 public interface ElectionDetailsView {
-    public void navigateToURL(String urlString);
+    void navigateToURL(String urlString);
 }

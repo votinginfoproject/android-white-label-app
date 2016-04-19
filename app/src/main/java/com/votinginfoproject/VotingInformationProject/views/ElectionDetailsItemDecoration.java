@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -106,7 +105,8 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
                 mDivider.draw(c);
 
             } else if ((viewHolder instanceof ElectionInformationViewHolder) ||
-                    (viewHolder instanceof ElectionBodyTitleViewHolder)) {
+                    (viewHolder instanceof ElectionBodyTitleViewHolder) ||
+                    (viewHolder instanceof ReportErrorViewHolder)) {
 
                 foundFirstSubtitleInElection = false;
 

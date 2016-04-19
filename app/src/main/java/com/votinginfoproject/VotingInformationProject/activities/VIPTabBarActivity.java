@@ -40,6 +40,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.DirectionsFragme
 import com.votinginfoproject.VotingInformationProject.fragments.ElectionDetailsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.LocationsFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.SupportWebViewFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
@@ -371,7 +372,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.bottom_navigation_title_ballot), BallotFragment.class, "ballot_tab", null);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.bottom_navigation_title_polls), LocationsFragment.class, "locations_tab", null);
-        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.bottom_navigation_title_details), ElectionDetailsFragment.class, "details_tab", null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(R.string.bottom_navigation_title_details), ElectionDetailsListFragment.class, "details_tab", null);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));

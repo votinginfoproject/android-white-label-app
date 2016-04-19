@@ -13,6 +13,8 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.UserPref
  * Created by max on 4/15/16.
  */
 public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
+    private static final String TAG = ElectionDetailsPresenterImpl.class.getSimpleName();
+
     @Override
     public void onCreate(Bundle savedState) {
 
@@ -38,5 +40,10 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
         if (urlString != null) {
             getView().navigateToURL(urlString);
         }
+    }
+
+    @Override
+    public void reportErrorClicked() {
+        Log.v(TAG, "Report Error Clicked()");
     }
 }
