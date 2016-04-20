@@ -15,9 +15,6 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInf
  * Created by marcvandehey on 4/6/16.
  */
 public class VoterInformationPresenterImpl extends VoterInformationPresenter {
-    private static final String TAG = VoterInformationPresenterImpl.class.getSimpleName();
-    private static final String VOTER_INFO_KEY = "VOTER_INFO";
-
     private final int POLLS_TAB = 0x0;
     private final int BALLOT_TAB = 0x1;
     private final int DETAILS_TAB = 0x2;
@@ -49,6 +46,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
         if (mCurrentTab == -1) {
             mCurrentTab = POLLS_TAB;
+
             getView().presentParentLevelFragment(PollingSitesListFragment.newInstance());
         }
     }

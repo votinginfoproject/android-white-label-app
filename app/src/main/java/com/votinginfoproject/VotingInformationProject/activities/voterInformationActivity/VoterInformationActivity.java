@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,7 +39,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         ContestListFragment.ContestListListener {
-
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
 
