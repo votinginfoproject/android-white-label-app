@@ -228,7 +228,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
             if (websitesChildItems.size() > 0) {
                 ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
-                websitesParent.mImageId = R.drawable.ic_website_active;
+                websitesParent.mImageId = R.drawable.ic_laptop;
                 toReturn.add(websitesParent);
 
                 websitesParent.mHiddenListItems.addAll(websitesChildItems);
@@ -236,21 +236,21 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
             if (body.hoursOfOperation != null) {
                 ListItem hoursParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_hours_of_operation));
-                hoursParent.mImageId = R.drawable.ic_hours_active;
+                hoursParent.mImageId = R.drawable.ic_hours;
                 toReturn.add(hoursParent);
                 hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
             }
 
             if (body.physicalAddress != null) {
                 ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
-                addressParent.mImageId = R.drawable.ic_address_active;
+                addressParent.mImageId = R.drawable.ic_address_marker;
                 toReturn.add(addressParent);
                 addressParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString()));
             }
 
             if (body.electionOfficials != null && !body.electionOfficials.isEmpty()) {
                 ListItem officialsParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_election_officials));
-                officialsParent.mImageId = R.drawable.ic_officials_active;
+                officialsParent.mImageId = R.drawable.ic_account_circle;
                 toReturn.add(officialsParent);
                 for (ElectionOfficial official : body.electionOfficials) {
                     officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));

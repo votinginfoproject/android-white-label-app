@@ -10,7 +10,8 @@
         android:layout_width="@dimen/fragment.election_details.subtitle_image_size"
         android:layout_height="@dimen/fragment.election_details.subtitle_image_size"
         android:layout_marginLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
-        android:layout_marginRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_internal"/>
+        android:layout_marginRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_internal"
+        android:tint="#D0D0D0"/>
 
     <TextView
         android:id="@+id/body_subtitle"
