@@ -53,11 +53,13 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_api_android_key"/>
 
-        <activity android:name=".activities.voterInformationActivity.VoterInformationActivity">
+        <activity android:name=".activities.voterInformationActivity.VoterInformationActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:parentActivityName=".activities.homeActivity.HomeActivity"
             android:name=".activities.aboutActivity.AboutVIPActivity"
+            android:screenOrientation="portrait"
             android:label="@string/about.app.title">
         </activity>
     </application>
