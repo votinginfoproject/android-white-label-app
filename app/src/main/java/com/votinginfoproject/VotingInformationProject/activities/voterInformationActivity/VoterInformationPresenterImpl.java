@@ -6,7 +6,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.TestFragment2;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
@@ -30,7 +29,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        //Not implemented
     }
 
     @Override

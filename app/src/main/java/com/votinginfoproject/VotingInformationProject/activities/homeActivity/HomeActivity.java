@@ -23,6 +23,7 @@ import com.votinginfoproject.VotingInformationProject.activities.aboutActivity.A
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
+
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
 
 import java.util.ArrayList;

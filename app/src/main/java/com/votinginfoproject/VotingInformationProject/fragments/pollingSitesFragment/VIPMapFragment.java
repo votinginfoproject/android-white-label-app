@@ -39,6 +39,7 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingS
 import java.util.ArrayList;
 
 public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener, OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnCameraChangeListener {
+
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
     private static final String HOME = "home";
