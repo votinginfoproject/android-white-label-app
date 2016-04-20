@@ -19,7 +19,6 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.Election
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,9 +106,12 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ElectionInformationViewHolder) {
+
             ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
             electionInformationViewHolder.setElection(mElection);
+
         } else if (holder instanceof ReportErrorViewHolder) {
+
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
             errorViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,45 +119,39 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                     mPresenter.reportErrorClicked();
                 }
             });
-        } else if (holder instanceof ElectionBodySubtitleViewHolder) {
 
-            final ListItem item = itemForListPosition(position);
-            final ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
-
-            viewHolder.setTitle(item.mText);
-            viewHolder.setImageResource(item.mImageId);
-            viewHolder.setExpanded(item.isExpanded);
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    subtitleClicked(item, v);
-
-                }
-            });
-
-        } else if (holder instanceof  ElectionBodyTitleViewHolder) {
+        } else {
 
             ListItem item = itemForListPosition(position);
-            ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
-            viewHolder.setTitle(item.mText);
+            if (item.onItemClickListener != null) {
+                holder.itemView.setOnClickListener(item.onItemClickListener);
+            } else {
+                holder.itemView.setOnClickListener(null);
+                holder.itemView.setClickable(false);
+            }
 
-        } else if (holder instanceof  ElectionBodyLinkViewHolder) {
+            if (holder instanceof ElectionBodySubtitleViewHolder) {
 
-            final ListItem item = itemForListPosition(position);
-            ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
-            viewHolder.setTitle(item.mText);
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mPresenter.linkSelected(item.mURLString);
-                }
-            });
+                ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
+                viewHolder.setTitle(item.mText);
+                viewHolder.setImageResource(item.mImageId);
+                viewHolder.setExpanded(item.isExpanded);
 
-        } else if (holder instanceof  ElectionBodyTextViewHolder) {
+            } else if (holder instanceof  ElectionBodyTitleViewHolder) {
 
-            ListItem item = itemForListPosition(position);
-            ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
-            viewHolder.setTitle(item.mText);
+                ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
+                viewHolder.setTitle(item.mText);
+
+            } else if (holder instanceof  ElectionBodyLinkViewHolder) {
+
+                ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
+                viewHolder.setTitle(item.mText);
+
+            } else if (holder instanceof  ElectionBodyTextViewHolder) {
+
+                ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
+                viewHolder.setTitle(item.mText);
+            }
         }
     }
 
@@ -227,8 +223,14 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             }
 
             if (websitesChildItems.size() > 0) {
+
+                for(final ListItem child : websitesChildItems) {
+                    child.onItemClickListener = new LinkClickListener(child);
+                }
+
                 ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
                 websitesParent.mImageId = R.drawable.ic_laptop;
+                websitesParent.onItemClickListener = new SubtitleClickListener(websitesParent);
                 toReturn.add(websitesParent);
 
                 websitesParent.mHiddenListItems.addAll(websitesChildItems);
@@ -237,6 +239,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             if (body.hoursOfOperation != null) {
                 ListItem hoursParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_hours_of_operation));
                 hoursParent.mImageId = R.drawable.ic_hours;
+                hoursParent.onItemClickListener = new SubtitleClickListener(hoursParent);
                 toReturn.add(hoursParent);
                 hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
             }
@@ -244,13 +247,18 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             if (body.physicalAddress != null) {
                 ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
                 addressParent.mImageId = R.drawable.ic_address_marker;
+                addressParent.onItemClickListener = new SubtitleClickListener(addressParent);
                 toReturn.add(addressParent);
-                addressParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString()));
+
+                ListItem addressChildItem = new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString());
+                addressChildItem.onItemClickListener = new AddressClickListener(addressChildItem);
+                addressParent.mHiddenListItems.add(addressChildItem);
             }
 
             if (body.electionOfficials != null && !body.electionOfficials.isEmpty()) {
                 ListItem officialsParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_election_officials));
                 officialsParent.mImageId = R.drawable.ic_account_circle;
+                officialsParent.onItemClickListener = new SubtitleClickListener(officialsParent);
                 toReturn.add(officialsParent);
                 for (ElectionOfficial official : body.electionOfficials) {
                     officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
@@ -319,6 +327,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     class ListItem {
         public final int mViewType;
+        public View.OnClickListener onItemClickListener;
         public String mText;
         public String mURLString;
         public int mImageId = 0;
@@ -339,6 +348,44 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public boolean isChild() {
             return (mViewType == BODY_CHILD_LINK_VIEW_HOLDER)
                     || (mViewType == BODY_CHILD_TEXT_VIEW_HOLDER);
+        }
+    }
+
+    abstract class DetailClickListener implements View.OnClickListener {
+        ListItem mItem;
+
+        public DetailClickListener(ListItem item) {
+            mItem = item;
+        }
+    }
+
+    class LinkClickListener extends DetailClickListener {
+        public LinkClickListener(ListItem item) {
+            super(item);
+        }
+        @Override
+        public void onClick(View v) {
+            mPresenter.linkSelected(mItem.mURLString);
+        }
+    }
+
+    class AddressClickListener extends DetailClickListener {
+        public AddressClickListener(ListItem item) {
+            super(item);
+        }
+        @Override
+        public void onClick(View v) {
+            mPresenter.addressSelected(mItem.mText);
+        }
+    }
+
+    class SubtitleClickListener extends DetailClickListener {
+        public SubtitleClickListener(ListItem item) {
+            super(item);
+        }
+        @Override
+        public void onClick(View v) {
+            subtitleClicked(mItem, v);
         }
     }
 }

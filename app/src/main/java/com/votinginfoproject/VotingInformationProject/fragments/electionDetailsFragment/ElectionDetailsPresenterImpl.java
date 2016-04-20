@@ -47,4 +47,10 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
         //TODO add things here
         Log.v(TAG, "Report Error Clicked()");
     }
+
+    @Override
+    public void addressSelected(String addressString) {
+        //TODO add other things here
+        Log.v(TAG, "Address selected: " + addressString);
+    }
 }

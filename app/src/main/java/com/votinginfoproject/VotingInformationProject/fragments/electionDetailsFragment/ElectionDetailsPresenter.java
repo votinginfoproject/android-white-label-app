@@ -12,5 +12,7 @@ public abstract class ElectionDetailsPresenter extends BasePresenter<ElectionDet
 
     public abstract void linkSelected(String urlString);
 
+    public abstract void addressSelected(String addressString);
+
     public abstract void reportErrorClicked();
 }
