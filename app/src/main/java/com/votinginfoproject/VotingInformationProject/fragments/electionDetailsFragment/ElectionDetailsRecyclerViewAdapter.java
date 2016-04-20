@@ -212,33 +212,49 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             ListItem sectionTitleNode = new ListItem(BODY_TITLE_VIEW_HOLDER, sectionName);
             toReturn.add(sectionTitleNode);
 
-            ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
-            websitesParent.mImageId = R.drawable.ic_website_active;
-            toReturn.add(websitesParent);
+            List<ListItem> websitesChildItems = new LinkedList<>();
+            if (body.electionRegistrationUrl != null) {
+                websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voter_registration_url), body.electionRegistrationUrl));
+            }
+            if (body.absenteeVotingInfoUrl != null) {
+                websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_absentee_voting_url), body.absenteeVotingInfoUrl));
+            }
+            if (body.votingLocationFinderUrl != null) {
+                websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voting_location_finder_url), body.votingLocationFinderUrl));
+            }
+            if (body.electionRulesUrl != null) {
+                websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_election_rules_url), body.electionRulesUrl));
+            }
 
-            ListItem[] children = {
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voter_registration_url), body.electionRegistrationUrl),
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_absentee_voting_url), body.absenteeVotingInfoUrl),
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voting_location_finder_url), body.votingLocationFinderUrl),
-                    new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_election_rules_url), body.electionRulesUrl)
-            };
-            websitesParent.mHiddenListItems.addAll(Arrays.asList(children));
+            if (websitesChildItems.size() > 0) {
+                ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
+                websitesParent.mImageId = R.drawable.ic_website_active;
+                toReturn.add(websitesParent);
 
-            ListItem hoursParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_hours_of_operation));
-            hoursParent.mImageId = R.drawable.ic_hours_active;
-            toReturn.add(hoursParent);
-            hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
+                websitesParent.mHiddenListItems.addAll(websitesChildItems);
+            }
 
-            ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
-            addressParent.mImageId = R.drawable.ic_address_active;
-            toReturn.add(addressParent);
-            addressParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString()));
+            if (body.hoursOfOperation != null) {
+                ListItem hoursParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_hours_of_operation));
+                hoursParent.mImageId = R.drawable.ic_hours_active;
+                toReturn.add(hoursParent);
+                hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
+            }
 
-            ListItem officialsParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_election_officials));
-            officialsParent.mImageId = R.drawable.ic_officials_active;
-            toReturn.add(officialsParent);
-            for (ElectionOfficial official : body.electionOfficials) {
-                officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
+            if (body.physicalAddress != null) {
+                ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
+                addressParent.mImageId = R.drawable.ic_address_active;
+                toReturn.add(addressParent);
+                addressParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString()));
+            }
+
+            if (body.electionOfficials != null && !body.electionOfficials.isEmpty()) {
+                ListItem officialsParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_election_officials));
+                officialsParent.mImageId = R.drawable.ic_officials_active;
+                toReturn.add(officialsParent);
+                for (ElectionOfficial official : body.electionOfficials) {
+                    officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
+                }
             }
         }
 
