@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -42,7 +38,7 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingS
 
 import java.util.ArrayList;
 
-public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener, OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnCameraChangeListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener, OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnCameraChangeListener {
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
     private static final String HOME = "home";
@@ -58,9 +54,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     PollingLocation selectedLocation;
     LatLng thisLocation;
     LatLng homeLocation;
-    LatLng currentLocation;
     String homeAddress;
-    String currentAddress;
     String encodedPolyline;
     LatLngBounds polylineBounds;
     boolean haveElectionAdminBody;
@@ -426,6 +420,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     }
 
     private void hideLocationCard() {
+        mPresenter.clearSelectedMapMarkers();
+
         mBottomCardViewHolder.getView().measure(0, 0);
         int height = mBottomCardViewHolder.getView().getMeasuredHeight();
 
@@ -449,20 +445,5 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
         hideLocationCard();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }

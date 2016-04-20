@@ -26,6 +26,8 @@ public abstract class PollingSitesPresenter extends BasePresenter<PollingSitesVi
 
     public abstract boolean mapMarkerClicked(GoogleMap map, Marker marker);
 
+    public abstract void clearSelectedMapMarkers();
+
     public abstract void lastPollingLocationClicked();
 
     @LayoutRes

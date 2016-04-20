@@ -100,29 +100,26 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
         ArrayList<PollingLocation> locations = getSortedLocations();
 
         for (PollingLocation location : locations) {
-            MarkerOptions markerOptions;
-            switch (location.pollingLocationType) {
-                case PollingLocation.POLLING_TYPE_DROP_BOX:
-
-                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_drop_box);
-
-                    break;
-                case PollingLocation.POLLING_TYPE_EARLY_VOTE:
-                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_early_voting);
-
-                    break;
-                case PollingLocation.POLLING_TYPE_LOCATION:
-                default:
-                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_poll);
-
-                    break;
-            }
+            MarkerOptions markerOptions = createMarkerOptions(location, getDrawableResForType(location.pollingLocationType, false));
 
             if (location.address != null) {
                 Marker marker = map.addMarker(markerOptions);
 
                 mappedPollingLocations.put(marker, location);
             }
+        }
+    }
+
+    @DrawableRes
+    private int getDrawableResForType(int pollingLocationType, boolean selected) {
+        switch (pollingLocationType) {
+            case PollingLocation.POLLING_TYPE_DROP_BOX:
+                return selected ? R.drawable.ic_marker_drop_box_selected : R.drawable.ic_marker_drop_box;
+            case PollingLocation.POLLING_TYPE_EARLY_VOTE:
+                return selected ? R.drawable.ic_marker_early_voting_selected : R.drawable.ic_marker_early_voting;
+            case PollingLocation.POLLING_TYPE_LOCATION:
+            default:
+                return selected ? R.drawable.ic_marker_poll_selected : R.drawable.ic_marker_poll;
         }
     }
 
@@ -189,18 +186,33 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
     }
 
     @Override
-    public boolean mapMarkerClicked(GoogleMap map, Marker marker) {
+    public boolean mapMarkerClicked(GoogleMap map, Marker selectedMarker) {
         //Pull Polling Location from Hashmap
-        PollingLocation location = mappedPollingLocations.get(marker);
+        PollingLocation location = mappedPollingLocations.get(selectedMarker);
         lastClickedLocation = location;
+
+        clearSelectedMapMarkers();
 
         if (location != null) {
             getView().showLocationCard(location);
+            selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(getDrawableResForType(location.pollingLocationType, true)));
 
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void clearSelectedMapMarkers() {
+        for (Marker marker : mappedPollingLocations.keySet()) {
+
+            PollingLocation pollingLocation = mappedPollingLocations.get(marker);
+
+            if (pollingLocation != null) {
+                marker.setIcon(BitmapDescriptorFactory.fromResource(getDrawableResForType(pollingLocation.pollingLocationType, false)));
+            }
+        }
     }
 
     @Override
