@@ -19,8 +19,4 @@ public abstract class VoterInformationPresenter extends BasePresenter<VoterInfor
     abstract void mapButtonClicked(@LayoutRes int currentSort);
 
     abstract void listButtonClicked(@LayoutRes int currentSort);
-
-    abstract void overflowButtonClicked();
-
-    abstract void mapFilterButtonClicked(int filterItem);
 }

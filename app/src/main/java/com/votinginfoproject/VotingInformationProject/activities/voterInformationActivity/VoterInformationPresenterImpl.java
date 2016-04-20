@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.TestFragment2;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 /**
  * Created by marcvandehey on 4/6/16.
@@ -26,59 +22,34 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     private final int BALLOT_TAB = 0x1;
     private final int DETAILS_TAB = 0x2;
 
-    private int mCurrentTab = 0x0;
+    private int mCurrentTab = -1;
 
-    private VoterInfo mVoterInfo;
-    private String mPartyFilter;
+    public VoterInformationPresenterImpl() {
 
-    public VoterInformationPresenterImpl(@NonNull VoterInfo voterInfo, String partyFilter) {
-        mVoterInfo = voterInfo;
-
-        UserPreferences.setVoterInfo(voterInfo);
-
-        mPartyFilter = partyFilter;
     }
 
     @Override
     public void onCreate(Bundle savedState) {
-        if (savedState != null) {
-            String voterInfoString = savedState.getString(VOTER_INFO_KEY);
-
-            Log.v(TAG, "Saved String: " + voterInfoString);
-
-            if (voterInfoString != null && voterInfoString.length() > 0) {
-                mVoterInfo = new Gson().fromJson(voterInfoString, VoterInfo.class);
-            } else {
-                //Kill View and navigate back to home.
-            }
-        } else {
-            getView().presentParentLevelFragment(PollingSitesListFragment.newInstance());
-        }
-    }
-
-    @Override
-    public void onAttachView(VoterInformationView voterInformationView) {
-        super.onAttachView(voterInformationView);
-        //Tell view to style fragments with voterInfo
-    }
-
-    @Override
-    public void onDetachView() {
-        super.onDetachView();
 
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-        if (mVoterInfo != null) {
-            String voterInfoString = new Gson().toJson(mVoterInfo);
-            state.putString(VOTER_INFO_KEY, voterInfoString);
-        }
+        //Not implemented
     }
 
     @Override
     public void onDestroy() {
+        //Not implemented
+    }
 
+    @Override
+    public void onAttachView(VoterInformationView voterInformationView) {
+        super.onAttachView(voterInformationView);
+
+        if (mCurrentTab == -1) {
+            getView().presentParentLevelFragment(PollingSitesListFragment.newInstance());
+        }
     }
 
     // Voter Information Presenter Protocol
@@ -134,15 +105,5 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     void listButtonClicked(@LayoutRes int currentSort) {
         //Kill all back navigation since we are going to the default view
         getView().presentParentLevelFragment(PollingSitesListFragment.newInstance(currentSort));
-    }
-
-    @Override
-    public void overflowButtonClicked() {
-
-    }
-
-    @Override
-    public void mapFilterButtonClicked(int filterItem) {
-
     }
 }

@@ -8,7 +8,6 @@ import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,7 +53,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             mBottomNavigationBar.setListener(this);
         }
 
-        setPresenter(new VoterInformationPresenterImpl(UserPreferences.getVoterInfo(), UserPreferences.getSelectedParty()));
+        setPresenter(new VoterInformationPresenterImpl());
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             startPollingLocation();
@@ -67,14 +66,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-
+        //Do not call super here until the Support Toolbar Parcelable crash is fixed
         UserPreferences.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
     }
 
     @Override
@@ -85,7 +78,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             UserPreferences.onRestoreInstanceState(savedInstanceState);
         }
 
-        setPresenter(new VoterInformationPresenterImpl(UserPreferences.getVoterInfo(), UserPreferences.getSelectedParty()));
+        setPresenter(new VoterInformationPresenterImpl());
     }
 
     @Override
@@ -97,13 +90,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
     }
 
     @Override
@@ -163,11 +149,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void navigateBack() {
         onBackPressed();
-    }
-
-    @Override
-    public void updatePollingSitesFilter() {
-
     }
 
     @Override

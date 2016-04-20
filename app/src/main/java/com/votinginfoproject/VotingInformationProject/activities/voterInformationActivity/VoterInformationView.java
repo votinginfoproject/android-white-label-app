@@ -13,7 +13,5 @@ public interface VoterInformationView {
 
     void navigateBack();
 
-    void updatePollingSitesFilter();
-
     void scrollCurrentFragmentToTop();
 }

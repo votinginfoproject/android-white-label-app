@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 
 public class HomeActivity extends BaseActivity<HomePresenter> implements HomeView {
-
     private final String TAG = HomeActivity.class.getSimpleName();
 
     private Button mGoButton;
@@ -160,7 +159,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     @Override
     public void navigateToVoterInformationActivity(VoterInfo voterInfo, String filter) {
         Intent intent = new Intent(this, VoterInformationActivity.class);
-
         startActivity(intent);
     }
 

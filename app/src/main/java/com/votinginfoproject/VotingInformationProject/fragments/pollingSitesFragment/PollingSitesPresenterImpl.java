@@ -232,16 +232,16 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        //Not implemented
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-
+        //Not implemented
     }
 
     @Override
     public void onDestroy() {
-
+        //Not implemented
     }
 }
