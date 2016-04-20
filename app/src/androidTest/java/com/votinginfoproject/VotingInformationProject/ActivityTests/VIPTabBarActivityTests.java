@@ -4,12 +4,11 @@ import android.support.v4.app.FragmentManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 
-import com.votinginfoproject.VotingInformationProject.MockVIPAppContext;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 /**
  * Created by kathrynkillebrew on 7/22/14.
@@ -40,8 +39,8 @@ public class VIPTabBarActivityTests extends ActivityInstrumentationTestCase2<VIP
 
     @UiThreadTest
     public void testVIPTabBarHasVoterInfo() {
-        VoterInfo voterInfo = UserPreferences.getVoterInfo();
-        assertEquals(voterInfo.election.name, "Test Election");
+        VoterInfoResponse voterInfoResponse = VoterInformation.getVoterInfo();
+        assertEquals(voterInfoResponse.election.name, "Test Election");
     }
 
     @UiThreadTest

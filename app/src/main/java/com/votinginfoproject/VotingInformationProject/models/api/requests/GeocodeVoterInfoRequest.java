@@ -2,7 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models.api.requests;
 
 import android.support.annotation.NonNull;
 
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 
 /**
  * Created by marcvandehey on 4/18/16.
@@ -10,16 +10,16 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 public class GeocodeVoterInfoRequest implements RequestType {
     private static final String TAG = GeocodeRequest.class.getSimpleName();
 
-    private VoterInfo voterInfo;
+    private VoterInfoResponse voterInfoResponse;
     private String geocodeKey;
 
-    public GeocodeVoterInfoRequest(@NonNull String geocodeKey, @NonNull VoterInfo voterInfo) {
+    public GeocodeVoterInfoRequest(@NonNull String geocodeKey, @NonNull VoterInfoResponse voterInfoResponse) {
         this.geocodeKey = geocodeKey;
-        this.voterInfo = voterInfo;
+        this.voterInfoResponse = voterInfoResponse;
     }
 
-    public VoterInfo getVoterInfo() {
-        return voterInfo;
+    public VoterInfoResponse getVoterInfoResponse() {
+        return voterInfoResponse;
     }
 
     public String getGeocodeKey() {

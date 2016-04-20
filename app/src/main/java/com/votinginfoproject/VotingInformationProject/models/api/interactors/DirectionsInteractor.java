@@ -39,7 +39,7 @@ public class DirectionsInteractor extends BaseInteractor<DirectionsResponse, Dir
                 response.mode = directionsRequest.getTravelMode();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Unexpected error in VoterInfo Request");
+                Log.e(TAG, "Unexpected error in VoterInfoResponse Request");
             }
         } else {
             if (params.length < 1) {

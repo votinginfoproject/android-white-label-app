@@ -2,7 +2,7 @@ package com.votinginfoproject.VotingInformationProject.activities.homeActivity;
 
 import android.support.annotation.StringRes;
 
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public interface HomeView {
 
     void navigateToAboutActivity();
 
-    void navigateToVoterInformationActivity(VoterInfo voterInfo, String partyFilter);
+    void navigateToVoterInformationActivity(VoterInfoResponse voterInfoResponse, String partyFilter);
 
     void showElectionPicker();
 

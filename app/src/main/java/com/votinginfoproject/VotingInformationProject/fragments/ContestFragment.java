@@ -15,8 +15,8 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.CandidatesAdapter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class ContestFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param contest_number Index of this contest within the list of contests on VoterInfo object
+     * @param contest_number Index of this contest within the list of contests on VoterInfoResponse object
      * @return A new instance of fragment ContestFragment.
      */
     public static ContestFragment newInstance(int contest_number) {
@@ -103,9 +103,9 @@ public class ContestFragment extends Fragment {
 
         try {
             ArrayList<Contest> contests = new ArrayList<>();
-            VoterInfo voterInfo = null;//UserPreferences.getVoterInfo();
+            VoterInfoResponse voterInfoResponse = null;//VoterInformation.getVoterInfoResponse();
 
-            contests.addAll(voterInfo.getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+            contests.addAll(voterInfoResponse.getFilteredContestsForParty(VoterInformation.getSelectedParty()));
             contest = contests.get(contestNum);
             Log.d(TAG, "Got contest for office: " + contest.office);
 
@@ -113,7 +113,7 @@ public class ContestFragment extends Fragment {
             // of type 'Referendum'; else title is office and subtitle is election name
             if (!contest.type.equals("Referendum")) {
                 mTitle.setText(contest.office);
-                mSubtitle.setText(voterInfo.election.getName());
+                mSubtitle.setText(voterInfoResponse.election.getName());
 
                 // add footer view for feedback
                 View feedback_layout = myActivity.getLayoutInflater().inflate(R.layout.feedback_link, mListView, false);

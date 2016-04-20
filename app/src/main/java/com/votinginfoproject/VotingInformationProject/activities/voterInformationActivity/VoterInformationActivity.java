@@ -25,7 +25,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigation
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
 
 public class VoterInformationActivity extends BaseActivity<VoterInformationPresenter> implements
@@ -60,14 +60,14 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         }
 
         if (savedInstanceState != null) {
-            UserPreferences.onRestoreInstanceState(savedInstanceState);
+            VoterInformation.onRestoreInstanceState(savedInstanceState);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //Do not call super here until the Support Toolbar Parcelable crash is fixed
-        UserPreferences.onSaveInstanceState(outState);
+        VoterInformation.onSaveInstanceState(outState);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            UserPreferences.onRestoreInstanceState(savedInstanceState);
+            VoterInformation.onRestoreInstanceState(savedInstanceState);
         }
 
         setPresenter(new VoterInformationPresenterImpl());
@@ -225,7 +225,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            UserPreferences.setLastKnownLocation(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+            VoterInformation.setLastKnownLocation(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
         }
     }
 

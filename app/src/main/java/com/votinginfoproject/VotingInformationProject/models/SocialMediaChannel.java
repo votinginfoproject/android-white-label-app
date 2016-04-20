@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Created by kathrynkillebrew on 7/14/14.
  *
  * To Add a new SocialMediaChannel, do the following:
- * 1. Add type returned from the VoterInfo query to getChannelTypes array
+ * 1. Add type returned from the VoterInfoResponse query to getChannelTypes array
  * 2. Add type added to array as a case in getUri()
  * 3. Add image for the social media channel to res/drawable
  * 4. Add TableRow in fragment_candidate where cleantype = type.toLowerCase().trim():

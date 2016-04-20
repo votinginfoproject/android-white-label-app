@@ -19,8 +19,7 @@ import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivi
 import com.votinginfoproject.VotingInformationProject.adapters.LocationsAdapter;
 import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         }
     };
     private final String TAG = LocationsFragment.class.getSimpleName();
-    VoterInfo voterInfo;
+    VoterInfoResponse voterInfoResponse;
     LocationsAdapter listAdapter;
     View rootView;
     TextView noneFoundMessage;
@@ -77,13 +76,13 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         // election labels
         TextView election_name_label = (TextView) rootView.findViewById(R.id.locations_election_title);
         TextView election_date_label = (TextView) rootView.findViewById(R.id.locations_election_subtitle);
-        election_name_label.setText(voterInfo.election.getName());
-        election_date_label.setText(voterInfo.election.getFormattedDate());
+        election_name_label.setText(voterInfoResponse.election.getName());
+        election_date_label.setText(voterInfoResponse.election.getFormattedDate());
 
         // clear directions polyline, if set from directions view
         myActivity.clearPolylines();
 
-        if (voterInfo.isMailOnly()) {
+        if (voterInfoResponse.isMailOnly()) {
             mailOnlyMessage.setVisibility(View.VISIBLE);
         } else {
             mailOnlyMessage.setVisibility(View.GONE);
@@ -124,13 +123,13 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         // always show 'all sites' option
         filterOptions.add(filterLabels.ALL);
         // show the other three options if there are any
-        if (!voterInfo.getOpenEarlyVoteSites().isEmpty()) {
+        if (!voterInfoResponse.getOpenEarlyVoteSites().isEmpty()) {
             filterOptions.add(filterLabels.EARLY);
         }
-        if (!voterInfo.getPollingLocations().isEmpty()) {
+        if (!voterInfoResponse.getPollingLocations().isEmpty()) {
             filterOptions.add(filterLabels.POLLING);
         }
-        if (!voterInfo.getOpenDropOffLocations().isEmpty()) {
+        if (!voterInfoResponse.getOpenDropOffLocations().isEmpty()) {
             filterOptions.add(filterLabels.DROP_BOX);
         }
 
@@ -146,7 +145,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         noneFoundMessage = (TextView) rootView.findViewById(R.id.locations_none_found_message);
 
         // initialize list adapter with all locations
-        allLocations = voterInfo.getAllLocations();
+        allLocations = voterInfoResponse.getAllLocations();
         // copy the list, so the original isn't destroyed by the adapter construction
         //noinspection unchecked
         listAdapter = new LocationsAdapter(myActivity, (ArrayList<PollingLocation>) allLocations.clone());
@@ -190,7 +189,7 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // get election info
-//        voterInfo = UserPreferences.getVoterInfo();
+//        voterInfoResponse = VoterInformation.getVoterInfoResponse();
     }
 
     @Override
@@ -206,11 +205,11 @@ public class LocationsFragment extends Fragment implements AdapterView.OnItemSel
         if (selection.equals(filterLabels.ALL)) {
             setFilter(allLocations);
         } else if (selection.equals(filterLabels.EARLY)) {
-            setFilter(voterInfo.getOpenEarlyVoteSites());
+            setFilter(voterInfoResponse.getOpenEarlyVoteSites());
         } else if (selection.equals(filterLabels.POLLING)) {
-            setFilter(voterInfo.getPollingLocations());
+            setFilter(voterInfoResponse.getPollingLocations());
         } else if (selection.equals(filterLabels.DROP_BOX)) {
-            setFilter(voterInfo.getOpenDropOffLocations());
+            setFilter(voterInfoResponse.getOpenDropOffLocations());
         } else {
             Log.e(TAG, "Selected item " + selection + "isn't recognized!");
             setFilter(allLocations);

@@ -17,8 +17,7 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class ElectionDetailsFragment extends Fragment {
     int unselectedButtonTextColor;
     int selectedSectionBackground;
     int unselectedSectionBackground;
-    VoterInfo voterInfo;
+    VoterInfoResponse voterInfoResponse;
     ElectionAdministrationBody stateAdmin;
     ElectionAdministrationBody localAdmin;
     boolean haveLink;
@@ -83,9 +82,9 @@ public class ElectionDetailsFragment extends Fragment {
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
         // get state and local election administration bodies
-//        voterInfo = UserPreferences.getVoterInfo();
-        stateAdmin = voterInfo.getStateAdmin();
-        localAdmin = voterInfo.getLocalAdmin();
+//        voterInfoResponse = VoterInformation.getVoterInfoResponse();
+        stateAdmin = voterInfoResponse.getStateAdmin();
+        localAdmin = voterInfoResponse.getLocalAdmin();
 
         if (localAdmin != null) {
             Log.d(TAG, "Got local election admin body " + localAdmin.name);

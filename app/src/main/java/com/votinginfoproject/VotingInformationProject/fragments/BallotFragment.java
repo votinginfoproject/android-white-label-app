@@ -15,8 +15,8 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.ContestsAdapter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class BallotFragment extends Fragment {
     private final String TAG = BallotFragment.class.getSimpleName();
 
-    VoterInfo voterInfo;
+    VoterInfoResponse voterInfoResponse;
     VIPTabBarActivity myActivity;
     ArrayList<Contest> filteredContests;
     private ContestsAdapter mAdapter;
@@ -47,14 +47,14 @@ public class BallotFragment extends Fragment {
         // election label
         TextView election_name_label = (TextView) rootView.findViewById(R.id.ballot_election_name);
         TextView election_date_label = (TextView) rootView.findViewById(R.id.ballot_election_date);
-        election_name_label.setText(voterInfo.election.getName());
-        election_date_label.setText(voterInfo.election.getFormattedDate());
+        election_name_label.setText(voterInfoResponse.election.getName());
+        election_date_label.setText(voterInfoResponse.election.getFormattedDate());
 
         // fill list of contests
         filteredContests.clear();
-        filteredContests.addAll(voterInfo.getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+        filteredContests.addAll(voterInfoResponse.getFilteredContestsForParty(VoterInformation.getSelectedParty()));
 
-        mAdapter = new ContestsAdapter(myActivity, filteredContests, voterInfo.election.getName());
+        mAdapter = new ContestsAdapter(myActivity, filteredContests, voterInfoResponse.election.getName());
         mAdapter.sortList();
         ListView contestList = (ListView) rootView.findViewById(R.id.ballot_contests_list);
 
@@ -85,7 +85,7 @@ public class BallotFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // get election info
-//        voterInfo = UserPreferences.getVoterInfo();
-        Log.d(TAG, "Got election: " + voterInfo.election.getName());
+//        voterInfoResponse = VoterInformation.getVoterInfoResponse();
+        Log.d(TAG, "Got election: " + voterInfoResponse.election.getName());
     }
 }

@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,13 +46,13 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
     public ArrayList<PollingLocation> getSortedLocations() {
         switch (currentSort) {
             case R.id.sort_all:
-                return UserPreferences.getAllPollingLocations();
+                return VoterInformation.getAllPollingLocations();
             case R.id.sort_polling_locations:
-                return UserPreferences.getPollingLocations();
+                return VoterInformation.getPollingLocations();
             case R.id.sort_early_vote:
-                return UserPreferences.getEarlyVotingLocations();
+                return VoterInformation.getEarlyVotingLocations();
             case R.id.sort_drop_boxes:
-                return UserPreferences.getDropBoxLocations();
+                return VoterInformation.getDropBoxLocations();
         }
 
         return new ArrayList<>();
@@ -60,7 +60,7 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
 
     @Override
     public Election getElection() {
-        return UserPreferences.getElection();
+        return VoterInformation.getElection();
     }
 
     @Override
@@ -145,11 +145,11 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
      */
     private void addNonPollingLocationsToMap(@NonNull GoogleMap map) {
         // add marker for user-entered address
-        LatLng homeLatLong = UserPreferences.getHomeAddress().getLocation();
+        LatLng homeLatLong = VoterInformation.getHomeAddress().getLocation();
 
         if (homeLatLong.latitude != 0.0) {
             map.addMarker(new MarkerOptions()
-                    .position(UserPreferences.getHomeAddress().getLocation())
+                    .position(VoterInformation.getHomeAddress().getLocation())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_address))
             );
         }
@@ -217,17 +217,17 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
 
     @Override
     public boolean hasPollingLocations() {
-        return !UserPreferences.getPollingLocations().isEmpty();
+        return !VoterInformation.getPollingLocations().isEmpty();
     }
 
     @Override
     public boolean hasEarlyVotingLocations() {
-        return !UserPreferences.getEarlyVotingLocations().isEmpty();
+        return !VoterInformation.getEarlyVotingLocations().isEmpty();
     }
 
     @Override
     public boolean hasDropBoxLocations() {
-        return !UserPreferences.getDropBoxLocations().isEmpty();
+        return !VoterInformation.getDropBoxLocations().isEmpty();
     }
 
     @Override

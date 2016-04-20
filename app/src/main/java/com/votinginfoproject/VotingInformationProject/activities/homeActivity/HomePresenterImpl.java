@@ -12,13 +12,13 @@ import com.votinginfoproject.VotingInformationProject.BuildConfig;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiError;
 import com.votinginfoproject.VotingInformationProject.models.Election;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.CivicInfoInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.GeocodeInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.CivicInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.GeocodeVoterInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.StopLightCivicInfoRequest;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     private static final String ALL_PARTIES_KEY = "ALL_PARTIES";
     private CivicInfoInteractor mCivicInteractor;
     private boolean mTestRun = false;
-    private VoterInfo mVoterInfo;
+    private VoterInfoResponse mVoterInfoResponse;
     private ArrayList<Election> mElections;
     private ArrayList<String> mParties;
 
@@ -45,7 +45,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     private String allPartiesString;
 
     public HomePresenterImpl(@NonNull Context context) {
-        this.mVoterInfo = null;
+        this.mVoterInfoResponse = null;
         mContext = context;
 
         mSelectedElection = 0;
@@ -63,7 +63,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             Log.v(TAG, "Saved String: " + voterInfoString);
 
             if (voterInfoString != null && voterInfoString.length() > 0) {
-                mVoterInfo = new Gson().fromJson(voterInfoString, VoterInfo.class);
+                mVoterInfoResponse = new Gson().fromJson(voterInfoString, VoterInfoResponse.class);
             }
 
             allPartiesString = savedState.getString(ALL_PARTIES_KEY);
@@ -75,8 +75,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         super.onAttachView(homeView);
 
         //Recreate view with cached response
-        if (mVoterInfo != null) {
-            civicInfoResponse(mVoterInfo);
+        if (mVoterInfoResponse != null) {
+            civicInfoResponse(mVoterInfoResponse);
         }
     }
 
@@ -89,8 +89,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-        if (mVoterInfo != null) {
-            String voterInfoString = new Gson().toJson(mVoterInfo);
+        if (mVoterInfoResponse != null) {
+            String voterInfoString = new Gson().toJson(mVoterInfoResponse);
             state.putString(VOTER_INFO_KEY, voterInfoString);
             state.putString(ALL_PARTIES_KEY, allPartiesString);
         }
@@ -130,7 +130,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             mSelectedParty = party;
             getView().setPartyText(mParties.get(mSelectedParty));
 
-            UserPreferences.setSelectedParty(mParties.get(mSelectedParty));
+            VoterInformation.setSelectedParty(mParties.get(mSelectedParty));
         }
     }
 
@@ -154,7 +154,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     public void goButtonClicked() {
         Log.d(TAG, "Go Button Clicked");
 
-        if (mVoterInfo != null && mVoterInfo.isSuccessful()) {
+        if (mVoterInfoResponse != null && mVoterInfoResponse.isSuccessful()) {
             //Filter Voting info and send to activity
             String filter = "";
 
@@ -163,7 +163,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
                 filter = mParties.get(mSelectedParty);
             }
 
-            getView().navigateToVoterInformationActivity(mVoterInfo, filter);
+            getView().navigateToVoterInformationActivity(mVoterInfoResponse, filter);
         }
     }
 
@@ -189,7 +189,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             getView().hidePartyPicker();
             getView().hideGoButton();
 
-            mVoterInfo = null;
+            mVoterInfoResponse = null;
             mSelectedElection = 0;
 
             getView().showMessage(R.string.activity_home_status_loading);
@@ -240,10 +240,10 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
      */
 
     @Override
-    public void civicInfoResponse(VoterInfo response) {
+    public void civicInfoResponse(VoterInfoResponse response) {
         if (response != null) {
             if (response.isSuccessful()) {
-                mVoterInfo = response;
+                mVoterInfoResponse = response;
 
                 //If this succeeds, it is assumed Play services is available for the rest of the app
                 GoogleApiAvailability api = GoogleApiAvailability.getInstance();
@@ -251,11 +251,11 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
                 if (code == ConnectionResult.SUCCESS) {
                     //Start loading up location overhead data
 
-                    mVoterInfo.setUpLocations();
+                    mVoterInfoResponse.setUpLocations();
 
                     GeocodeInteractor interactor = new GeocodeInteractor();
                     //TODO use key here when it is hooked up correctly
-                    GeocodeVoterInfoRequest request = new GeocodeVoterInfoRequest(""/*mContext.getString(R.string.google_api_browser_key)*/, mVoterInfo);
+                    GeocodeVoterInfoRequest request = new GeocodeVoterInfoRequest(""/*mContext.getString(R.string.google_api_browser_key)*/, mVoterInfoResponse);
 
                     interactor.enqueueRequest(request, this);
                 } else {
@@ -294,25 +294,25 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         getView().hideStatusView();
         getView().showGoButton();
 
-        if (mVoterInfo.otherElections != null && mVoterInfo.otherElections.size() > 0) {
+        if (mVoterInfoResponse.otherElections != null && mVoterInfoResponse.otherElections.size() > 0) {
             //Setup all elections data and show chooser
 
-            mElections = new ArrayList<>(mVoterInfo.otherElections);
+            mElections = new ArrayList<>(mVoterInfoResponse.otherElections);
 
             //Add the default election to the front of the list.
-            mElections.add(0, mVoterInfo.election);
+            mElections.add(0, mVoterInfoResponse.election);
 
-            UserPreferences.setElection(mVoterInfo.election);
+            VoterInformation.setElection(mVoterInfoResponse.election);
 
             getView().showElectionPicker();
             mSelectedElection = 0;
-            getView().setElectionText(mVoterInfo.election.getName());
+            getView().setElectionText(mVoterInfoResponse.election.getName());
         }
 
-        mParties = mVoterInfo.getUniqueParties();
+        mParties = mVoterInfoResponse.getUniqueParties();
         mParties.add(0, allPartiesString);
 
-        UserPreferences.setSelectedParty(allPartiesString);
+        VoterInformation.setSelectedParty(allPartiesString);
         if (mParties.size() > 1) {
             getView().setPartyText(mParties.get(0));
             mSelectedParty = 0;
@@ -321,8 +321,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     }
 
     @Override
-    public void onGeocodeResults(VoterInfo voterInfo) {
-        mVoterInfo = voterInfo;
+    public void onGeocodeResults(VoterInfoResponse voterInfoResponse) {
+        mVoterInfoResponse = voterInfoResponse;
         updateViewWithVoterInfo();
     }
 }

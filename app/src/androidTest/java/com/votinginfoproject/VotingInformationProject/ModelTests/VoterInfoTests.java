@@ -3,20 +3,16 @@ package com.votinginfoproject.VotingInformationProject.ModelTests;
 import android.test.AndroidTestCase;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.votinginfoproject.VotingInformationProject.MockVIPAppContext;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
-import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.application.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by andrew on 8/1/14.
@@ -24,12 +20,12 @@ import java.util.List;
 public class VoterInfoTests extends AndroidTestCase {
 
     public void testOtherElectionsNotNull() {
-        VoterInfo voterInfo = new VoterInfo();
-        assertNotNull(voterInfo.otherElections);
+        VoterInfoResponse voterInfoResponse = new VoterInfoResponse();
+        assertNotNull(voterInfoResponse.otherElections);
     }
 
     public void testGetLocationFromList() {
-        VoterInfo info = UserPreferences.getVoterInfo();
+        VoterInfoResponse info = VoterInformation.getVoterInfo();
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat api_date_format = new SimpleDateFormat("yyyy-MM-dd");
@@ -176,7 +172,7 @@ public class VoterInfoTests extends AndroidTestCase {
     }
 
     public void testGetAdministrativeBodies() {
-        VoterInfo info = UserPreferences.getVoterInfo();
+        VoterInfoResponse info = VoterInformation.getVoterInfo();
         info.setUpLocations();
 
         // should be able to get admin body address

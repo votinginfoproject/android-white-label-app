@@ -20,7 +20,6 @@ import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivi
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.SocialMediaChannel;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 
@@ -90,7 +89,7 @@ public class CandidateFragment extends Fragment {
 
         try {
             ArrayList<Contest> contests = new ArrayList<>();
-//            contests.addAll(UserPreferences.getVoterInfo().getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+//            contests.addAll(VoterInformation.getVoterInfoResponse().getFilteredContestsForParty(VoterInformation.getSelectedParty()));
             contest = contests.get(contestNum);
             candidate = contest.candidates.get(candidateNum);
 

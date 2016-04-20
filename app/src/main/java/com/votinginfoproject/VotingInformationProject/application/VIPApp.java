@@ -1,9 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.application;
 
 import android.app.Application;
-import android.location.Location;
 
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
 
 /**

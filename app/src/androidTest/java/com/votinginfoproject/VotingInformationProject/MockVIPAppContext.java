@@ -9,8 +9,8 @@ import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrat
 import com.votinginfoproject.VotingInformationProject.models.Source;
 import com.votinginfoproject.VotingInformationProject.models.State;
 import com.votinginfoproject.VotingInformationProject.application.VIPApp;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class MockVIPAppContext {
     public MockVIPAppContext() {
         app = new VIPApp();
 
-        VoterInfo testInfo = new VoterInfo();
+        VoterInfoResponse testInfo = new VoterInfoResponse();
         Election testElection = new Election();
         Contest testContestOne = new Contest();
         Contest testContestTwo = new Contest();
@@ -90,6 +90,6 @@ public class MockVIPAppContext {
         testInfo.state.add(testState);
 
 
-        UserPreferences.setVoterInfo(testInfo);
+        VoterInformation.setVoterInfo(testInfo);
     }
 }

@@ -17,8 +17,8 @@ import java.util.Locale;
 /**
  * Created by marcvandehey on 3/2/16.
  */
-public class UserPreferences {
-    private static final String TAG = UserPreferences.class.getSimpleName();
+public class VoterInformation {
+    private static final String TAG = VoterInformation.class.getSimpleName();
 
     private static String ARG_POLLING_LOCATIONS = "polling_locations";
     private static String ARG_EARLY_LOCATIONS = "early_locations";
@@ -34,7 +34,7 @@ public class UserPreferences {
     private static String ARG_STATE_ADDRESS = "state_admin_address";
     private static String ARG_LOCAL_ADDRESS = "local_admin_address";
 
-    private static UserPreferences ourInstance = new UserPreferences();
+    private static VoterInformation ourInstance = new VoterInformation();
     ArrayList<PollingLocation> pollingLocations;
     ArrayList<PollingLocation> earlyVotingLocations;
     ArrayList<PollingLocation> dropBoxLocations;
@@ -49,7 +49,7 @@ public class UserPreferences {
 
     private Location lastKnownLocation;
 
-    private UserPreferences() {
+    private VoterInformation() {
         this.useMetric = !Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country());
 
         this.selectedElection = null;
@@ -62,7 +62,7 @@ public class UserPreferences {
         allLocations = new ArrayList<>();
     }
 
-    private static UserPreferences getInstance() {
+    private static VoterInformation getInstance() {
         return ourInstance;
     }
 

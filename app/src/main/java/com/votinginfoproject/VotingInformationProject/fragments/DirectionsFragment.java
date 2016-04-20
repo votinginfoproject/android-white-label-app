@@ -23,11 +23,10 @@ import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bo
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.DirectionsRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,14 +110,14 @@ public class DirectionsFragment extends Fragment implements DirectionsInteractor
 
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
         myActivity = (VIPTabBarActivity) this.getActivity();
-        VoterInfo voterInfo = null;//UserPreferences.getVoterInfo();
+        VoterInfoResponse voterInfoResponse = null;//VoterInformation.getVoterInfoResponse();
 
         Resources res = myActivity.getResources();
         unselectedTextColor = res.getColor(R.color.button_blue);
         selectedTextColor = res.getColor(R.color.white);
 
         // get selected location
-        locationAddress = voterInfo.getAddressForId(location_id);
+        locationAddress = voterInfoResponse.getAddressForId(location_id);
 
         if (use_location) {
             // get user's current location
@@ -132,7 +131,7 @@ public class DirectionsFragment extends Fragment implements DirectionsInteractor
         TextView directions_title_label = (TextView) rootView.findViewById(R.id.directions_title);
         TextView directions_subtitle_label = (TextView) rootView.findViewById(R.id.directions_subtitle);
 
-        String locationName = voterInfo.getDescriptionForId(location_id);
+        String locationName = voterInfoResponse.getDescriptionForId(location_id);
 
         if (!locationName.isEmpty()) {
             directions_title_label.setText(locationName);

@@ -37,7 +37,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigation
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingSiteViewHolder;
 
 import java.util.ArrayList;
@@ -156,15 +156,15 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
         mPresenter = new PollingSitesPresenterImpl(this, selectedSort);
 
-        allLocations = UserPreferences.getAllPollingLocations();
+        allLocations = VoterInformation.getAllPollingLocations();
 
-        homeLocation = UserPreferences.getHomeAddress().getLocation();
+        homeLocation = VoterInformation.getHomeAddress().getLocation();
 
         //TODO get current location
 //        currentLocation = mActivity.getUserLocation();
 //        currentAddress = mActivity.getUserLocationAddress();
 
-        homeAddress = UserPreferences.getHomeAddress().toGeocodeString();
+        homeAddress = VoterInformation.getHomeAddress().toGeocodeString();
 
         //TODO rework how we are getting polylines
 //        polylineBounds = mActivity.getPolylineBounds();
@@ -183,14 +183,14 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             thisLocation = homeLocation;
         } else if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE)) {
             //TODO rework this
-            thisLocation = UserPreferences.getStateAdminAddress().getLocation();
+            thisLocation = VoterInformation.getStateAdminAddress().getLocation();
         } else if (locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            thisLocation = UserPreferences.getLocalAdminAddress().getLocation();
+            thisLocation = VoterInformation.getLocalAdminAddress().getLocation();
         } else {
             Log.d(TAG, "Have location ID: " + locationId);
 
             //TODO rework this
-//            selectedLocation = UserPreferences.getVoterInfo().getLocationForId(locationId);
+//            selectedLocation = VoterInformation.getVoterInfoResponse().getLocationForId(locationId);
 
             CivicApiAddress address = selectedLocation.address;
             thisLocation = new LatLng(address.latitude, address.longitude);

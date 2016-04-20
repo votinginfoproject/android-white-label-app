@@ -47,9 +47,9 @@ import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrat
 import com.votinginfoproject.VotingInformationProject.models.FilterLabels;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Bounds;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -69,7 +69,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     GeocodeQuery.GeocodeCallBackListener pollingCallBackListener;
     GeocodeQuery.GeocodeCallBackListener homeCallBackListener;
     GeocodeQuery.GeocodeCallBackListener adminBodyCallBackListener;
-    VoterInfo voterInfo;
+    VoterInfoResponse voterInfoResponse;
     Location homeLocation;
     LocationsFragment locationsFragment;
     DirectionsFragment directionsFragment;
@@ -91,7 +91,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     /**
      * Non-default constructor for testing, to set the application context.
      *
-     * @param context Mock context with a VoterInfo object
+     * @param context Mock context with a VoterInfoResponse object
      */
     public VIPTabBarActivity() {
         super();
@@ -184,7 +184,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     /**
      * Transition from ballot fragment to contest details fragment when user selects list item.
      *
-     * @param position Index of selected contest within the VoterInfo object's list of contests
+     * @param position Index of selected contest within the VoterInfoResponse object's list of contests
      */
     public void showContestDetails(int position) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
@@ -203,7 +203,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     /**
      * Transition from contest fragment to candidate fragment when user selects list item.
      *
-     * @param contestPosition   Index of selected contest within the VoterInfo object's list of contests
+     * @param contestPosition   Index of selected contest within the VoterInfoResponse object's list of contests
      * @param candidatePosition Index of selected candidate within the contest's list of candidates
      */
     public void showCandidateDetails(int contestPosition, int candidatePosition) {
@@ -311,7 +311,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
             }
         } else {
             // have either PollingLocation or ElectionAdministrationBody location
-            CivicApiAddress address = voterInfo.getAddressForId(destinationLocationIndex);
+            CivicApiAddress address = voterInfoResponse.getAddressForId(destinationLocationIndex);
             if (address != null && (address.longitude != 0 || address.latitude != 0)) {
                 haveLocation = true;
             }
@@ -392,10 +392,10 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     private void setUpGeocodePreferences() {
         // get LocationsFragment's root view
         locationsFragment = (LocationsFragment) mTabsAdapter.getItem(1);
-//        voterInfo = UserPreferences.getVoterInfo();
-        voterInfo.setUpLocations();
+//        voterInfoResponse = VoterInformation.getVoterInfoResponse();
+        voterInfoResponse.setUpLocations();
 
-        useMetric = UserPreferences.useMetric();
+        useMetric = VoterInformation.useMetric();
 
         // set up callback listener for reverse-geocode address result
         reverseGeocodeCallBackListener = new ReverseGeocodeQuery.ReverseGeocodeCallBackListener() {
@@ -423,7 +423,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 //                }
 //
 //                // find object and set values on it
-//                PollingLocation foundLoc = voterInfo.getLocationForId(key);
+//                PollingLocation foundLoc = voterInfoResponse.getLocationForId(key);
 //                if (foundLoc != null) {
 //                    foundLoc.address.latitude = lat;
 //                    foundLoc.address.longitude = lon;
@@ -445,7 +445,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
                 }
 
                 // start background geocode tasks for polling locations
-                ArrayList<PollingLocation> allLocations = voterInfo.getAllLocations();
+                ArrayList<PollingLocation> allLocations = voterInfoResponse.getAllLocations();
                 for (PollingLocation location : allLocations) {
                     // key by address, if location has no ID
                     if (location.id != null) {
@@ -460,14 +460,14 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
                 // start background geocode tasks for election admin bodies' physical addresses
 
                 // state
-                CivicApiAddress stateAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
+                CivicApiAddress stateAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
                 if (stateAdminAddress != null) {
                     new GeocodeQuery(getBaseContext(), adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.STATE,
                             stateAdminAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
                 }
 
                 // local
-                CivicApiAddress localAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
+                CivicApiAddress localAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
                 if (localAdminAddress != null) {
                     new GeocodeQuery(getBaseContext(), adminBodyCallBackListener, ElectionAdministrationBody.AdminBody.LOCAL,
                             localAdminAddress.toGeocodeString(), homeLocation, useMetric, null).execute();
@@ -485,7 +485,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 //                    return;
 //                }
 //
-//                CivicApiAddress address = voterInfo.getAdminAddress(key);
+//                CivicApiAddress address = voterInfoResponse.getAdminAddress(key);
 //                if (address != null) {
 //                    address.latitude = lat;
 //                    address.longitude = lon;
@@ -498,7 +498,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
         if (playServicesAvailable()) {
             // geocode home address; once result returned, geocode polling and admin body locations
-//            new GeocodeQuery(getBaseContext(), homeCallBackListener, "home", voterInfo.normalizedInput.toGeocodeString(),
+//            new GeocodeQuery(getBaseContext(), homeCallBackListener, "home", voterInfoResponse.normalizedInput.toGeocodeString(),
 //                    null, useMetric, null).execute();
         }
     }

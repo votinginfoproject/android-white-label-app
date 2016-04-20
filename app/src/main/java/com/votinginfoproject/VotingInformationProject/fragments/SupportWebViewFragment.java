@@ -95,7 +95,7 @@ public class SupportWebViewFragment extends Fragment {
 
         // build the POST
         Uri.Builder builder = new Uri.Builder();
-//        VoterInfo info = UserPreferences.getVoterInfo();
+//        VoterInfoResponse info = VoterInformation.getVoterInfoResponse();
 //        builder.appendQueryParameter("electionId", info.election.getId());
 //        builder.appendQueryParameter("address", info.normalizedInput.toGeocodeString());
 

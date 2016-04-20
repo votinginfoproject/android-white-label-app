@@ -8,13 +8,13 @@ import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.GeocodeRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.GeocodeVoterInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.RequestType;
 import com.votinginfoproject.VotingInformationProject.models.geocode.GeocodeLocationResult;
 import com.votinginfoproject.VotingInformationProject.models.geocode.Result;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,12 +37,12 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
         if (params.length > 0 && params[0] instanceof GeocodeVoterInfoRequest) {
             geocodeVoterInfoRequest = (GeocodeVoterInfoRequest) params[0];
 
-            VoterInfo voterInfo = geocodeVoterInfoRequest.getVoterInfo();
+            VoterInfoResponse voterInfoResponse = geocodeVoterInfoRequest.getVoterInfoResponse();
 
             OkHttpClient client = new OkHttpClient();
             Gson gson = new GsonBuilder().create();
 
-            GeocodeRequest homeGeocodeRequest = new GeocodeRequest(geocodeVoterInfoRequest.getGeocodeKey(), voterInfo.normalizedInput.toGeocodeString());
+            GeocodeRequest homeGeocodeRequest = new GeocodeRequest(geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.normalizedInput.toGeocodeString());
 
             Request homeAddressRequest = new Request.Builder().url(homeGeocodeRequest.buildQueryString()).build();
             GeocodeLocationResult homeAddressResponse;
@@ -70,41 +70,41 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
             }
 
             //TODO pass use metric in correctly
-            ArrayList<PollingLocation> geocodedPollingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfo.getPollingLocations(), homeLocation, UserPreferences.useMetric());
-            ArrayList<PollingLocation> geocodedEarlyVotingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfo.getOpenEarlyVoteSites(), homeLocation, UserPreferences.useMetric());
-            ArrayList<PollingLocation> geocodedDropBoxLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfo.getOpenDropOffLocations(), homeLocation, UserPreferences.useMetric());
+            ArrayList<PollingLocation> geocodedPollingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getPollingLocations(), homeLocation, VoterInformation.useMetric());
+            ArrayList<PollingLocation> geocodedEarlyVotingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getOpenEarlyVoteSites(), homeLocation, VoterInformation.useMetric());
+            ArrayList<PollingLocation> geocodedDropBoxLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getOpenDropOffLocations(), homeLocation, VoterInformation.useMetric());
 
-            CivicApiAddress stateAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
+            CivicApiAddress stateAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
 
             if (stateAdminAddress != null) {
                 Location stateAdminLocation = getGeocodedLocation(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), stateAdminAddress);
-                float stateAdminDistance = getDistance(homeLocation, stateAdminLocation, UserPreferences.useMetric());
+                float stateAdminDistance = getDistance(homeLocation, stateAdminLocation, VoterInformation.useMetric());
 
                 stateAdminAddress.latitude = stateAdminLocation.lat;
                 stateAdminAddress.longitude = stateAdminLocation.lng;
                 stateAdminAddress.distance = stateAdminDistance;
             }
 
-            CivicApiAddress localAdminAddress = voterInfo.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
+            CivicApiAddress localAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
 
             if (localAdminAddress != null) {
                 Location localAdminLocation = getGeocodedLocation(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), stateAdminAddress);
-                float localAdminDistance = getDistance(homeLocation, localAdminLocation, UserPreferences.useMetric());
+                float localAdminDistance = getDistance(homeLocation, localAdminLocation, VoterInformation.useMetric());
 
                 localAdminAddress.latitude = localAdminLocation.lat;
                 localAdminAddress.longitude = localAdminLocation.lng;
                 localAdminAddress.distance = localAdminDistance;
             }
 
-            CivicApiAddress homeAddress = voterInfo.normalizedInput;
+            CivicApiAddress homeAddress = voterInfoResponse.normalizedInput;
             homeAddress.latitude = homeLocation.lat;
             homeAddress.longitude = homeLocation.lng;
 
-            UserPreferences.setStateAdminAddress(stateAdminAddress);
-            UserPreferences.setLocalAdminAddress(localAdminAddress);
-            UserPreferences.setHomeAddress(homeAddress);
+            VoterInformation.setStateAdminAddress(stateAdminAddress);
+            VoterInformation.setLocalAdminAddress(localAdminAddress);
+            VoterInformation.setHomeAddress(homeAddress);
 
-            UserPreferences.setPollingLocations(geocodedPollingLocations, geocodedEarlyVotingLocations, geocodedDropBoxLocations);
+            VoterInformation.setPollingLocations(geocodedPollingLocations, geocodedEarlyVotingLocations, geocodedDropBoxLocations);
         }
 
         return geocodeVoterInfoRequest;
@@ -189,11 +189,11 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
         super.onPostExecute(geocodeVoterInfoRequest);
 
         if (getCallback() != null) {
-            getCallback().onGeocodeResults(geocodeVoterInfoRequest.getVoterInfo());
+            getCallback().onGeocodeResults(geocodeVoterInfoRequest.getVoterInfoResponse());
         }
     }
 
     public interface GeocodeCallback {
-        void onGeocodeResults(VoterInfo voterInfo);
+        void onGeocodeResults(VoterInfoResponse voterInfoResponse);
     }
 }

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.CivicInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.RequestType;
 
@@ -17,12 +17,12 @@ import okhttp3.Response;
 /**
  * Created by marcvandehey on 3/22/16.
  */
-public class CivicInfoInteractor extends BaseInteractor<VoterInfo, CivicInfoInteractor.CivicInfoCallback> {
+public class CivicInfoInteractor extends BaseInteractor<VoterInfoResponse, CivicInfoInteractor.CivicInfoCallback> {
     private static final String TAG = CivicInfoInteractor.class.getSimpleName();
 
     @Override
-    protected VoterInfo doInBackground(RequestType... params) {
-        VoterInfo response = null;
+    protected VoterInfoResponse doInBackground(RequestType... params) {
+        VoterInfoResponse response = null;
 
         if (params.length > 0) {
             OkHttpClient client = new OkHttpClient();
@@ -34,10 +34,10 @@ public class CivicInfoInteractor extends BaseInteractor<VoterInfo, CivicInfoInte
 
             try {
                 Response okHttpResponse = client.newCall(request).execute();
-                response = gson.fromJson(okHttpResponse.body().string(), VoterInfo.class);
+                response = gson.fromJson(okHttpResponse.body().string(), VoterInfoResponse.class);
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Unexpected error in VoterInfo Request");
+                Log.e(TAG, "Unexpected error in VoterInfoResponse Request");
             }
         }
 
@@ -45,17 +45,17 @@ public class CivicInfoInteractor extends BaseInteractor<VoterInfo, CivicInfoInte
     }
 
     @Override
-    protected void onPostExecute(VoterInfo voterInfoResponse) {
-        super.onPostExecute(voterInfoResponse);
+    protected void onPostExecute(VoterInfoResponse voterInfoResponseResponse) {
+        super.onPostExecute(voterInfoResponseResponse);
 
         CivicInfoCallback callback = getCallback();
 
         if (callback != null) {
-            callback.civicInfoResponse(voterInfoResponse);
+            callback.civicInfoResponse(voterInfoResponseResponse);
         }
     }
 
     public interface CivicInfoCallback {
-        void civicInfoResponse(VoterInfo response);
+        void civicInfoResponse(VoterInfoResponse response);
     }
 }

@@ -22,7 +22,7 @@ import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.activities.aboutActivity.AboutVIPActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
 
 import java.util.ArrayList;
@@ -157,7 +157,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     }
 
     @Override
-    public void navigateToVoterInformationActivity(VoterInfo voterInfo, String filter) {
+    public void navigateToVoterInformationActivity(VoterInfoResponse voterInfoResponse, String filter) {
         Intent intent = new Intent(this, VoterInformationActivity.class);
         startActivity(intent);
     }
