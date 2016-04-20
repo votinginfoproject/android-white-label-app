@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/row_polling_site_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?selectableItemBackground"
-                android:padding="16dp">
+                android:padding="16dp"
+    >
 
     <TextView
         android:id="@+id/text_view_polling_site_type"
@@ -19,45 +21,57 @@
         android:text="@string/locations.list.label.drop_off"
         android:textAllCaps="true"
         android:textColor="@color/description.text.gray"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        />
 
-    <TextView
-        android:id="@+id/site_title"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/text_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@id/text_view_polling_site_type"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        tools:text="First Unitarian Church of Providence - 2nd flr Auditorium - B"/>
+        >
 
-    <TextView
-        android:id="@+id/site_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/site_title"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:textColor="@color/description.text.gray"
-        tools:text="1 Benevolent St, Providence, RI 02906"/>
+        <TextView
+            android:id="@+id/site_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            tools:text="First Unitarian Church of Providence - 2nd flr Auditorium - B"
+            />
 
-    <TextView
-        android:id="@+id/site_hours"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/site_address"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:textColor="@color/description.text.gray"
-        tools:text="7am - 7pm"/>
+        <TextView
+            android:id="@+id/site_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/site_title"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:textColor="@color/description.text.gray"
+            tools:text="1 Benevolent St, Providence, RI 02906"
+            />
 
+        <TextView
+            android:id="@+id/site_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/site_address"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:textColor="@color/description.text.gray"
+            tools:text="7am - 7pm"
+            />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/icon_direction"
@@ -66,6 +80,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_directions"/>
+        android:src="@drawable/ic_directions"
+        />
 
 </RelativeLayout>

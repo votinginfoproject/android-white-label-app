@@ -27,7 +27,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private static final int POLLING_LOCATION_VIEW_HOLDER = 0x1;
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x2;
     private final Election mElection;
-    private final PollingSitesListFragment.PollingSiteOnClickListener mListener;
+    private final PollingSitesListFragment.PollingSitesListener mListener;
     private ArrayList<PollingLocation> mPollingLocations;
     private boolean hasHeader;
 
@@ -36,7 +36,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     public PollingSiteItemRecyclerViewAdapter(Context context,
                                               Election election,
                                               List<PollingLocation> items,
-                                              PollingSitesListFragment.PollingSiteOnClickListener listener) {
+                                              PollingSitesListFragment.PollingSitesListener listener) {
         mElection = election;
         mPollingLocations = new ArrayList<>(items);
         mListener = listener;

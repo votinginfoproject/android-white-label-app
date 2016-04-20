@@ -1,9 +1,12 @@
 package com.votinginfoproject.VotingInformationProject.models.singletons;
 
 import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -19,6 +22,18 @@ import java.util.Locale;
 public class UserPreferences {
     private static final String TAG = UserPreferences.class.getSimpleName();
 
+    private static String ARG_POLLING_LOCATIONS = "polling_locations";
+    private static String ARG_EARLY_LOCATIONS = "early_locations";
+    private static String ARG_DROP_LOCATIONS = "drop_locations";
+    private static String ARG_ALL_LOCATIONS = "all_locations";
+
+    private static String ARG_SELECTED_PARTY = "selected_party";
+    private static String ARG_HOME_LOCATION = "home_location";
+    private static String ARG_LAST_LOCATION = "last_location";
+    private static String ARG_VOTER_INFO = "voter_info";
+    private static String ARG_STATE_ADDRESS = "state_admin_address";
+    private static String ARG_LOCAL_ADDRESS = "local_admin_address";
+
     private static UserPreferences ourInstance = new UserPreferences();
     ArrayList<PollingLocation> pollingLocations;
     ArrayList<PollingLocation> earlyVotingLocations;
@@ -30,6 +45,8 @@ public class UserPreferences {
     private VoterInfo voterInfo;
     private CivicApiAddress stateAdminAddress;
     private CivicApiAddress localAdminAddress;
+
+    private Location lastKnownLocation;
 
     private UserPreferences() {
         this.useMetric = !Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country());
@@ -181,5 +198,59 @@ public class UserPreferences {
 
     public static ArrayList<PollingLocation> getDropBoxLocations() {
         return ourInstance.dropBoxLocations;
+    }
+
+    //Save User Preferences State and bind it to needed activity
+    public static void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(ARG_POLLING_LOCATIONS, ourInstance.pollingLocations);
+        outState.putParcelableArrayList(ARG_EARLY_LOCATIONS, ourInstance.earlyVotingLocations);
+        outState.putParcelableArrayList(ARG_DROP_LOCATIONS, ourInstance.dropBoxLocations);
+        outState.putParcelableArrayList(ARG_ALL_LOCATIONS, ourInstance.allLocations);
+
+        outState.putString(ARG_SELECTED_PARTY, ourInstance.selectedParty);
+
+        outState.putParcelable(ARG_HOME_LOCATION, ourInstance.homeLocation);
+        outState.putParcelable(ARG_LAST_LOCATION, ourInstance.lastKnownLocation);
+
+        if (ourInstance.voterInfo != null) {
+            String voterInfoString = new Gson().toJson(ourInstance.voterInfo);
+            outState.putString(ARG_VOTER_INFO, voterInfoString);
+        }
+
+        outState.putParcelable(ARG_STATE_ADDRESS, ourInstance.stateAdminAddress);
+        outState.putParcelable(ARG_LOCAL_ADDRESS, ourInstance.localAdminAddress);
+    }
+
+    //Restore User Preferences State if available
+    public static void onRestoreInstanceState(Bundle savedInstance) {
+        ourInstance.useMetric = !Locale.getDefault().getISO3Country().equalsIgnoreCase(Locale.US.getISO3Country());
+
+        ourInstance.pollingLocations = savedInstance.getParcelableArrayList(ARG_POLLING_LOCATIONS);
+        ourInstance.earlyVotingLocations = savedInstance.getParcelableArrayList(ARG_EARLY_LOCATIONS);
+        ourInstance.dropBoxLocations = savedInstance.getParcelableArrayList(ARG_DROP_LOCATIONS);
+        ourInstance.allLocations = savedInstance.getParcelableArrayList(ARG_ALL_LOCATIONS);
+
+        ourInstance.selectedParty = savedInstance.getString(ARG_SELECTED_PARTY, "");
+
+        ourInstance.homeLocation = savedInstance.getParcelable(ARG_HOME_LOCATION);
+        ourInstance.lastKnownLocation = savedInstance.getParcelable(ARG_LAST_LOCATION);
+
+        String voterInfoString = savedInstance.getString(ARG_VOTER_INFO);
+
+        if (voterInfoString != null && voterInfoString.length() > 0) {
+            ourInstance.voterInfo = new Gson().fromJson(voterInfoString, VoterInfo.class);
+        }
+
+        ourInstance.stateAdminAddress = savedInstance.getParcelable(ARG_STATE_ADDRESS);
+        ourInstance.localAdminAddress = savedInstance.getParcelable(ARG_LOCAL_ADDRESS);
+    }
+
+    @Nullable
+    public Location getLastKnownLocation() {
+        return getInstance().lastKnownLocation;
+    }
+
+    public static void setLastKnownLocation(Location lastKnownLocation) {
+        getInstance().lastKnownLocation = lastKnownLocation;
     }
 }

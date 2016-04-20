@@ -290,4 +290,8 @@
         <item name="android:button">@drawable/radio_button</item>
     </style>
 
+    <style name="map_bottom_card">
+        <item name="android:background">@color/white</item>
+        <item name="android:elevation">8dp</item>
+    </style>
 </resources>

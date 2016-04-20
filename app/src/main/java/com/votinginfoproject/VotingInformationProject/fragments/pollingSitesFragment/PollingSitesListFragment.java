@@ -32,7 +32,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
     private PollingSitesPresenterImpl mPresenter;
 
-    private PollingSiteOnClickListener mListener;
+    private PollingSitesListener mListener;
 
     private PollingSiteItemRecyclerViewAdapter mAdapter;
 
@@ -98,8 +98,8 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof PollingSiteOnClickListener) {
-            mListener = (PollingSiteOnClickListener) context;
+        if (context instanceof PollingSitesListener) {
+            mListener = (PollingSitesListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -194,12 +194,17 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         mRecyclerView.invalidateItemDecorations();
     }
 
+    @Override
+    public void showLocationCard(PollingLocation location) {
+        //Not Implemented
+    }
+
     /**
      * Recycler View Interaction methods
      * <p/>
      * Must be implemented by the Activity
      */
-    public interface PollingSiteOnClickListener {
+    public interface PollingSitesListener {
         void mapButtonClicked(@LayoutRes int currentSort);
 
         void listButtonClicked(@LayoutRes int currentSort);
@@ -207,5 +212,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         void pollingSiteClicked(PollingLocation location);
 
         void reportErrorClicked();
+
+        void startPollingLocation();
     }
 }

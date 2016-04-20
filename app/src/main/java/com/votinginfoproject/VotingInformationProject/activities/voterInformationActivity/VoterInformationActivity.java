@@ -1,39 +1,46 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
+
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
-import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
-
 
 public class VoterInformationActivity extends BaseActivity<VoterInformationPresenter> implements
         VoterInformationView,
-        BottomNavigationBar.BottomNavigationBarCallback, PollingSitesListFragment.PollingSiteOnClickListener,
-        ElectionDetailsListFragment.ElectionDetailsListFragmentCallback {
+        BottomNavigationBar.BottomNavigationBarCallback,
+        PollingSitesListFragment.PollingSitesListener,
+        ElectionDetailsListFragment.ElectionDetailsListFragmentCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
 
-    private BottomNavigationBar mBottomNavigationBar;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,34 +48,44 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
         setContentView(R.layout.activity_voter_information);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        BottomNavigationBar mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
 
-        ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
+        if (mBottomNavigationBar != null) {
+            mBottomNavigationBar.setListener(this);
         }
 
-        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
-        mBottomNavigationBar.setListener(this);
+        setPresenter(new VoterInformationPresenterImpl(UserPreferences.getVoterInfo(), UserPreferences.getSelectedParty()));
 
-        //Unwrap Extras
-        Bundle extras = getIntent().getExtras();
-
-        if (extras == null) {
-            //Finish with errors to display
-            finish();
-        } else {
-            String voterInfoString = extras.getString(ExtraConstants.VOTER_INFO);
-            String filter = extras.getString(ExtraConstants.PARTY_FILTER);
-
-            //Inflate Voter Info from Home Activity
-            VoterInfo voterInfo = new Gson().fromJson(voterInfoString, VoterInfo.class);
-
-            setPresenter(new VoterInformationPresenterImpl(voterInfo, filter));
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            startPollingLocation();
         }
+
+        if (savedInstanceState != null) {
+            UserPreferences.onRestoreInstanceState(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+
+        UserPreferences.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            UserPreferences.onRestoreInstanceState(savedInstanceState);
+        }
+
+        setPresenter(new VoterInformationPresenterImpl(UserPreferences.getVoterInfo(), UserPreferences.getSelectedParty()));
     }
 
     @Override
@@ -209,5 +226,33 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     public void navigateToDirectionsView(String address) {
         //TODO add other things here
         Log.v(TAG, "Address selected: " + address);
+    }
+
+    @Override
+    public void startPollingLocation() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            UserPreferences.setLastKnownLocation(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        //Not implemented
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        //Not implemented
     }
 }

@@ -51,6 +51,8 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
             } else {
                 //Kill View and navigate back to home.
             }
+        } else {
+            getView().presentParentLevelFragment(PollingSitesListFragment.newInstance());
         }
     }
 

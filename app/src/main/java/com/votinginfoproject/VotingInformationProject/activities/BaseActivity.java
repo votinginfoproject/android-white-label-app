@@ -1,12 +1,12 @@
 package com.votinginfoproject.VotingInformationProject.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by marcvandehey on 4/7/16.
  */
-public class BaseActivity<Presenter> extends AppCompatActivity {
+public class BaseActivity<Presenter> extends Activity {
 
     private BasePresenter mPresenter;
 

@@ -19,4 +19,6 @@ public interface PollingSitesView {
     void navigateToList(@LayoutRes int currentSort);
 
     void updateList(ArrayList<PollingLocation> locations);
+
+    void showLocationCard(PollingLocation location);
 }

@@ -1,9 +1,16 @@
 package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
+import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,18 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
@@ -32,12 +38,11 @@ import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingSiteViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
+public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener, OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnCameraChangeListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
     private static final String HOME = "home";
@@ -59,11 +64,10 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     String encodedPolyline;
     LatLngBounds polylineBounds;
     boolean haveElectionAdminBody;
-
-    HashMap<Marker, PollingLocation> mappedPollingLocations;
-
-    private PollingSitesListFragment.PollingSiteOnClickListener mListener;
+    private PollingSitesListFragment.PollingSitesListener mListener;
     private PollingSitesPresenter mPresenter;
+
+    private PollingSiteViewHolder mBottomCardViewHolder;
 
     private Toolbar mToolbar;
 
@@ -121,8 +125,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof PollingSitesListFragment.PollingSiteOnClickListener) {
-            mListener = (PollingSitesListFragment.PollingSiteOnClickListener) context;
+        if (context instanceof PollingSitesListFragment.PollingSitesListener) {
+            mListener = (PollingSitesListFragment.PollingSitesListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -238,57 +242,47 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
                     mToolbar.getMenu().removeItem(R.id.sort_drop_boxes);
                 }
             }
+
+            View mBottomCardLayout = view.findViewById(R.id.bottom_card_container);
+            mBottomCardLayout.measure(0, 0);
+            mBottomCardLayout.setTranslationY(mBottomCardLayout.getMeasuredHeight());
+            mBottomCardLayout.bringToFront();
+
+            mBottomCardViewHolder = new PollingSiteViewHolder(mBottomCardLayout);
+            mBottomCardViewHolder.getView().setOnClickListener(this);
         }
     }
 
-    /**
-     * Helper function to add everything that isn't a polling site to the map
-     */
-    private void addNonPollingToMap() {
-        // add marker for user-entered address
-        if (homeLocation != null) {
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(UserPreferences.getHomeLatLong())
-                    .title(getContext().getString(R.string.locations_map_label_user_address))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_address))
-            );
+    public void attemptToGetLocation() {
+        //Check for location Permissions
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        } else {
+            //Do location stuff
+            if (map != null) {
+                mListener.startPollingLocation();
+
+                map.setMyLocationEnabled(true);
+            }
         }
+    }
 
-        if (currentLocation != null) {
-            // add marker for current user location (used for directions)
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(currentLocation)
-                    .title(getContext().getString(R.string.locations_map_label_user_location))
-                    .snippet(currentAddress)
-                    .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation))
-            );
-        }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (haveElectionAdminBody) {
-            // add marker for state or local election administration body
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(thisLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_leg_body_map))
-            );
-
-            marker.showInfoWindow();
-            // allow for getting directions from election admin body location
-        }
-
-        if (encodedPolyline != null && !encodedPolyline.isEmpty()) {
-            // show directions line on map
-            PolylineOptions polylineOptions = new PolylineOptions();
-            List<LatLng> pts = PolyUtil.decode(encodedPolyline);
-            polylineOptions.addAll(pts);
-            polylineOptions.color(getContext().getResources().getColor(R.color.brand));
-            map.addPolyline(polylineOptions);
+        if (grantResults.length > 0) {
+            attemptToGetLocation();
+        } else {
+            //Show error
+            Snackbar.make(mBottomCardViewHolder.getView(), R.string.activity_vip_tab_enable_location_services_prompt, Snackbar.LENGTH_SHORT);
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
+        setRetainInstance(false);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -297,30 +291,24 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         }
     }
 
-    private MarkerOptions createMarkerOptions(PollingLocation location, @DrawableRes int drawable) {
-        MarkerOptions options = new MarkerOptions()
-                .position(new LatLng(location.address.latitude, location.address.longitude))
-                .icon(BitmapDescriptorFactory.fromResource(drawable));
-
-        return options;
-    }
-
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         mPresenter.menuItemClicked(item.getItemId());
         item.setChecked(true);
+
+        hideLocationCard();
 
         return false;
     }
 
     @Override
     public void navigateToDirections(PollingLocation pollingLocation) {
-
+//TODO do intent to new activity
     }
 
     @Override
     public void navigateToErrorForm() {
-
+        //Not implemented
     }
 
     @Override
@@ -336,42 +324,22 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     @Override
     public void updateList(ArrayList<PollingLocation> locations) {
         if (map != null) {
-            map.clear();
-            updateMapWithLocations(locations);
-            addNonPollingToMap();
+            mPresenter.onMapNeedsLayout(map);
         }
     }
 
-    private void updateMapWithLocations(ArrayList<PollingLocation> locations) {
-        mappedPollingLocations = new HashMap<>();
+    @Override
+    public void showLocationCard(PollingLocation location) {
+        if (mBottomCardViewHolder.getView().getTranslationY() > 0) {
+            mBottomCardViewHolder.setPollingLocation(getContext(), location);
 
-        for (PollingLocation location : locations) {
-            MarkerOptions markerOptions;
-            switch (location.pollingLocationType) {
-                case PollingLocation.POLLING_TYPE_DROP_BOX:
-
-                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_drop_box);
-
-                    break;
-                case PollingLocation.POLLING_TYPE_EARLY_VOTE:
-                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_early_voting);
-
-                    break;
-                case PollingLocation.POLLING_TYPE_LOCATION:
-                default:
-                    markerOptions = createMarkerOptions(location, R.drawable.ic_marker_poll);
-
-                    break;
-            }
-
-            markerOptions.title(location.address.locationName);
-
-            if (location.address != null) {
-                markerOptions.position(location.getLatLongLocation());
-                Marker marker = map.addMarker(markerOptions);
-
-                mappedPollingLocations.put(marker, location);
-            }
+            //Card not shown
+            mBottomCardViewHolder.getView().setVisibility(View.VISIBLE);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(mBottomCardViewHolder.getView(), "translationY", mBottomCardViewHolder.getView().getTranslationY(), 0);
+            animator.setDuration(300);
+            animator.start();
+        } else {
+            mBottomCardViewHolder.setPollingLocation(getContext(), location, true);
         }
     }
 
@@ -393,27 +361,19 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        //TODO handle layout here
-        //Unselect all markers
-        //select current marker
-
-//        marker.setIcon();
-
-        return true;
+        return mPresenter.mapMarkerClicked(map, marker);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        //TODO enable my location in M
-//            map.setMyLocationEnabled(true);
+        attemptToGetLocation();
 
         setupMapView(googleMap);
+        mPresenter.onMapNeedsLayout(googleMap);
 
-        updateMapWithLocations(mPresenter.getSortedLocations());
-
-        addNonPollingToMap();
+        resetView();
 
         //This will be the same as reset View, but not animated
         if (polylineBounds != null) {
@@ -436,11 +396,70 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         map.setOnMarkerClickListener(this);
         map.getUiSettings().setMapToolbarEnabled(false);
 
+        //Override default options so we can implement on click and show our own info window.
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-//TODO do this
+                //Empty
             }
         });
+
+        //Brings Selected Map Pin to the front without showing a view
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return new View(getContext());
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+        });
+
+        map.setOnMapClickListener(this);
+
+        map.setOnCameraChangeListener(this);
+    }
+
+    private void hideLocationCard() {
+        mBottomCardViewHolder.getView().measure(0, 0);
+        int height = mBottomCardViewHolder.getView().getMeasuredHeight();
+
+        ObjectAnimator hideCardAnimator = ObjectAnimator.ofFloat(mBottomCardViewHolder.getView(), "translationY", mBottomCardViewHolder.getView().getTranslationY(), height);
+        hideCardAnimator.setDuration(300);
+        hideCardAnimator.start();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(mBottomCardViewHolder.getView())) {
+            mPresenter.lastPollingLocationClicked();
+        }
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        hideLocationCard();
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+        hideLocationCard();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

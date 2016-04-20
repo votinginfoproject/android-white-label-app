@@ -2,6 +2,8 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 
 import android.support.annotation.LayoutRes;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
@@ -19,6 +21,12 @@ public abstract class PollingSitesPresenter extends BasePresenter<PollingSitesVi
     public abstract void menuItemClicked(@LayoutRes int sortType);
 
     public abstract void itemClickedAtIndex(int index);
+
+    public abstract void onMapNeedsLayout(GoogleMap map);
+
+    public abstract boolean mapMarkerClicked(GoogleMap map, Marker marker);
+
+    public abstract void lastPollingLocationClicked();
 
     @LayoutRes
     public abstract int getCurrentSort();
