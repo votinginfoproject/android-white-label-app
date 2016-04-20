@@ -61,6 +61,7 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
     public void setPollingLocation(final Context context, final PollingLocation pollingLocation, boolean animated) {
         if (!animated) {
             setPollingLocation(context, pollingLocation);
+
             return;
         }
 

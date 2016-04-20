@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -38,8 +42,14 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingS
 
 import java.util.ArrayList;
 
-public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener, PollingSitesView, BottomNavigationFragment, GoogleMap.OnMarkerClickListener, OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnCameraChangeListener {
-
+public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemClickListener,
+        PollingSitesView,
+        BottomNavigationFragment,
+        GoogleMap.OnMarkerClickListener,
+        OnMapReadyCallback,
+        View.OnClickListener,
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnCameraChangeListener {
     private static final String LOCATION_ID = "location_id";
     private static final String POLYLINE = "polyline";
     private static final String HOME = "home";
