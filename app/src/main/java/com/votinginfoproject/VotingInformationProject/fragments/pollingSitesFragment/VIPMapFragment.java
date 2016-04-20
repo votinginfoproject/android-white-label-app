@@ -68,6 +68,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     String encodedPolyline;
     LatLngBounds polylineBounds;
     boolean haveElectionAdminBody;
+    private PollingSitesListFragment.PollingSitesListener mListener;
+    private PollingSitesPresenter mPresenter;
 
     private PollingSitesListFragment.PollingSitesListener mListener;
 
