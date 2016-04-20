@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.views.viewHolders;
 
+import android.animation.ObjectAnimator;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.votinginfoproject.VotingInformationProject.R;
  */
 public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
 
+    private static final int chevronFlipAnimationDuration = 500;
+
     private final View mView;
     private final ImageView mImageView;
     private final ImageView mChevronImageView;
@@ -25,6 +28,7 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
         super(v);
 
         mView = v;
+        mView.setTag(this);
         mImageView = (ImageView) mView.findViewById(R.id.body_subtitle_image);
         mChevronImageView = (ImageView) mView.findViewById(R.id.body_subtitle_arrow);
         mTextView = (TextView) mView.findViewById(R.id.body_subtitle);
@@ -47,8 +51,13 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
 
     public void setExpanded(boolean expanded) {
         mIsExpanded = expanded;
-        @DrawableRes int resId = expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down;
-        mChevronImageView.setImageResource(resId);
+        performFlipAnimation(mIsExpanded);
+    }
+
+    private void performFlipAnimation(boolean expanded) {
+        ObjectAnimator flipY = ObjectAnimator.ofFloat(mChevronImageView, "scaleY", expanded ? -1f : 1f);
+        flipY.setDuration(chevronFlipAnimationDuration);
+        flipY.start();
     }
 
     public int getLeftDividerMargin() {

@@ -128,7 +128,8 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClicked(item);
+                    subtitleClicked(item, v);
+
                 }
             });
 
@@ -156,7 +157,6 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
             viewHolder.setTitle(item.mText);
         }
-
     }
 
     private ListItem itemForListPosition(int position) {
@@ -196,12 +196,12 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         for (ListItem item : parentListNodes) {
             if (!item.isChild()) {
                 parentNodes.add(item);
-
             }
         }
 
         for (ListItem item : parentNodes) {
             collapseListItem(item);
+            notifyItemChanged(getRecyclerViewIndexForItem(item));
         }
     }
 
@@ -245,12 +245,17 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         return toReturn;
     }
 
-    private void itemClicked(ListItem item) {
-        if (!item.isChild()) {
-            if (item.isExpanded) {
-                collapseListItem(item);
-            } else {
-                expandListItem(item);
+    private void subtitleClicked(ListItem item, View clickedView) {
+        if (item.isExpanded) {
+            collapseListItem(item);
+        } else {
+            expandListItem(item);
+        }
+
+        if (clickedView.getTag() != null) {
+            ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) clickedView.getTag();
+            if (subtitleViewHolder != null) {
+                subtitleViewHolder.setExpanded(item.isExpanded);
             }
         }
     }
@@ -258,8 +263,9 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private void expandListItem(ListItem item) {
         if (!item.isExpanded) {
 
-            int position = parentListNodes.indexOf(item);
-            int index = position + 1;
+            int position = getRecyclerViewIndexForItem(item);
+            int index = position;
+
             for (ListItem child : item.mHiddenListItems) {
                 parentListNodes.add(index, child);
                 index++;
@@ -267,29 +273,30 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
             item.isExpanded = true;
 
-            if (hasHeader) {
-                position++;
-            }
-            notifyItemChanged(position);
             notifyItemRangeInserted(position + 1, item.mHiddenListItems.size());
         }
+    }
+
+    private int getRecyclerViewIndexForItem(ListItem item) {
+        int position = parentListNodes.indexOf(item);
+        if (position >= 0 && hasHeader) {
+            position++;
+        }
+
+        return position;
     }
 
     private void collapseListItem(ListItem item) {
         if (item.isExpanded) {
 
-            int position = parentListNodes.indexOf(item);
+            int position = getRecyclerViewIndexForItem(item);
+
             for(ListItem child : item.mHiddenListItems) {
                 parentListNodes.remove(child);
             }
 
             item.isExpanded = false;
 
-
-            if (hasHeader) {
-                position++;
-            }
-            notifyItemChanged(position);
             notifyItemRangeRemoved(position + 1, item.mHiddenListItems.size());
         }
     }

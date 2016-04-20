@@ -154,6 +154,10 @@
     <string name="about.description.mail_only">Your upcoming election is mail-only. Please contact your local election official to learn more about how to receive and return your ballot.</string>
     <string name="about.loading.legal_notices">Loading…</string>
 
+    <!-- Vector Image paths -->
+    <string name="path.chevron.up">M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z</string>
+    <string name="path.chevron.down">M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

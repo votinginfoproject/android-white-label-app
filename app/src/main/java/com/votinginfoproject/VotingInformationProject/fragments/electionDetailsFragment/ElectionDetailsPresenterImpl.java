@@ -44,6 +44,7 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
 
     @Override
     public void reportErrorClicked() {
+        //TODO add things here
         Log.v(TAG, "Report Error Clicked()");
     }
 }
