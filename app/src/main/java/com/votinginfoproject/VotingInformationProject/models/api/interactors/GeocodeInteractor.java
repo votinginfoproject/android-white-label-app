@@ -97,7 +97,7 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
 
                 VoterInformation.setLocalAdministrationBody(localAdministrationBody);
             }
-            
+
             //Setup State Administration Body
             ElectionAdministrationBody stateAdministrationBody = voterInfoResponse.getStateAdmin();
 
