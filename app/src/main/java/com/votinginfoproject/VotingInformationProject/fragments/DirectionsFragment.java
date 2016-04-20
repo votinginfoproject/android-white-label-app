@@ -111,7 +111,7 @@ public class DirectionsFragment extends Fragment implements DirectionsInteractor
 
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
         myActivity = (VIPTabBarActivity) this.getActivity();
-        VoterInfo voterInfo = UserPreferences.getVoterInfo();
+        VoterInfo voterInfo = null;//UserPreferences.getVoterInfo();
 
         Resources res = myActivity.getResources();
         unselectedTextColor = res.getColor(R.color.button_blue);

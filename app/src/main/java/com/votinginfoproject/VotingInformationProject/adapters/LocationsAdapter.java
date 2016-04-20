@@ -32,18 +32,6 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
     boolean useMetric;
     Location home;
 
-    // View lookup cache.  Pattern from here:
-    // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
-    private static class ViewHolder {
-        TextView name;
-        TextView address;
-        TextView distance;
-        TextView voterServices;
-        TextView pollingHours;
-
-        boolean isQueryingDistance; // only query for distance if not already doing so
-    }
-
     /**
      * @param context   expected to be VIPTabBarActivity
      * @param locations list of polling locations to display
@@ -53,13 +41,22 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
 
         myActivity = (VIPTabBarActivity) context;
         useMetric = UserPreferences.useMetric();
-        home = UserPreferences.getHomeLocation();
+//        home = UserPreferences.getHomeLocation();
         distanceFormat = new DecimalFormat("0.00 ");
 
         if (useMetric) {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_metric);
         } else {
             distanceSuffix = context.getResources().getString(R.string.locations_distance_suffix_imperial);
+        }
+    }
+
+    private static void setTextOrHideView(TextView textView, CharSequence text) {
+        if (!TextUtils.isEmpty(text)) {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(text);
+        } else {
+            textView.setVisibility(View.GONE);
         }
     }
 
@@ -150,12 +147,15 @@ public class LocationsAdapter extends ArrayAdapter<PollingLocation> {
         return convertView;
     }
 
-    private static void setTextOrHideView(TextView textView, CharSequence text) {
-        if (!TextUtils.isEmpty(text)) {
-            textView.setVisibility(View.VISIBLE);
-            textView.setText(text);
-        } else {
-            textView.setVisibility(View.GONE);
-        }
+    // View lookup cache.  Pattern from here:
+    // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
+    private static class ViewHolder {
+        TextView name;
+        TextView address;
+        TextView distance;
+        TextView voterServices;
+        TextView pollingHours;
+
+        boolean isQueryingDistance; // only query for distance if not already doing so
     }
 }

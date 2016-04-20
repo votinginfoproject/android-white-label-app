@@ -90,7 +90,7 @@ public class CandidateFragment extends Fragment {
 
         try {
             ArrayList<Contest> contests = new ArrayList<>();
-            contests.addAll(UserPreferences.getVoterInfo().getFilteredContestsForParty(UserPreferences.getSelectedParty()));
+//            contests.addAll(UserPreferences.getVoterInfo().getFilteredContestsForParty(UserPreferences.getSelectedParty()));
             contest = contests.get(contestNum);
             candidate = contest.candidates.get(candidateNum);
 

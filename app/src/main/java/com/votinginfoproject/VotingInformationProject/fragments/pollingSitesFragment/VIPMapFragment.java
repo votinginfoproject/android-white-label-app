@@ -158,13 +158,13 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
         allLocations = UserPreferences.getAllPollingLocations();
 
-        homeLocation = UserPreferences.getHomeLatLong();
+        homeLocation = UserPreferences.getHomeAddress().getLocation();
 
         //TODO get current location
 //        currentLocation = mActivity.getUserLocation();
 //        currentAddress = mActivity.getUserLocationAddress();
 
-        homeAddress = UserPreferences.getVoterInfo().normalizedInput.toGeocodeString();
+        homeAddress = UserPreferences.getHomeAddress().toGeocodeString();
 
         //TODO rework how we are getting polylines
 //        polylineBounds = mActivity.getPolylineBounds();
@@ -177,17 +177,20 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             haveElectionAdminBody = false;
         }
 
+        //TODO Send in This Location instead of using hashmap
         // set selected location to zoom to
         if (locationId.equals(HOME)) {
             thisLocation = homeLocation;
-        } else if (haveElectionAdminBody) {
+        } else if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE)) {
             //TODO rework this
-            thisLocation = UserPreferences.getVoterInfo().getAdminBodyLatLng(locationId);
+            thisLocation = UserPreferences.getStateAdminAddress().getLocation();
+        } else if (locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
+            thisLocation = UserPreferences.getLocalAdminAddress().getLocation();
         } else {
             Log.d(TAG, "Have location ID: " + locationId);
 
             //TODO rework this
-            selectedLocation = UserPreferences.getVoterInfo().getLocationForId(locationId);
+//            selectedLocation = UserPreferences.getVoterInfo().getLocationForId(locationId);
 
             CivicApiAddress address = selectedLocation.address;
             thisLocation = new LatLng(address.latitude, address.longitude);

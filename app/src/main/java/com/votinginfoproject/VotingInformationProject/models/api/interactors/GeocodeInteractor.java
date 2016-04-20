@@ -96,17 +96,13 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
                 localAdminAddress.distance = localAdminDistance;
             }
 
-            //Setup Preferences Object
-            UserPreferences.setVoterInfo(voterInfo);
-
-            android.location.Location home = new android.location.Location("home");
-            home.setLatitude(homeLocation.lat);
-            home.setLongitude(homeLocation.lng);
-
-            UserPreferences.setHomeLocation(home);
+            CivicApiAddress homeAddress = voterInfo.normalizedInput;
+            homeAddress.latitude = homeLocation.lat;
+            homeAddress.longitude = homeLocation.lng;
 
             UserPreferences.setStateAdminAddress(stateAdminAddress);
             UserPreferences.setLocalAdminAddress(localAdminAddress);
+            UserPreferences.setHomeAddress(homeAddress);
 
             UserPreferences.setPollingLocations(geocodedPollingLocations, geocodedEarlyVotingLocations, geocodedDropBoxLocations);
         }

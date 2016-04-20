@@ -48,6 +48,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         super.onAttachView(voterInformationView);
 
         if (mCurrentTab == -1) {
+            mCurrentTab = POLLS_TAB;
             getView().presentParentLevelFragment(PollingSitesListFragment.newInstance());
         }
     }

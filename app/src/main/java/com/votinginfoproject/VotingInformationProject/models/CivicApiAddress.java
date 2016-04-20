@@ -3,6 +3,8 @@ package com.votinginfoproject.VotingInformationProject.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by kathrynkillebrew on 7/14/14.
  */
@@ -46,6 +48,10 @@ public class CivicApiAddress implements Parcelable {
         latitude = parcel.readDouble();
         longitude = parcel.readDouble();
         distance = parcel.readDouble();
+    }
+
+    public LatLng getLocation() {
+        return new LatLng(latitude, longitude);
     }
 
     @Override

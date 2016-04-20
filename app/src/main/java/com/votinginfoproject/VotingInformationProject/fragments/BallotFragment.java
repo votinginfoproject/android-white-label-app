@@ -85,7 +85,7 @@ public class BallotFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // get election info
-        voterInfo = UserPreferences.getVoterInfo();
+//        voterInfo = UserPreferences.getVoterInfo();
         Log.d(TAG, "Got election: " + voterInfo.election.getName());
     }
 }

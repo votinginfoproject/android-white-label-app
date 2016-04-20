@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
-import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 //import org.apache.http.util.EncodingUtils;
 
@@ -97,9 +95,9 @@ public class SupportWebViewFragment extends Fragment {
 
         // build the POST
         Uri.Builder builder = new Uri.Builder();
-        VoterInfo info = UserPreferences.getVoterInfo();
-        builder.appendQueryParameter("electionId", info.election.getId());
-        builder.appendQueryParameter("address", info.normalizedInput.toGeocodeString());
+//        VoterInfo info = UserPreferences.getVoterInfo();
+//        builder.appendQueryParameter("electionId", info.election.getId());
+//        builder.appendQueryParameter("address", info.normalizedInput.toGeocodeString());
 
         // strip leading question mark from parameters
         String paramString = builder.build().toString().substring(1);

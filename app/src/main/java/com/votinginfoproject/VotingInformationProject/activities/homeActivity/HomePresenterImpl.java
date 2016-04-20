@@ -18,6 +18,7 @@ import com.votinginfoproject.VotingInformationProject.models.api.interactors.Geo
 import com.votinginfoproject.VotingInformationProject.models.api.requests.CivicInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.GeocodeVoterInfoRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.StopLightCivicInfoRequest;
+import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
 import java.util.ArrayList;
 
@@ -128,6 +129,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         if (mParties.size() > party) {
             mSelectedParty = party;
             getView().setPartyText(mParties.get(mSelectedParty));
+
+            UserPreferences.setSelectedParty(mParties.get(mSelectedParty));
         }
     }
 
@@ -252,7 +255,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
                     GeocodeInteractor interactor = new GeocodeInteractor();
                     //TODO use key here when it is hooked up correctly
-                    GeocodeVoterInfoRequest request = new GeocodeVoterInfoRequest(/*mContext.getString(R.string.google_api_browser_key)*/"", mVoterInfo);
+                    GeocodeVoterInfoRequest request = new GeocodeVoterInfoRequest(""/*mContext.getString(R.string.google_api_browser_key)*/, mVoterInfo);
 
                     interactor.enqueueRequest(request, this);
                 } else {
@@ -299,6 +302,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             //Add the default election to the front of the list.
             mElections.add(0, mVoterInfo.election);
 
+            UserPreferences.setElection(mVoterInfo.election);
+
             getView().showElectionPicker();
             mSelectedElection = 0;
             getView().setElectionText(mVoterInfo.election.getName());
@@ -307,6 +312,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         mParties = mVoterInfo.getUniqueParties();
         mParties.add(0, allPartiesString);
 
+        UserPreferences.setSelectedParty(allPartiesString);
         if (mParties.size() > 1) {
             getView().setPartyText(mParties.get(0));
             mSelectedParty = 0;

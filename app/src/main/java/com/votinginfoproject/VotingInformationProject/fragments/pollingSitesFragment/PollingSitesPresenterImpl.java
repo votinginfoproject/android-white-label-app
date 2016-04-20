@@ -60,7 +60,7 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
 
     @Override
     public Election getElection() {
-        return UserPreferences.getVoterInfo().election;
+        return UserPreferences.getElection();
     }
 
     @Override
@@ -145,11 +145,11 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
      */
     private void addNonPollingLocationsToMap(@NonNull GoogleMap map) {
         // add marker for user-entered address
-        LatLng homeLatLong = UserPreferences.getHomeLatLong();
+        LatLng homeLatLong = UserPreferences.getHomeAddress().getLocation();
 
         if (homeLatLong.latitude != 0.0) {
             map.addMarker(new MarkerOptions()
-                    .position(UserPreferences.getHomeLatLong())
+                    .position(UserPreferences.getHomeAddress().getLocation())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_address))
             );
         }
@@ -217,17 +217,17 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
 
     @Override
     public boolean hasPollingLocations() {
-        return !UserPreferences.getVoterInfo().getPollingLocations().isEmpty();
+        return !UserPreferences.getPollingLocations().isEmpty();
     }
 
     @Override
     public boolean hasEarlyVotingLocations() {
-        return !UserPreferences.getVoterInfo().getOpenEarlyVoteSites().isEmpty();
+        return !UserPreferences.getEarlyVotingLocations().isEmpty();
     }
 
     @Override
     public boolean hasDropBoxLocations() {
-        return !UserPreferences.getVoterInfo().getOpenDropOffLocations().isEmpty();
+        return !UserPreferences.getDropBoxLocations().isEmpty();
     }
 
     @Override

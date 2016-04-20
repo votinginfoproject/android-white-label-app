@@ -85,6 +85,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     public void onBackPressed() {
         FragmentManager manager = getFragmentManager();
 
+        Log.v(TAG, "back count: " + manager.getBackStackEntryCount());
+
         if (manager.getBackStackEntryCount() > 1) {
             manager.popBackStack();
         } else {

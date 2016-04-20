@@ -83,7 +83,7 @@ public class ElectionDetailsFragment extends Fragment {
         mLinkMovementMethod = LinkMovementMethod.getInstance();
 
         // get state and local election administration bodies
-        voterInfo = UserPreferences.getVoterInfo();
+//        voterInfo = UserPreferences.getVoterInfo();
         stateAdmin = voterInfo.getStateAdmin();
         localAdmin = voterInfo.getLocalAdmin();
 

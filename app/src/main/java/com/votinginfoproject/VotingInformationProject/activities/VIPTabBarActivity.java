@@ -392,7 +392,7 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
     private void setUpGeocodePreferences() {
         // get LocationsFragment's root view
         locationsFragment = (LocationsFragment) mTabsAdapter.getItem(1);
-        voterInfo = UserPreferences.getVoterInfo();
+//        voterInfo = UserPreferences.getVoterInfo();
         voterInfo.setUpLocations();
 
         useMetric = UserPreferences.useMetric();
@@ -443,11 +443,6 @@ public class VIPTabBarActivity extends FragmentActivity implements GoogleApiClie
 
                     return;
                 }
-
-                homeLocation = new Location("home");
-                homeLocation.setLatitude(lat);
-                homeLocation.setLongitude(lon);
-                UserPreferences.setHomeLocation(homeLocation);
 
                 // start background geocode tasks for polling locations
                 ArrayList<PollingLocation> allLocations = voterInfo.getAllLocations();
