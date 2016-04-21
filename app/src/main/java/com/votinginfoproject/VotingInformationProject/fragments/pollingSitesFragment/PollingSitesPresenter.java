@@ -28,7 +28,7 @@ public abstract class PollingSitesPresenter extends BasePresenter<PollingSitesVi
 
     public abstract void clearSelectedMapMarkers();
 
-    public abstract void lastPollingLocationClicked();
+    public abstract void pollingItemSelected();
 
     @LayoutRes
     public abstract int getCurrentSort();

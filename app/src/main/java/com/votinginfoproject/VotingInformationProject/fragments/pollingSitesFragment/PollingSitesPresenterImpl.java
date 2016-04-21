@@ -216,7 +216,7 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
     }
 
     @Override
-    public void lastPollingLocationClicked() {
+    public void pollingItemSelected() {
         if (lastClickedLocation != null) {
             getView().navigateToDirections(lastClickedLocation);
         }

@@ -94,7 +94,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             pollingSiteViewHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.pollingSiteClicked(location);
+                    mListener.navigateToDirections(location);
                 }
             });
 

@@ -319,7 +319,9 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
     @Override
     public void navigateToDirections(PollingLocation pollingLocation) {
-//TODO do intent to new activity
+        if (mListener != null) {
+            mListener.navigateToDirections(pollingLocation);
+        }
     }
 
     @Override
@@ -452,7 +454,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     @Override
     public void onClick(View v) {
         if (v.equals(mBottomCardViewHolder.getView())) {
-            mPresenter.lastPollingLocationClicked();
+            mPresenter.pollingItemSelected();
         }
     }
 

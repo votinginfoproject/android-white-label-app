@@ -168,7 +168,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
     @Override
     public void navigateToDirections(PollingLocation pollingLocation) {
-        mListener.pollingSiteClicked(pollingLocation);
+        mListener.navigateToDirections(pollingLocation);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
         void listButtonClicked(@LayoutRes int currentSort);
 
-        void pollingSiteClicked(PollingLocation location);
+        void navigateToDirections(PollingLocation location);
 
         void reportErrorClicked();
 

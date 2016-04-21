@@ -9,6 +9,7 @@
     <dimen name="activity.home.label_text_size">16sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 
     <dimen name="fragment.election_details.item_min_height">48dp</dimen>
     <dimen name="fragment.election_details.subtitle_horizontal_padding">72dp</dimen>
