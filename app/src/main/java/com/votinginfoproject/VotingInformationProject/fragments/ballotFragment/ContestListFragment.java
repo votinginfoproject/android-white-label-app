@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link ContestListListener}
  * interface.
  */
-public class ContestListFragment extends Fragment implements BottomNavigationFragment, ContestListView, ContestListRecyclerViewAdapter.ContestListItemOnClickListener {
+public class ContestListFragment extends Fragment implements BottomNavigationFragment, ContestListView {
     private static final String TAG = ContestListFragment.class.getSimpleName();
 
     private static final String ARG_ELECTION = "arg_election";
@@ -62,7 +62,7 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
             ArrayList<Contest> contests = getArguments().getParcelableArrayList(ARG_CONTESTS);
 
             ContestListPresenterImpl presenter = new ContestListPresenterImpl(this, election, contests);
-            mAdapter = new ContestListRecyclerViewAdapter(presenter, this);
+            mAdapter = new ContestListRecyclerViewAdapter(presenter);
         }
     }
 
@@ -130,6 +130,13 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mAdapter.setPresenter(null);
+    }
+
+    @Override
     public void onContestItemClicked(Contest contest) {
         mListener.contestClicked(contest);
     }
@@ -141,9 +148,7 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
 
     @Override
     public void resetView() {
-        //TODO DO THIS
         mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
-
     }
 
     public interface ContestListListener {

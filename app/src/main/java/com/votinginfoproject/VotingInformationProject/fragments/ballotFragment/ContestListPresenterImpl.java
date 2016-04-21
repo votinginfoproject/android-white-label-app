@@ -61,8 +61,13 @@ public class ContestListPresenterImpl extends ContestListPresenter {
     }
 
     @Override
-    public void contestClicked(int index) {
-//        getView().getView
+    public void onContestItemClicked(Contest contest) {
+        getView().onContestItemClicked(contest);
+    }
+
+    @Override
+    public void onReportErrorClicked() {
+        getView().onReportErrorClicked();
     }
 
     @Override

@@ -16,7 +16,9 @@ public abstract class ContestListPresenter extends BasePresenter<ContestListView
 
     public abstract int getContestCount();
 
-    public abstract void contestClicked(int index);
+    public abstract void onContestItemClicked(Contest contest);
+
+    public abstract void onReportErrorClicked();
 
     public abstract Election getElection();
 

@@ -12,12 +12,14 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.Election
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final ContestListItemOnClickListener mListener;
     private ContestListPresenter mPresenter;
 
-    public ContestListRecyclerViewAdapter(ContestListPresenter presenter, ContestListItemOnClickListener listener) {
+    public ContestListRecyclerViewAdapter(ContestListPresenter presenter) {
         mPresenter = presenter;
-        mListener = listener;
+    }
+
+    public void setPresenter(ContestListPresenter presenter) {
+        mPresenter = presenter;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             contestViewHolder.setContest(contest, mPresenter.getElection().getName(), mPresenter.getSectionTitleForIndex(position), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onContestItemClicked(contest);
+                    mPresenter.onContestItemClicked(contest);
                 }
             });
         } else if (holder instanceof ElectionInformationViewHolder) {
@@ -64,7 +66,7 @@ public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             errorViewHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onReportErrorClicked();
+                    mPresenter.onReportErrorClicked();
                 }
             });
         }
@@ -78,11 +80,5 @@ public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public int getItemCount() {
         return mPresenter.getContestCount();
-    }
-
-    public interface ContestListItemOnClickListener {
-        void onContestItemClicked(Contest contest);
-
-        void onReportErrorClicked();
     }
 }
