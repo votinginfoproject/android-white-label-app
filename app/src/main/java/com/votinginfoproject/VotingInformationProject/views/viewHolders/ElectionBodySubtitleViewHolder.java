@@ -25,6 +25,7 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
     private final ImageView mChevronImageView;
     private final TextView mTextView;
     private boolean mIsExpanded = false;
+    public boolean isFirstSubtitle = false;
 
     private int mImageResource;
 

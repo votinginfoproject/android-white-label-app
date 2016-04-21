@@ -79,8 +79,6 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
         final int left = parent.getPaddingLeft();
         final int right = parent.getWidth() - parent.getPaddingRight();
 
-        boolean foundFirstSubtitleInElection = false;
-
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
 
@@ -93,13 +91,10 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
             final int bottom = top + mDivider.getIntrinsicHeight();
 
             if (viewHolder instanceof ElectionBodySubtitleViewHolder) {
-
-                if (!foundFirstSubtitleInElection) {
-                    foundFirstSubtitleInElection = true;
+                ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) viewHolder;
+                if (subtitleViewHolder.isFirstSubtitle) {
                     continue;
                 }
-
-                ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) viewHolder;
 
                 mDivider.setBounds(left + subtitleViewHolder.getLeftDividerMargin(), top, right, bottom);
                 mDivider.draw(c);
@@ -107,8 +102,6 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
             } else if ((viewHolder instanceof ElectionInformationViewHolder) ||
                     (viewHolder instanceof ElectionBodyTitleViewHolder) ||
                     (viewHolder instanceof ReportErrorViewHolder)) {
-
-                foundFirstSubtitleInElection = false;
 
                 mDivider.setBounds(left, top, right, bottom);
                 mDivider.draw(c);

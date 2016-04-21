@@ -50,7 +50,6 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         mStateAdmin = mPresenter.getStateAdmin();
 
         parentListNodes = getListNodesForBody(mLocalAdmin, "Local");
-
         parentListNodes.addAll(getListNodesForBody(mStateAdmin, "State"));
 
         hasHeader = (mElection != null);
@@ -127,6 +126,8 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 viewHolder.setTitle(item.mText);
                 viewHolder.setImageResource(item.mImageId);
                 viewHolder.setExpanded(item.isExpanded);
+                viewHolder.isFirstSubtitle = item.isFirstSubtitle;
+
             } else if (holder instanceof  ElectionBodyTitleViewHolder) {
                 ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
@@ -186,13 +187,14 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         for (ListItem item : parentNodes) {
             item.isExpanded = false;
-            notifyItemChanged(getRecyclerViewIndexForItem(item));
             collapseListItem(item);
+            notifyItemChanged(getRecyclerViewIndexForItem(item));
         }
     }
 
     public List<ListItem> getListNodesForBody(ElectionAdministrationBody body, String sectionName) {
         List<ListItem> toReturn = new ArrayList<>();
+        ListItem firstSubtitleListItem = null;
 
         if (body != null) {
             ListItem sectionTitleNode = new ListItem(BODY_TITLE_VIEW_HOLDER, sectionName);
@@ -226,6 +228,8 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 toReturn.add(websitesParent);
 
                 websitesParent.mHiddenListItems.addAll(websitesChildItems);
+
+                firstSubtitleListItem = websitesParent;
             }
 
             if (body.hoursOfOperation != null) {
@@ -233,7 +237,12 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 hoursParent.mImageId = R.drawable.ic_hours;
                 hoursParent.onItemClickListener = new SubtitleClickListener(hoursParent);
                 toReturn.add(hoursParent);
+
                 hoursParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.hoursOfOperation));
+
+                if (firstSubtitleListItem == null) {
+                    firstSubtitleListItem = hoursParent;
+                }
             }
 
             if (body.physicalAddress != null) {
@@ -245,6 +254,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 ListItem addressChildItem = new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString());
                 addressChildItem.onItemClickListener = new AddressClickListener(addressChildItem);
                 addressParent.mHiddenListItems.add(addressChildItem);
+
+                if (firstSubtitleListItem == null) {
+                    firstSubtitleListItem = addressParent;
+                }
             }
 
             if (body.electionOfficials != null && !body.electionOfficials.isEmpty()) {
@@ -256,7 +269,15 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 for (ElectionOfficial official : body.electionOfficials) {
                     officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
                 }
+
+                if (firstSubtitleListItem == null) {
+                    firstSubtitleListItem = officialsParent;
+                }
             }
+        }
+
+        if (firstSubtitleListItem != null) {
+            firstSubtitleListItem.isFirstSubtitle = true;
         }
 
         return toReturn;
@@ -320,6 +341,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public String mURLString;
         public int mImageId = 0;
         public boolean isExpanded = false;
+        public boolean isFirstSubtitle = false;
         public List<ListItem> mHiddenListItems = new ArrayList<>();
 
         public ListItem(int viewType, String text) {

@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/fragment.election_details.item_min_height"
+    android:background="?selectableItemBackground"
     android:gravity="center_vertical">
     
     <ImageView
