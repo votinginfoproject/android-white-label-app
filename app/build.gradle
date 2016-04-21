@@ -29,27 +29,27 @@ android {
 
 dependencies {
     //Networking and serialization
-    compile 'com.google.code.gson:gson:2.4'
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
     //Image Loading
-    compile 'com.squareup.picasso:picasso:2.5.2'
+
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     // You must install or update the Support Repository through the SDK manager to use this dependency.
+
+    // use Google Maps utility library for polyline decoder
+    // https://github.com/googlemaps/android-maps-utils
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:design:23.3.0'
-
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.android.support:customtabs:23.3.0'
 
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
-
-    // use Google Maps utility library for polyline decoder
-    // https://github.com/googlemaps/android-maps-utils
     compile 'com.google.maps.android:android-maps-utils:0.3.4'
     compile 'com.jakewharton:butterknife:7.0.1'
 }

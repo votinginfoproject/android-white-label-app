@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
-import com.votinginfoproject.VotingInformationProject.fragments.TestFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 /**
  * Created by marcvandehey on 4/6/16.
@@ -64,11 +65,10 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         if (mCurrentTab != BALLOT_TAB) {
             mCurrentTab = BALLOT_TAB;
 
-            getView().presentParentLevelFragment(TestFragment.newInstance("ballot", "nope"));
+            getView().presentParentLevelFragment(ContestListFragment.newInstance(VoterInformation.getElection(), VoterInformation.getContests()));
         } else {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();
-            getView().presentChildLevelFragment(TestFragment.newInstance("ballot child", "nope"));
         }
     }
 

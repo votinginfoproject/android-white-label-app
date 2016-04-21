@@ -23,6 +23,7 @@ import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
+import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
@@ -181,6 +182,12 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void pollingSiteClicked(PollingLocation location) {
         Log.v(TAG, "Polling location Clicked: ");
+    }
+
+    @Override
+    public void contestClicked(Contest contest) {
+        //TODO navigate to Contest Fragment
+        Log.v(TAG, "Contest clicked: " + contest.toString());
     }
 
     @Override

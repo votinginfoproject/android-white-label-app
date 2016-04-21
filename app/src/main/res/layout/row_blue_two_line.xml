@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/text_view_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="Contests"
+        />
+
+    <LinearLayout
+        android:id="@+id/clickable_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+
+        <TextView
+            android:id="@+id/text_view_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?colorPrimary"
+            android:textSize="16sp"
+            tools:text="Senator in General Assembly Dist. 06"
+            />
+
+        <TextView
+            android:id="@+id/text_view_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/description.text.gray"
+            android:textSize="14sp"
+            tools:text="US General Election 2014"
+            />
+
+    </LinearLayout>
+</LinearLayout>

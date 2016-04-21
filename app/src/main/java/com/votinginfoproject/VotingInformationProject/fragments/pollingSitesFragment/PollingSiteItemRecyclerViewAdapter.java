@@ -16,11 +16,6 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportEr
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ELECTION_VIEW_HOLDER = 0x0;
@@ -79,7 +74,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
+        if (position == 0 && hasHeader) {
             return ELECTION_VIEW_HOLDER;
         } else if (position < mPollingLocations.size() + (hasHeader ? 1 : 0)) {
             return POLLING_LOCATION_VIEW_HOLDER;

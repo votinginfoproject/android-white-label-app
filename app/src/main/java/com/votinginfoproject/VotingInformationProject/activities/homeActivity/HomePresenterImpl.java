@@ -245,6 +245,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             if (response.isSuccessful()) {
                 mVoterInfoResponse = response;
 
+                VoterInformation.updateWithVoterInfoResponse(mVoterInfoResponse);
+
                 //If this succeeds, it is assumed Play services is available for the rest of the app
                 GoogleApiAvailability api = GoogleApiAvailability.getInstance();
                 int code = api.isGooglePlayServicesAvailable(mContext);

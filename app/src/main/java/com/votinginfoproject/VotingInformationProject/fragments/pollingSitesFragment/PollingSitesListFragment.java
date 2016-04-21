@@ -81,7 +81,6 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));

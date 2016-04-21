@@ -34,9 +34,6 @@ public class CivicApiAddress implements Parcelable {
     public double longitude;
     public double distance;
 
-    /**
-     * Creator from Parcel, reads back fields IN THE ORDER they were written
-     */
     public CivicApiAddress(Parcel parcel) {
         locationName = parcel.readString();
         line1 = parcel.readString();

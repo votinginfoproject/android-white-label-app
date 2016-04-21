@@ -59,6 +59,10 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setPollingLocation(final Context context, final PollingLocation pollingLocation, boolean animated) {
+        if (!animated) {
+            setPollingLocation(context, pollingLocation);
+            return;
+        }
 
         mContainer.measure(0, 0);
 
@@ -70,7 +74,7 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
         containerFadeOut.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                //Not Implemented
             }
 
             @Override
@@ -80,16 +84,12 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
 
                 final int newHeight = mContainer.getMeasuredHeight();
 
-
-//                ObjectAnimator containerSize = ObjectAnimator.ofFloat(mView, "height", oldHeight, newHeight);
-
                 ObjectAnimator containerFadeIn = ObjectAnimator.ofFloat(mContainer, "alpha", 0.f, 1.f);
 
                 containerFadeIn.setDuration(300);
                 containerFadeIn.start();
 
                 mView.getLayoutParams().height = oldHeight;
-
 
                 Animation a = new Animation() {
                     @Override
@@ -107,23 +107,20 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
 
                 a.setDuration(300);
                 mView.startAnimation(a);
-
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
+                //Not implemented
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
+                //Not implemented
             }
         });
 
         containerFadeOut.start();
-
-
     }
 
     public View getView() {

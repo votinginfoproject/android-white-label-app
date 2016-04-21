@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
+import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
+import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +42,7 @@ public class VoterInformation {
     ArrayList<PollingLocation> earlyVotingLocations;
     ArrayList<PollingLocation> dropBoxLocations;
     ArrayList<PollingLocation> allLocations;
+
     private CivicApiAddress homeAddress;
     private String selectedParty;
     private boolean useMetric;
@@ -49,6 +52,8 @@ public class VoterInformation {
 
     private CivicApiAddress stateAdminAddress;
     private CivicApiAddress localAdminAddress;
+
+    private ArrayList<Contest> contests;
 
     private Election selectedElection;
 
@@ -61,6 +66,7 @@ public class VoterInformation {
 
         this.selectedParty = "";
 
+        contests = new ArrayList<>();
         pollingLocations = new ArrayList<>();
         earlyVotingLocations = new ArrayList<>();
         dropBoxLocations = new ArrayList<>();
@@ -69,6 +75,14 @@ public class VoterInformation {
 
     private static VoterInformation getInstance() {
         return ourInstance;
+    }
+
+    public static void updateWithVoterInfoResponse(VoterInfoResponse response) {
+        if (response.contests != null) {
+            ourInstance.contests = new ArrayList<>(response.contests);
+        }
+
+        response.setUpLocations();
     }
 
     public static Election getElection() {
@@ -113,6 +127,10 @@ public class VoterInformation {
 
     public static void setLocalAdministrationBody(ElectionAdministrationBody localAdministrationBody) {
         ourInstance.localAdministrationBody = localAdministrationBody;
+    }
+
+    public static ArrayList<Contest> getContests() {
+        return ourInstance.contests;
     }
 
     public static void setPollingLocations(ArrayList<PollingLocation> pollingLocations, ArrayList<PollingLocation> earlyVotingLocations, ArrayList<PollingLocation> dropBoxLocations) {
