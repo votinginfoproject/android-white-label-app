@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/fragment.election_details.item_min_height"
+    android:background="?selectableItemBackground"
     android:gravity="center_vertical">
     
     <ImageView
@@ -27,6 +28,7 @@
         android:layout_marginRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
         android:layout_marginLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_internal"
         android:layout_gravity="right|center_vertical"
-        android:src="@drawable/ic_arrow_down"/>
+        android:tint="@color/background.blue"
+        android:src="@drawable/ic_chevron_up"/>
 
 </LinearLayout>

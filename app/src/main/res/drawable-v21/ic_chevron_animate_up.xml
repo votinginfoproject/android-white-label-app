@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_chevron_down">
+    <target
+        android:name="path"
+        android:animation="@animator/chevron_turn_up" />
+</animated-vector>
