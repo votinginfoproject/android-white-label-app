@@ -6,6 +6,8 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +18,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
@@ -24,7 +27,8 @@ import com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar;
 
 public class VoterInformationActivity extends BaseActivity<VoterInformationPresenter> implements
         VoterInformationView,
-        BottomNavigationBar.BottomNavigationBarCallback, PollingSitesListFragment.PollingSiteOnClickListener {
+        BottomNavigationBar.BottomNavigationBarCallback, PollingSitesListFragment.PollingSiteOnClickListener,
+        ElectionDetailsListFragment.ElectionDetailsListFragmentCallback {
 
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
@@ -183,6 +187,27 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void reportErrorClicked() {
         Log.v(TAG, "Report Error Clicked()");
+    }
 
+    //Election Details Interface
+    @Override
+    public void navigateToURL(String urlString) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.background_blue));
+
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(urlString));
+    }
+
+    @Override
+    public void navigateToErrorView() {
+        //TODO add things here
+        Log.v(TAG, "Report Error Clicked()");
+    }
+
+    @Override
+    public void navigateToDirectionsView(String address) {
+        //TODO add other things here
+        Log.v(TAG, "Address selected: " + address);
     }
 }

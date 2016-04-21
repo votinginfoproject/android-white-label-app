@@ -271,7 +271,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         if (clickedView.getTag() != null) {
             ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) clickedView.getTag();
-            
+
             if (subtitleViewHolder != null) {
                 subtitleViewHolder.setExpanded(item.isExpanded);
             }

@@ -2,10 +2,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +20,14 @@ import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemD
  * Created by max on 4/15/16.
  */
 public class ElectionDetailsListFragment extends Fragment implements BottomNavigationFragment, ElectionDetailsView {
+
+    public interface ElectionDetailsListFragmentCallback {
+        void navigateToURL(String urlString);
+
+        void navigateToErrorView();
+
+        void navigateToDirectionsView(String address);
+    }
 
     private ElectionDetailsPresenter mPresenter;
 
@@ -89,10 +94,22 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
 
     @Override
     public void navigateToURL(String urlString) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(ContextCompat.getColor(getView().getContext(), R.color.background_blue));
+        if (getActivity() instanceof ElectionDetailsListFragmentCallback) {
+            ((ElectionDetailsListFragmentCallback) getActivity()).navigateToURL(urlString);
+        }
+    }
 
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(getActivity(), Uri.parse(urlString));
+    @Override
+    public void navigateToErrorView() {
+        if (getActivity() instanceof ElectionDetailsListFragmentCallback) {
+            ((ElectionDetailsListFragmentCallback) getActivity()).navigateToErrorView();
+        }
+    }
+
+    @Override
+    public void navigateToDirectionsView(String address) {
+        if (getActivity() instanceof ElectionDetailsListFragmentCallback) {
+            ((ElectionDetailsListFragmentCallback) getActivity()).navigateToDirectionsView(address);
+        }
     }
 }

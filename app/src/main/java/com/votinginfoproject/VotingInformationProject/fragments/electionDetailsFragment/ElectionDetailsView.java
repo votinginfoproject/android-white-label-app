@@ -5,4 +5,8 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
  */
 public interface ElectionDetailsView {
     void navigateToURL(String urlString);
+
+    void navigateToErrorView();
+
+    void navigateToDirectionsView(String address);
 }
