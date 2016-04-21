@@ -157,7 +157,6 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     @Override
     public void resetView() {
         mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
-
     }
 
     @Override

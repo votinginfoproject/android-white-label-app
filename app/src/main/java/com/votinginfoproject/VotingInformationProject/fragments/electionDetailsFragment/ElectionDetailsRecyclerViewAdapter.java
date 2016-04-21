@@ -10,7 +10,6 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.ElectionOfficial;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyLinkViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodySubtitleViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTextViewHolder;
@@ -26,7 +25,6 @@ import java.util.List;
  * Created by max on 4/15/16.
  */
 public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private static final int ELECTION_VIEW_HOLDER = 0x0;
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x1;
     private static final int BODY_TITLE_VIEW_HOLDER = 0x2;
@@ -38,20 +36,18 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private final ElectionDetailsPresenter mPresenter;
     private boolean hasHeader;
 
-    private final VoterInfo mVoterInfo;
     private final Election mElection;
     private final ElectionAdministrationBody mLocalAdmin;
     private final ElectionAdministrationBody mStateAdmin;
 
     private List<ListItem> parentListNodes;
 
-    public ElectionDetailsRecyclerViewAdapter(Context context, VoterInfo voterInfo, ElectionDetailsPresenter presenter) {
+    public ElectionDetailsRecyclerViewAdapter(Context context, ElectionDetailsPresenter presenter) {
         mContext = context;
         mPresenter = presenter;
-        mVoterInfo = voterInfo;
-        mElection = mVoterInfo.election;
-        mLocalAdmin = mVoterInfo.getLocalAdmin();
-        mStateAdmin = mVoterInfo.getStateAdmin();
+        mElection = mPresenter.getElection();
+        mLocalAdmin = mPresenter.getLocalAdmin();
+        mStateAdmin = mPresenter.getStateAdmin();
 
         parentListNodes = getListNodesForBody(mLocalAdmin, "Local");
 
@@ -99,19 +95,16 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             default:
                 viewHolder = null;
         }
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ElectionInformationViewHolder) {
-
             ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
             electionInformationViewHolder.setElection(mElection);
 
         } else if (holder instanceof ReportErrorViewHolder) {
-
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
             errorViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -119,10 +112,9 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                     mPresenter.reportErrorClicked();
                 }
             });
-
         } else {
-
             ListItem item = itemForListPosition(position);
+
             if (item.onItemClickListener != null) {
                 holder.itemView.setOnClickListener(item.onItemClickListener);
             } else {
@@ -131,24 +123,20 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             }
 
             if (holder instanceof ElectionBodySubtitleViewHolder) {
-
                 ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
                 viewHolder.setImageResource(item.mImageId);
                 viewHolder.setExpanded(item.isExpanded);
 
             } else if (holder instanceof  ElectionBodyTitleViewHolder) {
-
                 ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
 
             } else if (holder instanceof  ElectionBodyLinkViewHolder) {
-
                 ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
                 viewHolder.setTitle(item.mText);
 
             } else if (holder instanceof  ElectionBodyTextViewHolder) {
-
                 ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
                 viewHolder.setTitle(item.mText);
             }
@@ -175,10 +163,12 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             if (hasHeader) {
                 position--;
             }
+
             if (position < parentListNodes.size()) {
                 return parentListNodes.get(position).mViewType;
             }
         }
+
         return REPORT_ERROR_VIEW_HOLDER;
     }
 
@@ -212,18 +202,20 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             if (body.electionRegistrationUrl != null) {
                 websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voter_registration_url), body.electionRegistrationUrl));
             }
+
             if (body.absenteeVotingInfoUrl != null) {
                 websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_absentee_voting_url), body.absenteeVotingInfoUrl));
             }
+
             if (body.votingLocationFinderUrl != null) {
                 websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_voting_location_finder_url), body.votingLocationFinderUrl));
             }
+
             if (body.electionRulesUrl != null) {
                 websitesChildItems.add(new ListItem(BODY_CHILD_LINK_VIEW_HOLDER, mContext.getString(R.string.details_label_election_rules_url), body.electionRulesUrl));
             }
 
             if (websitesChildItems.size() > 0) {
-
                 for(final ListItem child : websitesChildItems) {
                     child.onItemClickListener = new LinkClickListener(child);
                 }
@@ -260,6 +252,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 officialsParent.mImageId = R.drawable.ic_account_circle;
                 officialsParent.onItemClickListener = new SubtitleClickListener(officialsParent);
                 toReturn.add(officialsParent);
+
                 for (ElectionOfficial official : body.electionOfficials) {
                     officialsParent.mHiddenListItems.add(new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, official.name));
                 }
@@ -278,6 +271,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         if (clickedView.getTag() != null) {
             ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) clickedView.getTag();
+            
             if (subtitleViewHolder != null) {
                 subtitleViewHolder.setExpanded(item.isExpanded);
             }
@@ -286,7 +280,6 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private void expandListItem(ListItem item) {
         if (!item.isExpanded) {
-
             int position = getRecyclerViewIndexForItem(item);
             int index = position;
 
@@ -303,6 +296,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private int getRecyclerViewIndexForItem(ListItem item) {
         int position = parentListNodes.indexOf(item);
+
         if (position >= 0 && hasHeader) {
             position++;
         }
@@ -312,7 +306,6 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private void collapseListItem(ListItem item) {
         if (item.isExpanded) {
-
             int position = getRecyclerViewIndexForItem(item);
 
             for(ListItem child : item.mHiddenListItems) {

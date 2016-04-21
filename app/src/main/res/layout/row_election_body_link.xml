@@ -8,7 +8,6 @@
     android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
     android:gravity="center_vertical">
 
-
     <TextView
         android:id="@+id/body_link_text"
         android:textColor="@color/item_header_blue"

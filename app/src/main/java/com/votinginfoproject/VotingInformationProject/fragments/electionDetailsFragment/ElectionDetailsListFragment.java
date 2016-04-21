@@ -2,9 +2,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
@@ -20,9 +18,6 @@ import com.votinginfoproject.VotingInformationProject.activities.voterInformatio
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemDecoration;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.DividerItemDecoration;
-
-import java.net.URI;
 
 /**
  * Created by max on 4/15/16.
@@ -51,18 +46,14 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
         mPresenter.setView(this);
 
         View view = inflater.inflate(R.layout.fragment_recycler_list, container, false);
+        Context context = view.getContext();
+
+        mAdapter = new ElectionDetailsRecyclerViewAdapter(context, mPresenter);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-
-
-        Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new ElectionDetailsItemDecoration(getActivity(), ElectionDetailsItemDecoration.VERTICAL_LIST));
-
-        mAdapter = new ElectionDetailsRecyclerViewAdapter(context, mPresenter.getVoterInfo(), mPresenter);
-
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.invalidate();
 
         return view;
@@ -89,7 +80,6 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
             }
         }
     }
-
 
     @Override
     public void resetView() {

@@ -13,7 +13,6 @@ import com.votinginfoproject.VotingInformationProject.R;
  * Created by max on 4/18/16.
  */
 public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
-
     private static final int chevronFlipAnimationDuration = 500;
 
     private final View mView;

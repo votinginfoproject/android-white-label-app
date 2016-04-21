@@ -10,7 +10,6 @@ import com.votinginfoproject.VotingInformationProject.R;
  * Created by max on 4/18/16.
  */
 public class ElectionBodyLinkViewHolder extends RecyclerView.ViewHolder {
-
     private final View mView;
     private final TextView mTextView;
 

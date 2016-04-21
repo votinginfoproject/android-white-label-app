@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 import com.votinginfoproject.VotingInformationProject.models.singletons.UserPreferences;
 
@@ -17,22 +18,32 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        //Not implemented
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-
+        //Not implemented
     }
 
     @Override
     public void onDestroy() {
-
+        //Not implemented
     }
 
     @Override
-    public VoterInfo getVoterInfo() {
-        return UserPreferences.getVoterInfo();
+    public ElectionAdministrationBody getLocalAdmin() {
+        return UserPreferences.getVoterInfo().getLocalAdmin();
+    }
+
+    @Override
+    public ElectionAdministrationBody getStateAdmin() {
+        return UserPreferences.getVoterInfo().getStateAdmin();
+    }
+
+    @Override
+    public Election getElection() {
+        return UserPreferences.getVoterInfo().election;
     }
 
     @Override

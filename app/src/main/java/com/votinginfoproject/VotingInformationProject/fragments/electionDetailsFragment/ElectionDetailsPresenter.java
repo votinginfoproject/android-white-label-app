@@ -2,13 +2,18 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
 
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 /**
  * Created by max on 4/15/16.
  */
 public abstract class ElectionDetailsPresenter extends BasePresenter<ElectionDetailsView> {
-    public abstract VoterInfo getVoterInfo();
+    public abstract ElectionAdministrationBody getLocalAdmin();
+
+    public abstract ElectionAdministrationBody getStateAdmin();
+
+    public abstract Election getElection();
 
     public abstract void linkSelected(String urlString);
 
