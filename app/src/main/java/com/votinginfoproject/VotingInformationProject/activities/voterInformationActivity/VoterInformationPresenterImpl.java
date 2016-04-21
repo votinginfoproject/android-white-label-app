@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
+
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
