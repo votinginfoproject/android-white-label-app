@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment;
+package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

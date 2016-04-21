@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
-import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
-
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
+import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 /**
@@ -69,6 +69,11 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
             //If currently selected, reset the scroll position
             getView().scrollCurrentFragmentToTop();
         }
+    }
+
+    @Override
+    void contestClicked(Contest contest) {
+
     }
 
     @Override

@@ -22,7 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
-import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
@@ -190,8 +190,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void contestClicked(Contest contest) {
-        //TODO navigate to Contest Fragment
-        Log.v(TAG, "Contest clicked: " + contest.toString());
+        getPresenter().contestClicked(contest);
     }
 
     @Override
