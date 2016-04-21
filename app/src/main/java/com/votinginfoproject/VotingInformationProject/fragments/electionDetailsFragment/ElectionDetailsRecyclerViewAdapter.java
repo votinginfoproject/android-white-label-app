@@ -127,7 +127,6 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 viewHolder.setTitle(item.mText);
                 viewHolder.setImageResource(item.mImageId);
                 viewHolder.setExpanded(item.isExpanded);
-
             } else if (holder instanceof  ElectionBodyTitleViewHolder) {
                 ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
@@ -180,14 +179,15 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     public void collapseAll() {
         List<ListItem> parentNodes = new LinkedList<>();
         for (ListItem item : parentListNodes) {
-            if (!item.isChild()) {
+            if (!item.isChild() && item.isExpanded) {
                 parentNodes.add(item);
             }
         }
 
         for (ListItem item : parentNodes) {
-            collapseListItem(item);
+            item.isExpanded = false;
             notifyItemChanged(getRecyclerViewIndexForItem(item));
+            collapseListItem(item);
         }
     }
 
@@ -264,8 +264,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private void subtitleClicked(ListItem item, View clickedView) {
         if (item.isExpanded) {
+            item.isExpanded = false;
             collapseListItem(item);
         } else {
+            item.isExpanded = true;
             expandListItem(item);
         }
 
@@ -279,19 +281,15 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     private void expandListItem(ListItem item) {
-        if (!item.isExpanded) {
-            int position = getRecyclerViewIndexForItem(item);
-            int index = position;
+        int position = getRecyclerViewIndexForItem(item);
+        int index = position;
 
-            for (ListItem child : item.mHiddenListItems) {
-                parentListNodes.add(index, child);
-                index++;
-            }
-
-            item.isExpanded = true;
-
-            notifyItemRangeInserted(position + 1, item.mHiddenListItems.size());
+        for (ListItem child : item.mHiddenListItems) {
+            parentListNodes.add(index, child);
+            index++;
         }
+
+        notifyItemRangeInserted(position + 1, item.mHiddenListItems.size());
     }
 
     private int getRecyclerViewIndexForItem(ListItem item) {
@@ -305,17 +303,14 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     private void collapseListItem(ListItem item) {
-        if (item.isExpanded) {
-            int position = getRecyclerViewIndexForItem(item);
+        int position = getRecyclerViewIndexForItem(item);
 
-            for(ListItem child : item.mHiddenListItems) {
-                parentListNodes.remove(child);
-            }
-
-            item.isExpanded = false;
-
-            notifyItemRangeRemoved(position + 1, item.mHiddenListItems.size());
+        for(ListItem child : item.mHiddenListItems) {
+            parentListNodes.remove(child);
         }
+
+        notifyItemRangeRemoved(position + 1, item.mHiddenListItems.size());
+
     }
 
     class ListItem {

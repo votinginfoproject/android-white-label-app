@@ -24,7 +24,7 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
     private final ImageView mImageView;
     private final ImageView mChevronImageView;
     private final TextView mTextView;
-    private boolean mIsExpanded;
+    private boolean mIsExpanded = false;
 
     private int mImageResource;
 
@@ -54,20 +54,19 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setExpanded(boolean expanded) {
+        if (expanded != mIsExpanded) {
+            performFlipAnimation(expanded);
+        }
         mIsExpanded = expanded;
-        performFlipAnimation(mIsExpanded);
     }
 
     private void performFlipAnimation(boolean expanded) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (expanded) {
-                mChevronImageView.setImageResource(R.drawable.ic_chevron_animate_up);
+            int drawableID = expanded ? R.drawable.ic_chevron_animate_up : R.drawable.ic_chevron_animate_down;
+            Drawable drawable = itemView.getContext().getDrawable(drawableID);
 
-            } else {
-                mChevronImageView.setImageResource(R.drawable.ic_chevron_animate_down);
-            }
+            mChevronImageView.setImageDrawable(drawable);
 
-            Drawable drawable = mChevronImageView.getDrawable();
             if(drawable instanceof Animatable) {
                 ((Animatable) drawable).start();
             }

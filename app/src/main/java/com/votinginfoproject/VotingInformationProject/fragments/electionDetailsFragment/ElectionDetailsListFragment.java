@@ -15,7 +15,6 @@ import com.votinginfoproject.VotingInformationProject.activities.voterInformatio
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemDecoration;
-
 /**
  * Created by max on 4/15/16.
  */
