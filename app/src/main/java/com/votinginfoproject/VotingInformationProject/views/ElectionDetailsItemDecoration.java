@@ -51,9 +51,9 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
         if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
             throw new IllegalArgumentException("invalid orientation");
         }
+
         mOrientation = orientation;
     }
-
 
     public void drawHorizontal(Canvas c, RecyclerView parent) {
 

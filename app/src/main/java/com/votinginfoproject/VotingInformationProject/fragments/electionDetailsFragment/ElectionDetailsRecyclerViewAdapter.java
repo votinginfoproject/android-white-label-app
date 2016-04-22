@@ -94,6 +94,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             default:
                 viewHolder = null;
         }
+
         return viewHolder;
     }
 
@@ -131,11 +132,9 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             } else if (holder instanceof  ElectionBodyTitleViewHolder) {
                 ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
-
             } else if (holder instanceof  ElectionBodyLinkViewHolder) {
                 ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
                 viewHolder.setTitle(item.mText);
-
             } else if (holder instanceof  ElectionBodyTextViewHolder) {
                 ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
                 viewHolder.setTitle(item.mText);

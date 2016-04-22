@@ -19,7 +19,6 @@ import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemD
  * Created by max on 4/15/16.
  */
 public class ElectionDetailsListFragment extends Fragment implements BottomNavigationFragment, ElectionDetailsView {
-
     public interface ElectionDetailsListFragmentCallback {
         void navigateToURL(String urlString);
 
