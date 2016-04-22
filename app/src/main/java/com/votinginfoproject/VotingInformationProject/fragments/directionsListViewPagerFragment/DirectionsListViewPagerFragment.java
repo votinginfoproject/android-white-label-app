@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 
 public class DirectionsListViewPagerFragment extends Fragment {
+    public DirectionsListViewPagerPresenter mPresenter;
     public ViewPager mViewPager;
 
     public DirectionsListViewPagerFragment() {
@@ -36,10 +37,10 @@ public class DirectionsListViewPagerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPresenter = new DirectionsListViewPagerPresenterImpl();
 
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
-
-        mViewPager.setAdapter(new DirectionsListViewPagerAdapter(getFragmentManager()));
+        mViewPager.setAdapter(new DirectionsListViewPagerAdapter(getFragmentManager(), mPresenter));
     }
 
     @Override

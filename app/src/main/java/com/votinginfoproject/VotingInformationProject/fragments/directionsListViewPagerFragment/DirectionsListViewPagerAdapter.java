@@ -11,19 +11,24 @@ import com.votinginfoproject.VotingInformationProject.fragments.directionsListFr
  */
 public class DirectionsListViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private static final String[] TRANSIT_MODES = {"driving","walking","biking"};
+    private final DirectionsListViewPagerPresenter mPresenter;
 
-    public DirectionsListViewPagerAdapter(FragmentManager fm) {
+    public DirectionsListViewPagerAdapter(FragmentManager fm, DirectionsListViewPagerPresenter presenter) {
         super(fm);
+        mPresenter = presenter;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return DirectionsListFragment.newInstance(TRANSIT_MODES[position]);
+        return DirectionsListFragment.newInstance(
+                mPresenter.getTransitModes()[position],
+                mPresenter.getOriginCoordinates(),
+                mPresenter.getDestinationCoordinates()
+        );
     }
 
     @Override
     public int getCount() {
-        return TRANSIT_MODES.length;
+        return mPresenter.getTransitModes().length;
     }
 }
