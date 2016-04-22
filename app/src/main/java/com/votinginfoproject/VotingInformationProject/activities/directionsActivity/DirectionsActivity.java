@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsFragment.DirectionsListViewPagerFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerFragment;
 
 public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
     private static int selected_alpha = 255;
