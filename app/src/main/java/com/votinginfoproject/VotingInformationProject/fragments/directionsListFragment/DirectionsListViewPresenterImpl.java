@@ -1,6 +1,8 @@
 package com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -37,6 +39,21 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
         mDirectionsInteractor = new DirectionsInteractor();
 
         requestDirections();
+    }
+
+    @Override
+    public void onCreate(Bundle savedState) {
+
+    }
+
+    @Override
+    public void onSaveState(@NonNull Bundle state) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
     }
 
     private void requestDirections() {

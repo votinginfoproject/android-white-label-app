@@ -12,8 +12,12 @@ import com.votinginfoproject.VotingInformationProject.R;
 /**
  * Created by max on 4/22/16.
  */
-public class DirectionsListFragment extends Fragment implements  DirectionsListView {
+public class DirectionsListFragment extends Fragment implements DirectionsListView {
+    private static final String TAG = DirectionsListFragment.class.getSimpleName();
+
     private DirectionsListViewPresenter mPresenter;
+
+    private DirectionsRecyclerViewAdapter mAdapter;
 
     private static final String ARG_TRANSIT_MODE = "transit_mode";
     private static final String ARG_ORIGIN_COORDINATES = "origin_coordinates";
@@ -43,9 +47,17 @@ public class DirectionsListFragment extends Fragment implements  DirectionsListV
         String destinationCoordinates = args.getString(ARG_DESTINATION_COORDINATES);
 
         mPresenter = new DirectionsListViewPresenterImpl(rootView.getContext(), transitMode, originCoordinates, destinationCoordinates);
+        mPresenter.setView(this);
+
+        mAdapter = new DirectionsRecyclerViewAdapter(mPresenter);
 
         ((TextView) rootView.findViewById(R.id.section_label)).setText(transitMode);
 
         return rootView;
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }
