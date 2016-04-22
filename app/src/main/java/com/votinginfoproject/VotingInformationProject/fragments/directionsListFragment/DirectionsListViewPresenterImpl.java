@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.DirectionsRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
@@ -27,7 +29,7 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
     private String mOriginCoordinates;
     private String mDestinationCoordinates;
 
-    private List<Route> mRoutes = new ArrayList<>();
+    private List<Step> mSteps = new ArrayList<>();
 
     public DirectionsListViewPresenterImpl(Context context, String transitMode, String originCoordinates, String destinationCoordinates) {
         mContext = context;
@@ -56,6 +58,11 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
 
     }
 
+    @Override
+    List<Step> getSteps() {
+        return mSteps;
+    }
+
     private void requestDirections() {
         String directionsKey = mContext.getString(R.string.google_api_browser_key);
         DirectionsRequest request = new DirectionsRequest(directionsKey, mTransitMode, mOriginCoordinates, mDestinationCoordinates);
@@ -65,9 +72,15 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
 
     @Override
     public void directionsResponse(DirectionsResponse response) {
-        mRoutes = response.routes;
-        if (mRoutes.size() > 0) {
-            Log.e(TAG, mTransitMode + " " + mRoutes.get(0).summary);
+        mSteps.clear();
+
+        List<Route> routes = response.routes;
+
+        if (routes.size() > 0) {
+            Route route = routes.get(0);
+            for(Leg leg : route.legs) {
+                mSteps.addAll(leg.steps);
+            }
         }
     }
 }

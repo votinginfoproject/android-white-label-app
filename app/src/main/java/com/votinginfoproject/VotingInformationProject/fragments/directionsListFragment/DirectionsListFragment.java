@@ -14,9 +14,8 @@ import com.votinginfoproject.VotingInformationProject.R;
  */
 public class DirectionsListFragment extends Fragment implements DirectionsListView {
     private static final String TAG = DirectionsListFragment.class.getSimpleName();
-
+    
     private DirectionsListViewPresenter mPresenter;
-
     private DirectionsRecyclerViewAdapter mAdapter;
 
     private static final String ARG_TRANSIT_MODE = "transit_mode";
