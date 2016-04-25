@@ -66,8 +66,6 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
 
     @Override
     List<Step> getSteps() {
-        Log.e(TAG, mTransitMode + " - " + mSteps.size() + "");
-
         return mSteps;
     }
 
