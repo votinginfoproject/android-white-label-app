@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -102,6 +103,15 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof  PollingSitesListener) {
+            mListener = (PollingSitesListener) activity;
         }
     }
 
