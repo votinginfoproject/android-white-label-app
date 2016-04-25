@@ -21,6 +21,8 @@ import java.util.List;
 public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter implements DirectionsInteractor.DirectionsCallback {
     private static final String TAG = DirectionsListViewPresenterImpl.class.getSimpleName();
 
+    private static final String STEPS_KEY = "STEPS";
+
     private Context mContext;
 
     private DirectionsInteractor mDirectionsInteractor;
@@ -29,7 +31,7 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
     private String mOriginCoordinates;
     private String mDestinationCoordinates;
 
-    private List<Step> mSteps = new ArrayList<>();
+    private ArrayList<Step> mSteps = new ArrayList<>();
 
     public DirectionsListViewPresenterImpl(Context context, String transitMode, String originCoordinates, String destinationCoordinates) {
         mContext = context;
@@ -45,21 +47,27 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        Log.e(TAG, "On create!!");
+        if (savedState != null) {
+            mSteps = savedState.getParcelableArrayList(STEPS_KEY);
+            getView().refresh();
+        }
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-
+        state.putParcelableArrayList(STEPS_KEY, mSteps);
     }
 
     @Override
     public void onDestroy() {
-
+        setView(null);
     }
 
     @Override
     List<Step> getSteps() {
+        Log.e(TAG, mTransitMode + " - " + mSteps.size() + "");
+
         return mSteps;
     }
 
@@ -82,5 +90,7 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
                 mSteps.addAll(leg.steps);
             }
         }
+
+        getView().refresh();
     }
 }

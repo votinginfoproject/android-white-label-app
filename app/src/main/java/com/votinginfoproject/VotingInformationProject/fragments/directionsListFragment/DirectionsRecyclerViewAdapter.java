@@ -1,6 +1,8 @@
 package com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,12 +38,16 @@ public class DirectionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
-            viewHolder.mTextView.setText(mPresenter.getSteps().get(position).html_instructions);
+            viewHolder.mTextView.setText(stripHtml(mPresenter.getSteps().get(position).html_instructions));
         }
     }
 
     @Override
     public int getItemCount() {
         return mPresenter.getSteps().size();
+    }
+
+    private String stripHtml(String html) {
+        return Html.fromHtml(html).toString();
     }
 }

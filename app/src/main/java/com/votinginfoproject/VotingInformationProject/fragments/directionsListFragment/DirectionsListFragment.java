@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.directionsListF
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import com.votinginfoproject.VotingInformationProject.R;
  */
 public class DirectionsListFragment extends Fragment implements DirectionsListView {
     private static final String TAG = DirectionsListFragment.class.getSimpleName();
-    
+
+    private RecyclerView mRecyclerView;
+
     private DirectionsListViewPresenter mPresenter;
     private DirectionsRecyclerViewAdapter mAdapter;
 
@@ -38,7 +41,7 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_directions2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_directions_list, container, false);
 
         Bundle args = getArguments();
         String transitMode = args.getString(ARG_TRANSIT_MODE);
@@ -50,13 +53,14 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
 
         mAdapter = new DirectionsRecyclerViewAdapter(mPresenter);
 
-        ((TextView) rootView.findViewById(R.id.section_label)).setText(transitMode);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
     }
 
     @Override
     public void refresh() {
-
+        mAdapter.notifyDataSetChanged();
     }
 }
