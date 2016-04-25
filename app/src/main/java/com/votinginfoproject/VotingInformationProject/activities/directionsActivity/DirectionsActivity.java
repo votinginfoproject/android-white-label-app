@@ -14,16 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerAdapter;
 import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerPresenter;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerPresenterImpl;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerView;
 
-public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
+public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView {
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
 
     private static String ARG_CIVIC_ADDRESS = "arg_civic_address";
     private static String ARG_CURRENT_LOCATION = "arg_current_location";
     private static String ARG_POLLING_LOCATION = "arg_polling_location";
-
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,37 +41,46 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
      * The {@link ViewPager} that will host the section contents.
      */
     private TabLayout mTabLayout;
+    private DirectionsViewPagerAdapter mAdapter;
+    public DirectionsPresenter mPresenter;
+    public ViewPager mViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
 
+        mPresenter = new DirectionsPresenterImpl(this, "Austin", "Toronto");
+        mPresenter.setView(this);
+
+        mAdapter = new DirectionsViewPagerAdapter(getFragmentManager(), mPresenter);
+
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setAdapter(mAdapter);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPresenter.swipedToDirectionsListAtIndex(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         setupTabs();
-
-
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-
-        DirectionsListViewPagerFragment pager = new DirectionsListViewPagerFragment();
-
-        transaction.replace(R.id.container, pager, "D");
-
-
-        transaction.addToBackStack("D");
-
-        transaction.commit();
     }
 
     @Override
@@ -103,6 +115,11 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     public void onTabSelected(TabLayout.Tab tab) {
         if (tab.getIcon() != null) {
             tab.getIcon().setAlpha(selected_alpha);
+
+            int tabIndex = mTabLayout.getSelectedTabPosition();
+            if (tabIndex >= 0) {
+                mPresenter.tabSelectedAtIndex(tabIndex);
+            }
         }
 
 //Determine if list is showing or map is showing, then update appropriately
@@ -120,42 +137,41 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
 //Reset View
     }
 
+    @Override
+    public void refresh() {
+        mAdapter.notifyDataSetChanged();
+        setupTabs();
+    }
+
+    @Override
+    public void selectTabAtIndex(int index) {
+        TabLayout.Tab tab = mTabLayout.getTabAt(index);
+        if (tab != null) {
+            tab.select();
+        }
+    }
+
+    @Override
+    public void navigateToDirectionsListAtIndex(int index) {
+        mViewPager.setCurrentItem(index);
+    }
+
     private void setupTabs() {
         mTabLayout.removeAllTabs();
 
-        TabLayout.Tab driveTab = mTabLayout.newTab().setIcon(R.drawable.ic_directions_car);
-        driveTab.setContentDescription(R.string.directions_label_drive_button);
+        String[] transitModes = mPresenter.getTransitModes();
 
-        TabLayout.Tab busTab = mTabLayout.newTab().setIcon(R.drawable.ic_directions_bus);
-        busTab.setContentDescription(R.string.directions_label_transit_button);
-
-        TabLayout.Tab bikeTab = mTabLayout.newTab().setIcon(R.drawable.ic_directions_bike);
-        bikeTab.setContentDescription(R.string.directions_label_bike_button);
-
-        TabLayout.Tab walkTab = mTabLayout.newTab().setIcon(R.drawable.ic_directions_walk);
-        walkTab.setContentDescription(R.string.directions_label_walk_button);
-
-        mTabLayout.addTab(driveTab);
-        mTabLayout.addTab(busTab);
-        mTabLayout.addTab(bikeTab);
-        mTabLayout.addTab(walkTab);
+        if (transitModes.length > 0) {
+            mTabLayout.setVisibility(View.VISIBLE);
+            for (String transitMode : transitModes) {
+                int tabDrawable = mPresenter.getTabImageForTransitMode(transitMode);
+                TabLayout.Tab tab = mTabLayout.newTab().setIcon(tabDrawable);
+                mTabLayout.addTab(tab);
+            }
+        } else {
+            mTabLayout.setVisibility(View.GONE);
+        }
 
         mTabLayout.setOnTabSelectedListener(this);
-
-        if (driveTab.getIcon() != null) {
-            driveTab.getIcon().setAlpha(selected_alpha);
-        }
-
-        if (busTab.getIcon() != null) {
-            busTab.getIcon().setAlpha(unselected_alpha);
-        }
-
-        if (bikeTab.getIcon() != null) {
-            bikeTab.getIcon().setAlpha(unselected_alpha);
-        }
-
-        if (walkTab.getIcon() != null) {
-            walkTab.getIcon().setAlpha(unselected_alpha);
-        }
     }
 }

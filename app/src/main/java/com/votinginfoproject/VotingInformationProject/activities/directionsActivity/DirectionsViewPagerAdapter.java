@@ -1,0 +1,35 @@
+package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
+
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment.DirectionsListFragment;
+
+/**
+ * Created by max on 4/25/16.
+ */
+public class DirectionsViewPagerAdapter extends FragmentStatePagerAdapter {
+
+    private final DirectionsPresenter mPresenter;
+
+    public DirectionsViewPagerAdapter(FragmentManager fm, DirectionsPresenter presenter) {
+        super(fm);
+        mPresenter = presenter;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        String transitMode = mPresenter.getTransitModes()[position];
+        return DirectionsListFragment.newInstance(mPresenter.getRouteForTransitMode(transitMode));
+    }
+
+    @Override
+    public int getCount() {
+        if (mPresenter.isLoading()) {
+            return 0;
+        }
+        return mPresenter.getTransitModes().length;
+    }
+}

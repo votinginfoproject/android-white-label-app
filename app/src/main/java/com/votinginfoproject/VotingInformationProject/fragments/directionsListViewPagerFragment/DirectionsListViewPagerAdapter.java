@@ -20,11 +20,7 @@ public class DirectionsListViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return DirectionsListFragment.newInstance(
-                mPresenter.getTransitModes()[position],
-                mPresenter.getOriginCoordinates(),
-                mPresenter.getDestinationCoordinates()
-        );
+        return null;
     }
 
     @Override

@@ -46,6 +46,11 @@ public class DirectionsListViewPagerFragment extends Fragment implements  Direct
     }
 
     @Override
+    public void refresh() {
+
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
