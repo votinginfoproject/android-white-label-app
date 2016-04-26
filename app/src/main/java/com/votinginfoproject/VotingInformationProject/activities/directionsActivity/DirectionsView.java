@@ -17,5 +17,7 @@ public interface DirectionsView {
 
     void navigateToDirectionsListAtIndex(int index);
 
+    void navigateToExternalMap(String address);
+
     void toggleMapDisplaying(boolean displaying);
 }

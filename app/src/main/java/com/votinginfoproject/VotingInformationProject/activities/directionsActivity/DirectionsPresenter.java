@@ -20,4 +20,6 @@ public abstract class DirectionsPresenter extends BasePresenter<DirectionsView> 
     public abstract void swipedToDirectionsListAtIndex(int index);
 
     public abstract void mapButtonPressed();
+
+    public abstract void externalMapButtonPressed();
 }

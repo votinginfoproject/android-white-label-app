@@ -11,8 +11,10 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:id="@+id/action_open_in_maps"
+        android:icon="@drawable/ic_open_in_new"
+        android:panelFullBackground="@drawable/selector_overflow_menu"
+        android:title="@string/directions.label.open_in_maps_button"
+        app:showAsAction="ifRoom" />
+
 </menu>

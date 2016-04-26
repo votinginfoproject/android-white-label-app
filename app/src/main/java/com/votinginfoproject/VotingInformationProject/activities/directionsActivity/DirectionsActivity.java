@@ -1,7 +1,9 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -36,6 +38,7 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInf
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView, OnMapReadyCallback {
@@ -73,16 +76,15 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
 
-        Location destination = null;
+        PollingLocation pollingLocation = null;
 
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            PollingLocation pollingLocation = (PollingLocation) extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
-            destination = pollingLocation.location;
+            pollingLocation = (PollingLocation) extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
         }
 
-        mPresenter = new DirectionsPresenterImpl(this, destination);
+        mPresenter = new DirectionsPresenterImpl(this, pollingLocation);
         mPresenter.setView(this);
 
         mAdapter = new DirectionsViewPagerAdapter(getFragmentManager(), mPresenter);
@@ -156,7 +158,8 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_open_in_maps:
+                mPresenter.externalMapButtonPressed();
                 return true;
             case R.id.action_map_toggle:
                 mPresenter.mapButtonPressed();
@@ -284,6 +287,13 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         mMap.animateCamera(update);
 
         mMap.addPolyline(polylineOptions);
+    }
+
+    @Override
+    public void navigateToExternalMap(String address) {
+        String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s (%s)", address, "Where the party is at");
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(intent);
     }
 
     @Override

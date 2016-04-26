@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.DirectionsRequest;
@@ -27,15 +29,15 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private Context mContext;
     private List<String> mLoadingTransitModes = new ArrayList<>();
     private List<DirectionsInteractor> mDirectionsInteractors = new ArrayList<>();
-    private Location mDestination;
+    private PollingLocation mPollingLocation;
     private boolean mIsPresentingMap;
     private int mPresentingRouteIndex;
 
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
 
-    public DirectionsPresenterImpl(Context context, Location destination) {
+    public DirectionsPresenterImpl(Context context, PollingLocation pollingLocation) {
         mContext = context;
-        mDestination = destination;
+        mPollingLocation = pollingLocation;
 
         enqueueRequests();
     }
@@ -119,6 +121,11 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         getView().toggleMapDisplaying(mIsPresentingMap);
     }
 
+    @Override
+    public void externalMapButtonPressed() {
+        getView().navigateToExternalMap(mPollingLocation.address.toGeocodeString());
+    }
+
     private void refreshView() {
         getView().refreshDataView();
 
@@ -158,13 +165,13 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
         Location origin = VoterInformation.getLastKnownLocation();
 
-        if (origin != null && mDestination != null) {
+        if (origin != null && mPollingLocation.location != null) {
             String directionsKey = mContext.getString(R.string.google_api_browser_key);
 
             for (String transitMode : mAllTransitModes) {
                 mLoadingTransitModes.add(transitMode);
 
-                DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mDestination);
+                DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
 
                 DirectionsInteractor interactor = new DirectionsInteractor();
                 mDirectionsInteractors.add(interactor);
