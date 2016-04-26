@@ -66,6 +66,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
      */
     private TabLayout mTabLayout;
     private DirectionsViewPagerAdapter mAdapter;
+    private View mLoadingView;
     private int mMenuLayoutID = R.menu.menu_directions_list;
     private MapView mMapView;
     private GoogleMap mMap;
@@ -117,6 +118,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         mMapView.getMapAsync(this);
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        mLoadingView = findViewById(R.id.loading_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -323,6 +326,15 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s (%s)", address, "Where the party is at");
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(intent);
+    }
+
+    @Override
+    public void toggleLoading(boolean loading) {
+        float toAlpha = loading ? 1f : 0f;
+
+        mLoadingView.animate()
+                .alpha(toAlpha)
+                .setDuration(250);
     }
 
     @Override

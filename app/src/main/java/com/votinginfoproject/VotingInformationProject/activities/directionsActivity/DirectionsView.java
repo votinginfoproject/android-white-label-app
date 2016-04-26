@@ -20,4 +20,6 @@ public interface DirectionsView {
     void navigateToExternalMap(String address);
 
     void toggleMapDisplaying(boolean displaying);
+
+    void toggleLoading(boolean loading);
 }

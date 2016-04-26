@@ -110,7 +110,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         }
         refreshView();
 
-        if (mLoadingTransitModes.size() == 0) {
+        getView().toggleLoading(isLoading());
+        if (!isLoading()) {
             updateViewMap();
         }
     }
