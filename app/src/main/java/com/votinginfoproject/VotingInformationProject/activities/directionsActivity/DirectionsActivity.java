@@ -1,8 +1,12 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,11 +15,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.geometry.Bounds;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 
-public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView {
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView, OnMapReadyCallback {
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
 
@@ -39,6 +59,7 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     private DirectionsViewPagerAdapter mAdapter;
     private int mMenuLayoutID = R.menu.menu_directions_list;
     private MapView mMapView;
+    private GoogleMap mMap;
 
     public DirectionsPresenter mPresenter;
     public ViewPager mViewPager;
@@ -80,6 +101,7 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
 
         mMapView = (MapView) findViewById(R.id.map_view);
         mMapView.onCreate(savedInstanceState);
+        mMapView.getMapAsync(this);
     }
 
     @Override
@@ -212,5 +234,51 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         mMenuLayoutID = displaying ? R.menu.menu_directions_map : R.menu.menu_directions_list;
 
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showRouteOnMap(Route route) {
+        mMap.clear();
+
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .geodesic(true)
+                .color(ContextCompat.getColor(getApplicationContext(), R.color.background_blue));
+
+        for (int legIdx = 0; legIdx < route.legs.size(); legIdx ++) {
+            Leg leg = route.legs.get(legIdx);
+
+            for (int stepIdx = 0; stepIdx < leg.steps.size(); stepIdx++) {
+                Step step = leg.steps.get(stepIdx);
+
+                if (legIdx == 0 && stepIdx == 0) {
+                    Location startLocation = step.start_location;
+                    polylineOptions.add(new LatLng(startLocation.lat, startLocation.lng));
+                }
+
+                Location endLocation = step.end_location;
+                polylineOptions.add(new LatLng(endLocation.lat, endLocation.lng));
+            }
+        }
+
+        Location northeastLocation = route.bounds.northeast;
+        Location southwestLocation = route.bounds.southwest;
+
+        LatLng northeastLatLng = new LatLng(northeastLocation.lat, northeastLocation.lng);
+        LatLng southwestLatLng = new LatLng(southwestLocation.lat, southwestLocation.lng);
+
+        LatLngBounds bounds = new LatLngBounds.Builder().include(northeastLatLng).include(southwestLatLng).build();
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, mMapView.getWidth() / 4);
+        mMap.animateCamera(update);
+
+        mMap.addPolyline(polylineOptions);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            mMap.setMyLocationEnabled(true);
+        }
     }
 }

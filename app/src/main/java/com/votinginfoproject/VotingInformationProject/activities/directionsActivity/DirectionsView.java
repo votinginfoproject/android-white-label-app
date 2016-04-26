@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 
 /**
@@ -11,6 +12,8 @@ public interface DirectionsView {
     void setTabs(TabData[] tabs);
 
     void selectTabAtIndex(int index);
+
+    void showRouteOnMap(Route route);
 
     void navigateToDirectionsListAtIndex(int index);
 

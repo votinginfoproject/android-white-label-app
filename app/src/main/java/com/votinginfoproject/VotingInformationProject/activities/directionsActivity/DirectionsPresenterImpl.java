@@ -28,6 +28,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private String mOriginCoordinates;
     private String mDestinationCoordinates;
     private boolean mIsPresentingMap;
+    private int mPresentingRouteIndex;
 
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
 
@@ -84,12 +85,14 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void tabSelectedAtIndex(int index) {
-        getView().navigateToDirectionsListAtIndex(index);
+        updatePresentingRouteIndex(index);
+        getView().navigateToDirectionsListAtIndex(mPresentingRouteIndex);
     }
 
     @Override
     public void swipedToDirectionsListAtIndex(int index) {
-        getView().selectTabAtIndex(index);
+        updatePresentingRouteIndex(index);
+        getView().selectTabAtIndex(mPresentingRouteIndex);
     }
 
     @Override
@@ -114,6 +117,10 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             transitModesToRoutes.put(transitMode, null);
         }
         refreshView();
+
+        if (mLoadingTransitModes.size() == 0) {
+            updateViewMap();
+        }
     }
 
     @Override
@@ -169,6 +176,23 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             DirectionsInteractor interactor = new DirectionsInteractor();
             mDirectionsInteractors.add(interactor);
             interactor.enqueueRequest(request, this);
+        }
+    }
+
+    private void updatePresentingRouteIndex(int newIndex) {
+        if (newIndex != mPresentingRouteIndex) {
+            mPresentingRouteIndex = newIndex;
+            updateViewMap();
+        }
+    }
+
+    private void updateViewMap() {
+        String[] transitModes = getTransitModes();
+
+        if (mPresentingRouteIndex < transitModes.length) {
+            String transitMode = transitModes[mPresentingRouteIndex];
+
+            getView().showRouteOnMap(getRouteForTransitMode(transitMode));
         }
     }
 }
