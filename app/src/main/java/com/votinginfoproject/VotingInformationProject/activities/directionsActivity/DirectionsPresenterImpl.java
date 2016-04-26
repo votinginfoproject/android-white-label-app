@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.activities.directionsActi
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
@@ -28,6 +27,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private List<DirectionsInteractor> mDirectionsInteractors = new ArrayList<>();
     private String mOriginCoordinates;
     private String mDestinationCoordinates;
+    private boolean mIsPresentingMap;
 
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
 
@@ -116,8 +116,14 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         refreshView();
     }
 
+    @Override
+    public void mapButtonPressed() {
+        mIsPresentingMap = !mIsPresentingMap;
+        getView().toggleMapDisplaying(mIsPresentingMap);
+    }
+
     private void refreshView() {
-        getView().refresh();
+        getView().refreshDataView();
 
         TabData[] tabs = getTabDataForTransitModes(getTransitModes());
         getView().setTabs(tabs);

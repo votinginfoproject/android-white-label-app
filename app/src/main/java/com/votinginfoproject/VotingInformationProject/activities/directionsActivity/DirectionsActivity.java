@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,11 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerAdapter;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerPresenter;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerPresenterImpl;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerView;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 
 public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView {
@@ -43,6 +36,7 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
      */
     private TabLayout mTabLayout;
     private DirectionsViewPagerAdapter mAdapter;
+    private int mMenuLayoutID = R.menu.menu_directions_list;
     public DirectionsPresenter mPresenter;
     public ViewPager mViewPager;
 
@@ -85,20 +79,18 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_directions, menu);
+        getMenuInflater().inflate(mMenuLayoutID, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_map_toggle:
+                mPresenter.mapButtonPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -137,7 +129,7 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void refresh() {
+    public void refreshDataView() {
         mAdapter.notifyDataSetChanged();
     }
 
@@ -171,5 +163,12 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         }
 
         mTabLayout.setOnTabSelectedListener(this);
+    }
+
+    @Override
+    public void toggleMapDisplaying(boolean displaying) {
+        mMenuLayoutID = displaying ? R.menu.menu_directions_map : R.menu.menu_directions_list;
+        invalidateOptionsMenu();
+        Log.e("butt", "displaying map: " + displaying);
     }
 }

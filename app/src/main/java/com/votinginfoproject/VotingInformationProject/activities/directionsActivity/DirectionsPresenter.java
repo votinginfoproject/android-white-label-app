@@ -22,4 +22,6 @@ public abstract class DirectionsPresenter extends BasePresenter<DirectionsView> 
     public abstract void tabSelectedAtIndex(int index);
 
     public abstract void swipedToDirectionsListAtIndex(int index);
+
+    public abstract void mapButtonPressed();
 }

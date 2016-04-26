@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/list_view"
-        android:icon="@drawable/ic_polling_sites_list"
+        android:icon="@drawable/ic_list"
         android:title="@string/locations.button.list_map"
         app:showAsAction="always"/>
 
