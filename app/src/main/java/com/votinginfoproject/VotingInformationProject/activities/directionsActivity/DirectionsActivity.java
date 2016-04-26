@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.MapView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 
@@ -37,6 +38,8 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     private TabLayout mTabLayout;
     private DirectionsViewPagerAdapter mAdapter;
     private int mMenuLayoutID = R.menu.menu_directions_list;
+    private MapView mMapView;
+
     public DirectionsPresenter mPresenter;
     public ViewPager mViewPager;
 
@@ -74,6 +77,39 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+
+        mMapView = (MapView) findViewById(R.id.map_view);
+        mMapView.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();;
     }
 
     @Override
@@ -167,8 +203,14 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void toggleMapDisplaying(boolean displaying) {
+        View invisibleView = displaying ? mViewPager : mMapView;
+        View visibleView = displaying ? mMapView : mViewPager;
+
+        invisibleView.setVisibility(View.INVISIBLE);
+        visibleView.setVisibility(View.VISIBLE);
+
         mMenuLayoutID = displaying ? R.menu.menu_directions_map : R.menu.menu_directions_list;
+
         invalidateOptionsMenu();
-        Log.e("butt", "displaying map: " + displaying);
     }
 }
