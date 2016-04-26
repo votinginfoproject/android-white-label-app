@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.geometry.Bounds;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
@@ -41,7 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView, OnMapReadyCallback {
+public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView, OnMapReadyCallback {
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
 
@@ -113,9 +114,15 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar.setTitle(R.string.title_activity_directions);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -158,6 +165,9 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_open_in_maps:
                 mPresenter.externalMapButtonPressed();
                 return true;
@@ -185,8 +195,6 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
                 mPresenter.tabSelectedAtIndex(tabIndex);
             }
         }
-
-//Determine if list is showing or map is showing, then update appropriately
     }
 
     @Override
@@ -198,7 +206,7 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-//Reset View
+        
     }
 
     @Override
