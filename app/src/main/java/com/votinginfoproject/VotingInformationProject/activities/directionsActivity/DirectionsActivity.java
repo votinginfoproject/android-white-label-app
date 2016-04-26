@@ -25,11 +25,14 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.geometry.Bounds;
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
+import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -70,11 +73,16 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        Location destination = null;
 
-        mPresenter = new DirectionsPresenterImpl(this, "Austin", "Toronto");
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            PollingLocation pollingLocation = (PollingLocation) extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
+            destination = pollingLocation.location;
+        }
+
+        mPresenter = new DirectionsPresenterImpl(this, destination);
         mPresenter.setView(this);
 
         mAdapter = new DirectionsViewPagerAdapter(getFragmentManager(), mPresenter);
@@ -102,6 +110,10 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         mMapView = (MapView) findViewById(R.id.map_view);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
     }
 
     @Override

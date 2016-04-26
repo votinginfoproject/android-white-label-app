@@ -15,10 +15,6 @@ public abstract class DirectionsPresenter extends BasePresenter<DirectionsView> 
 
     public abstract Route getRouteForTransitMode(String transitMode);
 
-    public abstract String getOriginCoordinates();
-
-    public abstract String getDestinationCoordinates();
-
     public abstract void tabSelectedAtIndex(int index);
 
     public abstract void swipedToDirectionsListAtIndex(int index);

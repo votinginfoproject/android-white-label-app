@@ -44,6 +44,10 @@ public class Location implements Parcelable {
         dest.writeFloat(lng);
     }
 
+    public String getGoogleAPIRepresentation() {
+        return lat + "," + lng;
+    }
+
     public String getDescription() {
         return "Location - latitude: " + lat + " longitude: " + lng;
     }

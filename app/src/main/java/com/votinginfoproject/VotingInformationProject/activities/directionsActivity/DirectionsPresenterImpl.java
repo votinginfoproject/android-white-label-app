@@ -6,11 +6,13 @@ import android.support.annotation.NonNull;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.DirectionsRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,17 +27,15 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private Context mContext;
     private List<String> mLoadingTransitModes = new ArrayList<>();
     private List<DirectionsInteractor> mDirectionsInteractors = new ArrayList<>();
-    private String mOriginCoordinates;
-    private String mDestinationCoordinates;
+    private Location mDestination;
     private boolean mIsPresentingMap;
     private int mPresentingRouteIndex;
 
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
 
-    public DirectionsPresenterImpl(Context context, String originCoordinates, String destinationCoordinates) {
+    public DirectionsPresenterImpl(Context context, Location destination) {
         mContext = context;
-        mOriginCoordinates = originCoordinates;
-        mDestinationCoordinates = destinationCoordinates;
+        mDestination = destination;
 
         enqueueRequests();
     }
@@ -93,16 +93,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     public void swipedToDirectionsListAtIndex(int index) {
         updatePresentingRouteIndex(index);
         getView().selectTabAtIndex(mPresentingRouteIndex);
-    }
-
-    @Override
-    public String getOriginCoordinates() {
-        return mOriginCoordinates;
-    }
-
-    @Override
-    public String getDestinationCoordinates() {
-        return mDestinationCoordinates;
     }
 
     @Override
@@ -166,16 +156,20 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         mDirectionsInteractors.clear();
         mLoadingTransitModes.clear();
 
-        String directionsKey = mContext.getString(R.string.google_api_browser_key);
+        Location origin = VoterInformation.getLastKnownLocation();
 
-        for (String transitMode : mAllTransitModes) {
-            mLoadingTransitModes.add(transitMode);
+        if (origin != null && mDestination != null) {
+            String directionsKey = mContext.getString(R.string.google_api_browser_key);
 
-            DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, getOriginCoordinates(), getDestinationCoordinates());
+            for (String transitMode : mAllTransitModes) {
+                mLoadingTransitModes.add(transitMode);
 
-            DirectionsInteractor interactor = new DirectionsInteractor();
-            mDirectionsInteractors.add(interactor);
-            interactor.enqueueRequest(request, this);
+                DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mDestination);
+
+                DirectionsInteractor interactor = new DirectionsInteractor();
+                mDirectionsInteractors.add(interactor);
+                interactor.enqueueRequest(request, this);
+            }
         }
     }
 

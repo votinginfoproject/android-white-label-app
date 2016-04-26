@@ -3,6 +3,8 @@ package com.votinginfoproject.VotingInformationProject.models.api.requests;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
+
 /**
  * Created by marcvandehey on 3/29/16.
  */
@@ -17,13 +19,25 @@ public class DirectionsRequest implements RequestType {
     public DirectionsRequest(
             @NonNull String directionsKey,
             @NonNull String travelMode,
+            @NonNull Location origin,
+            @NonNull Location destination) {
+
+        this.travelMode = travelMode;
+        this.originCoordinates = origin.getGoogleAPIRepresentation();
+        this.destinationCoordinates = destination.getGoogleAPIRepresentation();
+        this.directionsKey = directionsKey;
+    }
+
+    public DirectionsRequest(
+            @NonNull String directionsKey,
+            @NonNull String travelMode,
             @NonNull String originCoordinates,
             @NonNull String destinationCoordinates) {
 
         this.travelMode = travelMode;
         this.originCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
-        this.directionsKey = directionsKey;
+        this.travelMode = travelMode;
     }
 
     public String getTravelMode() {

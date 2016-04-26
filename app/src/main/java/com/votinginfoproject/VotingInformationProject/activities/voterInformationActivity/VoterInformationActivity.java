@@ -5,7 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -60,7 +60,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
         setPresenter(new VoterInformationPresenterImpl());
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             startPollingLocation();
         }
 
@@ -187,6 +187,10 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void pollingSiteClicked(PollingLocation location) {
         Log.v(TAG, "Polling location Clicked: ");
+
+        Intent intent = new Intent(this, DirectionsActivity.class);
+        intent.putExtra(ExtraConstants.LOCATION_DESTINATION, location);
+        startActivity(intent);
     }
 
     @Override
@@ -234,13 +238,22 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();
+            mGoogleApiClient.connect();
         }
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            VoterInformation.setLastKnownLocation(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+            com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
+                    new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
+
+            formattedLocation.lat = (float) lastLocation.getLatitude();
+            formattedLocation.lng = (float) lastLocation.getLongitude();
+
+            VoterInformation.setLastKnownLocation(formattedLocation);
         }
     }
 
