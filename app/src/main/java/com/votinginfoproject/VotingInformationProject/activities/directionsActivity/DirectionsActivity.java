@@ -19,6 +19,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.directionsListVi
 import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerPresenter;
 import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.directionsListViewPagerFragment.DirectionsListViewPagerView;
+import com.votinginfoproject.VotingInformationProject.models.TabData;
 
 public class DirectionsActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView {
     private static int selected_alpha = 255;
@@ -79,8 +80,6 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
-
-        setupTabs();
     }
 
     @Override
@@ -140,7 +139,6 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void refresh() {
         mAdapter.notifyDataSetChanged();
-        setupTabs();
     }
 
     @Override
@@ -156,16 +154,16 @@ public class DirectionsActivity extends AppCompatActivity implements View.OnClic
         mViewPager.setCurrentItem(index);
     }
 
-    private void setupTabs() {
+    @Override
+    public void setTabs(TabData[] tabs) {
         mTabLayout.removeAllTabs();
 
-        String[] transitModes = mPresenter.getTransitModes();
-
-        if (transitModes.length > 0) {
+        if (tabs.length > 0) {
             mTabLayout.setVisibility(View.VISIBLE);
-            for (String transitMode : transitModes) {
-                int tabDrawable = mPresenter.getTabImageForTransitMode(transitMode);
-                TabLayout.Tab tab = mTabLayout.newTab().setIcon(tabDrawable);
+            for (TabData tabData : tabs) {
+                TabLayout.Tab tab = mTabLayout.newTab();
+                tab.setIcon(tabData.drawableID);
+                tab.setContentDescription(tabData.contentDescriptionID);
                 mTabLayout.addTab(tab);
             }
         } else {

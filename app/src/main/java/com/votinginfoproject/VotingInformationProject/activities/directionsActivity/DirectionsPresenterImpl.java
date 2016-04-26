@@ -8,6 +8,7 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
+import com.votinginfoproject.VotingInformationProject.models.TabData;
 import com.votinginfoproject.VotingInformationProject.models.api.interactors.DirectionsInteractor;
 import com.votinginfoproject.VotingInformationProject.models.api.requests.DirectionsRequest;
 import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
@@ -40,7 +41,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        refreshView();
     }
 
     @Override
@@ -112,22 +113,40 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         } else {
             transitModesToRoutes.put(transitMode, null);
         }
-        getView().refresh();
+        refreshView();
     }
 
-    @Override
-    public int getTabImageForTransitMode(String transitMode) {
+    private void refreshView() {
+        getView().refresh();
+
+        TabData[] tabs = getTabDataForTransitModes(getTransitModes());
+        getView().setTabs(tabs);
+    }
+
+    public TabData[] getTabDataForTransitModes(String[] transitModes) {
+        List<TabData> tabDataList = new ArrayList<>();
+
+        for (String transitMode : transitModes) {
+            tabDataList.add(getTabDataForTransitMode(transitMode));
+        }
+
+        TabData[] toReturn = new TabData[tabDataList.size()];
+        return tabDataList.toArray(toReturn);
+    }
+
+    public TabData getTabDataForTransitMode(String transitMode) {
         switch (transitMode) {
             case TransitModes.DRIVING:
-                return R.drawable.ic_directions_car;
+                return new TabData(R.drawable.ic_directions_car, R.string.directions_label_drive_button);
             case TransitModes.BICYCLING:
-                return R.drawable.ic_directions_bike;
+                return new TabData(R.drawable.ic_directions_bike, R.string.directions_label_bike_button);
             case TransitModes.TRANSIT:
-                return R.drawable.ic_directions_bus;
+                return new TabData(R.drawable.ic_directions_bus, R.string.directions_label_transit_button);
             case TransitModes.WALKING:
-                return R.drawable.ic_directions_walk;
+                return new TabData(R.drawable.ic_directions_walk, R.string.directions_label_walk_button);
         }
-        return 0;
+
+        return null;
     }
 
     private void enqueueRequests() {

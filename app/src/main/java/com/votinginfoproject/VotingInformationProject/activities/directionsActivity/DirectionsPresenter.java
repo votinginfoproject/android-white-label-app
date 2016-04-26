@@ -13,8 +13,6 @@ public abstract class DirectionsPresenter extends BasePresenter<DirectionsView> 
 
     public abstract String[] getTransitModes();
 
-    public abstract int getTabImageForTransitMode(String transitMode);
-
     public abstract Route getRouteForTransitMode(String transitMode);
 
     public abstract String getOriginCoordinates();
