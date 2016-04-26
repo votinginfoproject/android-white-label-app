@@ -47,6 +47,7 @@ import java.util.Map;
 public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView, OnMapReadyCallback {
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
+    private static int fade_duration = 250;
 
     private static String ARG_CIVIC_ADDRESS = "arg_civic_address";
     private static String ARG_CURRENT_LOCATION = "arg_current_location";
@@ -241,6 +242,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             for (TabData tabData : tabs) {
                 TabLayout.Tab tab = mTabLayout.newTab();
                 tab.setIcon(tabData.drawableID);
+                tab.getIcon().setAlpha(unselected_alpha);
                 tab.setContentDescription(tabData.contentDescriptionID);
                 mTabLayout.addTab(tab);
             }
@@ -260,7 +262,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         visibleView.setAlpha(0f);
         visibleView.animate()
                 .alpha(1f)
-                .setDuration(250)
+                .setDuration(fade_duration)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -270,7 +272,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         invisibleView.animate()
                 .alpha(0f)
-                .setDuration(250)
+                .setDuration(fade_duration)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -334,7 +336,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         mLoadingView.animate()
                 .alpha(toAlpha)
-                .setDuration(250);
+                .setDuration(fade_duration);
     }
 
     @Override
