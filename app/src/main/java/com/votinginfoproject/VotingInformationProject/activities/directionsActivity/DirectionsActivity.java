@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -206,7 +208,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-        
+
     }
 
     @Override
@@ -248,11 +250,30 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void toggleMapDisplaying(boolean displaying) {
-        View invisibleView = displaying ? mViewPager : mMapView;
-        View visibleView = displaying ? mMapView : mViewPager;
+        final View invisibleView = displaying ? mViewPager : mMapView;
+        final View visibleView = displaying ? mMapView : mViewPager;
 
-        invisibleView.setVisibility(View.INVISIBLE);
         visibleView.setVisibility(View.VISIBLE);
+        visibleView.setAlpha(0f);
+        visibleView.animate()
+                .alpha(1f)
+                .setDuration(250)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        visibleView.setVisibility(View.VISIBLE);
+                    }
+                });
+
+        invisibleView.animate()
+                .alpha(0f)
+                .setDuration(250)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        invisibleView.setVisibility(View.GONE);
+                    }
+                });
 
         mMenuLayoutID = displaying ? R.menu.menu_directions_map : R.menu.menu_directions_list;
 
