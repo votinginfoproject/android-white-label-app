@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Distance;
+import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Duration;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 
 /**
@@ -15,7 +17,7 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
     private TextView mInstructionsText;
     private TextView mDistanceText;
     private TextView mDurationText;
-    private View mDivider;
+    private View mDistanceDurationDivider;
 
     private Step mStep;
 
@@ -25,7 +27,7 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
         mInstructionsText = (TextView) view.findViewById(R.id.directions_step_instructions);
         mDistanceText = (TextView) view.findViewById(R.id.directions_step_distance);
         mDurationText = (TextView) view.findViewById(R.id.directions_step_duration);
-        mDivider = view.findViewById(R.id.directions_step_divider);
+        mDistanceDurationDivider = view.findViewById(R.id.directions_step_divider);
 
         updateUI();
     }
@@ -42,20 +44,30 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
 
         if (mStep != null) {
             mInstructionsText.setText(trimTrailingWhitespace(Html.fromHtml(mStep.html_instructions)));
-            if (mStep.duration != null) {
-                mDurationText.setText(mStep.duration.text);
+
+            Duration duration = mStep.duration;
+            Distance distance = mStep.distance;
+
+            if (duration != null) {
+                mDurationText.setText(duration.text);
             }
 
-            if (mStep.distance != null) {
-                mDistanceText.setText(mStep.distance.text);
+            if (distance != null) {
+                mDistanceText.setText(distance.text);
+            }
+
+            if (duration != null && distance != null) {
+                mDistanceDurationDivider.setVisibility(View.VISIBLE);
+            } else {
+                mDistanceDurationDivider.setVisibility(View.GONE);
             }
         }
     }
 
     private static CharSequence trimTrailingWhitespace(CharSequence source) {
-
-        if(source == null)
+        if(source == null) {
             return "";
+        }
 
         int i = source.length();
 

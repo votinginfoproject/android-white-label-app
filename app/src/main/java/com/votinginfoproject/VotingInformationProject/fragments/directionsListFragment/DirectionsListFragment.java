@@ -24,22 +24,6 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
     private DirectionsRecyclerViewAdapter mAdapter;
 
     private static final String ARG_ROUTE = "route";
-    private static final String ARG_TRANSIT_MODE = "transit_mode";
-    private static final String ARG_ORIGIN_COORDINATES = "origin_coordinates";
-    private static final String ARG_DESTINATION_COORDINATES = "destination_coordinates";
-
-//    public static DirectionsListFragment newInstance(String transitMode, String originCoordinates, String destinationCoordinates) {
-//        DirectionsListFragment fragment = new DirectionsListFragment();
-//
-//        Bundle args = new Bundle();
-//        args.putString(ARG_TRANSIT_MODE, transitMode);
-//        args.putString(ARG_ORIGIN_COORDINATES, originCoordinates);
-//        args.putString(ARG_DESTINATION_COORDINATES, destinationCoordinates);
-//
-//        fragment.setArguments(args);
-//
-//        return  fragment;
-//    }
 
     public static DirectionsListFragment newInstance(Route route) {
         DirectionsListFragment fragment = new DirectionsListFragment();
@@ -54,12 +38,13 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         View rootView = inflater.inflate(R.layout.fragment_directions_list, container, false);
 
         Bundle args = getArguments();
         Route route = args.getParcelable(ARG_ROUTE);
 
-        mPresenter = new DirectionsListViewPresenterImpl(rootView.getContext(), route);
+        mPresenter = new DirectionsListViewPresenterImpl(route);
         mPresenter.setView(this);
 
         mAdapter = new DirectionsRecyclerViewAdapter(mPresenter);
@@ -72,7 +57,7 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
     }
 
     @Override
-    public void refresh() {
+    public void refreshViewData() {
         mAdapter.notifyDataSetChanged();
     }
 }

@@ -1,14 +1,9 @@
 package com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment;
 
-import android.graphics.Path;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.DirectionsStepViewHolder;
@@ -17,17 +12,9 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.Directio
  * Created by max on 4/22/16.
  */
 public class DirectionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = DirectionsRecyclerViewAdapter.class.getSimpleName();
 
     private DirectionsListViewPresenter mPresenter;
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
-        }
-    }
 
     public DirectionsRecyclerViewAdapter(DirectionsListViewPresenter presenter) {
         mPresenter = presenter;

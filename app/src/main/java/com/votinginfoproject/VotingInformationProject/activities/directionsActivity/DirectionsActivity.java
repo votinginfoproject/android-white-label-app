@@ -50,50 +50,38 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements View.OnClickListener, TabLayout.OnTabSelectedListener, DirectionsView, OnMapReadyCallback {
+public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements DirectionsView, TabLayout.OnTabSelectedListener, OnMapReadyCallback {
+    private static final String TAG = DirectionsActivity.class.getSimpleName();
+
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
     private static int fade_duration = 250;
 
-    private static String ARG_CIVIC_ADDRESS = "arg_civic_address";
-    private static String ARG_CURRENT_LOCATION = "arg_current_location";
-    private static String ARG_POLLING_LOCATION = "arg_polling_location";
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private TabLayout mTabLayout;
+
+    public ViewPager mViewPager;
     private DirectionsViewPagerAdapter mAdapter;
+
     private View mLoadingView;
     private ProgressBar mProgressBar;
-    private int mMenuLayoutID = R.menu.menu_directions_list;
+
     private MapView mMapView;
     private GoogleMap mMap;
 
     public DirectionsPresenter mPresenter;
-    public ViewPager mViewPager;
 
+    private int mMenuLayoutID = R.menu.menu_directions_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_directions);
 
         PollingLocation pollingLocation = null;
-
         Bundle extras = getIntent().getExtras();
-
         if (extras != null) {
-            pollingLocation = (PollingLocation) extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
+            pollingLocation = extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
         }
 
         mPresenter = new DirectionsPresenterImpl(this, pollingLocation);
@@ -103,11 +91,10 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(mAdapter);
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                //Required empty override method
             }
 
             @Override
@@ -117,7 +104,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                //Required empty override method
             }
         });
 
@@ -168,7 +155,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();;
+        mMapView.onDestroy();
     }
 
     @Override
@@ -196,37 +183,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public void onClick(View v) {
-        Log.v("here", "jere");
-
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        if (tab.getIcon() != null) {
-            tab.getIcon().setAlpha(selected_alpha);
-
-            int tabIndex = mTabLayout.getSelectedTabPosition();
-            if (tabIndex >= 0) {
-                mPresenter.tabSelectedAtIndex(tabIndex);
-            }
-        }
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-        if (tab.getIcon() != null) {
-            tab.getIcon().setAlpha(unselected_alpha);
-        }
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void refreshDataView() {
+    public void refreshViewData() {
         mAdapter.notifyDataSetChanged();
     }
 
@@ -249,13 +206,18 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         if (tabs.length > 0) {
             mTabLayout.setVisibility(View.VISIBLE);
+
             for (TabData tabData : tabs) {
                 TabLayout.Tab tab = mTabLayout.newTab();
+
                 tab.setIcon(tabData.drawableID);
                 tab.getIcon().setAlpha(unselected_alpha);
+
                 tab.setContentDescription(tabData.contentDescriptionID);
+
                 mTabLayout.addTab(tab);
             }
+
         } else {
             mTabLayout.setVisibility(View.GONE);
         }
@@ -309,6 +271,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             for (int stepIdx = 0; stepIdx < leg.steps.size(); stepIdx++) {
                 Step step = leg.steps.get(stepIdx);
 
+                //Add the first point to the polyline as the start location of the first step
                 if (legIdx == 0 && stepIdx == 0) {
                     Location startLocation = step.start_location;
                     polylineOptions.add(new LatLng(startLocation.lat, startLocation.lng));
@@ -323,14 +286,15 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         Location northeastLocation = route.bounds.northeast;
         Location southwestLocation = route.bounds.southwest;
-
         LatLng northeastLatLng = new LatLng(northeastLocation.lat, northeastLocation.lng);
         LatLng southwestLatLng = new LatLng(southwestLocation.lat, southwestLocation.lng);
 
-        LatLngBounds bounds = new LatLngBounds.Builder().include(northeastLatLng).include(southwestLatLng).build();
+        LatLngBounds bounds = new LatLngBounds.Builder()
+                .include(northeastLatLng)
+                .include(southwestLatLng)
+                .build();
 
         CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, mMapView.getWidth() / 4);
-
         mMap.animateCamera(update);
 
         int numPoints = polylineOptions.getPoints().size();
@@ -346,7 +310,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void navigateToExternalMap(String address) {
-        String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s (%s)", address, "Where the party is at");
+        String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s", address);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(intent);
     }
@@ -364,6 +328,32 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 .setDuration(fade_duration);
     }
 
+    //TabLayout.OnTabSelectedListener
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getIcon() != null) {
+            tab.getIcon().setAlpha(selected_alpha);
+
+            int tabIndex = mTabLayout.getSelectedTabPosition();
+            if (tabIndex >= 0) {
+                mPresenter.tabSelectedAtIndex(tabIndex);
+            }
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        if (tab.getIcon() != null) {
+            tab.getIcon().setAlpha(unselected_alpha);
+        }
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        //Required empty override method
+    }
+
+    //GoogleMaps OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

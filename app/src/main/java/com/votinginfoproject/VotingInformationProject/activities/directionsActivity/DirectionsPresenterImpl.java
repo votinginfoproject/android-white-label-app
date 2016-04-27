@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
@@ -24,16 +23,18 @@ import java.util.List;
  * Created by max on 4/25/16.
  */
 public class DirectionsPresenterImpl extends DirectionsPresenter implements DirectionsInteractor.DirectionsCallback {
-    private String[] mAllTransitModes = TransitModes.ALL;
+    private static final String TAG = DirectionsPresenterImpl.class.getSimpleName();
 
     private Context mContext;
-    private List<String> mLoadingTransitModes = new ArrayList<>();
-    private List<DirectionsInteractor> mDirectionsInteractors = new ArrayList<>();
-    private PollingLocation mPollingLocation;
-    private boolean mIsPresentingMap;
-    private int mPresentingRouteIndex;
 
+    private PollingLocation mPollingLocation;
+
+    private String[] mAllTransitModes = TransitModes.ALL;
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
+    private List<String> mLoadingTransitModes = new ArrayList<>();
+
+    private int mIndexOfPresentedRoute;
+    private boolean mIsPresentingMap;
 
     public DirectionsPresenterImpl(Context context, PollingLocation pollingLocation) {
         mContext = context;
@@ -44,17 +45,17 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onCreate(Bundle savedState) {
-        refreshView();
+        refreshViewData();
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-
+        //Required empty override method
     }
 
     @Override
     public void onDestroy() {
-
+        //Required empty override method
     }
 
     @Override
@@ -88,13 +89,13 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     @Override
     public void tabSelectedAtIndex(int index) {
         updatePresentingRouteIndex(index);
-        getView().navigateToDirectionsListAtIndex(mPresentingRouteIndex);
+        getView().navigateToDirectionsListAtIndex(mIndexOfPresentedRoute);
     }
 
     @Override
     public void swipedToDirectionsListAtIndex(int index) {
         updatePresentingRouteIndex(index);
-        getView().selectTabAtIndex(mPresentingRouteIndex);
+        getView().selectTabAtIndex(mIndexOfPresentedRoute);
     }
 
     @Override
@@ -108,9 +109,12 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         } else {
             transitModesToRoutes.put(transitMode, null);
         }
-        refreshView();
+
+        refreshViewData();
 
         getView().toggleLoading(isLoading());
+
+        //If we're done loading, go ahead ahead and tell the view to update its map
         if (!isLoading()) {
             updateViewMap();
         }
@@ -127,8 +131,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         getView().navigateToExternalMap(mPollingLocation.address.toGeocodeString());
     }
 
-    private void refreshView() {
-        getView().refreshDataView();
+    private void refreshViewData() {
+        getView().refreshViewData();
 
         TabData[] tabs = getTabDataForTransitModes(getTransitModes());
         getView().setTabs(tabs);
@@ -161,7 +165,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     }
 
     private void enqueueRequests() {
-        mDirectionsInteractors.clear();
         mLoadingTransitModes.clear();
 
         Location origin = VoterInformation.getLastKnownLocation();
@@ -175,15 +178,15 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
                 DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
 
                 DirectionsInteractor interactor = new DirectionsInteractor();
-                mDirectionsInteractors.add(interactor);
                 interactor.enqueueRequest(request, this);
             }
         }
     }
 
     private void updatePresentingRouteIndex(int newIndex) {
-        if (newIndex != mPresentingRouteIndex) {
-            mPresentingRouteIndex = newIndex;
+        if (newIndex != mIndexOfPresentedRoute) {
+            mIndexOfPresentedRoute = newIndex;
+
             updateViewMap();
         }
     }
@@ -191,8 +194,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private void updateViewMap() {
         String[] transitModes = getTransitModes();
 
-        if (mPresentingRouteIndex < transitModes.length) {
-            String transitMode = transitModes[mPresentingRouteIndex];
+        if (mIndexOfPresentedRoute < transitModes.length) {
+            String transitMode = transitModes[mIndexOfPresentedRoute];
 
             getView().showRouteOnMap(getRouteForTransitMode(transitMode),
                     mPollingLocation.getDrawableMarker(true));

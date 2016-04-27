@@ -9,7 +9,7 @@ import com.votinginfoproject.VotingInformationProject.models.TabData;
  * Created by max on 4/25/16.
  */
 public interface DirectionsView {
-    void refreshDataView();
+    void refreshViewData();
 
     void setTabs(TabData[] tabs);
 

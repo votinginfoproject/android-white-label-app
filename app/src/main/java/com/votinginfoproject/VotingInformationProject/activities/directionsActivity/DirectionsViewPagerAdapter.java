@@ -11,6 +11,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.directionsListFr
  * Created by max on 4/25/16.
  */
 public class DirectionsViewPagerAdapter extends FragmentStatePagerAdapter {
+    private static final String TAG = DirectionsViewPagerAdapter.class.getSimpleName();
 
     private final DirectionsPresenter mPresenter;
 
