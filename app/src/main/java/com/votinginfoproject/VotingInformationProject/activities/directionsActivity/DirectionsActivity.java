@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -68,6 +69,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     private TabLayout mTabLayout;
     private DirectionsViewPagerAdapter mAdapter;
     private View mLoadingView;
+    private ProgressBar mProgressBar;
     private int mMenuLayoutID = R.menu.menu_directions_list;
     private MapView mMapView;
     private GoogleMap mMap;
@@ -121,6 +123,9 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mLoadingView = findViewById(R.id.loading_view);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.animate();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -333,6 +338,10 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void toggleLoading(boolean loading) {
         float toAlpha = loading ? 1f : 0f;
+
+        if (loading) {
+            mProgressBar.animate();
+        }
 
         mLoadingView.animate()
                 .alpha(toAlpha)
