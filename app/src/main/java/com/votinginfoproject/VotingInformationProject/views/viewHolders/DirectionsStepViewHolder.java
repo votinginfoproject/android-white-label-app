@@ -41,7 +41,7 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
         mDurationText.setText("");
 
         if (mStep != null) {
-            mInstructionsText.setText(stripHtml(mStep.html_instructions));
+            mInstructionsText.setText(trimTrailingWhitespace(Html.fromHtml(mStep.html_instructions)));
             if (mStep.duration != null) {
                 mDurationText.setText(mStep.duration.text);
             }
@@ -52,7 +52,17 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private String stripHtml(String html) {
-        return Html.fromHtml(html).toString();
+    private static CharSequence trimTrailingWhitespace(CharSequence source) {
+
+        if(source == null)
+            return "";
+
+        int i = source.length();
+
+        // loop back to the first non-whitespace character
+        while(--i >= 0 && Character.isWhitespace(source.charAt(i))) {
+        }
+
+        return source.subSequence(0, i+1);
     }
 }

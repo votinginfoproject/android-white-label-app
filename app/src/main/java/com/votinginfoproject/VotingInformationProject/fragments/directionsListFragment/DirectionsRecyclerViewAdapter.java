@@ -44,16 +44,11 @@ public class DirectionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         if (holder instanceof DirectionsStepViewHolder) {
             DirectionsStepViewHolder viewHolder = (DirectionsStepViewHolder) holder;
             viewHolder.setStep(mPresenter.getSteps().get(position));
-            //viewHolder.mTextView.setText(stripHtml(mPresenter.getSteps().get(position).html_instructions));
         }
     }
 
     @Override
     public int getItemCount() {
         return mPresenter.getSteps().size();
-    }
-
-    private String stripHtml(String html) {
-        return Html.fromHtml(html).toString();
     }
 }

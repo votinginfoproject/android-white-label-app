@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.DividerItemDecoration;
 
 /**
  * Created by max on 4/22/16.
@@ -57,18 +58,15 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
 
         Bundle args = getArguments();
         Route route = args.getParcelable(ARG_ROUTE);
-        //String transitMode = args.getString(ARG_TRANSIT_MODE);
-        //String originCoordinates = args.getString(ARG_ORIGIN_COORDINATES);
-        //String destinationCoordinates = args.getString(ARG_DESTINATION_COORDINATES);
 
         mPresenter = new DirectionsListViewPresenterImpl(rootView.getContext(), route);
-        //mPresenter = new DirectionsListViewPresenterImpl(rootView.getContext(), transitMode, originCoordinates, destinationCoordinates);
         mPresenter.setView(this);
 
         mAdapter = new DirectionsRecyclerViewAdapter(mPresenter);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         return rootView;
     }
