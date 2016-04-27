@@ -55,7 +55,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onDestroy() {
-        //Required empty override method
+        setView(null);
     }
 
     @Override

@@ -217,7 +217,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
                 mTabLayout.addTab(tab);
             }
-
         } else {
             mTabLayout.setVisibility(View.GONE);
         }

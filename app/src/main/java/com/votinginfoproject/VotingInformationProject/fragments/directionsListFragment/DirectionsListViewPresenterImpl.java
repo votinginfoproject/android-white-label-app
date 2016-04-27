@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.directionsListF
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
@@ -16,8 +17,6 @@ import java.util.List;
 public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter {
     private static final String TAG = DirectionsListViewPresenterImpl.class.getSimpleName();
 
-    private static final String STEPS_KEY = "STEPS";
-
     private ArrayList<Step> mSteps = new ArrayList<>();
 
     public DirectionsListViewPresenterImpl(Route route) {
@@ -28,14 +27,14 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
 
     @Override
     public void onCreate(Bundle savedState) {
-        if (savedState != null) {
+        if (getView() != null) {
             getView().refreshViewData();
         }
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-        state.putParcelableArrayList(STEPS_KEY, mSteps);
+        //Required empty override method
     }
 
     @Override

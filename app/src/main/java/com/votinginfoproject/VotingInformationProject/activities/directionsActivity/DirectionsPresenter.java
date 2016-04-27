@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
-import android.support.v13.app.FragmentStatePagerAdapter;
-
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 
