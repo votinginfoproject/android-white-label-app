@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,8 +26,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.geometry.Bounds;
 import com.votinginfoproject.VotingInformationProject.R;
@@ -291,7 +296,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public void showRouteOnMap(Route route) {
+    public void showRouteOnMap(Route route, @DrawableRes int destinationMarkerRes) {
         mMap.clear();
 
         PolylineOptions polylineOptions = new PolylineOptions()
@@ -314,6 +319,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             }
         }
 
+        mMap.addPolyline(polylineOptions);
+
         Location northeastLocation = route.bounds.northeast;
         Location southwestLocation = route.bounds.southwest;
 
@@ -323,9 +330,18 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeastLatLng).include(southwestLatLng).build();
 
         CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, mMapView.getWidth() / 4);
+
         mMap.animateCamera(update);
 
-        mMap.addPolyline(polylineOptions);
+        int numPoints = polylineOptions.getPoints().size();
+        if (numPoints > 0 && destinationMarkerRes > 0) {
+            LatLng lastPoint = polylineOptions.getPoints().get(numPoints - 1);
+
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(destinationMarkerRes);
+
+            MarkerOptions pollMarker = new MarkerOptions().position(lastPoint).icon(bitmapDescriptor);
+            mMap.addMarker(pollMarker);
+        }
     }
 
     @Override

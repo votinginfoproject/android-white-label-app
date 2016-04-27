@@ -88,6 +88,20 @@ public class PollingLocation implements Parcelable {
     }
 
     public
+    @DrawableRes
+    int getDrawableMarker(boolean selected) {
+        switch (pollingLocationType) {
+            case POLLING_TYPE_DROP_BOX:
+                return selected ? R.drawable.ic_marker_drop_box_selected : R.drawable.ic_marker_drop_box;
+            case POLLING_TYPE_EARLY_VOTE:
+                return selected ? R.drawable.ic_marker_early_voting_selected : R.drawable.ic_marker_early_voting;
+            case POLLING_TYPE_LOCATION:
+                return selected ? R.drawable.ic_marker_poll_selected : R.drawable.ic_marker_poll;
+        }
+        return 0;
+    }
+
+    public
     @StringRes
     int getPollingTypeString() {
         switch (pollingLocationType) {

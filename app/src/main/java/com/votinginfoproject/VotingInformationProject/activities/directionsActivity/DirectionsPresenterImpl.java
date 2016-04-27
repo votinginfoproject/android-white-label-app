@@ -194,7 +194,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         if (mPresentingRouteIndex < transitModes.length) {
             String transitMode = transitModes[mPresentingRouteIndex];
 
-            getView().showRouteOnMap(getRouteForTransitMode(transitMode));
+            getView().showRouteOnMap(getRouteForTransitMode(transitMode),
+                    mPollingLocation.getDrawableMarker(true));
         }
     }
 }
