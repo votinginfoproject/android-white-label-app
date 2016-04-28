@@ -64,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?android:attr/colorBackground"
+            android:layout_below="@+id/appbar"
             android:gravity="center">
 
             <ProgressBar
@@ -73,6 +74,40 @@
                 style="?android:attr/progressBarStyleLarge"
                 android:indeterminateDrawable="@drawable/progress_indeterminate_blue"
                 android:indeterminate="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/error_view"
+            android:alpha="0"
+            android:background="?android:attr/colorBackground"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/appbar"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_error_outline"
+                android:tint="@color/text_light_gray"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/text_light_gray"
+                android:text="@string/directions.error.connection_error"/>
+
+            <Button
+                android:id="@+id/retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/retry"/>
 
         </LinearLayout>
 

@@ -24,4 +24,6 @@ public interface DirectionsView {
     void toggleMapDisplaying(boolean displaying);
 
     void toggleLoading(boolean loading);
+
+    void toggleError(boolean error);
 }

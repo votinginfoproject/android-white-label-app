@@ -30,6 +30,7 @@
     <color name="home_warning_background">#042a42</color>
     <color name="brand">#60c9f8</color>
     <color name="dark_text">#dd000000</color>
+    <color name="text_light_gray">#d0d0d0</color>
 
     <!--Polling location colors-->
     <color name="polling_location_early_vote">#FF00ADFF</color>

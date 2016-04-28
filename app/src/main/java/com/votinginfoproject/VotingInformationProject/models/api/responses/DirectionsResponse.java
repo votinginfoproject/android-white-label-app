@@ -13,6 +13,6 @@ public class DirectionsResponse {
     public String mode;
 
     public boolean hasErrors() {
-        return status != null && status.equals("OK");
+        return status != null && !status.equals("OK");
     }
 }

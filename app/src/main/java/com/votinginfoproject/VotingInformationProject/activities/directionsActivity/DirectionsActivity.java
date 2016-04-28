@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -66,6 +67,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     private View mLoadingView;
     private ProgressBar mProgressBar;
+
+    private View mErrorView;
 
     private MapView mMapView;
     private GoogleMap mMap;
@@ -125,6 +128,16 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mProgressBar.animate();
+
+        mErrorView = findViewById(R.id.error_view);
+
+        Button retryButton = (Button) mErrorView.findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPresenter().retryButtonPressed();
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -284,6 +297,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         if (mMap == null) {
             return;
         }
+
         mMap.clear();
 
         PolylineOptions polylineOptions = new PolylineOptions()
@@ -351,6 +365,28 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         mLoadingView.animate()
                 .alpha(toAlpha)
                 .setDuration(fade_duration);
+    }
+
+    @Override
+    public void toggleError(final boolean error) {
+        float toAlpha = error ? 1f : 0f;
+
+        if (error) {
+            mErrorView.setVisibility(View.VISIBLE);
+        }
+
+        mErrorView.animate()
+                .alpha(toAlpha)
+                .setDuration(fade_duration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        if (!error) {
+                            mErrorView.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
     //TabLayout.OnTabSelectedListener

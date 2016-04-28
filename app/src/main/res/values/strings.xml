@@ -14,6 +14,7 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="retry">Retry</string>
     <string name="error.no_phone">Phone not installed</string>
     <string name="error.no_email">Email client not installed</string>
     <string name="error.no_browser">Web browser not installed</string>
@@ -133,6 +134,7 @@
     <string name="locations.map.label.polling_location_hours">Hours:</string>
     <string name="locations.map.error.polling_location_hours_not_found">Hours of operation not found for this location.</string>
 
+
     <!-- Directions list strings -->
     <string name="directions.label.walk_button">Walk</string>
     <string name="directions.label.bike_button">Bike</string>
@@ -142,6 +144,8 @@
     <string name="directions.error.no_directions_found">No directions found.</string>
     <string name="directions.error.no_origin">Could not find origin point for directions.</string>
     <string name="directions.loading">Loading directions…</string>
+    <string name="directions.error.connection_error">Map data is unavailable.\nCheck your network connection.</string>
+
 
     <!-- About App strings -->
     <string name="about.app.title">About This App</string>

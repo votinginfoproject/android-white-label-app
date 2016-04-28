@@ -32,7 +32,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private String[] mAllTransitModes = TransitModes.ALL;
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
-    
+
     private HashMap<String, DirectionsInteractor> mTransitModesToInteractors = new HashMap<>();
 
     private int mIndexOfPresentedRoute;
@@ -132,19 +132,24 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
         mTransitModesToInteractors.remove(transitMode);
 
-        if (response.routes.size() > 0) {
-            transitModesToRoutes.put(transitMode, response.routes.get(0));
-        } else {
-            transitModesToRoutes.put(transitMode, null);
-        }
+        if (!response.hasErrors()) {
+            if (response.routes.size() > 0) {
+                transitModesToRoutes.put(transitMode, response.routes.get(0));
 
-        if (getView() != null) {
-            refreshViewData();
-
-            //If done loading, tell the view to update its map
-            if (!isLoading()) {
-                updateViewMap();
+            } else {
+                transitModesToRoutes.put(transitMode, null);
             }
+
+            if (getView() != null) {
+                refreshViewData();
+
+                //If done loading, tell the view to update its map
+                if (!isLoading()) {
+                    updateViewMap();
+                }
+            }
+        } else {
+            showConnectionError();
         }
     }
 
@@ -160,8 +165,23 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     }
 
     @Override
+    public void retryButtonPressed() {
+        for (String transitMode : mAllTransitModes) {
+            enqueueRequest(transitMode);
+        }
+        getView().toggleError(false);
+        getView().toggleLoading(true);
+    }
+
+    @Override
     public void onMapReady() {
         updateViewMap();
+    }
+
+    private void showConnectionError() {
+        if (getView() != null) {
+            getView().toggleError(true);
+        }
     }
 
     private void refreshViewData() {
