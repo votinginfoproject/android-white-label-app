@@ -56,9 +56,11 @@ public class VoterInfoResponse implements RequestType {
 
         if (contests != null) {
             for (Contest contest : contests) {
-                for (Candidate candidate : contest.candidates) {
-                    if (!candidate.party.isEmpty() && !parties.contains(candidate.party)) {
-                        parties.add(candidate.party);
+                if (contest.candidates != null) {
+                    for (Candidate candidate : contest.candidates) {
+                        if (candidate.party != null && !candidate.party.isEmpty() && !parties.contains(candidate.party)) {
+                            parties.add(candidate.party);
+                        }
                     }
                 }
             }

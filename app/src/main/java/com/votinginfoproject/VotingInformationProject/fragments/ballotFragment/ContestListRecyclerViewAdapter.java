@@ -52,7 +52,12 @@ public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
             final Contest contest = mPresenter.getContest(position);
 
-            contestViewHolder.setContest(contest, mPresenter.getElection().getName(), mPresenter.getSectionTitleForIndex(position), new View.OnClickListener() {
+            String electionName = "";
+            if (mPresenter.getElection() != null) {
+                electionName = mPresenter.getElection().getName();
+            }
+
+            contestViewHolder.setContest(contest, electionName, mPresenter.getSectionTitleForIndex(position), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mPresenter.onContestItemClicked(contest);
