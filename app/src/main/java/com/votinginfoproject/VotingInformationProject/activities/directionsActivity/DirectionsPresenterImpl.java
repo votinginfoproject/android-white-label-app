@@ -32,7 +32,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private String[] mAllTransitModes = TransitModes.ALL;
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
-    //private List<String> mLoadingTransitModes = new ArrayList<>();
+    
     private HashMap<String, DirectionsInteractor> mTransitModesToInteractors = new HashMap<>();
 
     private int mIndexOfPresentedRoute;
@@ -45,7 +45,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onCreate(Bundle savedState) {
-        //mLoadingTransitModes.clear();
 
         for (String transitMode : mAllTransitModes) {
             if (savedState != null && savedState.containsKey(transitMode)) {
@@ -57,6 +56,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
         if (getView() != null) {
             refreshViewData();
+            updateViewMap();
         }
     }
 
@@ -107,7 +107,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     @Override
     public boolean isLoading() {
         return !mTransitModesToInteractors.isEmpty();
-        //return mLoadingTransitModes.size() != 0;
     }
 
     @Override
@@ -139,13 +138,13 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             transitModesToRoutes.put(transitMode, null);
         }
 
-        refreshViewData();
+        if (getView() != null) {
+            refreshViewData();
 
-        getView().toggleLoading(isLoading());
-
-        //If we're done loading, go ahead ahead and tell the view to update its map
-        if (!isLoading()) {
-            updateViewMap();
+            //If done loading, tell the view to update its map
+            if (!isLoading()) {
+                updateViewMap();
+            }
         }
     }
 
@@ -158,6 +157,11 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     @Override
     public void externalMapButtonPressed() {
         getView().navigateToExternalMap(mPollingLocation.address.toGeocodeString());
+    }
+
+    @Override
+    public void onMapReady() {
+        updateViewMap();
     }
 
     private void refreshViewData() {
@@ -194,22 +198,11 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         return null;
     }
 
-    private void enqueueAllRequests() {
-        Log.e(TAG, "enqueuing requests");
-        //mLoadingTransitModes.clear();
-
-        for (String transitMode : mAllTransitModes) {
-            enqueueRequest(transitMode);
-        }
-    }
-
     private void enqueueRequest(String transitMode) {
         Location origin = VoterInformation.getLastKnownLocation();
 
         if (origin != null && mPollingLocation.location != null) {
             String directionsKey = mContext.getString(R.string.google_api_browser_key);
-
-            //mLoadingTransitModes.add(transitMode);
 
             DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
 

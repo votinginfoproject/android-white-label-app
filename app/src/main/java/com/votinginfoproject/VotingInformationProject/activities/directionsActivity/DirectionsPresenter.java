@@ -19,5 +19,7 @@ public abstract class DirectionsPresenter extends BasePresenter<DirectionsView> 
 
     public abstract void mapButtonPressed();
 
+    public abstract void onMapReady();
+
     public abstract void externalMapButtonPressed();
 }

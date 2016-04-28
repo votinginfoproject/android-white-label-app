@@ -203,19 +203,28 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void selectTabAtIndex(int index) {
-        TabLayout.Tab tab = mTabLayout.getTabAt(index);
-        if (tab != null) {
-            tab.select();
+        if (mTabLayout != null) {
+            TabLayout.Tab tab = mTabLayout.getTabAt(index);
+
+            if (tab != null) {
+                tab.select();
+            }
         }
     }
 
     @Override
     public void navigateToDirectionsListAtIndex(int index) {
-        mViewPager.setCurrentItem(index);
+        if (mViewPager != null) {
+            mViewPager.setCurrentItem(index);
+        }
     }
 
     @Override
     public void setTabs(TabData[] tabs) {
+        if (mTabLayout == null) {
+            return;
+        }
+
         mTabLayout.removeAllTabs();
 
         if (tabs.length > 0) {
@@ -376,5 +385,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         if (ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
             mMap.setMyLocationEnabled(true);
         }
+        getPresenter().onMapReady();
     }
 }
