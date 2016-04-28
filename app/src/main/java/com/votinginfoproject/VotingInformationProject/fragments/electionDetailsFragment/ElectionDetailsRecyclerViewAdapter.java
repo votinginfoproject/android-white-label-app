@@ -299,15 +299,16 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     private void expandListItem(ListItem item) {
-        int position = getRecyclerViewIndexForItem(item);
-        int index = position;
+        int recyclerViewParentIndex = getRecyclerViewIndexForItem(item);
+
+        int insertIndex = parentListNodes.indexOf(item) + 1;
 
         for (ListItem child : item.mHiddenListItems) {
-            parentListNodes.add(index, child);
-            index++;
+            parentListNodes.add(insertIndex, child);
+            insertIndex++;
         }
 
-        notifyItemRangeInserted(position + 1, item.mHiddenListItems.size());
+        notifyItemRangeInserted(recyclerViewParentIndex + 1, item.mHiddenListItems.size());
     }
 
     private int getRecyclerViewIndexForItem(ListItem item) {
