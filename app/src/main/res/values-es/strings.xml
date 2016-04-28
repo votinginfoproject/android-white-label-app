@@ -61,6 +61,7 @@
     <string name="fragment.ballot.list.header.contests">Competencias</string>
 
     <!-- Contest Detail Strings -->
+    <string name="contest.toolbar">Competencia</string>
     <string name="contest.header.details">Detalles de la competencia</string>
     <string name="contest.label.type">Tipo</string>
     <string name="contest.label.office">Oficina</string>

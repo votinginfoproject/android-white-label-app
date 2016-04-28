@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment;
+package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment.ContestListPresenter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ContestViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;

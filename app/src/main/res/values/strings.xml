@@ -63,6 +63,8 @@
     <string name="fragment.ballot.list.header.contests">Contests</string>
 
     <!-- Contest Detail Strings -->
+    <string name="contest.toolbar">Contest</string>
+
     <string name="contest.header.details">Contest Details</string>
     <string name="contest.label.type">Type</string>
     <string name="contest.label.office">Office</string>

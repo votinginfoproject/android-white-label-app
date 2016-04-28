@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.activities.voterInformati
 import android.support.annotation.LayoutRes;
 
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 
 /**
@@ -14,6 +15,8 @@ public abstract class VoterInformationPresenter extends BasePresenter<VoterInfor
     abstract void ballotButtonClicked();
 
     abstract void contestClicked(Contest contest);
+
+    abstract void candidateClicked(Candidate candidate);
 
     abstract void detailsButtonClicked();
 

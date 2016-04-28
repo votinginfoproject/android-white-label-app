@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment;
+package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment;
 
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.Contest;

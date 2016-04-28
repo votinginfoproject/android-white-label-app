@@ -10,6 +10,7 @@
     <color name="list.selected">#DCDCDC</color>
 
     <color name="description.text.gray">#757575</color>
+    <color name="description.text.black">#000</color>
 
     <color name="background.blue">#0068AC</color>
     <color name="button_blue">#00234b</color>

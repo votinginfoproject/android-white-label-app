@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
-import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestListFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
@@ -73,7 +75,12 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     @Override
     void contestClicked(Contest contest) {
+        getView().presentChildLevelFragment(ContestInformationListFragment.newInstance(VoterInformation.getElection(), contest));
+    }
 
+    @Override
+    void candidateClicked(Candidate candidate) {
+        //TODO present candidate info
     }
 
     @Override
