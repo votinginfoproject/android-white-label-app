@@ -65,6 +65,7 @@
         <activity
             android:name=".activities.directionsActivity.DirectionsActivity"
             android:label="@string/title_activity_directions"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             >
         </activity>
