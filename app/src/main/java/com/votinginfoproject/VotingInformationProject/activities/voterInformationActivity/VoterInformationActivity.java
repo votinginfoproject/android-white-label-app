@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
@@ -34,7 +35,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         PollingSitesListFragment.PollingSitesListener,
         ElectionDetailsListFragment.ElectionDetailsListFragmentCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        ContestListFragment.ContestListListener {
 
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
