@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.Election;
+import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 
 import java.util.ArrayList;
@@ -42,6 +43,10 @@ public class VoterInformation {
     private CivicApiAddress homeAddress;
     private String selectedParty;
     private boolean useMetric;
+
+    private ElectionAdministrationBody stateAdministrationBody;
+    private ElectionAdministrationBody localAdministrationBody;
+
     private CivicApiAddress stateAdminAddress;
     private CivicApiAddress localAdminAddress;
 
@@ -94,20 +99,20 @@ public class VoterInformation {
         ourInstance.selectedParty = selectedParty;
     }
 
-    public static CivicApiAddress getStateAdminAddress() {
-        return ourInstance.stateAdminAddress;
+    public static ElectionAdministrationBody getStateAdministrationBody() {
+        return ourInstance.stateAdministrationBody;
     }
 
-    public static void setStateAdminAddress(CivicApiAddress stateAdminAddress) {
-        ourInstance.stateAdminAddress = stateAdminAddress;
+    public static void setStateAdministrationBody(ElectionAdministrationBody stateAdministrationBody) {
+        ourInstance.stateAdministrationBody = stateAdministrationBody;
     }
 
-    public static CivicApiAddress getLocalAdminAddress() {
-        return ourInstance.localAdminAddress;
+    public static ElectionAdministrationBody getLocalAdministrationBody() {
+        return ourInstance.localAdministrationBody;
     }
 
-    public static void setLocalAdminAddress(CivicApiAddress localAdminAddress) {
-        ourInstance.localAdminAddress = localAdminAddress;
+    public static void setLocalAdministrationBody(ElectionAdministrationBody localAdministrationBody) {
+        ourInstance.localAdministrationBody = localAdministrationBody;
     }
 
     public static void setPollingLocations(ArrayList<PollingLocation> pollingLocations, ArrayList<PollingLocation> earlyVotingLocations, ArrayList<PollingLocation> dropBoxLocations) {

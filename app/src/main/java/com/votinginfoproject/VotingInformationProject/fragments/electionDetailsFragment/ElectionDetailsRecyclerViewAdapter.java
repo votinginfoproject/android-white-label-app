@@ -34,12 +34,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private final Context mContext;
     private final ElectionDetailsPresenter mPresenter;
-    private boolean hasHeader;
-
     private final Election mElection;
     private final ElectionAdministrationBody mLocalAdmin;
     private final ElectionAdministrationBody mStateAdmin;
-
+    private boolean hasHeader;
     private List<ListItem> parentListNodes;
 
     public ElectionDetailsRecyclerViewAdapter(Context context, ElectionDetailsPresenter presenter) {
@@ -60,7 +58,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         View view;
         RecyclerView.ViewHolder viewHolder;
 
-        switch(viewType) {
+        switch (viewType) {
             case ELECTION_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_election_header, parent, false);
@@ -129,13 +127,13 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 viewHolder.setExpanded(item.isExpanded);
                 viewHolder.isFirstSubtitle = item.isFirstSubtitle;
 
-            } else if (holder instanceof  ElectionBodyTitleViewHolder) {
+            } else if (holder instanceof ElectionBodyTitleViewHolder) {
                 ElectionBodyTitleViewHolder viewHolder = (ElectionBodyTitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
-            } else if (holder instanceof  ElectionBodyLinkViewHolder) {
+            } else if (holder instanceof ElectionBodyLinkViewHolder) {
                 ElectionBodyLinkViewHolder viewHolder = (ElectionBodyLinkViewHolder) holder;
                 viewHolder.setTitle(item.mText);
-            } else if (holder instanceof  ElectionBodyTextViewHolder) {
+            } else if (holder instanceof ElectionBodyTextViewHolder) {
                 ElectionBodyTextViewHolder viewHolder = (ElectionBodyTextViewHolder) holder;
                 viewHolder.setTitle(item.mText);
             }
@@ -217,7 +215,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             }
 
             if (websitesChildItems.size() > 0) {
-                for(final ListItem child : websitesChildItems) {
+                for (final ListItem child : websitesChildItems) {
                     child.onItemClickListener = new LinkClickListener(child);
                 }
 
@@ -244,13 +242,13 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 }
             }
 
-            if (body.physicalAddress != null) {
+            if (body.getPhysicalAddress() != null) {
                 ListItem addressParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_label_physical_address));
                 addressParent.mImageId = R.drawable.ic_address_marker;
                 addressParent.onItemClickListener = new SubtitleClickListener(addressParent);
                 toReturn.add(addressParent);
 
-                ListItem addressChildItem = new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.physicalAddress.toString());
+                ListItem addressChildItem = new ListItem(BODY_CHILD_TEXT_VIEW_HOLDER, body.getPhysicalAddress().toString());
                 addressChildItem.onItemClickListener = new AddressClickListener(addressChildItem);
                 addressParent.mHiddenListItems.add(addressChildItem);
 
@@ -325,7 +323,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private void collapseListItem(ListItem item) {
         int position = getRecyclerViewIndexForItem(item);
 
-        for(ListItem child : item.mHiddenListItems) {
+        for (ListItem child : item.mHiddenListItems) {
             parentListNodes.remove(child);
         }
 
@@ -345,10 +343,10 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
         public ListItem(int viewType, String text) {
             mViewType = viewType;
-            mText= text;
+            mText = text;
         }
 
-        public ListItem (int viewType, String text, String urlString) {
+        public ListItem(int viewType, String text, String urlString) {
             mText = text;
             mViewType = viewType;
             mURLString = urlString;
@@ -372,6 +370,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public LinkClickListener(ListItem item) {
             super(item);
         }
+
         @Override
         public void onClick(View v) {
             mPresenter.linkSelected(mItem.mURLString);
@@ -382,6 +381,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public AddressClickListener(ListItem item) {
             super(item);
         }
+
         @Override
         public void onClick(View v) {
             mPresenter.addressSelected(mItem.mText);
@@ -392,6 +392,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public SubtitleClickListener(ListItem item) {
             super(item);
         }
+
         @Override
         public void onClick(View v) {
             subtitleClicked(mItem, v);

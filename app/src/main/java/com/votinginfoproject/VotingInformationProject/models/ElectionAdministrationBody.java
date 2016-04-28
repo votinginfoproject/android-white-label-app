@@ -17,17 +17,13 @@ public class ElectionAdministrationBody {
     public String electionRulesUrl;
     public List<String> voter_services;
     public String hoursOfOperation;
-    public CivicApiAddress correspondenceAddress;
-    public CivicApiAddress physicalAddress;
     public List<ElectionOfficial> electionOfficials;
-
-    public interface AdminBody {
-        String STATE = "state_eab";
-        String LOCAL = "local_eab";
-    }
+    private CivicApiAddress correspondenceAddress;
+    private CivicApiAddress physicalAddress;
 
     /**
      * Helper function to return pretty-printed list of voter services
+     *
      * @return String with each service separated by a newline (or empty string if none)
      */
     public String getVoterServices() {
@@ -67,27 +63,24 @@ public class ElectionAdministrationBody {
         return builder.toString();
     }
 
-    /**
-     * Helper function to avoid null pointer errors when fetching address
-     * @return multi-line address string
-     */
-    public String getCorrespondenceAddress() {
-        if (correspondenceAddress == null) {
-            return "";
-        } else {
-            return correspondenceAddress.toString();
-        }
+    public CivicApiAddress getCorrespondenceAddress() {
+        return correspondenceAddress;
     }
 
-    /**
-     * Helper function to avoid null pointer errors when fetching address
-     * @return multi-line address string
-     */
-    public String getPhysicalAddress() {
-        if (physicalAddress == null) {
-            return "";
-        } else {
-            return physicalAddress.toString();
-        }
+    public void setCorrespondenceAddress(CivicApiAddress correspondenceAddress) {
+        this.correspondenceAddress = correspondenceAddress;
+    }
+
+    public CivicApiAddress getPhysicalAddress() {
+        return physicalAddress;
+    }
+
+    public void setPhysicalAddress(CivicApiAddress physicalAddress) {
+        this.physicalAddress = physicalAddress;
+    }
+
+    public interface AdminBody {
+        String STATE = "state_eab";
+        String LOCAL = "local_eab";
     }
 }

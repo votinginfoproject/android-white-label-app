@@ -260,8 +260,8 @@ public class ElectionDetailsFragment extends Fragment {
             // set non-link field values
             setTextView(R.id.details_voter_services, R.id.details_voter_services_section_header, body.getVoterServices());
             setTextView(R.id.details_hours_of_operation, R.id.details_hours_of_operation_section_header, body.hoursOfOperation);
-            setTextView(R.id.details_correspondence_address, R.id.details_correspondence_address_section_header, body.getCorrespondenceAddress());
-            setPhysicalAddressView(body.getPhysicalAddress(), eab_type);
+            setTextView(R.id.details_correspondence_address, R.id.details_correspondence_address_section_header, body.getCorrespondenceAddress().toString());
+            setPhysicalAddressView(body.getPhysicalAddress().toString(), eab_type);
             setTextView(R.id.details_election_officials, R.id.details_election_officials_section_header, body.getElectionOfficials());
         } catch (Exception ex) {
             Log.e(TAG, "Failed to set election details info!");

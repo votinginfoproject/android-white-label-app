@@ -85,29 +85,68 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
                 stateAdminAddress.distance = stateAdminDistance;
             }
 
-            CivicApiAddress localAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.LOCAL);
+            //Set up Local Administration Body
+            ElectionAdministrationBody localAdministrationBody = voterInfoResponse.getLocalAdmin();
 
-            if (localAdminAddress != null) {
-                Location localAdminLocation = getGeocodedLocation(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), stateAdminAddress);
-                float localAdminDistance = getDistance(homeLocation, localAdminLocation, VoterInformation.useMetric());
+            if (localAdministrationBody != null) {
+                CivicApiAddress localPhysicalAddress = getLocationForApiAddress(localAdministrationBody.getPhysicalAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+                CivicApiAddress localCorrespondenceAddress = getLocationForApiAddress(localAdministrationBody.getCorrespondenceAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
 
-                localAdminAddress.latitude = localAdminLocation.lat;
-                localAdminAddress.longitude = localAdminLocation.lng;
-                localAdminAddress.distance = localAdminDistance;
+                localAdministrationBody.setPhysicalAddress(localPhysicalAddress);
+                localAdministrationBody.setCorrespondenceAddress(localCorrespondenceAddress);
+
+                VoterInformation.setLocalAdministrationBody(localAdministrationBody);
+            }
+            
+            //Setup State Administration Body
+            ElectionAdministrationBody stateAdministrationBody = voterInfoResponse.getStateAdmin();
+
+            if (stateAdministrationBody != null) {
+                CivicApiAddress statePhysicalAddress = getLocationForApiAddress(stateAdministrationBody.getPhysicalAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+                CivicApiAddress stateCorrespondenceAddress = getLocationForApiAddress(stateAdministrationBody.getCorrespondenceAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+
+                stateAdministrationBody.setPhysicalAddress(statePhysicalAddress);
+                stateAdministrationBody.setCorrespondenceAddress(stateCorrespondenceAddress);
+
+                VoterInformation.setStateAdministrationBody(stateAdministrationBody);
             }
 
+            //Setup Home address
             CivicApiAddress homeAddress = voterInfoResponse.normalizedInput;
             homeAddress.latitude = homeLocation.lat;
             homeAddress.longitude = homeLocation.lng;
 
-            VoterInformation.setStateAdminAddress(stateAdminAddress);
-            VoterInformation.setLocalAdminAddress(localAdminAddress);
             VoterInformation.setHomeAddress(homeAddress);
 
+            //Polling Locations
             VoterInformation.setPollingLocations(geocodedPollingLocations, geocodedEarlyVotingLocations, geocodedDropBoxLocations);
         }
 
         return geocodeVoterInfoRequest;
+    }
+
+    /**
+     * Helper Function to Geocode a Civic Api Address and update its latitude, longitude and distance from Home
+     *
+     * @param civicApiAddress
+     * @param client
+     * @param gson
+     * @param key
+     * @param homeLocation
+     * @return
+     */
+    private CivicApiAddress getLocationForApiAddress(CivicApiAddress civicApiAddress, OkHttpClient client, Gson gson, String key, Location homeLocation) {
+        if (civicApiAddress != null) {
+            Location location = getGeocodedLocation(client, gson, key, civicApiAddress);
+
+            float localAdminDistance = getDistance(homeLocation, location, VoterInformation.useMetric());
+
+            civicApiAddress.latitude = location.lat;
+            civicApiAddress.longitude = location.lng;
+            civicApiAddress.distance = localAdminDistance;
+        }
+
+        return civicApiAddress;
     }
 
     private ArrayList<PollingLocation> getGeocodedLocationForList(OkHttpClient client, Gson gson, String geocodeKey, ArrayList<PollingLocation> locations, Location homeLocation, boolean useMetric) {

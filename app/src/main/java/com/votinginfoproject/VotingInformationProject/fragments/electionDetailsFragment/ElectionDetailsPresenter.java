@@ -3,7 +3,6 @@ package com.votinginfoproject.VotingInformationProject.fragments.electionDetails
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
-import com.votinginfoproject.VotingInformationProject.models.VoterInfo;
 
 /**
  * Created by max on 4/15/16.

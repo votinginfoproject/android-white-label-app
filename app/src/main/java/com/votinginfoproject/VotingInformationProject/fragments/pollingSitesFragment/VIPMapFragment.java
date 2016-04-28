@@ -177,9 +177,14 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             thisLocation = homeLocation;
         } else if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE)) {
             //TODO rework this
-            thisLocation = VoterInformation.getStateAdminAddress().getLocation();
+            if (VoterInformation.getStateAdministrationBody() != null) {
+                thisLocation = VoterInformation.getStateAdministrationBody().getPhysicalAddress().getLocation();
+            }
+
         } else if (locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            thisLocation = VoterInformation.getLocalAdminAddress().getLocation();
+            if (VoterInformation.getLocalAdministrationBody() != null) {
+                thisLocation = VoterInformation.getLocalAdministrationBody().getPhysicalAddress().getLocation();
+            }
         } else {
             Log.d(TAG, "Have location ID: " + locationId);
 

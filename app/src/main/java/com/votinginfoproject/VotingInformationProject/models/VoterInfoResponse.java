@@ -214,15 +214,15 @@ public class VoterInfoResponse implements RequestType {
      * @return state election administration body (or null if there is none)
      */
     public ElectionAdministrationBody getStateAdmin() {
-        if (state == null) {
-            Log.d(TAG + ":getStateAdmin", "there is no state!");
-
-            return null;
-        } else {
+        if (state != null && state.get(0).electionAdministrationBody != null) {
             Log.d(TAG + ":getStateAdmin", "state is: " + state.size());
 
             return state.get(0).electionAdministrationBody;
         }
+
+        Log.d(TAG + ":getStateAdmin", "there is no state or address!");
+
+        return null;
     }
 
     /**
@@ -232,14 +232,12 @@ public class VoterInfoResponse implements RequestType {
      * @return local election administration body (or null if not found)
      */
     public ElectionAdministrationBody getLocalAdmin() {
-        if (state == null) {
-            return null;
-        }
+        if (state != null) {
+            State thisState = state.get(0);
 
-        State thisState = state.get(0);
-
-        if (thisState != null && thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null) {
-            return thisState.local_jurisdiction.electionAdministrationBody;
+            if (thisState != null && thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null) {
+                return thisState.local_jurisdiction.electionAdministrationBody;
+            }
         }
 
         return null;
@@ -261,7 +259,7 @@ public class VoterInfoResponse implements RequestType {
         }
 
         if (admin != null) {
-            return admin.physicalAddress;
+            return admin.getPhysicalAddress();
         }
 
         return null;
