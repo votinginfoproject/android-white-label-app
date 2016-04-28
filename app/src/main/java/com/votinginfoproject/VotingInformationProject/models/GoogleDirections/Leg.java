@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models.GoogleDirections;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Leg implements Parcelable {
-    private static final Creator<Leg> CREATOR = new Creator<Leg>() {
+    public static final Creator<Leg> CREATOR = new Creator<Leg>() {
         @Override
         public Leg createFromParcel(Parcel source) {
             return new Leg(source);
@@ -21,6 +22,18 @@ public class Leg implements Parcelable {
         @Override
         public Leg[] newArray(int size) {
             return new Leg[size];
+        }
+    };
+
+    public static final Creator<Integer> INTEGER_CREATOR = new Creator<Integer>() {
+        @Override
+        public Integer createFromParcel(Parcel source) {
+            return source.readInt();
+        }
+
+        @Override
+        public Integer[] newArray(int size) {
+            return new Integer[size];
         }
     };
 
@@ -35,7 +48,7 @@ public class Leg implements Parcelable {
 
     private Leg(Parcel parcel) {
         steps = new ArrayList<>();
-        parcel.readList(steps, Step.class.getClassLoader());
+        parcel.readTypedList(steps, Step.CREATOR);
 
         via_waypoint = new ArrayList<>();
         parcel.readList(via_waypoint, Integer.class.getClassLoader());
@@ -55,13 +68,13 @@ public class Leg implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(steps);
+        dest.writeTypedList(steps);
         dest.writeList(via_waypoint);
-        dest.writeParcelable(distance, flags);
-        dest.writeParcelable(duration, flags);
+        dest.writeParcelable(distance, 0);
+        dest.writeParcelable(duration, 0);
         dest.writeString(start_address);
         dest.writeString(end_address);
-        dest.writeParcelable(start_location, flags);
-        dest.writeParcelable(end_location, flags);
+        dest.writeParcelable(start_location, 0);
+        dest.writeParcelable(end_location, 0);
     }
 }

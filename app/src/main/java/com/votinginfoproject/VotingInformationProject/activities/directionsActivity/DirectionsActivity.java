@@ -53,6 +53,8 @@ import java.util.Map;
 public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements DirectionsView, TabLayout.OnTabSelectedListener, OnMapReadyCallback {
     private static final String TAG = DirectionsActivity.class.getSimpleName();
 
+    private static final String KEY_MAP_STATE = "Map_state";
+
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
     private static int fade_duration = 250;
@@ -68,8 +70,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     private MapView mMapView;
     private GoogleMap mMap;
 
-    public DirectionsPresenter mPresenter;
-
     private int mMenuLayoutID = R.menu.menu_directions_list;
 
     @Override
@@ -84,10 +84,12 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             pollingLocation = extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
         }
 
-        mPresenter = new DirectionsPresenterImpl(this, pollingLocation);
-        mPresenter.setView(this);
+        if (getPresenter() == null) {
+            setPresenter(new DirectionsPresenterImpl(this, pollingLocation));
+        }
+        getPresenter().onCreate(savedInstanceState);
 
-        mAdapter = new DirectionsViewPagerAdapter(getFragmentManager(), mPresenter);
+        mAdapter = new DirectionsViewPagerAdapter(getFragmentManager(), getPresenter());
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(mAdapter);
@@ -99,7 +101,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
             @Override
             public void onPageSelected(int position) {
-                mPresenter.swipedToDirectionsListAtIndex(position);
+                getPresenter().swipedToDirectionsListAtIndex(position);
             }
 
             @Override
@@ -109,8 +111,13 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         });
 
         mMapView = (MapView) findViewById(R.id.map_view);
-        mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+
+        Bundle mapState = null;
+        if (savedInstanceState != null) {
+            mapState = savedInstanceState.getBundle(KEY_MAP_STATE);
+        }
+        mMapView.onCreate(mapState);
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -126,6 +133,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+        getPresenter().setView(this);
     }
 
     @Override
@@ -142,8 +151,11 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Bundle mapState = new Bundle();
+        mMapView.onSaveInstanceState(mapState);
+        outState.putBundle(KEY_MAP_STATE, mapState);
+
         super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
     }
 
     @Override
@@ -172,10 +184,10 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 onBackPressed();
                 return true;
             case R.id.action_open_in_maps:
-                mPresenter.externalMapButtonPressed();
+                getPresenter().externalMapButtonPressed();
                 return true;
             case R.id.action_map_toggle:
-                mPresenter.mapButtonPressed();
+                getPresenter().mapButtonPressed();
                 return true;
         }
 
@@ -184,7 +196,9 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void refreshViewData() {
-        mAdapter.notifyDataSetChanged();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -258,6 +272,9 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void showRouteOnMap(Route route, @DrawableRes int destinationMarkerRes) {
+        if (mMap == null) {
+            return;
+        }
         mMap.clear();
 
         PolylineOptions polylineOptions = new PolylineOptions()
@@ -293,7 +310,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 .include(southwestLatLng)
                 .build();
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, mMapView.getWidth() / 4);
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
         mMap.animateCamera(update);
 
         int numPoints = polylineOptions.getPoints().size();
@@ -335,7 +352,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
             int tabIndex = mTabLayout.getSelectedTabPosition();
             if (tabIndex >= 0) {
-                mPresenter.tabSelectedAtIndex(tabIndex);
+                getPresenter().tabSelectedAtIndex(tabIndex);
             }
         }
     }

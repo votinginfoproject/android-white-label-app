@@ -10,7 +10,7 @@ public class Location implements Parcelable {
     /**
      * Static field used to regenerate object, individually or as arrays
      */
-    public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {
+    public static final Creator<Location> CREATOR = new Creator<Location>() {
         public Location createFromParcel(Parcel pc) {
             return new Location(pc);
         }

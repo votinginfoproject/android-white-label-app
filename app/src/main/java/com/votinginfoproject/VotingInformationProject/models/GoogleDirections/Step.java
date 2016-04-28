@@ -8,10 +8,10 @@ import android.os.Parcelable;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Step implements Parcelable {
-    private static final Creator<Step> CREATOR = new Creator<Step>() {
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
         @Override
         public Step createFromParcel(Parcel source) {
-            return null;
+            return new Step(source);
         }
 
         @Override
@@ -48,12 +48,12 @@ public class Step implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(travel_mode);
-        dest.writeParcelable(start_location, flags);
-        dest.writeParcelable(end_location, flags);
-        dest.writeParcelable(polyline, flags);
-        dest.writeParcelable(duration, flags);
+        dest.writeParcelable(start_location, 0);
+        dest.writeParcelable(end_location, 0);
+        dest.writeParcelable(polyline, 0);
+        dest.writeParcelable(duration, 0);
         dest.writeString(html_instructions);
         dest.writeString(maneuver);
-        dest.writeParcelable(distance, flags);
+        dest.writeParcelable(distance, 0);
     }
 }

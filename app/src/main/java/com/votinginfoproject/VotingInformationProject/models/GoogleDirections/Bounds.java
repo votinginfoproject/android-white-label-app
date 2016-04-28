@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Bounds implements Parcelable {
-    private static final Creator<Bounds> CREATOR = new Creator<Bounds>() {
+    public static final Creator<Bounds> CREATOR = new Creator<Bounds>() {
         @Override
         public Bounds createFromParcel(Parcel source) {
             return new Bounds(source);

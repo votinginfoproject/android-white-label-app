@@ -9,7 +9,7 @@ import android.os.Parcelable;
 public class Polyline implements Parcelable {
     public String points;
 
-    public Creator<Polyline> CREATOR = new Creator<Polyline>() {
+    public static final Creator<Polyline> CREATOR = new Creator<Polyline>() {
         @Override
         public Polyline createFromParcel(Parcel source) {
             return new Polyline(source);

@@ -7,10 +7,10 @@ import android.os.Parcelable;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Distance implements Parcelable {
-    private static final Creator<Distance> CREATOR = new Creator<Distance>() {
+    public static final Creator<Distance> CREATOR = new Creator<Distance>() {
         @Override
         public Distance createFromParcel(Parcel source) {
-            return null;
+            return new Distance(source);
         }
 
         @Override

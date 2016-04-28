@@ -7,10 +7,10 @@ import android.os.Parcelable;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Duration implements Parcelable {
-    private static final Creator<Duration> CREATOR = new Creator<Duration>() {
+    public static final Creator<Duration> CREATOR = new Creator<Duration>() {
         @Override
         public Duration createFromParcel(Parcel source) {
-            return null;
+            return new Duration(source);
         }
 
         @Override

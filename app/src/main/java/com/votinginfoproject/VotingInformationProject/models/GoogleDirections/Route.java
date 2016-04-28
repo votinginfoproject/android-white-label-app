@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models.GoogleDirections;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Route implements Parcelable {
-    private static final Creator<Route> CREATOR = new Creator<Route>() {
+    public static final Creator<Route> CREATOR = new Creator<Route>() {
         @Override
         public Route createFromParcel(Parcel source) {
             return new Route(source);
@@ -43,7 +44,7 @@ public class Route implements Parcelable {
         parcel.readList(waypoint_order, Integer.class.getClassLoader());
 
         legs = new ArrayList<>();
-        parcel.readList(legs, Leg.class.getClassLoader());
+        parcel.readTypedList(legs, Leg.CREATOR);
     }
 
     @Override
@@ -54,11 +55,11 @@ public class Route implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(summary);
-        dest.writeParcelable(bounds, flags);
+        dest.writeParcelable(bounds, 0);
         dest.writeString(copyrights);
-        dest.writeParcelable(overview_polyline, flags);
-        dest.writeList(warnings);
+        dest.writeParcelable(overview_polyline, 0);
+        dest.writeStringList(warnings);
         dest.writeList(waypoint_order);
-        dest.writeList(legs);
+        dest.writeTypedList(legs);
     }
 }

@@ -44,8 +44,11 @@ public class DirectionsListFragment extends Fragment implements DirectionsListVi
         Bundle args = getArguments();
         Route route = args.getParcelable(ARG_ROUTE);
 
-        mPresenter = new DirectionsListViewPresenterImpl(route);
-        mPresenter.setView(this);
+        if (mPresenter == null) {
+            mPresenter = new DirectionsListViewPresenterImpl(route);
+            mPresenter.setView(this);
+        }
+        mPresenter.onCreate(savedInstanceState);
 
         mAdapter = new DirectionsRecyclerViewAdapter(mPresenter);
 

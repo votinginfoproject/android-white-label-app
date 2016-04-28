@@ -23,10 +23,18 @@ public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter
         for (Leg leg : route.legs) {
             mSteps.addAll(leg.steps);
         }
+        Log.e(TAG, "Added " + mSteps.size() + "steps!");
     }
 
     @Override
     public void onCreate(Bundle savedState) {
+        //Required empty override method
+    }
+
+    @Override
+    public void onAttachView(DirectionsListView view) {
+        super.onAttachView(view);
+
         if (getView() != null) {
             getView().refreshViewData();
         }

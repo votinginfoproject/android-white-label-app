@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.activities.directionsActi
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
@@ -31,7 +32,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private String[] mAllTransitModes = TransitModes.ALL;
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
-    private List<String> mLoadingTransitModes = new ArrayList<>();
+    //private List<String> mLoadingTransitModes = new ArrayList<>();
+    private HashMap<String, DirectionsInteractor> mTransitModesToInteractors = new HashMap<>();
 
     private int mIndexOfPresentedRoute;
     private boolean mIsPresentingMap;
@@ -39,23 +41,49 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     public DirectionsPresenterImpl(Context context, PollingLocation pollingLocation) {
         mContext = context;
         mPollingLocation = pollingLocation;
-
-        enqueueRequests();
     }
 
     @Override
     public void onCreate(Bundle savedState) {
-        refreshViewData();
+        //mLoadingTransitModes.clear();
+
+        for (String transitMode : mAllTransitModes) {
+            if (savedState != null && savedState.containsKey(transitMode)) {
+                transitModesToRoutes.put(transitMode, (Route) savedState.getParcelable(transitMode));
+            } else {
+                enqueueRequest(transitMode);
+            }
+        }
+
+        if (getView() != null) {
+            refreshViewData();
+        }
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-        //Required empty override method
+        for (String transitMode: getTransitModes()) {
+            state.putParcelable(transitMode, getRouteForTransitMode(transitMode));
+        }
     }
 
     @Override
     public void onDestroy() {
+        for (DirectionsInteractor interactor : mTransitModesToInteractors.values()) {
+            interactor.cancel(true);
+        }
+
         setView(null);
+    }
+
+    @Override
+    public void onAttachView(DirectionsView view) {
+        super.onAttachView(view);
+
+        if (getView() != null) {
+            getView().toggleLoading(isLoading());
+            refreshViewData();
+        }
     }
 
     @Override
@@ -78,7 +106,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public boolean isLoading() {
-        return mLoadingTransitModes.size() != 0;
+        return !mTransitModesToInteractors.isEmpty();
+        //return mLoadingTransitModes.size() != 0;
     }
 
     @Override
@@ -102,7 +131,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     public void directionsResponse(DirectionsResponse response) {
         String transitMode = response.mode;
 
-        mLoadingTransitModes.remove(transitMode);
+        mTransitModesToInteractors.remove(transitMode);
 
         if (response.routes.size() > 0) {
             transitModesToRoutes.put(transitMode, response.routes.get(0));
@@ -133,6 +162,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private void refreshViewData() {
         getView().refreshViewData();
+        getView().toggleLoading(isLoading());
 
         TabData[] tabs = getTabDataForTransitModes(getTransitModes());
         getView().setTabs(tabs);
@@ -164,22 +194,29 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         return null;
     }
 
-    private void enqueueRequests() {
-        mLoadingTransitModes.clear();
+    private void enqueueAllRequests() {
+        Log.e(TAG, "enqueuing requests");
+        //mLoadingTransitModes.clear();
 
+        for (String transitMode : mAllTransitModes) {
+            enqueueRequest(transitMode);
+        }
+    }
+
+    private void enqueueRequest(String transitMode) {
         Location origin = VoterInformation.getLastKnownLocation();
 
         if (origin != null && mPollingLocation.location != null) {
             String directionsKey = mContext.getString(R.string.google_api_browser_key);
 
-            for (String transitMode : mAllTransitModes) {
-                mLoadingTransitModes.add(transitMode);
+            //mLoadingTransitModes.add(transitMode);
 
-                DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
+            DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
 
-                DirectionsInteractor interactor = new DirectionsInteractor();
-                interactor.enqueueRequest(request, this);
-            }
+            DirectionsInteractor interactor = new DirectionsInteractor();
+            interactor.enqueueRequest(request, this);
+
+            mTransitModesToInteractors.put(transitMode, interactor);
         }
     }
 
