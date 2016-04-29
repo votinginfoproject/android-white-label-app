@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
@@ -19,6 +20,7 @@ public class Contest implements Parcelable {
             return new Contest[size];
         }
     };
+
     public String id;
     public String type;
     public String primaryParty;

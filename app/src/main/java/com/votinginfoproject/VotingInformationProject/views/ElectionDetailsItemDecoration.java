@@ -11,7 +11,7 @@ import android.view.View;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodySubtitleViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTitleViewHolder;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.HeaderViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 /**
@@ -19,14 +19,11 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportEr
  */
 public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
 
+    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
-
-    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
-
-    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
-
     private Drawable mDivider;
 
     private int mOrientation;
@@ -99,7 +96,7 @@ public class ElectionDetailsItemDecoration extends RecyclerView.ItemDecoration {
                 mDivider.setBounds(left + subtitleViewHolder.getLeftDividerMargin(), top, right, bottom);
                 mDivider.draw(c);
 
-            } else if ((viewHolder instanceof ElectionInformationViewHolder) ||
+            } else if ((viewHolder instanceof HeaderViewHolder) ||
                     (viewHolder instanceof ElectionBodyTitleViewHolder) ||
                     (viewHolder instanceof ReportErrorViewHolder)) {
 

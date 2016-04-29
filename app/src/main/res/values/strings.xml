@@ -66,8 +66,9 @@
     <string name="contest.toolbar">Contest</string>
 
     <string name="contest.header.details">Contest Details</string>
-    <string name="contest.label.type">Type</string>
-    <string name="contest.label.office">Office</string>
+    <string name="contest.label.type">Contest Type</string>
+    <string name="contest.label.office">District Name</string>
+    <string name="contest.label.special">Special</string>
     <string name="contest.label.number_elected">Number Elected</string>
     <string name="contest.label.number_voting_for">Number Voting For</string>
     <string name="contest.label.ballot_placement">Ballot Placement</string>

@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -111,10 +112,23 @@ public class ContestInformationListFragment extends Fragment implements BottomNa
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof ContestInformationListener) {
             mListener = (ContestInformationListener) context;
         } else {
             throw new RuntimeException(context.toString()
+                    + " must implement ContestInformationListener");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof ContestInformationListener) {
+            mListener = (ContestInformationListener) activity;
+        } else {
+            throw new RuntimeException(activity.toString()
                     + " must implement ContestInformationListener");
         }
     }

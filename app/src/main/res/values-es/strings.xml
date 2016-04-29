@@ -64,6 +64,7 @@
     <string name="contest.toolbar">Competencia</string>
     <string name="contest.header.details">Detalles de la competencia</string>
     <string name="contest.label.type">Tipo</string>
+    <string name="contest.label.special">Especial</string>
     <string name="contest.label.office">Oficina</string>
     <string name="contest.label.number_elected">Cantidad elegida</string>
     <string name="contest.label.number_voting_for">Cantidad  de votos para</string>

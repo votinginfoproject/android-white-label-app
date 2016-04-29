@@ -22,7 +22,6 @@ public class ContestsAdapter extends ArrayAdapter<Contest> {
     Comparator<Contest> contestComparator;
     String electionName;
 
-
     // View lookup cache.  Pattern from here:
     // https://github.com/thecodepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
     private static class ViewHolder {

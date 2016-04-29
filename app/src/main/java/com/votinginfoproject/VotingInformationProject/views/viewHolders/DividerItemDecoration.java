@@ -84,7 +84,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
             //If the child is the header show full length
             //If the next child is the footer show full length as well
-            if (viewHolder instanceof ElectionInformationViewHolder) {
+            if (viewHolder instanceof HeaderViewHolder) {
                 leftBounds = 0;
             } else if (viewHolder instanceof ReportErrorViewHolder) {
                 leftBounds = right;

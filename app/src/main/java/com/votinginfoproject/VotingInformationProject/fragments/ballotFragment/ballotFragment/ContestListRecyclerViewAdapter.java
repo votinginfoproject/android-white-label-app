@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ContestViewHolder;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.HeaderViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -31,7 +31,7 @@ public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_election_header, parent, false);
 
-                return new ElectionInformationViewHolder(view);
+                return new HeaderViewHolder(view);
             case ContestListPresenter.CONTEST_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_blue_two_line, parent, false);
 
@@ -63,9 +63,9 @@ public class ContestListRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     mPresenter.onContestItemClicked(contest);
                 }
             });
-        } else if (holder instanceof ElectionInformationViewHolder) {
-            ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
-            electionInformationViewHolder.setElection(mPresenter.getElection());
+        } else if (holder instanceof HeaderViewHolder && mPresenter.getElection() != null) {
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+            headerViewHolder.setData(mPresenter.getElection().getName(), mPresenter.getElection().getFormattedDate());
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
             errorViewHolder.setOnClickListener(new View.OnClickListener() {

@@ -14,7 +14,7 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.Election
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodySubtitleViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTextViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionBodyTitleViewHolder;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.HeaderViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             case ELECTION_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_election_header, parent, false);
-                viewHolder = new ElectionInformationViewHolder(view);
+                viewHolder = new HeaderViewHolder(view);
                 break;
             case REPORT_ERROR_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext())
@@ -98,10 +98,13 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof ElectionInformationViewHolder) {
-            ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
-            electionInformationViewHolder.setElection(mElection);
+        if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder electionInformationViewHolder = (HeaderViewHolder) holder;
+            Election election = mPresenter.getElection();
 
+            if (election != null) {
+                electionInformationViewHolder.setData(election.getName(), election.getFormattedDate());
+            }
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
             errorViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

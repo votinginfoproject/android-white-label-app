@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
@@ -18,6 +19,8 @@ import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInf
  * Created by marcvandehey on 4/6/16.
  */
 public class VoterInformationPresenterImpl extends VoterInformationPresenter {
+    private static final String TAG = VoterInformationPresenterImpl.class.getSimpleName();
+
     private final int POLLS_TAB = 0x0;
     private final int BALLOT_TAB = 0x1;
     private final int DETAILS_TAB = 0x2;
@@ -80,7 +83,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     @Override
     void candidateClicked(Candidate candidate) {
-        //TODO present candidate info
+        Log.v(TAG, "Candidate Clicked: " + candidate.name);
     }
 
     @Override
@@ -114,7 +117,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     @Override
     void listButtonClicked(@LayoutRes int currentSort) {
-        //Kill all back navigation since we are going to the default view
+        //Remove all back navigation since we are going to the default view
         getView().presentParentLevelFragment(PollingSitesListFragment.newInstance(currentSort));
     }
 }

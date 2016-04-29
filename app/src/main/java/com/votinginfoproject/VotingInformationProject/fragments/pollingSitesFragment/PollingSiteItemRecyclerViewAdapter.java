@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.ElectionInformationViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.HeaderViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.PollingSiteViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
@@ -48,7 +48,7 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             case ELECTION_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_election_header, parent, false);
-                viewHolder = new ElectionInformationViewHolder(view);
+                viewHolder = new HeaderViewHolder(view);
                 break;
             case REPORT_ERROR_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext())
@@ -98,9 +98,9 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 }
             });
 
-        } else if (holder instanceof ElectionInformationViewHolder) {
-            ElectionInformationViewHolder electionInformationViewHolder = (ElectionInformationViewHolder) holder;
-            electionInformationViewHolder.setElection(mElection);
+        } else if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+            headerViewHolder.setData(mElection.getName(), mElection.getFormattedDate());
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
             errorViewHolder.setOnClickListener(new View.OnClickListener() {
