@@ -3,6 +3,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -68,8 +69,6 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     String encodedPolyline;
     LatLngBounds polylineBounds;
     boolean haveElectionAdminBody;
-    private PollingSitesListFragment.PollingSitesListener mListener;
-    private PollingSitesPresenter mPresenter;
 
     private PollingSitesListFragment.PollingSitesListener mListener;
 

@@ -4,19 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,34 +25,34 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.geometry.Bounds;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
-import com.votinginfoproject.VotingInformationProject.constants.ExtraConstants;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
-import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements DirectionsView, TabLayout.OnTabSelectedListener, OnMapReadyCallback {
+public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements DirectionsView,
+        TabLayout.OnTabSelectedListener,
+        OnMapReadyCallback,
+        Toolbar.OnMenuItemClickListener {
     private static final String TAG = DirectionsActivity.class.getSimpleName();
+
+    public static final String ARG_LOCATION_DESTINATION = "Location_destination";
 
     private static final String KEY_MAP_STATE = "Map_state";
 
     private static int selected_alpha = 255;
     private static int unselected_alpha = (int) (255 * 0.6);
     private static int fade_duration = 250;
+
+    private Toolbar mToolbar;
 
     private TabLayout mTabLayout;
 
@@ -73,8 +67,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     private MapView mMapView;
     private GoogleMap mMap;
 
-    private int mMenuLayoutID = R.menu.menu_directions_list;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +76,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         PollingLocation pollingLocation = null;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            pollingLocation = extras.getParcelable(ExtraConstants.LOCATION_DESTINATION);
+            pollingLocation = extras.getParcelable(ARG_LOCATION_DESTINATION);
         }
 
         if (getPresenter() == null) {
@@ -139,13 +131,17 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        toolbar.setTitle(R.string.title_activity_directions);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.title_activity_directions);
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        mToolbar.inflateMenu(R.menu.menu_directions_list);
+        mToolbar.setOnMenuItemClickListener(this);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         getPresenter().setView(this);
     }
@@ -184,14 +180,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(mMenuLayoutID, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -203,8 +192,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 getPresenter().mapButtonPressed();
                 return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
@@ -287,9 +275,9 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                     }
                 });
 
-        mMenuLayoutID = displaying ? R.menu.menu_directions_map : R.menu.menu_directions_list;
-
-        invalidateOptionsMenu();
+        int menuLayoutID = displaying ? R.menu.menu_directions_map : R.menu.menu_directions_list;
+        mToolbar.getMenu().clear();
+        mToolbar.inflateMenu(menuLayoutID);
     }
 
     @Override

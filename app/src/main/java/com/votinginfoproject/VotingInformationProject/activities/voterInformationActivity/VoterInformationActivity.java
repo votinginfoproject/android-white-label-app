@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -20,8 +21,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
-import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
@@ -185,11 +186,9 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     //Polling Site List Interface
     @Override
-    public void pollingSiteClicked(PollingLocation location) {
-        Log.v(TAG, "Polling location Clicked: ");
-
+    public void navigateToDirections(PollingLocation location) {
         Intent intent = new Intent(this, DirectionsActivity.class);
-        intent.putExtra(ExtraConstants.LOCATION_DESTINATION, location);
+        intent.putExtra(DirectionsActivity.ARG_LOCATION_DESTINATION, location);
         startActivity(intent);
     }
 
