@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -74,6 +76,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     private ProgressBar mProgressBar;
 
     private View mErrorView;
+    private View mEnableLocationView;
 
     private MapView mMapView;
     private GoogleMap mMap;
@@ -132,12 +135,12 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mLoadingView = findViewById(R.id.loading_view);
+        mLoadingView = findViewById(R.id.loading);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mProgressBar.animate();
 
-        mErrorView = findViewById(R.id.error_view);
+        mErrorView = findViewById(R.id.connection_error);
 
         Button retryButton = (Button) mErrorView.findViewById(R.id.retry_button);
         retryButton.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +149,17 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 getPresenter().retryButtonPressed();
             }
         });
+
+        mEnableLocationView = findViewById(R.id.enable_location);
+
+        Button locationSettingsButton = (Button) mEnableLocationView.findViewById(R.id.location_settings_button);
+        locationSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPresenter().launchSettingsButtonPressed();
+            }
+        });
+
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.title_activity_directions);
@@ -235,6 +249,11 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         if (mViewPager != null) {
             mViewPager.setCurrentItem(index);
         }
+    }
+
+    @Override
+    public void navigateToAppSettings() {
+        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
     }
 
     @Override
@@ -360,7 +379,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public void toggleLoading(boolean loading) {
+    public void toggleLoadingView(boolean loading) {
         float toAlpha = loading ? 1f : 0f;
 
         if (loading) {
@@ -373,22 +392,31 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public void toggleError(final boolean error) {
-        float toAlpha = error ? 1f : 0f;
+    public void toggleEnableLocationView(boolean showing) {
+        fadeView(mEnableLocationView, showing);
+    }
 
-        if (error) {
-            mErrorView.setVisibility(View.VISIBLE);
+    @Override
+    public void toggleConnectionErrorView(final boolean error) {
+        fadeView(mErrorView, error);
+    }
+
+    private void fadeView(final View view, final boolean showing) {
+        float toAlpha = showing ? 1f : 0f;
+
+        if (showing) {
+            view.setVisibility(View.VISIBLE);
         }
 
-        mErrorView.animate()
+        view.animate()
                 .alpha(toAlpha)
                 .setDuration(fade_duration)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        if (!error) {
-                            mErrorView.setVisibility(View.GONE);
+                        if (!showing) {
+                            view.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -423,7 +451,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+        if (getPresenter().locationServicesEnabled()) {
             mMap.setMyLocationEnabled(true);
         }
         getPresenter().onMapReady();
@@ -453,6 +481,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             formattedLocation.lng = (float) lastLocation.getLongitude();
 
             VoterInformation.setLastKnownLocation(formattedLocation);
+
+            getPresenter().lastKnownLocationUpdated();
         }
     }
 

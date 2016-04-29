@@ -23,9 +23,13 @@ public interface DirectionsView {
 
     void toggleMapDisplaying(boolean displaying);
 
-    void toggleLoading(boolean loading);
+    void toggleLoadingView(boolean loading);
 
-    void toggleError(boolean error);
+    void toggleConnectionErrorView(boolean error);
+
+    void toggleEnableLocationView(boolean showing);
 
     void startPollingLocation();
+
+    void navigateToAppSettings();
 }

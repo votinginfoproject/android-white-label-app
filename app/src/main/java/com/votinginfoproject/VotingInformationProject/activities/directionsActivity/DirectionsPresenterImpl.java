@@ -1,9 +1,11 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
@@ -16,8 +18,11 @@ import com.votinginfoproject.VotingInformationProject.models.api.requests.Direct
 import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -34,6 +39,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private String[] mAllTransitModes = TransitModes.ALL;
     private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
 
+    private List<String> mQueuedTransitModes = new ArrayList<>();
     private HashMap<String, DirectionsInteractor> mTransitModesToInteractors = new HashMap<>();
 
     private int mIndexOfPresentedRoute;
@@ -47,13 +53,16 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onCreate(Bundle savedState) {
-
         for (String transitMode : mAllTransitModes) {
             if (savedState != null && savedState.containsKey(transitMode)) {
                 transitModesToRoutes.put(transitMode, (Route) savedState.getParcelable(transitMode));
             } else {
-                enqueueRequest(transitMode);
+                mQueuedTransitModes.add(transitMode);
             }
+        }
+
+        if (!mUsingLastKnownLocation) {
+            tryEnqueueRequestsFromOrigin();
         }
 
         if (getView() != null) {
@@ -83,8 +92,19 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         super.onAttachView(view);
 
         if (getView() != null) {
-            getView().toggleLoading(isLoading());
+            if (mUsingLastKnownLocation && !locationServicesEnabled()) {
+                getView().toggleEnableLocationView(true);
+            }
+
+            getView().toggleLoadingView(isLoading());
             refreshViewData();
+        }
+    }
+
+    @Override
+    public void lastKnownLocationUpdated() {
+        if (mUsingLastKnownLocation) {
+            requestAllTransitModes();
         }
     }
 
@@ -167,12 +187,16 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     }
 
     @Override
+    public void launchSettingsButtonPressed() {
+        getView().navigateToAppSettings();
+    }
+
+    @Override
     public void retryButtonPressed() {
-        for (String transitMode : mAllTransitModes) {
-            enqueueRequest(transitMode);
-        }
-        getView().toggleError(false);
-        getView().toggleLoading(true);
+        requestAllTransitModes();
+
+        getView().toggleConnectionErrorView(false);
+        getView().toggleLoadingView(true);
     }
 
     @Override
@@ -180,15 +204,27 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         updateViewMap();
     }
 
+    @Override
+    public boolean locationServicesEnabled() {
+        return ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestAllTransitModes() {
+        mQueuedTransitModes.clear();
+        mQueuedTransitModes.addAll(Arrays.asList(mAllTransitModes));
+
+        tryEnqueueRequestsFromOrigin();
+    }
+
     private void showConnectionError() {
         if (getView() != null) {
-            getView().toggleError(true);
+            getView().toggleConnectionErrorView(true);
         }
     }
 
     private void refreshViewData() {
         getView().refreshViewData();
-        getView().toggleLoading(isLoading());
+        getView().toggleLoadingView(isLoading());
 
         TabData[] tabs = getTabDataForTransitModes(getTransitModes());
         getView().setTabs(tabs);
@@ -220,17 +256,29 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         return null;
     }
 
-    private void enqueueRequest(String transitMode) {
-        Location origin;
+    private void tryEnqueueRequestsFromOrigin() {
+        Location origin = null;
 
         if (mUsingLastKnownLocation) {
-            origin = VoterInformation.getLastKnownLocation();
+            if (locationServicesEnabled()) {
+                origin = VoterInformation.getLastKnownLocation();
+            } else if (getView() != null){
+                getView().toggleEnableLocationView(true);
+            }
         } else {
             origin = new Location();
             origin.lat = (float) VoterInformation.getHomeAddress().getLocation().latitude;
             origin.lng = (float) VoterInformation.getHomeAddress().getLocation().longitude;
         }
 
+        if (origin != null) {
+            for (String transitMode : mQueuedTransitModes) {
+                enqueueRequest(transitMode, origin);
+            }
+        }
+    }
+
+    private void enqueueRequest(String transitMode, Location origin) {
         if (origin != null && mPollingLocation.location != null) {
             String directionsKey = mContext.getString(R.string.google_api_browser_key);
 
