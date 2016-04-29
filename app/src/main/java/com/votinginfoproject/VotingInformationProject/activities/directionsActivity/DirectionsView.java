@@ -26,4 +26,6 @@ public interface DirectionsView {
     void toggleLoading(boolean loading);
 
     void toggleError(boolean error);
+
+    void startPollingLocation();
 }

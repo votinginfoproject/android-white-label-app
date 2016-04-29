@@ -34,7 +34,7 @@ public class DirectionsRequest implements RequestType {
             @NonNull String originCoordinates,
             @NonNull String destinationCoordinates) {
 
-        this.travelMode = travelMode;
+        this.directionsKey = directionsKey;
         this.originCoordinates = originCoordinates;
         this.destinationCoordinates = destinationCoordinates;
         this.travelMode = travelMode;

@@ -28,6 +28,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private Context mContext;
 
+    private boolean mUsingLastKnownLocation;
     private PollingLocation mPollingLocation;
 
     private String[] mAllTransitModes = TransitModes.ALL;
@@ -38,9 +39,10 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     private int mIndexOfPresentedRoute;
     private boolean mIsPresentingMap;
 
-    public DirectionsPresenterImpl(Context context, PollingLocation pollingLocation) {
+    public DirectionsPresenterImpl(Context context, PollingLocation pollingLocation, boolean useLastKnownLocation) {
         mContext = context;
         mPollingLocation = pollingLocation;
+        mUsingLastKnownLocation = useLastKnownLocation;
     }
 
     @Override
@@ -219,7 +221,15 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     }
 
     private void enqueueRequest(String transitMode) {
-        Location origin = VoterInformation.getLastKnownLocation();
+        Location origin;
+
+        if (mUsingLastKnownLocation) {
+            origin = VoterInformation.getLastKnownLocation();
+        } else {
+            origin = new Location();
+            origin.lat = (float) VoterInformation.getHomeAddress().getLocation().latitude;
+            origin.lng = (float) VoterInformation.getHomeAddress().getLocation().longitude;
+        }
 
         if (origin != null && mPollingLocation.location != null) {
             String directionsKey = mContext.getString(R.string.google_api_browser_key);

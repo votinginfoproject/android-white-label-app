@@ -1,9 +1,12 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -186,9 +189,32 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     //Polling Site List Interface
     @Override
-    public void navigateToDirections(PollingLocation location) {
+    public void navigateToDirections(final PollingLocation location) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.activity_vip_tab_directions_origin_prompt);
+
+        builder.setItems(R.array.activity_vip_tab_directions_origin_options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        openDirectionsActivity(location, false);
+                        break;
+                    case 1:
+                        openDirectionsActivity(location, true);
+                        break;
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void openDirectionsActivity(PollingLocation location, boolean useLastKnownLocation) {
         Intent intent = new Intent(this, DirectionsActivity.class);
         intent.putExtra(DirectionsActivity.ARG_LOCATION_DESTINATION, location);
+        intent.putExtra(DirectionsActivity.ARG_USE_LAST_KNOWN_LOCATION, useLastKnownLocation);
         startActivity(intent);
     }
 

@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
@@ -7,15 +8,21 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,16 +42,20 @@ import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Ro
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Step;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.Locale;
 
 public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements DirectionsView,
         TabLayout.OnTabSelectedListener,
         OnMapReadyCallback,
-        Toolbar.OnMenuItemClickListener {
+        Toolbar.OnMenuItemClickListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = DirectionsActivity.class.getSimpleName();
 
     public static final String ARG_LOCATION_DESTINATION = "Location_destination";
+    public static final String ARG_USE_LAST_KNOWN_LOCATION = "Use_last_known_location";
 
     private static final String KEY_MAP_STATE = "Map_state";
 
@@ -67,6 +78,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     private MapView mMapView;
     private GoogleMap mMap;
 
+    private GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +87,16 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         setContentView(R.layout.activity_directions);
 
         PollingLocation pollingLocation = null;
+        boolean useLastKnownLocation = false;
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             pollingLocation = extras.getParcelable(ARG_LOCATION_DESTINATION);
+            useLastKnownLocation = extras.getBoolean(ARG_USE_LAST_KNOWN_LOCATION);
         }
 
         if (getPresenter() == null) {
-            setPresenter(new DirectionsPresenterImpl(this, pollingLocation));
+            setPresenter(new DirectionsPresenterImpl(this, pollingLocation, useLastKnownLocation));
         }
         getPresenter().onCreate(savedInstanceState);
 
@@ -144,6 +160,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         });
 
         getPresenter().setView(this);
+        startPollingLocation();
     }
 
     @Override
@@ -321,7 +338,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 .include(southwestLatLng)
                 .build();
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 100);
         mMap.animateCamera(update);
 
         int numPoints = polylineOptions.getPoints().size();
@@ -410,5 +427,42 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             mMap.setMyLocationEnabled(true);
         }
         getPresenter().onMapReady();
+    }
+
+    public void startPollingLocation() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Got location!!");
+            android.location.Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+            com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
+                    new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
+
+            formattedLocation.lat = (float) lastLocation.getLatitude();
+            formattedLocation.lng = (float) lastLocation.getLongitude();
+
+            VoterInformation.setLastKnownLocation(formattedLocation);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        //Not implemented
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        //Not implemented
     }
 }
