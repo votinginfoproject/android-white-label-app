@@ -28,7 +28,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     private int mCurrentTab = -1;
 
     public VoterInformationPresenterImpl() {
-
+        //Not implemented
     }
 
     @Override
@@ -58,7 +58,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     }
 
     // Voter Information Presenter Protocol
-
+    
     @Override
     public void backNavigationBarButtonClicked() {
         getView().navigateBack();

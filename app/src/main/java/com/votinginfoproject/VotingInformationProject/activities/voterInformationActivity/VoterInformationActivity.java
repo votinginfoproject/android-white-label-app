@@ -21,9 +21,11 @@ import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
@@ -36,7 +38,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         ElectionDetailsListFragment.ElectionDetailsListFragmentCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        ContestListFragment.ContestListListener {
+        ContestListFragment.ContestListListener,
+        ContestInformationListFragment.ContestInformationListener {
 
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
@@ -189,6 +192,11 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void contestClicked(Contest contest) {
         getPresenter().contestClicked(contest);
+    }
+
+    @Override
+    public void candidateClicked(Candidate candidate) {
+        getPresenter().candidateClicked(candidate);
     }
 
     @Override
