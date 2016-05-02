@@ -18,11 +18,9 @@ import com.votinginfoproject.VotingInformationProject.models.api.requests.Direct
 import com.votinginfoproject.VotingInformationProject.models.api.responses.DirectionsResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -105,6 +103,16 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     public void lastKnownLocationUpdated() {
         if (mUsingLastKnownLocation) {
             requestAllTransitModes();
+        }
+    }
+
+    @Override
+    public void onPermissionsUpdated() {
+        if (locationServicesEnabled()) {
+            getView().toggleEnableLocationView(false);
+            getView().attemptToGetLocation();
+        } else if (mUsingLastKnownLocation) {
+            getView().toggleEnableLocationView(true);
         }
     }
 
@@ -201,6 +209,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onMapReady() {
+        getView().attemptToGetLocation();
+
         updateViewMap();
     }
 

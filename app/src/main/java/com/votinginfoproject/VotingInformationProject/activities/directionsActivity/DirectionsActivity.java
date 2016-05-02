@@ -12,6 +12,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
@@ -174,7 +175,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         });
 
         getPresenter().setView(this);
-        startPollingLocation();
+        //startPollingLocation();
     }
 
     @Override
@@ -199,6 +200,16 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //For whatever reason, the presenter's reference to the view gets lost and we have to set it again
+        getPresenter().setView(this);
+
+        getPresenter().onPermissionsUpdated();
+    }
+
+        @Override
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
@@ -422,6 +433,33 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 });
     }
 
+    @Override
+    public void attemptToGetLocation() {
+        Log.e(TAG, "attemptToGetLocation");
+        if (getPresenter().locationServicesEnabled()) {
+            Log.e(TAG, "location enabled");
+
+            mMap.setMyLocationEnabled(true);
+
+            startPollingLocation();
+        } else {
+            Log.e(TAG, "location disabled");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+    }
+
+    private void startPollingLocation() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+        mGoogleApiClient.reconnect();
+    }
+
+
     //TabLayout.OnTabSelectedListener
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -451,27 +489,14 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (getPresenter().locationServicesEnabled()) {
-            mMap.setMyLocationEnabled(true);
-        }
+
         getPresenter().onMapReady();
     }
 
-    public void startPollingLocation() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-            mGoogleApiClient.connect();
-        }
-    }
-
+    //GoogleAPI ConnectionCallback
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "Got location!!");
             android.location.Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
             com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =

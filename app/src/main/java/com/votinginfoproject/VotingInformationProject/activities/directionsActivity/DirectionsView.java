@@ -29,7 +29,7 @@ public interface DirectionsView {
 
     void toggleEnableLocationView(boolean showing);
 
-    void startPollingLocation();
+    void attemptToGetLocation();
 
     void navigateToAppSettings();
 }

@@ -270,7 +270,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
     public void attemptToGetLocation() {
         //Check for location Permissions
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         } else {
             //Do location stuff
