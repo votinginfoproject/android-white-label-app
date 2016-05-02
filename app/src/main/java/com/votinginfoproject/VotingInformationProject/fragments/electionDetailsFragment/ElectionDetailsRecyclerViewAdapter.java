@@ -127,7 +127,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 ElectionBodySubtitleViewHolder viewHolder = (ElectionBodySubtitleViewHolder) holder;
                 viewHolder.setTitle(item.mText);
                 viewHolder.setImageResource(item.mImageId);
-                viewHolder.setExpanded(item.isExpanded);
+                viewHolder.setExpanded(item.isExpanded, false);
                 viewHolder.isFirstSubtitle = item.isFirstSubtitle;
 
             } else if (holder instanceof ElectionBodyTitleViewHolder) {
@@ -296,7 +296,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             ElectionBodySubtitleViewHolder subtitleViewHolder = (ElectionBodySubtitleViewHolder) clickedView.getTag();
 
             if (subtitleViewHolder != null) {
-                subtitleViewHolder.setExpanded(item.isExpanded);
+                subtitleViewHolder.setExpanded(item.isExpanded, true);
             }
         }
     }

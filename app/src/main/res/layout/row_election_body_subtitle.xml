@@ -27,9 +27,8 @@
         android:layout_height="@dimen/fragment.election_details.subtitle_image_size"
         android:layout_marginRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
         android:layout_marginLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_internal"
-        android:layout_marginTop="10dp"
         android:layout_gravity="right|center_vertical"
-        android:tint="@color/background.blue"
-        android:src="@drawable/ic_chevron_down"/>
+        android:src="@drawable/ic_chevron_down"
+        android:tint="@color/background.blue"/>
 
 </LinearLayout>

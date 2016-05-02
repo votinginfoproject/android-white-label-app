@@ -2,13 +2,12 @@ package com.votinginfoproject.VotingInformationProject.views.viewHolders;
 
 import android.animation.ObjectAnimator;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,14 +53,14 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
         mImageView.setImageResource(mImageResource);
     }
 
-    public void setExpanded(boolean expanded) {
+    public void setExpanded(boolean expanded, boolean shouldAnimate) {
         if (expanded != mIsExpanded) {
-            performFlipAnimation(expanded);
+            flipArrow(expanded, shouldAnimate);
         }
         mIsExpanded = expanded;
     }
 
-    private void performFlipAnimation(boolean expanded) {
+    private void flipArrow(boolean expanded, boolean shouldAnimate) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int drawableID = expanded ? R.drawable.ic_chevron_animate_up : R.drawable.ic_chevron_animate_down;
             Drawable drawable = itemView.getContext().getDrawable(drawableID);
@@ -69,12 +68,22 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
             mChevronImageView.setImageDrawable(drawable);
 
             if(drawable instanceof Animatable) {
-                ((Animatable) drawable).start();
+                Animatable animatable = (Animatable) drawable;
+
+                animatable.start();
+
+                if (!shouldAnimate) {
+                    animatable.stop();
+                }
             }
         } else {
-            ObjectAnimator flipY = ObjectAnimator.ofFloat(mChevronImageView, "scaleY", expanded ? -1f : 1f);
-            flipY.setDuration(chevronFlipAnimationDuration);
-            flipY.start();
+            if (shouldAnimate) {
+                ObjectAnimator flipY = ObjectAnimator.ofFloat(mChevronImageView, "scaleY", expanded ? -1f : 1f);
+                flipY.setDuration(chevronFlipAnimationDuration);
+                flipY.start();
+            } else {
+                mChevronImageView.setScaleY(expanded ? -1f : 1f);
+            }
         }
     }
 
