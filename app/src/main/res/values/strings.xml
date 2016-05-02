@@ -76,11 +76,15 @@
     <string name="contest.header.candidate_list">Candidates</string>
 
     <!-- Candidate Details Strings -->
+    <string name="candidate.toolbar">Candidate</string>
     <string name="candidate.details_header">Candidate Details</string>
     <string name="candidate.social_header">Social Media Channels</string>
     <string name="candidate.no_name">No Name Available</string>
     <string name="candidate.no_party">No Listed Affiliation</string>
     <string name="candidate.details_none">No Candidate Details Available</string>
+    <string name="candidate.details.website">Website</string>
+    <string name="candidate.details.phone">Phone</string>
+    <string name="candidate.details.email">Phone</string>
 
     <!-- Accessibility descriptions for images -->
     <string name="social.channel.description.youtube">Visit YouTube channel</string>

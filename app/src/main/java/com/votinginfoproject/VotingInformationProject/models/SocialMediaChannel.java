@@ -3,6 +3,9 @@ package com.votinginfoproject.VotingInformationProject.models;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
+
+import com.votinginfoproject.VotingInformationProject.R;
 
 import java.util.Arrays;
 
@@ -106,6 +109,26 @@ public class SocialMediaChannel implements Parcelable {
                 return Uri.parse(id);
             default:
                 return null;
+        }
+    }
+
+    @DrawableRes
+    public int getDrawable() {
+        if (type == null) {
+            return -1;
+        }
+
+        switch (type) {
+            case "Twitter":
+                return R.drawable.ic_twitter;
+            case "Facebook":
+                return R.drawable.ic_facebook;
+            case "GooglePlus":
+                return R.drawable.ic_google_plus;
+            case "YouTube":
+                return R.drawable.ic_youtube;
+            default:
+                return R.drawable.ic_computer;
         }
     }
 

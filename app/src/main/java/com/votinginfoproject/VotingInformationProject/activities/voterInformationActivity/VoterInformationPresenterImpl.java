@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
@@ -58,7 +60,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     }
 
     // Voter Information Presenter Protocol
-    
+
     @Override
     public void backNavigationBarButtonClicked() {
         getView().navigateBack();
@@ -84,6 +86,10 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     @Override
     void candidateClicked(Candidate candidate) {
         Log.v(TAG, "Candidate Clicked: " + candidate.name);
+        CandidateInformationPresenterImpl presenter = new CandidateInformationPresenterImpl();
+        presenter.setCandidate(candidate);
+
+        getView().presentChildLevelFragment(CandidateInformationFragment.newInstance(presenter));
     }
 
     @Override

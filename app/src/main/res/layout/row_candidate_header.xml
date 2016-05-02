@@ -9,35 +9,33 @@
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="16dp"
-        tools:src="@drawable/ic_computer"
+        android:layout_height="match_parent"
+        android:visibility="gone"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:orientation="vertical"
-        android:padding="16dp"
         >
 
         <TextView
             android:id="@+id/text_view_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            tools:text="candidatename.org"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            tools:text="Harold Metts"
             />
 
         <TextView
             android:id="@+id/text_view_description"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/description.text.gray"
             android:textSize="14sp"
-            tools:text="Website"
+            tools:text="Democrat"
             />
     </LinearLayout>
 

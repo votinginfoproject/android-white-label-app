@@ -26,6 +26,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
@@ -44,7 +45,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         ContestListFragment.ContestListListener,
-        ContestInformationListFragment.ContestInformationListener {
+        ContestInformationListFragment.ContestInformationListener,
+        CandidateInformationFragment.CandidateInformationListener {
 
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
@@ -227,6 +229,16 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void candidateClicked(Candidate candidate) {
         getPresenter().candidateClicked(candidate);
+    }
+
+    @Override
+    public void phoneNumberClicked(String phoneNumber) {
+        //Navigate to phone number
+    }
+
+    @Override
+    public void emailClicked(String email) {
+        //navigate to email
     }
 
     @Override

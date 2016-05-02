@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -60,7 +61,6 @@ public class Candidate implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeString(name);
         dest.writeString(party);
         dest.writeString(candidateUrl);
