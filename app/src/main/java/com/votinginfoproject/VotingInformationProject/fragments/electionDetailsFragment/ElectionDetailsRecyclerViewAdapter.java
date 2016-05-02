@@ -223,7 +223,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 }
 
                 ListItem websitesParent = new ListItem(BODY_PARENT_VIEW_HOLDER, mContext.getString(R.string.details_section_header_links));
-                websitesParent.mImageId = R.drawable.ic_laptop;
+                websitesParent.mImageId = R.drawable.ic_computer;
                 websitesParent.onItemClickListener = new SubtitleClickListener(websitesParent);
                 toReturn.add(websitesParent);
 

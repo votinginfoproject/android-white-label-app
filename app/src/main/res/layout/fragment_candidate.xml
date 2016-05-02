@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout android:id="@+id/candidate_fragment"
-              style="@style/fragment_style"
-              xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/candidate_fragment"
+              style="@style/fragment_style"
               android:orientation="vertical"
-              tools:context="com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment">
+              tools:context="com.votinginfoproject.VotingInformationProject.fragments.CandidateFragment"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <ImageView
             android:id="@+id/candidate_photo"
@@ -18,58 +20,69 @@
             android:layout_height="80sp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/accessibility.description.candidate"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/candidate_name"
                 style="@style/fragment_header"
                 android:layout_marginTop="5sp"
-                android:text="@string/candidate.no_name"/>
+                android:text="@string/candidate.no_name"
+                />
 
             <TextView
                 android:id="@+id/candidate_party"
                 style="@style/fragment_sub_header"
-                android:text="@string/candidate.no_party"/>
+                android:text="@string/candidate.no_party"
+                />
         </LinearLayout>
     </LinearLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/candidate_details_section_header"
                 style="@style/section_header"
-                android:text="@string/candidate.details_header"/>
+                android:text="@string/candidate.details_header"
+                />
 
             <TableLayout
                 android:id="@+id/candidate_details_table"
-                style="@style/two_column_table">
+                style="@style/two_column_table"
+                >
 
                 <TableRow
                     android:id="@+id/candidate_details_web_site_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_details_web_site_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/accessibility.description.website"
-                        android:src="@drawable/ic_website"/>
+                        android:src="@drawable/ic_computer"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_details_web_site_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
                 </TableRow>
 
                 <TableRow>
@@ -79,18 +92,21 @@
 
                 <TableRow
                     android:id="@+id/candidate_details_phone_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_details_phone_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/accessibility.description.phone"
-                        android:src="@drawable/ic_phone"/>
+                        android:src="@drawable/ic_phone"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_details_phone_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
 
                 </TableRow>
 
@@ -101,18 +117,21 @@
 
                 <TableRow
                     android:id="@+id/candidate_details_email_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_details_email_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/accessibility.description.email"
-                        android:src="@drawable/ic_email"/>
+                        android:src="@drawable/ic_email"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_details_email_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
 
                 </TableRow>
 
@@ -126,13 +145,15 @@
                     style="@style/list_item_header"
                     android:paddingLeft="5sp"
                     android:paddingRight="5sp"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         android:id="@+id/candidate_details_none_text"
                         style="@style/candidate_details_row_text"
                         android:gravity="center"
-                        android:text="@string/candidate.details_none"/>
+                        android:text="@string/candidate.details_none"
+                        />
 
                 </TableRow>
 
@@ -141,28 +162,33 @@
             <TextView
                 android:id="@+id/candidate_social_section_header"
                 style="@style/section_header"
-                android:text="@string/candidate.social_header"/>
+                android:text="@string/candidate.social_header"
+                />
 
             <TableLayout
                 android:id="@+id/candidate_social_table"
                 style="@style/fill_width_wrap_height"
                 android:shrinkColumns="0"
-                android:stretchColumns="1">
+                android:stretchColumns="1"
+                >
 
                 <TableRow
                     android:id="@+id/candidate_social_twitter_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_social_twitter_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/social.channel.description.twitter"
-                        android:src="@drawable/ic_twitter"/>
+                        android:src="@drawable/ic_twitter"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_social_twitter_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
 
                 </TableRow>
 
@@ -173,18 +199,21 @@
 
                 <TableRow
                     android:id="@+id/candidate_social_facebook_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_social_facebook_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/social.channel.description.facebook"
-                        android:src="@drawable/ic_facebook"/>
+                        android:src="@drawable/ic_facebook"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_social_facebook_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
 
                 </TableRow>
 
@@ -195,18 +224,21 @@
 
                 <TableRow
                     android:id="@+id/candidate_social_googleplus_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_social_googleplus_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/social.channel.description.google_plus"
-                        android:src="@drawable/ic_googleplus"/>
+                        android:src="@drawable/ic_google_plus"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_social_googleplus_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
 
                 </TableRow>
 
@@ -217,18 +249,21 @@
 
                 <TableRow
                     android:id="@+id/candidate_social_youtube_row"
-                    style="@style/table_row">
+                    style="@style/table_row"
+                    >
 
                     <ImageView
                         android:id="@+id/candidate_social_youtube_image"
                         style="@style/candidate_details_row_image"
                         android:contentDescription="@string/social.channel.description.youtube"
-                        android:src="@drawable/ic_youtube"/>
+                        android:src="@drawable/ic_youtube"
+                        />
 
                     <TextView
                         android:id="@+id/candidate_social_youtube_text"
                         style="@style/candidate_details_row_text"
-                        android:text="@string/candidate.social_header"/>
+                        android:text="@string/candidate.social_header"
+                        />
                 </TableRow>
             </TableLayout>
         </LinearLayout>
