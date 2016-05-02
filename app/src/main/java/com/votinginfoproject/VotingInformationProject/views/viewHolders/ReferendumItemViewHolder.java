@@ -10,7 +10,6 @@ import com.votinginfoproject.VotingInformationProject.R;
  * Created by marcvandehey on 4/29/16.
  */
 public class ReferendumItemViewHolder extends RecyclerView.ViewHolder {
-
     private final TextView mTextView;
 
     /**

@@ -147,6 +147,10 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
         return rowCount;
     }
 
+    /**
+     * Generates the Row Count in the case that the Contest is a Referendum
+     * @return
+     */
     private int getReferendumRowCount() {
         int rowCount = mHasHeader ? 1 : 0;
 
@@ -174,6 +178,10 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
         return rowCount;
     }
 
+    /**
+     * Generates the Row Count in the case that the Contest is a normal Contest
+     * @return
+     */
     private int getContestRowCount() {
         int rowCount = mHasHeader ? 1 : 0;
 

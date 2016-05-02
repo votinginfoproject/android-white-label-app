@@ -25,7 +25,6 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.BallotIt
  * Created by marcvandehey on 4/21/16.
  */
 public class ContestInformationListFragment extends Fragment implements BottomNavigationFragment, ContestInformationView, ContestInformationRecyclerViewAdapter.ContestInformationItemOnClickListener {
-
     private static final String TAG = ContestInformationListFragment.class.getSimpleName();
 
     private static final String ARG_ELECTION = "arg_election";
