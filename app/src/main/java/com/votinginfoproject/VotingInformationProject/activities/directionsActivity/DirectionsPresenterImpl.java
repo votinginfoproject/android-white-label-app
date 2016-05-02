@@ -42,6 +42,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private int mIndexOfPresentedRoute;
     private boolean mIsPresentingMap;
+    private boolean mHasEnqueuedRequests;
 
     public DirectionsPresenterImpl(Context context, PollingLocation pollingLocation, boolean useLastKnownLocation) {
         mContext = context;
@@ -94,7 +95,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
                 getView().toggleEnableLocationView(true);
             }
 
-            getView().toggleLoadingView(isLoading());
             refreshViewData();
         }
     }
@@ -136,7 +136,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public boolean isLoading() {
-        return !mTransitModesToInteractors.isEmpty();
+        return !mHasEnqueuedRequests || !mTransitModesToInteractors.isEmpty();
     }
 
     @Override
@@ -298,6 +298,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             interactor.enqueueRequest(request, this);
 
             mTransitModesToInteractors.put(transitMode, interactor);
+
+            mHasEnqueuedRequests = true;
         }
     }
 

@@ -435,15 +435,15 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void attemptToGetLocation() {
-        Log.e(TAG, "attemptToGetLocation");
         if (getPresenter().locationServicesEnabled()) {
-            Log.e(TAG, "location enabled");
-
-            mMap.setMyLocationEnabled(true);
+            try {
+                mMap.setMyLocationEnabled(true);
+            } catch (SecurityException ex) {
+                Log.wtf(TAG, "Permissions error");
+            }
 
             startPollingLocation();
         } else {
-            Log.e(TAG, "location disabled");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
     }
@@ -456,6 +456,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                     .addOnConnectionFailedListener(this)
                     .build();
         }
+
         mGoogleApiClient.reconnect();
     }
 
