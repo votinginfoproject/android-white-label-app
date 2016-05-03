@@ -1,5 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
@@ -25,6 +28,9 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
     private WebView mWebView;
 
     private View mLoadingView;
+    private ProgressBar mProgressBar;
+
+    private int mLoadingViewFadeDuration = 250;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +70,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.feedback_link);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        
+
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +79,8 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
         });
 
         mLoadingView = findViewById(R.id.loading_view);
+
+        mProgressBar = (ProgressBar) mLoadingView.findViewById(R.id.progress_bar);
 
         getPresenter().setView(this);
     }
@@ -83,7 +91,26 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
     }
 
     @Override
-    public void toggleLoading(boolean loading) {
-        mLoadingView.setVisibility(loading ? View.VISIBLE : View.GONE);
+    public void toggleLoading(final boolean loading) {
+        float alpha = loading ? 1 : 0;
+
+        if (loading) {
+            mLoadingView.setVisibility(View.VISIBLE);
+            mProgressBar.animate();
+        }
+
+        mLoadingView.animate()
+                .alpha(alpha)
+                .setDuration(mLoadingViewFadeDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                        if (!loading) {
+                            mLoadingView.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 }

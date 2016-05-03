@@ -77,6 +77,7 @@ public class ContestListPresenterImpl extends ContestListPresenter {
 
     @Override
     public String getSectionTitleForIndex(int index) {
+
         index -= hasHeader() ? 1 : 0;
 
         if (index == 0 && getView() != null && getView().getContext() != null) {
