@@ -102,7 +102,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                     getCandidate().email,
                     context.getString(R.string.candidate_details_email),
                     context.getString(R.string.accessibility_description_email),
-                    R.drawable.ic_phone,
+                    R.drawable.ic_email,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

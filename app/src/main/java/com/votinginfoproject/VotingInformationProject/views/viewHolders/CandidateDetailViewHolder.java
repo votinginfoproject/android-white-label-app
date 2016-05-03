@@ -30,6 +30,9 @@ public class CandidateDetailViewHolder extends RecyclerView.ViewHolder {
         clickableView = itemView.findViewById(R.id.clickable_view);
     }
 
+    public boolean hasSectionTitle() {
+        return sectionTextView.getVisibility() == View.VISIBLE;
+    }
 
     /**
      * Bind the data for the Candidate Detail View Holder

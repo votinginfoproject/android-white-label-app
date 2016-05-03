@@ -61,7 +61,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         mRecyclerView = (RecyclerView) view.findViewById(R.id.polling_locations_list);
 
         //Update Decoration
-//        mRecyclerView.addItemDecoration(new BallotItemDecoration(getActivity()));
+        mRecyclerView.addItemDecoration(new CandidateItemDecoration(getActivity()));
 
         // Set the adapter
         Context context = view.getContext();

@@ -84,7 +84,7 @@
     <string name="candidate.details_none">No Candidate Details Available</string>
     <string name="candidate.details.website">Website</string>
     <string name="candidate.details.phone">Phone</string>
-    <string name="candidate.details.email">Phone</string>
+    <string name="candidate.details.email">Email</string>
 
     <!-- Accessibility descriptions for images -->
     <string name="social.channel.description.youtube">Visit YouTube channel</string>
