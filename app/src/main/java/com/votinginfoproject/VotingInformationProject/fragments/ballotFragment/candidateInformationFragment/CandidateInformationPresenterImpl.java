@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.Toast;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
@@ -78,7 +79,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                             if (getView() != null) {
                                 getView().navigateToUrl(getCandidate().candidateUrl);
                             }
-
                         }
                     });
         } else if (index == phoneIndex) {
@@ -203,5 +203,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
     @Override
     public void onReportErrorClicked() {
         //Navigate to report error
+
+        Toast.makeText(getView().getContext(), "Hook up error Report", Toast.LENGTH_SHORT);
     }
 }

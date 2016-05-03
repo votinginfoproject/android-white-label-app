@@ -29,16 +29,14 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
     private CandidateInformationListener mListener;
 
     public CandidateInformationFragment() {
-
+        //Required Empty Constructor
     }
 
     public static CandidateInformationFragment newInstance(CandidateInformationPresenter presenter) {
         CandidateInformationFragment candidateInformationFragment = new CandidateInformationFragment();
 
         Bundle args = new Bundle();
-
         args.putParcelable(ARG_PRESENTER, presenter);
-
         candidateInformationFragment.setArguments(args);
 
         return candidateInformationFragment;
@@ -72,7 +70,6 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         mPresenter.setView(this);
 
         mRecyclerView.setAdapter(mAdapter);
-
         mAdapter.setPresenter(mPresenter);
 
         return view;
@@ -102,7 +99,6 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
             }
         }
     }
-
 
     @Override
     public void onAttach(Context context) {

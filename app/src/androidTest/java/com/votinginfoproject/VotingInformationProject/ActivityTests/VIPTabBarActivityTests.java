@@ -4,9 +4,6 @@ import android.support.v4.app.FragmentManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 
-import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
-import com.votinginfoproject.VotingInformationProject.fragments.BallotFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.ContestFragment;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 

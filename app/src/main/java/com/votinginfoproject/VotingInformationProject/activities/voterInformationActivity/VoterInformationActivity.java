@@ -48,7 +48,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         ContestListFragment.ContestListListener,
         ContestInformationListFragment.ContestInformationListener,
         CandidateInformationFragment.CandidateInformationListener {
-
     private final static String TAG = VoterInformationActivity.class.getSimpleName();
     private final static String TOP_LEVEL_TAG = "VIP_TOP_LEVEL_TAG";
 

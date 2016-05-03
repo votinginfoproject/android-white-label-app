@@ -84,4 +84,11 @@ public class CandidateInformationRecyclerViewAdapter extends RecyclerView.Adapte
     public int getItemCount() {
         return mPresenter.getRowCount();
     }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+
+        mPresenter = null;
+    }
 }

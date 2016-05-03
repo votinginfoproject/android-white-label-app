@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.homeActivity.HomeActivity;
-import com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;

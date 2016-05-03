@@ -25,16 +25,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.VIPTabBarActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/activity.vip.tab"
-            android:parentActivityName=".activities.homeActivity.HomeActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.homeActivity.HomeActivity"/>
-        </activity>
-        <activity
             android:name=".activities.AboutActivity"
             android:label="@string/about.app.title"
             android:parentActivityName=".activities.VIPTabBarActivity">
