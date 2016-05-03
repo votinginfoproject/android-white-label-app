@@ -18,7 +18,6 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,6 +25,8 @@ import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorActivity;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
@@ -253,9 +254,15 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void reportErrorClicked() {
-        Toast.makeText(this, "Error clicked", Toast.LENGTH_SHORT).show();
+        openReportErrorActivity();
+    }
 
-        Log.v(TAG, "Report Error Clicked()");
+    public void openReportErrorActivity() {
+        Intent intent = new Intent(this, ReportErrorActivity.class);
+
+        intent.putExtra(ReportErrorActivity.ARG_PRESENTER, new ReportErrorPresenterImpl());
+
+        startActivity(intent);
     }
 
     //Election Details Interface
@@ -269,9 +276,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
-    public void navigateToErrorView() {
-        //TODO add things here
-        Log.v(TAG, "Report Error Clicked()");
+    public void reportErrorButtonClicked() {
+        openReportErrorActivity();
     }
 
     @Override

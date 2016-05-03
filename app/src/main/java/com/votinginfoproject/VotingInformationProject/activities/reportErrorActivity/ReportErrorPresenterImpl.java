@@ -1,12 +1,30 @@
 package com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by max on 5/3/16.
  */
-public class ReportErrorPresenterImpl implements Parcelable {
+public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Parcelable {
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        
+    }
+
+    @Override
+    public void onSaveState(@NonNull Bundle state) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
     public static Creator<ReportErrorPresenterImpl> CREATOR = new Creator<ReportErrorPresenterImpl>() {
         @Override
         public ReportErrorPresenterImpl createFromParcel(Parcel source) {
@@ -18,6 +36,10 @@ public class ReportErrorPresenterImpl implements Parcelable {
             return new ReportErrorPresenterImpl[size];
         }
     };
+
+    public ReportErrorPresenterImpl() {
+
+    }
 
     private ReportErrorPresenterImpl(Parcel source) {
 
