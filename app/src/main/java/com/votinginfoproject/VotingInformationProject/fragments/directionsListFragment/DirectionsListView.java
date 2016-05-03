@@ -5,4 +5,6 @@ package com.votinginfoproject.VotingInformationProject.fragments.directionsListF
  */
 public interface DirectionsListView {
     void refreshViewData();
+
+    void resetView();
 }

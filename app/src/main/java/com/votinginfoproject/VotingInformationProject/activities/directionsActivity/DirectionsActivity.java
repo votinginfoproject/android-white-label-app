@@ -3,8 +3,10 @@ package com.votinginfoproject.VotingInformationProject.activities.directionsActi
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Path;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -39,6 +41,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment.DirectionsListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment.DirectionsListView;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
@@ -82,6 +86,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     private MapView mMapView;
     private GoogleMap mMap;
 
+    private CameraUpdate mZoomToRouteUpdate;
+
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -102,6 +108,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         if (getPresenter() == null) {
             setPresenter(new DirectionsPresenterImpl(this, pollingLocation, useLastKnownLocation));
         }
+
         getPresenter().onCreate(savedInstanceState);
 
         mAdapter = new DirectionsViewPagerAdapter(getFragmentManager(), getPresenter());
@@ -132,6 +139,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         if (savedInstanceState != null) {
             mapState = savedInstanceState.getBundle(KEY_MAP_STATE);
         }
+
         mMapView.onCreate(mapState);
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -161,7 +169,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
             }
         });
 
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.title_activity_directions);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -175,7 +182,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         });
 
         getPresenter().setView(this);
-        //startPollingLocation();
     }
 
     @Override
@@ -209,7 +215,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         getPresenter().onPermissionsUpdated();
     }
 
-        @Override
+    @Override
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
@@ -226,14 +232,18 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+
                 return true;
             case R.id.action_open_in_maps:
                 getPresenter().externalMapButtonPressed();
+
                 return true;
             case R.id.action_map_toggle:
                 getPresenter().mapButtonPressed();
+
                 return true;
         }
+
         return false;
     }
 
@@ -246,7 +256,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void selectTabAtIndex(int index) {
-        if (mTabLayout != null) {
+        if (mTabLayout != null && index != mTabLayout.getSelectedTabPosition()) {
             TabLayout.Tab tab = mTabLayout.getTabAt(index);
 
             if (tab != null) {
@@ -368,8 +378,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 .include(southwestLatLng)
                 .build();
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-        mMap.animateCamera(update);
+        mZoomToRouteUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+        mMap.animateCamera(mZoomToRouteUpdate);
 
         int numPoints = polylineOptions.getPoints().size();
         if (numPoints > 0 && destinationMarkerRes > 0) {
@@ -448,19 +458,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         }
     }
 
-    private void startPollingLocation() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        }
-
-        mGoogleApiClient.reconnect();
-    }
-
-
     //TabLayout.OnTabSelectedListener
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -483,7 +480,31 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-        //Required empty override method
+        getPresenter().currentTabReselected();
+    }
+
+    @Override
+    public void resetView() {
+        if (mMap != null && mZoomToRouteUpdate != null) {
+            mMap.animateCamera(mZoomToRouteUpdate);
+        }
+
+        int currentIndex = mViewPager.getCurrentItem();
+
+        DirectionsListFragment fragment = (DirectionsListFragment) mAdapter.instantiateItem(mViewPager, currentIndex);
+        fragment.resetView();
+    }
+
+    private void startPollingLocation() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+
+        mGoogleApiClient.reconnect();
     }
 
     //GoogleMaps OnMapReadyCallback

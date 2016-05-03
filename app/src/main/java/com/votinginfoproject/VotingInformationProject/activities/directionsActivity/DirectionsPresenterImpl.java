@@ -165,7 +165,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         if (!response.hasErrors()) {
             if (response.routes.size() > 0) {
                 transitModesToRoutes.put(transitMode, response.routes.get(0));
-
             } else {
                 transitModesToRoutes.put(transitMode, null);
             }
@@ -219,6 +218,11 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         return ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
+    @Override
+    public void currentTabReselected() {
+        getView().resetView();
+    }
+
     private void requestAllTransitModes() {
         mQueuedTransitModes.clear();
         mQueuedTransitModes.addAll(Arrays.asList(mAllTransitModes));
@@ -248,6 +252,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         }
 
         TabData[] toReturn = new TabData[tabDataList.size()];
+
         return tabDataList.toArray(toReturn);
     }
 

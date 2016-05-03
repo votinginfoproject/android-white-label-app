@@ -98,6 +98,7 @@ public class PollingLocation implements Parcelable {
             case POLLING_TYPE_LOCATION:
                 return selected ? R.drawable.ic_marker_poll_selected : R.drawable.ic_marker_poll;
         }
+
         return 0;
     }
 

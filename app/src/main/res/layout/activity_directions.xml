@@ -85,6 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/appbar"
+            android:visibility="gone"
             android:gravity="center">
 
             <ImageView
@@ -114,6 +115,7 @@
         <LinearLayout
             android:id="@+id/enable_location"
             android:alpha="0"
+            android:visibility="gone"
             android:background="?android:attr/colorBackground"
             android:orientation="vertical"
             android:layout_width="match_parent"

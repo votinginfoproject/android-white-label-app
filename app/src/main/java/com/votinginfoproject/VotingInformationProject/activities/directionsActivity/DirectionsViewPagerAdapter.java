@@ -16,6 +16,7 @@ public class DirectionsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public DirectionsViewPagerAdapter(FragmentManager fm, DirectionsPresenter presenter) {
         super(fm);
+
         mPresenter = presenter;
     }
 
@@ -30,6 +31,7 @@ public class DirectionsViewPagerAdapter extends FragmentStatePagerAdapter {
         if (mPresenter.isLoading()) {
             return 0;
         }
+
         return mPresenter.getTransitModes().length;
     }
 }

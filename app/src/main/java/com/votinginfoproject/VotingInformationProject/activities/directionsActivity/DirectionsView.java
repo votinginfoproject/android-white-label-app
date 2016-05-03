@@ -11,6 +11,8 @@ import com.votinginfoproject.VotingInformationProject.models.TabData;
 public interface DirectionsView {
     void refreshViewData();
 
+    void resetView();
+
     void setTabs(TabData[] tabs);
 
     void selectTabAtIndex(int index);
