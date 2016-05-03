@@ -38,7 +38,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment.DirectionsListFragment;
@@ -51,6 +53,7 @@ import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.models.TabData;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
+import java.util.List;
 import java.util.Locale;
 
 public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implements DirectionsView,
@@ -349,20 +352,13 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 .geodesic(true)
                 .color(ContextCompat.getColor(getApplicationContext(), R.color.background_blue));
 
-        for (int legIdx = 0; legIdx < route.legs.size(); legIdx ++) {
-            Leg leg = route.legs.get(legIdx);
+        for (Leg leg : route.legs) {
+            for (Step step : leg.steps) {
+                List<LatLng> polylinePoints = PolyUtil.decode(step.polyline.points);
 
-            for (int stepIdx = 0; stepIdx < leg.steps.size(); stepIdx++) {
-                Step step = leg.steps.get(stepIdx);
-
-                //Add the first point to the polyline as the start location of the first step
-                if (legIdx == 0 && stepIdx == 0) {
-                    Location startLocation = step.start_location;
-                    polylineOptions.add(new LatLng(startLocation.lat, startLocation.lng));
+                for (LatLng point : polylinePoints) {
+                    polylineOptions.add(point);
                 }
-
-                Location endLocation = step.end_location;
-                polylineOptions.add(new LatLng(endLocation.lat, endLocation.lng));
             }
         }
 
