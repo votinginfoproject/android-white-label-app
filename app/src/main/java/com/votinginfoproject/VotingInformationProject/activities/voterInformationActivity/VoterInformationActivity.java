@@ -272,13 +272,17 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
-                    new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
+            if (lastLocation != null) {
+                com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
+                        new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
 
-            formattedLocation.lat = (float) lastLocation.getLatitude();
-            formattedLocation.lng = (float) lastLocation.getLongitude();
+                formattedLocation.lat = (float) lastLocation.getLatitude();
+                formattedLocation.lng = (float) lastLocation.getLongitude();
 
-            VoterInformation.setLastKnownLocation(formattedLocation);
+                VoterInformation.setLastKnownLocation(formattedLocation);
+            } else {
+                Log.e(TAG, "Expected location but got none");
+            }
         }
     }
 

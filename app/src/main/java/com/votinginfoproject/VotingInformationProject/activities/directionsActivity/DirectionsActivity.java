@@ -521,15 +521,19 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             android.location.Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
+            if (lastLocation != null) {
+                com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
                     new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
 
-            formattedLocation.lat = (float) lastLocation.getLatitude();
-            formattedLocation.lng = (float) lastLocation.getLongitude();
+                formattedLocation.lat = (float) lastLocation.getLatitude();
+                formattedLocation.lng = (float) lastLocation.getLongitude();
 
-            VoterInformation.setLastKnownLocation(formattedLocation);
+                VoterInformation.setLastKnownLocation(formattedLocation);
 
-            getPresenter().lastKnownLocationUpdated();
+                getPresenter().lastKnownLocationUpdated();
+            } else {
+                //TODO decide what to do when there's a null location (location unavailable or turned off globally)
+            }
         }
     }
 

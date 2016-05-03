@@ -64,6 +64,8 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    /* Html.fromHtml returns a Spanned, which has no trim function.
+       Can't trim mStep.html_instructions because it uses tags for whitespace :( */
     private static CharSequence trimTrailingWhitespace(CharSequence source) {
         if(source == null) {
             return "";
