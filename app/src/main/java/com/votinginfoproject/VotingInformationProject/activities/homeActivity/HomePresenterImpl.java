@@ -295,6 +295,10 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
     }
 
     private void updateViewWithVoterInfo() {
+        if (getView() == null) {
+            return;
+        }
+
         getView().hideStatusView();
         getView().showGoButton();
 

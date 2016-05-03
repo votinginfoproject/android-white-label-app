@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +15,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.AboutVIPFragment
 import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
 
 public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements AboutVIPView {
-    private  final String TAG = AboutVIPActivity.class.getSimpleName();
+    private final String TAG = AboutVIPActivity.class.getSimpleName();
 
     private View mFragmentContainer;
 
@@ -67,7 +66,7 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
             AboutVIPFragment toRemove = getTopFragment();
             navigateToPreviousFragment(toRemove);
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 
@@ -107,6 +106,7 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
     private void navigateToPreviousFragment(final AboutVIPFragment fragmentToRemove) {
         Animator unreveal = fragmentToRemove.prepareUnrevealAnimator();
 
+
         unreveal.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -121,7 +121,6 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
             @Override
             public void onAnimationCancel(Animator animation) {
                 getFragmentManager().popBackStackImmediate();
-                //Required onAnimationCancel override
             }
 
             @Override
@@ -149,6 +148,6 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
     }
 
     public void upButtonPressed() {
-        super.onBackPressed();
+        onBackPressed();
     }
 }
