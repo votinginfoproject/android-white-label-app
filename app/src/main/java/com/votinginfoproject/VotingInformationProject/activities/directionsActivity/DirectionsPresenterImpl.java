@@ -323,7 +323,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             String transitMode = transitModes[mIndexOfPresentedRoute];
 
             getView().showRouteOnMap(getRouteForTransitMode(transitMode),
-                    mPollingLocation.getDrawableMarker(true));
+                    mPollingLocation.getDrawableMarker(true),
+                    !mUsingLastKnownLocation);
         }
     }
 }

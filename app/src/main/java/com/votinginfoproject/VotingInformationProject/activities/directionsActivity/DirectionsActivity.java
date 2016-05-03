@@ -341,7 +341,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public void showRouteOnMap(Route route, @DrawableRes int destinationMarkerRes) {
+    public void showRouteOnMap(Route route, @DrawableRes int destinationMarkerRes, boolean displayHomeMarker) {
         if (mMap == null) {
             return;
         }
@@ -378,13 +378,24 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         mMap.animateCamera(mZoomToRouteUpdate);
 
         int numPoints = polylineOptions.getPoints().size();
-        if (numPoints > 0 && destinationMarkerRes > 0) {
-            LatLng lastPoint = polylineOptions.getPoints().get(numPoints - 1);
+        if (numPoints > 0) {
+            if (destinationMarkerRes > 0) {
+                LatLng lastPoint = polylineOptions.getPoints().get(numPoints - 1);
 
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(destinationMarkerRes);
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(destinationMarkerRes);
 
-            MarkerOptions pollMarker = new MarkerOptions().position(lastPoint).icon(bitmapDescriptor);
-            mMap.addMarker(pollMarker);
+                MarkerOptions pollMarker = new MarkerOptions().position(lastPoint).icon(bitmapDescriptor);
+                mMap.addMarker(pollMarker);
+            }
+
+            if (displayHomeMarker) {
+                LatLng firstPoint = polylineOptions.getPoints().get(0);
+
+                BitmapDescriptor homeMarkerDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_address);
+
+                MarkerOptions homeMarker = new MarkerOptions().position(firstPoint).icon(homeMarkerDescriptor);
+                mMap.addMarker(homeMarker);
+            }
         }
     }
 

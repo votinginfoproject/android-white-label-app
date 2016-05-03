@@ -17,7 +17,7 @@ public interface DirectionsView {
 
     void selectTabAtIndex(int index);
 
-    void showRouteOnMap(Route route, @DrawableRes int destinationMarkerResource);
+    void showRouteOnMap(Route route, @DrawableRes int destinationMarkerResource, boolean displayHomeMarker);
 
     void navigateToDirectionsListAtIndex(int index);
 
