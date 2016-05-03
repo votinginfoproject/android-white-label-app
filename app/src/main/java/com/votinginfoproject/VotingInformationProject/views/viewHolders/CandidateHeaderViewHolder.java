@@ -35,7 +35,6 @@ public class CandidateHeaderViewHolder extends RecyclerView.ViewHolder {
      * @param description
      */
     public void bindData(Context context, String imageURL, String title, String description) {
-        Log.v("TAG", "Binding data: " + imageURL + " " + title + " " + description);
         if (imageURL != null) {
             //Currently assumes only one Header View per Recycler view, don't reload the image if it is already visible
             if (imageView.getVisibility() != View.VISIBLE) {

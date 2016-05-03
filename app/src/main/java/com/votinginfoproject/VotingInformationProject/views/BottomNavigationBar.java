@@ -66,7 +66,6 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        Log.v("bottom bar", "something clicked maybe");
         if (v.equals(pollsNavigationButton)) {
             pollsNavigationButton.setSelected();
             ballotNavigationButton.setUnselected();

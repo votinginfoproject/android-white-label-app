@@ -66,7 +66,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
         Context context = getView().getContext();
 
         if (index == websiteIndex) {
-            Log.v(TAG, "Got Website Data: " + index);
             return new DataHolder(
                     getSectionTitleForIndex(index),
                     getCandidate().candidateUrl,
@@ -80,8 +79,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         }
                     });
         } else if (index == phoneIndex) {
-            Log.v(TAG, "Got Phone Data: " + index);
-
             return new DataHolder(
                     getSectionTitleForIndex(index),
                     getCandidate().phone,
@@ -95,8 +92,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         }
                     });
         } else if (index == emailIndex) {
-            Log.v(TAG, "Got Email Data: " + index);
-
             return new DataHolder(
                     getSectionTitleForIndex(index),
                     getCandidate().email,
@@ -112,11 +107,9 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
         } else if (index >= socialMediaHeaderIndex && index < getRowCount() - 1) {
 
             int modifiedIndex = index - socialMediaHeaderIndex;
-            Log.v(TAG, "Got Social Media Data: " + index + " mod: " + modifiedIndex);
 
             if (modifiedIndex >= 0 && getCandidate().channels.size() > modifiedIndex) {
                 SocialMediaChannel channel = getCandidate().channels.get(modifiedIndex);
-                Log.v(TAG, "channel: " + channel);
 
                 return new DataHolder(
                         getSectionTitleForIndex(index),
@@ -169,8 +162,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
 
         rowCount++;//Added row for report button
 
-        Log.v("here", "Row Count: " + rowCount);
-
         return rowCount;
     }
 
@@ -189,15 +180,10 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
     @Override
     public int getViewTypeForIndex(int index) {
         if (index == 0) {
-            Log.v(TAG, "Index: " + index + " HEADER_VIEW_HOLDER");
             return HEADER_VIEW_HOLDER;
         } else if (index < getRowCount() - 1) {
-            Log.v(TAG, "Index: " + index + " CANDIDATE_INFO_VIEW_HOLDER" + getDataForIndex(index));
-
             return CANDIDATE_INFO_VIEW_HOLDER;
         } else {
-            Log.v(TAG, "Index: " + index + " REPORT_VIEW_HOLDER");
-
             return REPORT_VIEW_HOLDER;
         }
     }
