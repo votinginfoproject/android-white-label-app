@@ -206,7 +206,9 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
 
             //Check if we are building with the Debug settings, if so attempt to use StopLight
             if (BuildConfig.DEBUG && mContext.getResources().getBoolean(R.bool.use_stoplight)) {
-                searchAddress = mContext.getString(R.string.test_address);
+                if (searchAddress.isEmpty()) {
+                    searchAddress = mContext.getString(R.string.test_address);
+                }
 
                 request = new StopLightCivicInfoRequest(mContext, electionId, searchAddress);
 
