@@ -17,7 +17,6 @@ import com.votinginfoproject.VotingInformationProject.activities.voterInformatio
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.BallotItemDecoration;
 
 import java.util.ArrayList;
 

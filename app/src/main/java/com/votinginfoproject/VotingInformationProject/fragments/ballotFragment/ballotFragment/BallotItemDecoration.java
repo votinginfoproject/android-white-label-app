@@ -1,12 +1,16 @@
-package com.votinginfoproject.VotingInformationProject.views.viewHolders;
+package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment;
+
+import android.support.v7.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ContestViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 /**
  * Created by marcvandehey on 4/21/16.

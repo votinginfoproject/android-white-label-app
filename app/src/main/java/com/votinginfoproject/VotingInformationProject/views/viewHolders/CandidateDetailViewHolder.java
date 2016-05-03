@@ -17,6 +17,8 @@ public class CandidateDetailViewHolder extends RecyclerView.ViewHolder {
     private ImageView imageView;
     private TextView titleTextView;
     private TextView descriptionTextView;
+    private TextView sectionTextView;
+    private View clickableView;
 
     public CandidateDetailViewHolder(View itemView) {
         super(itemView);
@@ -24,6 +26,8 @@ public class CandidateDetailViewHolder extends RecyclerView.ViewHolder {
         imageView = (ImageView) itemView.findViewById(R.id.image_view);
         titleTextView = (TextView) itemView.findViewById(R.id.text_view_title);
         descriptionTextView = (TextView) itemView.findViewById(R.id.text_view_description);
+        sectionTextView = (TextView) itemView.findViewById(R.id.text_view_section);
+        clickableView = itemView.findViewById(R.id.clickable_view);
     }
 
 
@@ -36,10 +40,33 @@ public class CandidateDetailViewHolder extends RecyclerView.ViewHolder {
      * @param description
      */
     public void bindData(Context context, CandidateInformationPresenter.DataHolder dataHolder) {
-        imageView.setImageDrawable(ContextCompat.getDrawable(context, dataHolder.drawable));
-        titleTextView.setText(dataHolder.title);
-        descriptionTextView.setText(dataHolder.description);
+        if (dataHolder == null) {
+            return;
+        }
 
-        itemView.setOnClickListener(dataHolder.listener);
+        if (context != null) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(context, dataHolder.drawable));
+        }
+
+        itemView.setContentDescription(dataHolder.accessibilityText);
+
+        titleTextView.setText(dataHolder.title);
+
+        if (dataHolder.description == null) {
+            descriptionTextView.setVisibility(View.GONE);
+        } else {
+            descriptionTextView.setVisibility(View.VISIBLE);
+            descriptionTextView.setText(dataHolder.description);
+        }
+
+        if (dataHolder.sectionText == null) {
+            sectionTextView.setVisibility(View.GONE);
+        } else {
+            sectionTextView.setVisibility(View.VISIBLE);
+            sectionTextView.setText(dataHolder.sectionText);
+        }
+
+        clickableView.setClickable(true);
+        clickableView.setOnClickListener(dataHolder.listener);
     }
 }

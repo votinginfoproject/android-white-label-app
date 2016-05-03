@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.BallotItemDecoration;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.BallotItemDecoration;
 
 /**
  * Created by marcvandehey on 4/21/16.

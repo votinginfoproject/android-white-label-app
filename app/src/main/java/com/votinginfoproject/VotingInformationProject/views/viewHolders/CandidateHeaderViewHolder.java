@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.views.viewHolders;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ public class CandidateHeaderViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         imageView = (ImageView) itemView.findViewById(R.id.image_view);
-        imageView = (ImageView) itemView.findViewById(R.id.image_view);
         titleTextView = (TextView) itemView.findViewById(R.id.text_view_title);
         descriptionTextView = (TextView) itemView.findViewById(R.id.text_view_description);
     }
@@ -35,6 +35,7 @@ public class CandidateHeaderViewHolder extends RecyclerView.ViewHolder {
      * @param description
      */
     public void bindData(Context context, String imageURL, String title, String description) {
+        Log.v("TAG", "Binding data: " + imageURL + " " + title + " " + description);
         if (imageURL != null) {
             //Currently assumes only one Header View per Recycler view, don't reload the image if it is already visible
             if (imageView.getVisibility() != View.VISIBLE) {
@@ -44,6 +45,8 @@ public class CandidateHeaderViewHolder extends RecyclerView.ViewHolder {
         } else {
             imageView.setVisibility(View.GONE);
         }
+
+        itemView.setContentDescription(title);
 
         titleTextView.setText(title);
         descriptionTextView.setText(description);

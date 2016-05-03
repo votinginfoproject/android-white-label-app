@@ -56,10 +56,12 @@ public abstract class CandidateInformationPresenter extends BasePresenter<Candid
         public String title;
         public String description;
         public String accessibilityText;
+        public String sectionText;
 
         public View.OnClickListener listener;
 
-        public DataHolder(String title, String description, String accessibilityText, @DrawableRes int drawable, View.OnClickListener listener) {
+        public DataHolder(String sectionText, String title, String description, String accessibilityText, @DrawableRes int drawable, View.OnClickListener listener) {
+            this.sectionText = sectionText;
             this.title = title;
             this.description = description;
             this.accessibilityText = accessibilityText;

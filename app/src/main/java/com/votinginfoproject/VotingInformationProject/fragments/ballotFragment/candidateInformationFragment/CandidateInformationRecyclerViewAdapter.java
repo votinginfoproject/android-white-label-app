@@ -9,8 +9,6 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.CandidateDetailViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.CandidateHeaderViewHolder;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.ContestViewHolder;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.HeaderViewHolder;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
 
 /**
@@ -34,11 +32,11 @@ public class CandidateInformationRecyclerViewAdapter extends RecyclerView.Adapte
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_candidate_header, parent, false);
 
-                return new HeaderViewHolder(view);
+                return new CandidateHeaderViewHolder(view);
             case CandidateInformationPresenter.CANDIDATE_INFO_VIEW_HOLDER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_candidate_detail_item, parent, false);
 
-                return new ContestViewHolder(view);
+                return new CandidateDetailViewHolder(view);
             case CandidateInformationPresenter.REPORT_VIEW_HOLDER:
             default:
                 view = LayoutInflater.from(parent.getContext())
@@ -54,13 +52,18 @@ public class CandidateInformationRecyclerViewAdapter extends RecyclerView.Adapte
             CandidateHeaderViewHolder candidateHeaderViewHolder = (CandidateHeaderViewHolder) holder;
             Candidate candidate = mPresenter.getCandidate();
 
-            candidateHeaderViewHolder.bindData(mPresenter.getView().getContext(), candidate.candidateUrl, candidate.name, candidate.party);
+            if (mPresenter.getView() != null) {
+                candidateHeaderViewHolder.bindData(mPresenter.getView().getContext(), candidate.candidateUrl, candidate.name, candidate.party);
+            }
+
         } else if (holder instanceof CandidateDetailViewHolder) {
             CandidateDetailViewHolder candidateDetailViewHolder = (CandidateDetailViewHolder) holder;
 
             CandidateInformationPresenter.DataHolder dataHolder = mPresenter.getDataForIndex(position);
 
-            candidateDetailViewHolder.bindData(mPresenter.getView().getContext(), dataHolder);
+            if (mPresenter.getView() != null) {
+                candidateDetailViewHolder.bindData(mPresenter.getView().getContext(), dataHolder);
+            }
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
             errorViewHolder.setOnClickListener(new View.OnClickListener() {

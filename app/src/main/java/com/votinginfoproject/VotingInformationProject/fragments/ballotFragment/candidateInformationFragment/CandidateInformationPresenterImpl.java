@@ -25,6 +25,8 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
             return new CandidateInformationPresenterImpl[size];
         }
     };
+
+    private static final String TAG = CandidateInformationPresenterImpl.class.getSimpleName();
     private int websiteIndex = -1;
     private int phoneIndex = -1;
     private int emailIndex = -1;
@@ -57,10 +59,17 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
 
     @Override
     public DataHolder getDataForIndex(int index) {
+        if (getView() == null) {
+            return null;
+        }
+
         Context context = getView().getContext();
 
         if (index == websiteIndex) {
-            return new DataHolder(getCandidate().candidateUrl,
+            Log.v(TAG, "Got Website Data: " + index);
+            return new DataHolder(
+                    getSectionTitleForIndex(index),
+                    getCandidate().candidateUrl,
                     context.getString(R.string.candidate_details_website),
                     context.getString(R.string.accessibility_description_website),
                     R.drawable.ic_computer,
@@ -71,7 +80,11 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         }
                     });
         } else if (index == phoneIndex) {
-            return new DataHolder(getCandidate().phone,
+            Log.v(TAG, "Got Phone Data: " + index);
+
+            return new DataHolder(
+                    getSectionTitleForIndex(index),
+                    getCandidate().phone,
                     context.getString(R.string.candidate_details_phone),
                     context.getString(R.string.accessibility_description_phone),
                     R.drawable.ic_phone,
@@ -82,7 +95,11 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         }
                     });
         } else if (index == emailIndex) {
-            return new DataHolder(getCandidate().email,
+            Log.v(TAG, "Got Email Data: " + index);
+
+            return new DataHolder(
+                    getSectionTitleForIndex(index),
+                    getCandidate().email,
                     context.getString(R.string.candidate_details_email),
                     context.getString(R.string.accessibility_description_email),
                     R.drawable.ic_phone,
@@ -93,13 +110,18 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         }
                     });
         } else if (index >= socialMediaHeaderIndex && index < getRowCount() - 1) {
+
             int modifiedIndex = index - socialMediaHeaderIndex;
+            Log.v(TAG, "Got Social Media Data: " + index + " mod: " + modifiedIndex);
 
-            if (modifiedIndex > 0 && getCandidate().channels.size() > modifiedIndex) {
+            if (modifiedIndex >= 0 && getCandidate().channels.size() > modifiedIndex) {
                 SocialMediaChannel channel = getCandidate().channels.get(modifiedIndex);
+                Log.v(TAG, "channel: " + channel);
 
-                return new DataHolder(channel.type,
-                        channel.getCleanType(),
+                return new DataHolder(
+                        getSectionTitleForIndex(index),
+                        channel.type,
+                        null,//Do not show detail text here
                         channel.getCleanType(),
                         channel.getDrawable(),
                         new View.OnClickListener() {
@@ -123,7 +145,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
     public int getRowCount() {
         Candidate candidate = getCandidate();
 
-        int rowCount = 1;
+        int rowCount = 1;//Added row for header
 
         if (candidate.candidateUrl != null) {
             websiteIndex = rowCount;
@@ -145,6 +167,8 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
             rowCount += candidate.channels.size();
         }
 
+        rowCount++;//Added row for report button
+
         Log.v("here", "Row Count: " + rowCount);
 
         return rowCount;
@@ -153,24 +177,29 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
     @Override
     public String getSectionTitleForIndex(int index) {
         //If it is not the header, and there is at least one item of candidate details
-        if (index == 1 && websiteIndex > 0 || phoneIndex > 0 || emailIndex > 0) {
+        if (index == 1 && (websiteIndex > 0 || phoneIndex > 0 || emailIndex > 0)) {
             return getView().getContext().getString(R.string.candidate_details_header);
         } else if (index == socialMediaHeaderIndex) {
             return getView().getContext().getString(R.string.candidate_social_header);
         }
 
-        return "";
+        return null;
     }
 
     @Override
     public int getViewTypeForIndex(int index) {
         if (index == 0) {
+            Log.v(TAG, "Index: " + index + " HEADER_VIEW_HOLDER");
             return HEADER_VIEW_HOLDER;
         } else if (index < getRowCount() - 1) {
-            return CANDIDATE_INFO_VIEW_HOLDER;
-        }
+            Log.v(TAG, "Index: " + index + " CANDIDATE_INFO_VIEW_HOLDER" + getDataForIndex(index));
 
-        return REPORT_VIEW_HOLDER;
+            return CANDIDATE_INFO_VIEW_HOLDER;
+        } else {
+            Log.v(TAG, "Index: " + index + " REPORT_VIEW_HOLDER");
+
+            return REPORT_VIEW_HOLDER;
+        }
     }
 
     @Override

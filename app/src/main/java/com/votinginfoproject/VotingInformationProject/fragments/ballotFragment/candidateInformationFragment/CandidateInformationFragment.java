@@ -24,6 +24,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
     private static final String ARG_PRESENTER = "arg_presenter";
 
     private CandidateInformationRecyclerViewAdapter mAdapter;
+    private CandidateInformationPresenter mPresenter;
     private RecyclerView mRecyclerView;
     private CandidateInformationListener mListener;
 
@@ -48,10 +49,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            CandidateInformationPresenter presenter = getArguments().getParcelable(ARG_PRESENTER);
-
-            mAdapter = new CandidateInformationRecyclerViewAdapter();
-            mAdapter.setPresenter(presenter);
+            mPresenter = getArguments().getParcelable(ARG_PRESENTER);
         }
     }
 
@@ -70,9 +68,12 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 1));
 
-        if (mAdapter != null) {
-            mRecyclerView.setAdapter(mAdapter);
-        }
+        mAdapter = new CandidateInformationRecyclerViewAdapter();
+        mPresenter.setView(this);
+
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setPresenter(mPresenter);
 
         return view;
     }
