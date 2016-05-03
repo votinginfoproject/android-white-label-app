@@ -102,7 +102,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         if (manager.getBackStackEntryCount() > 1) {
             manager.popBackStack();
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 
