@@ -18,6 +18,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -234,21 +235,34 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     @Override
     public void phoneNumberClicked(String phoneNumber) {
         //Navigate to phone number
+        Intent dial = new Intent();
+        dial.setAction("android.intent.action.DIAL");
+        dial.setData(Uri.parse("tel:" + phoneNumber));
+
+        startActivity(Intent.createChooser(dial, getString(R.string.accessibility_description_phone)));
     }
 
     @Override
     public void emailClicked(String email) {
         //navigate to email
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/html");
+        intent.putExtra(Intent.EXTRA_EMAIL, email);
+
+        startActivity(Intent.createChooser(intent, getString(R.string.accessibility_description_email)));
     }
 
     @Override
     public void reportErrorClicked() {
+        Toast.makeText(this, "Error clicked", Toast.LENGTH_SHORT).show();
+
         Log.v(TAG, "Report Error Clicked()");
     }
 
     //Election Details Interface
     @Override
     public void navigateToURL(String urlString) {
+
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(this, R.color.background_blue));
 

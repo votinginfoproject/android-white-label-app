@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 
 import com.votinginfoproject.VotingInformationProject.R;
@@ -76,6 +75,10 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         @Override
                         public void onClick(View v) {
                             //Navigate to URL
+                            if (getView() != null) {
+                                getView().navigateToUrl(getCandidate().candidateUrl);
+                            }
+
                         }
                     });
         } else if (index == phoneIndex) {
@@ -89,6 +92,9 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         @Override
                         public void onClick(View v) {
                             //Navigate to phone
+                            if (getView() != null) {
+                                getView().navigateToPhone(getCandidate().phone);
+                            }
                         }
                     });
         } else if (index == emailIndex) {
@@ -102,6 +108,9 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         @Override
                         public void onClick(View v) {
                             //Navigate to email
+                            if (getView() != null) {
+                                getView().navigateToEmail(getCandidate().email);
+                            }
                         }
                     });
         } else if (index >= socialMediaHeaderIndex && index < getRowCount() - 1) {
@@ -109,7 +118,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
             int modifiedIndex = index - socialMediaHeaderIndex;
 
             if (modifiedIndex >= 0 && getCandidate().channels.size() > modifiedIndex) {
-                SocialMediaChannel channel = getCandidate().channels.get(modifiedIndex);
+                final SocialMediaChannel channel = getCandidate().channels.get(modifiedIndex);
 
                 return new DataHolder(
                         getSectionTitleForIndex(index),
@@ -121,6 +130,9 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                             @Override
                             public void onClick(View v) {
                                 //Navigate to URL
+                                if (getView() != null) {
+                                    getView().navigateToUrl(channel.id);
+                                }
                             }
                         });
             }
