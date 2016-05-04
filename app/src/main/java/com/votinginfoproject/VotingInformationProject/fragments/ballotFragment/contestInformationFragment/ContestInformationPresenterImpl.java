@@ -52,7 +52,7 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
         String description = "";
 
         if (index == 0 && hasHeader()) {
-            if (mContest.type.equals("Referendum")) {
+            if (mIsReferendum) {
                 description = mContest.referendumSubtitle;
                 title = mContest.referendumTitle;
             } else {

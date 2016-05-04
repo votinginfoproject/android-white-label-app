@@ -9,7 +9,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 /**
  * Created by marcvandehey on 4/29/16.
  */
-public class ReferendumItemViewHolder extends RecyclerView.ViewHolder {
+public class ReferendumItemViewHolder extends RecyclerView.ViewHolder implements DecoratedViewHolder {
     private final TextView mTextView;
     private final TextView mSectionTextView;
 
@@ -37,5 +37,10 @@ public class ReferendumItemViewHolder extends RecyclerView.ViewHolder {
     @Override
     public String toString() {
         return super.toString() + " '" + mTextView.getText() + "'";
+    }
+
+    @Override
+    public boolean shouldShowItemDecoration() {
+        return (mSectionTextView.getVisibility() == View.VISIBLE);
     }
 }
