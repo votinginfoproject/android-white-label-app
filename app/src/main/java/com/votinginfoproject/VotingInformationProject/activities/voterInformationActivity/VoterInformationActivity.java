@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +19,6 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,6 +26,9 @@ import com.google.android.gms.location.LocationServices;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorActivity;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
@@ -181,6 +184,11 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
     public void mapButtonClicked(@LayoutRes int currentSort) {
         getPresenter().mapButtonClicked(currentSort);
     }
@@ -222,6 +230,15 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
+    public void navigateToReportErrorActivity(ReportErrorPresenter presenter) {
+        Intent intent = new Intent(this, ReportErrorActivity.class);
+
+        intent.putExtra(ReportErrorActivity.ARG_PRESENTER, presenter);
+
+        startActivity(intent);
+    }
+
+    @Override
     public void contestClicked(Contest contest) {
         getPresenter().contestClicked(contest);
     }
@@ -253,9 +270,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void reportErrorClicked() {
-        Toast.makeText(this, "Error clicked", Toast.LENGTH_SHORT).show();
-
-        Log.v(TAG, "Report Error Clicked()");
+        getPresenter().reportErrorButtonClicked();
     }
 
     //Election Details Interface
@@ -269,9 +284,8 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
-    public void navigateToErrorView() {
-        //TODO add things here
-        Log.v(TAG, "Report Error Clicked()");
+    public void reportErrorButtonClicked() {
+        getPresenter().reportErrorButtonClicked();
     }
 
     @Override

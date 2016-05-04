@@ -8,4 +8,6 @@
     <integer name="bottom_nav_text_alpha_selected">100</integer>
     <integer name="bottom_nav_image_alpha_unselected">60</integer>
     <integer name="bottom_nav_image_alpha_selected">100</integer>
+
+    <integer name="report_error_loading_transition_duration">250</integer>
 </resources>

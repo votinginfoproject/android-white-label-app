@@ -59,6 +59,13 @@
             android:theme="@style/AppTheme"
             >
         </activity>
+        <activity
+            android:name=".activities.reportErrorActivity.ReportErrorActivity"
+            android:label="@string/title_activity_directions"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            >
+        </activity>
     </application>
 
 </manifest>

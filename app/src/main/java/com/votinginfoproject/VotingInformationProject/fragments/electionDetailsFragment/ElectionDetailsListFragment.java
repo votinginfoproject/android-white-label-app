@@ -22,7 +22,7 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
     public interface ElectionDetailsListFragmentCallback {
         void navigateToURL(String urlString);
 
-        void navigateToErrorView();
+        void reportErrorButtonClicked();
 
         void navigateToDirectionsView(String address);
     }
@@ -100,7 +100,7 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
     @Override
     public void navigateToErrorView() {
         if (getActivity() instanceof ElectionDetailsListFragmentCallback) {
-            ((ElectionDetailsListFragmentCallback) getActivity()).navigateToErrorView();
+            ((ElectionDetailsListFragmentCallback) getActivity()).reportErrorButtonClicked();
         }
     }
 

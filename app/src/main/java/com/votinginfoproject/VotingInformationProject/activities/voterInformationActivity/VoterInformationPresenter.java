@@ -22,6 +22,8 @@ public abstract class VoterInformationPresenter extends BasePresenter<VoterInfor
 
     abstract void pollingSitesButtonClicked();
 
+    abstract void reportErrorButtonClicked();
+
     abstract void mapButtonClicked(@LayoutRes int currentSort);
 
     abstract void listButtonClicked(@LayoutRes int currentSort);
