@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -242,7 +238,6 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
                 mToolbar.setOnMenuItemClickListener(this);
                 mToolbar.inflateMenu(R.menu.polling_sites_map);
-                mToolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
 
                 //Remove any sorts that are missing locations
                 if (!mPresenter.hasPollingLocations()) {
@@ -255,6 +250,15 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
                 if (!mPresenter.hasDropBoxLocations()) {
                     mToolbar.getMenu().removeItem(R.id.sort_drop_boxes);
+                }
+
+                //If there aren't any polling locations
+                if (!mPresenter.hasPollingLocations() &&
+                        !mPresenter.hasEarlyVotingLocations() &&
+                        !mPresenter.hasDropBoxLocations()) {
+                    mToolbar.getMenu().removeGroup(R.id.filter_polling_sites);
+                } else {
+                    mToolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
                 }
             }
 

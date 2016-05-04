@@ -110,7 +110,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        if (activity instanceof  PollingSitesListener) {
+        if (activity instanceof PollingSitesListener) {
             mListener = (PollingSitesListener) activity;
         }
     }
@@ -158,7 +158,14 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
                     mToolbar.getMenu().removeItem(R.id.sort_drop_boxes);
                 }
 
-                mToolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
+                //If there aren't any polling locations
+                if (!mPresenter.hasPollingLocations() &&
+                        !mPresenter.hasEarlyVotingLocations() &&
+                        !mPresenter.hasDropBoxLocations()) {
+                    mToolbar.getMenu().removeGroup(R.id.filter_polling_sites);
+                } else {
+                    mToolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
+                }
             }
         }
     }

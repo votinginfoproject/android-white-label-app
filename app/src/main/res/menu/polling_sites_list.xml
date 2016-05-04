@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/filter_polling_sites"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/sort_all"
             android:checked="true"
             android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.all_sites"
-            app:showAsAction="never|withText" />
+            app:showAsAction="never|withText"/>
         <item
             android:id="@+id/sort_polling_locations"
             android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.polling_sites"
-            app:showAsAction="never|withText" />
+            app:showAsAction="never|withText"/>
 
         <item
             android:id="@+id/sort_early_vote"
             android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.early_voting"
-            app:showAsAction="never|withText" />
+            app:showAsAction="never|withText"/>
 
         <item
             android:id="@+id/sort_drop_boxes"
             android:icon="@drawable/ic_format_list"
             android:title="@string/locations.list.label.drop_off"
-            app:showAsAction="never|withText" />
+            app:showAsAction="never|withText"/>
     </group>
 
     <item
@@ -33,5 +35,5 @@
         android:icon="@drawable/ic_map"
         android:panelFullBackground="@drawable/selector_overflow_menu"
         android:title="@string/locations.button.list_map"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 </menu>

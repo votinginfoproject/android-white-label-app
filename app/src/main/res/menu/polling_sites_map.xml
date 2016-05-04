@@ -7,7 +7,8 @@
         android:title="@string/locations.button.list_map"
         app:showAsAction="always"/>
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/filter_polling_sites">
         <item
             android:id="@+id/sort_all"
             android:enabled="true"
