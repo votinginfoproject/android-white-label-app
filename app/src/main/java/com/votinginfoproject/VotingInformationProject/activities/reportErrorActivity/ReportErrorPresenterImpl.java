@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.Xml;
 
 import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
@@ -34,26 +35,26 @@ public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Pa
     };
 
     public ReportErrorPresenterImpl() {
-
+        //Required empty constructor
     }
 
     private ReportErrorPresenterImpl(Parcel source) {
-
+        //Required parcel constructor
     }
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        //Not implemented
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-
+        //Not implemented
     }
 
     @Override
     public void onDestroy() {
-
+        setView(null);
     }
 
     @Override
@@ -72,23 +73,24 @@ public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Pa
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        //Not implemented
     }
 
     @Override
     void webViewFinishedLoading() {
-        getView().toggleLoading(false);
+        if (getView() != null) {
+            getView().toggleLoading(false);
+        }
     }
 
     private void postData() {
         Uri.Builder builder = new Uri.Builder();
-        //VoterInfoResponse info = VoterInformation.getVoterInfoResponse();
         builder.appendQueryParameter("electionId", VoterInformation.getElection().getId());
         builder.appendQueryParameter("address", VoterInformation.getHomeAddress().toGeocodeString());
 
         // strip leading question mark from parameters
         String paramString = builder.build().toString().substring(1);
-        byte[] post = paramString.getBytes();//Xml.Encoding.getBytes(paramString, "BASE64");
+        byte[] post = paramString.getBytes();
 
         getView().postUrl(FEEDBACK_URL, post);
     }
