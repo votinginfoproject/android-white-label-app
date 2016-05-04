@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -110,14 +111,31 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
         }
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof ContestListListener) {
             mListener = (ContestListListener) context;
         } else {
             throw new RuntimeException(context.toString()
+                    + " must implement ContestListListener");
+        }
+    }
+
+    /**
+     * Implement deprecated protocol for older devices that will not call onAttach(Context)
+     *
+     * @param activity
+     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof ContestListListener) {
+            mListener = (ContestListListener) activity;
+        } else {
+            throw new RuntimeException(activity.toString()
                     + " must implement ContestListListener");
         }
     }
@@ -133,6 +151,23 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
         super.onDestroy();
 
         mAdapter.setPresenter(null);
+    }
+
+    /**
+     * Override getContext to return activity if context is not available
+     * <p/>
+     * This is a problem with older devices where getContext is not utilized
+     *
+     * @return
+     */
+
+    @Override
+    public Context getContext() {
+        try {
+            return super.getContext();
+        } catch (NoSuchMethodError error) {
+            return getActivity();
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -108,6 +109,34 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement ContestListListener");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof CandidateInformationListener) {
+            mListener = (CandidateInformationListener) activity;
+        } else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement ContestListListener");
+        }
+    }
+
+    /**
+     * Override getContext to return activity if context is not available
+     * <p/>
+     * This is a problem with older devices where getContext is not utilized
+     *
+     * @return
+     */
+
+    @Override
+    public Context getContext() {
+        try {
+            return super.getContext();
+        } catch (NoSuchMethodError error) {
+            return getActivity();
         }
     }
 

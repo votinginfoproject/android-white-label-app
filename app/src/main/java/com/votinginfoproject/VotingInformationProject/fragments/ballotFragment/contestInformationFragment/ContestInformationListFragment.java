@@ -132,6 +132,23 @@ public class ContestInformationListFragment extends Fragment implements BottomNa
         }
     }
 
+    /**
+     * Override getContext to return activity if context is not available
+     * <p/>
+     * This is a problem with older devices where getContext is not utilized
+     *
+     * @return
+     */
+
+    @Override
+    public Context getContext() {
+        try {
+            return super.getContext();
+        } catch (NoSuchMethodError error) {
+            return getActivity();
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();

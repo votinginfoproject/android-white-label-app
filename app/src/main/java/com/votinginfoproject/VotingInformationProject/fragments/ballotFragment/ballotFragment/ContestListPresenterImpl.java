@@ -79,7 +79,11 @@ public class ContestListPresenterImpl extends ContestListPresenter {
     public String getSectionTitleForIndex(int index) {
         index -= hasHeader() ? 1 : 0;
 
-        return (index == 0) ? getView().getContext().getString(R.string.fragment_ballot_list_header_contests) : null;
+        if (index == 0 && getView() != null && getView().getContext() != null) {
+            return getView().getContext().getString(R.string.fragment_ballot_list_header_contests);
+        }
+
+        return null;
     }
 
     @Override
