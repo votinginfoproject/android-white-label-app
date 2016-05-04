@@ -59,6 +59,7 @@
     <!-- Feedback Strings -->
     <string name="feedback.link">Report an Error</string>
     <string name="feedback.loading">Loading feedback form…</string>
+    <string name="feedback.url">https://voter-info-tool.appspot.com/feedback</string>
 
     <!-- Election View Strings -->
     <string name="fragment.ballot.list.header.contests">Contests</string>

@@ -26,6 +26,7 @@ import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorActivity;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
@@ -66,7 +67,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             mBottomNavigationBar.setListener(this);
         }
 
-        setPresenter(new VoterInformationPresenterImpl());
+        setPresenter(new VoterInformationPresenterImpl(getApplicationContext()));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             startPollingLocation();
@@ -91,7 +92,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             VoterInformation.onRestoreInstanceState(savedInstanceState);
         }
 
-        setPresenter(new VoterInformationPresenterImpl());
+        setPresenter(new VoterInformationPresenterImpl(getApplicationContext()));
     }
 
     @Override
@@ -223,6 +224,15 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
+    public void navigateToReportErrorActivity(ReportErrorPresenter presenter) {
+        Intent intent = new Intent(this, ReportErrorActivity.class);
+
+        intent.putExtra(ReportErrorActivity.ARG_PRESENTER, presenter);
+
+        startActivity(intent);
+    }
+
+    @Override
     public void contestClicked(Contest contest) {
         getPresenter().contestClicked(contest);
     }
@@ -254,15 +264,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void reportErrorClicked() {
-        openReportErrorActivity();
-    }
-
-    public void openReportErrorActivity() {
-        Intent intent = new Intent(this, ReportErrorActivity.class);
-
-        intent.putExtra(ReportErrorActivity.ARG_PRESENTER, new ReportErrorPresenterImpl());
-
-        startActivity(intent);
+        getPresenter().reportErrorButtonClicked();
     }
 
     //Election Details Interface
@@ -277,7 +279,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void reportErrorButtonClicked() {
-        openReportErrorActivity();
+        getPresenter().reportErrorButtonClicked();
     }
 
     @Override

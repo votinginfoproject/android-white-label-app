@@ -1,11 +1,14 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
+import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationPresenterImpl;
@@ -29,8 +32,10 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     private int mCurrentTab = -1;
 
-    public VoterInformationPresenterImpl() {
-        //Not implemented
+    private Context mContext;
+
+    public VoterInformationPresenterImpl(Context context) {
+        mContext = context;
     }
 
     @Override
@@ -125,5 +130,15 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
     void listButtonClicked(@LayoutRes int currentSort) {
         //Remove all back navigation since we are going to the default view
         getView().presentParentLevelFragment(PollingSitesListFragment.newInstance(currentSort));
+    }
+
+    @Override
+    void reportErrorButtonClicked() {
+        String electionID = VoterInformation.getElection().getId();
+        String homeAddress = VoterInformation.getHomeAddress().toGeocodeString();
+
+        ReportErrorPresenter presenter = new ReportErrorPresenterImpl(mContext, electionID, homeAddress);
+
+        getView().navigateToReportErrorActivity(presenter);
     }
 }

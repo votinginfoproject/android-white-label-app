@@ -2,12 +2,10 @@ package com.votinginfoproject.VotingInformationProject.activities.reportErrorAct
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -20,19 +18,14 @@ import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
  */
 public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> implements ReportErrorView {
     public static final String TAG = ReportErrorActivity.class.getSimpleName();
-
     public static final String ARG_PRESENTER = "presenter";
 
-    private Toolbar mToolbar;
-
     private WebView mWebView;
-
     private View mLoadingView;
     private ProgressBar mProgressBar;
 
-    private int mLoadingViewFadeDuration = 250;
-
     @Override
+    @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -42,7 +35,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
 
         if (extras != null) {
             if (extras.containsKey(ARG_PRESENTER) && getPresenter() == null) {
-                ReportErrorPresenter presenter = (ReportErrorPresenter) extras.getParcelable(ARG_PRESENTER);
+                ReportErrorPresenter presenter = extras.getParcelable(ARG_PRESENTER);
 
                 setPresenter(presenter);
             }
@@ -50,6 +43,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
 
         mWebView = (WebView) findViewById(R.id.web_view);
 
+        //Careful, this opens app to XSS attacks. Only use on trusted websites
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         mWebView.setWebViewClient(new WebViewClient() {
@@ -59,7 +53,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
             public void onLoadResource(WebView view, String url) {
                 super.onLoadResource(view, url);
 
-                if(mWebView.getProgress()==100 && !finished){
+                if (mWebView.getProgress() == 100 && !finished) {
                     finished = true;
 
                     getPresenter().webViewFinishedLoading();
@@ -67,11 +61,11 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
             }
         });
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.feedback_link);
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.feedback_link);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -101,7 +95,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
 
         mLoadingView.animate()
                 .alpha(alpha)
-                .setDuration(mLoadingViewFadeDuration)
+                .setDuration(getResources().getInteger(R.integer.report_error_loading_transition_duration))
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
