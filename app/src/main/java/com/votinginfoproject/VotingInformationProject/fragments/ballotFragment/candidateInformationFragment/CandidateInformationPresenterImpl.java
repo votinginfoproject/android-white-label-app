@@ -203,7 +203,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
     @Override
     public void onReportErrorClicked() {
         //Navigate to report error
-
-        Toast.makeText(getView().getContext(), "Hook up error Report", Toast.LENGTH_SHORT);
+        Toast.makeText(getView().getContext(), "Hook up error Report", Toast.LENGTH_SHORT).show();
     }
 }

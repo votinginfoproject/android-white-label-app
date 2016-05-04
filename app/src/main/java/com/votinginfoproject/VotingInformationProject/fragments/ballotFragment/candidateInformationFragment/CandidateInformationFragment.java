@@ -125,12 +125,11 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
 
     /**
      * Override getContext to return activity if context is not available
-     * <p/>
+     * <p>
      * This is a problem with older devices where getContext is not utilized
      *
      * @return
      */
-
     @Override
     public Context getContext() {
         try {

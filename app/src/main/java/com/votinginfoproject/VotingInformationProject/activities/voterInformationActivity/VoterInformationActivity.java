@@ -261,7 +261,6 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     //Election Details Interface
     @Override
     public void navigateToURL(String urlString) {
-
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(this, R.color.background_blue));
 
