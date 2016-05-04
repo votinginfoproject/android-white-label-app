@@ -75,6 +75,9 @@
     <string name="contest.label.number_voting_for">Number Voting For</string>
     <string name="contest.label.ballot_placement">Ballot Placement</string>
     <string name="contest.header.candidate_list">Candidates</string>
+    <string name="contest.label.referendum_text">Referendum Details</string>
+    <string name="contest.label.referendum_pro">Referendum Pro</string>
+    <string name="contest.label.referendum_con">Referendum Con</string>
 
     <!-- Candidate Details Strings -->
     <string name="candidate.toolbar">Candidate</string>
@@ -167,8 +170,5 @@
     <string name="about.loading.legal_notices">Loading…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_directions">Directions</string>
 </resources>
