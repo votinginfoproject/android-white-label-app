@@ -3,8 +3,10 @@ package com.votinginfoproject.VotingInformationProject.activities.reportErrorAct
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -40,27 +42,13 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
                 setPresenter(presenter);
             }
         }
+
         getPresenter().onCreate(savedInstanceState);
 
         mWebView = (WebView) findViewById(R.id.web_view);
 
         //Careful, this opens app to XSS attacks. Only use on trusted websites
         mWebView.getSettings().setJavaScriptEnabled(true);
-
-        mWebView.setWebViewClient(new WebViewClient() {
-            private boolean finished = false;
-
-            @Override
-            public void onLoadResource(WebView view, String url) {
-                super.onLoadResource(view, url);
-
-                if (mWebView.getProgress() == 100 && !finished) {
-                    finished = true;
-
-                    getPresenter().webViewFinishedLoading();
-                }
-            }
-        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.feedback_link);
@@ -81,8 +69,9 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
     }
 
     @Override
-    public void postUrl(String url, byte[] postData) {
-        mWebView.postUrl(url, postData);
+    public void postUrl(final String postUrl, byte[] postData) {
+        mWebView.setWebViewClient(new ReportErrorWebViewClient(postUrl));
+        mWebView.postUrl(postUrl, postData);
     }
 
     @Override
@@ -91,6 +80,8 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
 
         if (loading) {
             mLoadingView.setVisibility(View.VISIBLE);
+
+            mProgressBar.setVisibility(View.VISIBLE);
             mProgressBar.animate();
         }
 
@@ -104,8 +95,42 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
 
                         if (!loading) {
                             mLoadingView.setVisibility(View.GONE);
+
+                            mProgressBar.setVisibility(View.GONE);
                         }
                     }
                 });
+    }
+
+    private class ReportErrorWebViewClient extends WebViewClient {
+        private String mReportErrorUrl;
+
+        private boolean finished = false;
+
+        public ReportErrorWebViewClient(String reportErrorUrl) {
+            super();
+
+            mReportErrorUrl = reportErrorUrl;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+
+            if (url.equals(mReportErrorUrl)) {
+                finished = false;
+            }
+        }
+
+        @Override
+        public void onLoadResource(WebView view, String url) {
+            super.onLoadResource(view, url);
+
+            if (mWebView.getProgress() == 100 && !finished) {
+                finished = true;
+
+                getPresenter().webViewFinishedLoading();
+            }
+        }
     }
 }

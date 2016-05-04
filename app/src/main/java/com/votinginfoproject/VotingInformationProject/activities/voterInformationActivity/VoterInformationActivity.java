@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -67,7 +68,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             mBottomNavigationBar.setListener(this);
         }
 
-        setPresenter(new VoterInformationPresenterImpl(getApplicationContext()));
+        setPresenter(new VoterInformationPresenterImpl());
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             startPollingLocation();
@@ -92,7 +93,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
             VoterInformation.onRestoreInstanceState(savedInstanceState);
         }
 
-        setPresenter(new VoterInformationPresenterImpl(getApplicationContext()));
+        setPresenter(new VoterInformationPresenterImpl());
     }
 
     @Override
@@ -180,6 +181,11 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
                 ((BottomNavigationFragment) lastFragment).resetView();
             }
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override

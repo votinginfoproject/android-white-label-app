@@ -32,12 +32,6 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     private int mCurrentTab = -1;
 
-    private Context mContext;
-
-    public VoterInformationPresenterImpl(Context context) {
-        mContext = context;
-    }
-
     @Override
     public void onCreate(Bundle savedState) {
         //Not implemented
@@ -137,7 +131,7 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
         String electionID = VoterInformation.getElection().getId();
         String homeAddress = VoterInformation.getHomeAddress().toGeocodeString();
 
-        ReportErrorPresenter presenter = new ReportErrorPresenterImpl(mContext, electionID, homeAddress);
+        ReportErrorPresenter presenter = new ReportErrorPresenterImpl(getView().getContext(), electionID, homeAddress);
 
         getView().navigateToReportErrorActivity(presenter);
     }

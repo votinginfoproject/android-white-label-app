@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 import android.app.Fragment;
+import android.content.Context;
 
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
 
@@ -18,4 +19,6 @@ public interface VoterInformationView {
     void navigateToReportErrorActivity(ReportErrorPresenter presenter);
 
     void scrollCurrentFragmentToTop();
+
+    Context getContext();
 }
