@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.application.LocationPermissions;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
@@ -274,15 +275,21 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
     public void attemptToGetLocation() {
         //Check for location Permissions
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-        } else {
+        if (LocationPermissions.granted(getContext())) {
             //Do location stuff
+            Log.e(TAG, "Location granted!!");
             if (map != null) {
                 mListener.startPollingLocation();
 
-                map.setMyLocationEnabled(true);
+                try {
+                    map.setMyLocationEnabled(true);
+
+                } catch(SecurityException ex) {
+                    Log.wtf(TAG, "Location permissions appear granted, but still encountered exception.");
+                }
             }
+        } else if (!LocationPermissions.grantedForApplication(getContext())) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
     }
 

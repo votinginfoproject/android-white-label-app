@@ -29,6 +29,7 @@ import com.votinginfoproject.VotingInformationProject.activities.directionsActiv
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorActivity;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
+import com.votinginfoproject.VotingInformationProject.application.LocationPermissions;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment.ContestInformationListFragment;
@@ -70,7 +71,7 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
         setPresenter(new VoterInformationPresenterImpl());
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (LocationPermissions.granted(this)) {
             startPollingLocation();
         }
 
@@ -308,8 +309,14 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (LocationPermissions.granted(this)) {
+            Location lastLocation = null;
+
+            try {
+                lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            } catch (SecurityException ex) {
+                Log.wtf(TAG, "Location permissions appear granted but location not given.");
+            }
 
             if (lastLocation != null) {
                 com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
