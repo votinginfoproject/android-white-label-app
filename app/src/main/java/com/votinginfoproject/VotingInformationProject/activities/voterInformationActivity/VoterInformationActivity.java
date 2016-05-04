@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -36,6 +38,7 @@ import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.c
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment.ElectionDetailsListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesListFragment;
+import com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.VIPMapFragment;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
@@ -98,6 +101,26 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        FragmentManager manager = getFragmentManager();
+        int entryCount = manager.getBackStackEntryCount();
+
+        if (entryCount > 0) {
+            FragmentManager.BackStackEntry entry = manager.getBackStackEntryAt(entryCount - 1);
+            Fragment lastFragment = manager.findFragmentByTag(entry.getName());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                lastFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                
+            } else if (lastFragment instanceof VIPMapFragment) {
+                ((VIPMapFragment) lastFragment).attemptToGetLocation();
+            }
+        }
+    }
+
+        @Override
     public void onBackPressed() {
         FragmentManager manager = getFragmentManager();
 
