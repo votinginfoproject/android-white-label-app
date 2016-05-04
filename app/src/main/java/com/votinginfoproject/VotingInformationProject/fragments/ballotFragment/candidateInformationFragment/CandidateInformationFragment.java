@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.BallotRecyclerViewDecorator;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 
 /**
@@ -60,7 +61,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         mRecyclerView = (RecyclerView) view.findViewById(R.id.polling_locations_list);
 
         //Update Decoration
-        mRecyclerView.addItemDecoration(new CandidateItemDecoration(getActivity()));
+        mRecyclerView.addItemDecoration(new BallotRecyclerViewDecorator(getActivity()));
 
         // Set the adapter
         Context context = view.getContext();

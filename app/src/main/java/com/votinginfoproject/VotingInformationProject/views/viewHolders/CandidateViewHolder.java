@@ -11,7 +11,7 @@ import com.votinginfoproject.VotingInformationProject.models.Candidate;
 /**
  * Created by marcvandehey on 4/28/16.
  */
-public class CandidateViewHolder extends RecyclerView.ViewHolder {
+public class CandidateViewHolder extends RecyclerView.ViewHolder implements DecoratedViewHolder {
     private View mClickableView;
     private TextView mTitle;
     private TextView mDescription;
@@ -24,10 +24,6 @@ public class CandidateViewHolder extends RecyclerView.ViewHolder {
         mTitle = (TextView) itemView.findViewById(R.id.text_view_title);
         mDescription = (TextView) itemView.findViewById(R.id.text_view_description);
         mSectionTitle = (TextView) itemView.findViewById(R.id.text_view_section);
-    }
-
-    public boolean hasSectionTitle() {
-        return mSectionTitle.getVisibility() == View.VISIBLE;
     }
 
     /**
@@ -51,5 +47,10 @@ public class CandidateViewHolder extends RecyclerView.ViewHolder {
 
             mClickableView.setOnClickListener(listener);
         }
+    }
+
+    @Override
+    public boolean shouldShowItemDecoration() {
+        return mSectionTitle.getVisibility() == View.VISIBLE;
     }
 }

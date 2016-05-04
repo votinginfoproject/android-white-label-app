@@ -1,4 +1,4 @@
-package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment;
+package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,20 +8,19 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.CandidateDetailViewHolder;
-import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportErrorViewHolder;
+import com.votinginfoproject.VotingInformationProject.views.viewHolders.DecoratedViewHolder;
 
 /**
  * Created by marcvandehey on 5/3/16.
  */
-public class CandidateItemDecoration extends RecyclerView.ItemDecoration {
+public class BallotRecyclerViewDecorator extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
 
     private Drawable mDivider;
 
-    public CandidateItemDecoration(Context context) {
+    public BallotRecyclerViewDecorator(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
@@ -45,11 +44,11 @@ public class CandidateItemDecoration extends RecyclerView.ItemDecoration {
 
             //If the child is the header show full length
             //If the next child is the footer show full length as well
-            boolean shouldDrawDecoration = (viewHolder instanceof ReportErrorViewHolder);
+            boolean shouldDrawDecoration = false;
 
-            if (viewHolder instanceof CandidateDetailViewHolder) {
-                CandidateDetailViewHolder candidateDetailViewHolder = (CandidateDetailViewHolder) viewHolder;
-                shouldDrawDecoration = candidateDetailViewHolder.hasSectionTitle();
+            if (viewHolder instanceof DecoratedViewHolder) {
+                DecoratedViewHolder decoratedViewHolder = (DecoratedViewHolder) viewHolder;
+                shouldDrawDecoration = decoratedViewHolder.shouldShowItemDecoration();
             }
 
             if (shouldDrawDecoration) {

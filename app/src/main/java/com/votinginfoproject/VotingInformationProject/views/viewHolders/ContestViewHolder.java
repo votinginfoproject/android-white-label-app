@@ -11,7 +11,7 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
 /**
  * Created by marcvandehey on 4/21/16.
  */
-public class ContestViewHolder extends ViewHolder {
+public class ContestViewHolder extends ViewHolder implements DecoratedViewHolder {
     private View mClickableView;
     private TextView mTitle;
     private TextView mDescription;
@@ -24,10 +24,6 @@ public class ContestViewHolder extends ViewHolder {
         mTitle = (TextView) itemView.findViewById(R.id.text_view_title);
         mDescription = (TextView) itemView.findViewById(R.id.text_view_description);
         mSectionTitle = (TextView) itemView.findViewById(R.id.text_view_section);
-    }
-
-    public boolean hasSectionTitle() {
-        return mSectionTitle.getVisibility() == View.VISIBLE;
     }
 
     /**
@@ -58,5 +54,10 @@ public class ContestViewHolder extends ViewHolder {
 
             mClickableView.setOnClickListener(listener);
         }
+    }
+
+    @Override
+    public boolean shouldShowItemDecoration() {
+        return mSectionTitle.getVisibility() == View.VISIBLE;
     }
 }

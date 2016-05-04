@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * Created by marcvandehey on 4/12/16.
  */
-public class ReportErrorViewHolder extends RecyclerView.ViewHolder {
+public class ReportErrorViewHolder extends RecyclerView.ViewHolder implements DecoratedViewHolder {
     public View mView;
 
     /**
@@ -20,5 +20,10 @@ public class ReportErrorViewHolder extends RecyclerView.ViewHolder {
 
     public void setOnClickListener(View.OnClickListener listener) {
         mView.setOnClickListener(listener);
+    }
+
+    @Override
+    public boolean shouldShowItemDecoration() {
+        return true;
     }
 }
