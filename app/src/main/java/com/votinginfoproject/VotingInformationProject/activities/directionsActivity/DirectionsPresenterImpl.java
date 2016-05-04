@@ -1,13 +1,11 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 
 import com.votinginfoproject.VotingInformationProject.R;
+import com.votinginfoproject.VotingInformationProject.application.LocationPermissions;
 import com.votinginfoproject.VotingInformationProject.constants.TransitModes;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
@@ -92,7 +90,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
         if (getView() != null) {
             if (mUsingLastKnownLocation && !locationServicesEnabled()) {
-                getView().toggleEnableLocationView(true);
+                getView().toggleEnableGlobalLocationView(true);
             }
 
             refreshViewData();
@@ -107,12 +105,12 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     }
 
     @Override
-    public void onPermissionsUpdated() {
+    public void checkLocationPermissions() {
         if (locationServicesEnabled()) {
-            getView().toggleEnableLocationView(false);
+            getView().toggleEnableGlobalLocationView(false);
             getView().attemptToGetLocation();
         } else if (mUsingLastKnownLocation) {
-            getView().toggleEnableLocationView(true);
+            getView().toggleEnableGlobalLocationView(true);
         }
     }
 
@@ -208,14 +206,21 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onMapReady() {
-        getView().attemptToGetLocation();
+        if (locationServicesEnabled()) {
+            getView().attemptToGetLocation();
+        } else if (mUsingLastKnownLocation) {
+            getView().toggleEnableGlobalLocationView(true);
+            if (!LocationPermissions.grantedForApplication(mContext)) {
+                getView().showEnableAppLocationPrompt();
+            }
+        }
 
         updateViewMap();
     }
 
     @Override
     public boolean locationServicesEnabled() {
-        return ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return LocationPermissions.granted(mContext);
     }
 
     @Override
@@ -278,7 +283,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             if (locationServicesEnabled()) {
                 origin = VoterInformation.getLastKnownLocation();
             } else if (getView() != null){
-                getView().toggleEnableLocationView(true);
+                getView().toggleEnableGlobalLocationView(true);
             }
         } else {
             origin = new Location();

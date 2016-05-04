@@ -27,7 +27,7 @@ public abstract class DirectionsPresenter extends BasePresenter<DirectionsView> 
 
     public abstract void onMapReady();
 
-    public abstract void onPermissionsUpdated();
+    public abstract void checkLocationPermissions();
 
     public abstract void externalMapButtonPressed();
 

@@ -29,7 +29,9 @@ public interface DirectionsView {
 
     void toggleConnectionErrorView(boolean error);
 
-    void toggleEnableLocationView(boolean showing);
+    void toggleEnableGlobalLocationView(boolean showing);
+
+    void showEnableAppLocationPrompt();
 
     void attemptToGetLocation();
 

@@ -3,10 +3,7 @@ package com.votinginfoproject.VotingInformationProject.activities.directionsActi
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Path;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,13 +34,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment.DirectionsListFragment;
-import com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment.DirectionsListView;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
@@ -190,7 +184,10 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void onResume() {
         super.onResume();
+
         mMapView.onResume();
+
+        getPresenter().checkLocationPermissions();
     }
 
     @Override
@@ -206,16 +203,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
         outState.putBundle(KEY_MAP_STATE, mapState);
 
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        //For whatever reason, the presenter's reference to the view gets lost and we have to set it again
-        getPresenter().setView(this);
-
-        getPresenter().onPermissionsUpdated();
     }
 
     @Override
@@ -420,7 +407,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     }
 
     @Override
-    public void toggleEnableLocationView(boolean showing) {
+    public void toggleEnableGlobalLocationView(boolean showing) {
         fadeView(mEnableLocationView, showing);
     }
 
@@ -454,15 +441,20 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     public void attemptToGetLocation() {
         if (getPresenter().locationServicesEnabled()) {
             try {
-                mMap.setMyLocationEnabled(true);
+                if (mMap != null) {
+                    mMap.setMyLocationEnabled(true);
+                }
             } catch (SecurityException ex) {
                 Log.wtf(TAG, "Permissions error");
             }
 
             startPollingLocation();
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
+    }
+
+    @Override
+    public void showEnableAppLocationPrompt() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
     }
 
     //TabLayout.OnTabSelectedListener
@@ -525,8 +517,14 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     //GoogleAPI ConnectionCallback
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            android.location.Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (getPresenter().locationServicesEnabled()) {
+            android.location.Location lastLocation = null;
+
+            try {
+                lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            } catch (SecurityException ex) {
+                Log.wtf(TAG, "Failed to get location when services enabled.");
+            }
 
             if (lastLocation != null) {
                 com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
@@ -539,6 +537,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
                 getPresenter().lastKnownLocationUpdated();
             } else {
+                getPresenter().checkLocationPermissions();
                 //TODO decide what to do when there's a null location (location unavailable or turned off globally)
             }
         }
