@@ -23,7 +23,6 @@ public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Pa
     private String mElectionID;
     private String mHomeAddress;
 
-
     public static Creator<ReportErrorPresenterImpl> CREATOR = new Creator<ReportErrorPresenterImpl>() {
         @Override
         public ReportErrorPresenterImpl createFromParcel(Parcel source) {
@@ -47,7 +46,6 @@ public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Pa
         mFeedbackURL = source.readString();
         mElectionID = source.readString();
         mHomeAddress = source.readString();
-
     }
 
     @Override
@@ -101,8 +99,8 @@ public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Pa
 
     private void postData() {
         Uri.Builder builder = new Uri.Builder();
-        builder.appendQueryParameter("electionId", VoterInformation.getElection().getId());
-        builder.appendQueryParameter("address", VoterInformation.getHomeAddress().toGeocodeString());
+        builder.appendQueryParameter("electionId", mElectionID);
+        builder.appendQueryParameter("address", mHomeAddress);
 
         // strip leading question mark from parameters
         String paramString = builder.build().toString().substring(1);

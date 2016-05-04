@@ -40,6 +40,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
                 setPresenter(presenter);
             }
         }
+        getPresenter().onCreate(savedInstanceState);
 
         mWebView = (WebView) findViewById(R.id.web_view);
 
