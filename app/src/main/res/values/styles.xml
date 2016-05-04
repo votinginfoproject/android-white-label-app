@@ -287,7 +287,7 @@
         <item name="android:gravity">start|left|center_vertical</item>
     </style>
 
-    <style name="vip_radio_style" parent="@android:style/Widget.ActionButton.Overflow">
+    <style name="vip_radio_style" parent="@android:style/Widget.CompoundButton">
         <item name="android:button">@drawable/radio_button</item>
     </style>
 
