@@ -284,16 +284,16 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
 
     @Override
     public void onCreate(Bundle savedState) {
-
+        //Not implemented
     }
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-
+        //Not implemented
     }
 
     @Override
     public void onDestroy() {
-
+        //Not implemented
     }
 }
