@@ -95,7 +95,7 @@ public class ContestInformationListFragment extends Fragment implements BottomNa
                 Log.e(TAG, "No toolbar found in class: " + getClass().getSimpleName());
             } else {
                 mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-                mToolbar.setTitle(R.string.contest_header_details);
+                mToolbar.setTitle(R.string.contest_toolbar);
                 mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
