@@ -82,7 +82,7 @@ public class ContestInformationRecyclerViewAdapter extends RecyclerView.Adapter<
         } else if (holder instanceof ReferendumItemViewHolder) {
             ReferendumItemViewHolder referendumItemViewHolder = (ReferendumItemViewHolder) holder;
 
-            referendumItemViewHolder.setText(mPresenter.getReferendumItemForIndex(position));
+            referendumItemViewHolder.bindData(mPresenter.getSectionTitleForIndex(position), mPresenter.getReferendumItemForIndex(position));
         } else if (holder instanceof ReportErrorViewHolder) {
             ReportErrorViewHolder errorViewHolder = (ReportErrorViewHolder) holder;
 

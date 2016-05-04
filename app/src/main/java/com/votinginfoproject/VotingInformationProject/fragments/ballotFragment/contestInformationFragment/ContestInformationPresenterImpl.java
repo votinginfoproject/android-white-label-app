@@ -59,7 +59,7 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
                 title = mContest.office;
                 description = mElection.getName();
             }
-        } else if (adjustedIndex < mContest.candidates.size()) {
+        } else if (mContest.candidates != null && adjustedIndex < mContest.candidates.size()) {
             Candidate candidate = mContest.candidates.get(adjustedIndex);
 
             title = candidate.name;
@@ -134,10 +134,10 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
         int rowCount = 0;
 
         if (mContest != null) {
+            rowCount = getContestRowCount();
+
             if (mIsReferendum) {
-                rowCount += getReferendumRowCount();
-            } else {
-                rowCount += getContestRowCount();
+                rowCount = getReferendumRowCount(rowCount);
             }
 
             //Add an extra row for Report error
@@ -149,10 +149,11 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
 
     /**
      * Generates the Row Count in the case that the Contest is a Referendum
+     *
      * @return
      */
-    private int getReferendumRowCount() {
-        int rowCount = mHasHeader ? 1 : 0;
+    private int getReferendumRowCount(int currentRowCount) {
+        int rowCount = currentRowCount;
 
         if (mContest.referendumText != null) {
             referendumTextIndex = rowCount;
@@ -180,6 +181,7 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
 
     /**
      * Generates the Row Count in the case that the Contest is a normal Contest
+     *
      * @return
      */
     private int getContestRowCount() {
@@ -243,9 +245,15 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
     public String getSectionTitleForIndex(int index) {
         int adjustedIndex = index - (hasHeader() ? 1 : 0);
 
-        if (adjustedIndex == 0) {
+        if (index == referendumTextIndex) {
+            return getView().getContext().getString(R.string.contest_label_referendum_text);
+        } else if (index == referendumProIndex) {
+            return getView().getContext().getString(R.string.contest_label_referendum_pro);
+        } else if (index == referendumConIndex) {
+            return getView().getContext().getString(R.string.contest_label_referendum_con);
+        } else if (adjustedIndex == 0 && mContest.candidates != null && !mContest.candidates.isEmpty()) {
             return getView().getContext().getString(R.string.candidate_details_header);
-        } else if (adjustedIndex == mContest.candidates.size()) {
+        } else if ((mContest.candidates != null && adjustedIndex == mContest.candidates.size()) || adjustedIndex == 0) {
             return getView().getContext().getString(R.string.contest_header_details);
         }
 
@@ -263,11 +271,11 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
 
         if (hasHeader() && index == 0) {
             return ELECTION_VIEW_HOLDER;
-        } else if (mIsReferendum && index < getRowCount() - 1) {
+        } else if (index == referendumTextIndex || index == referendumProIndex || index == referendumConIndex) {
             return REFERENDUM_VIEW_HOLDER;
-        } else if (!mIsReferendum && adjustedIndex < mContest.candidates.size()) {
+        } else if (mContest.candidates != null && adjustedIndex < mContest.candidates.size()) {
             return CANDIDATE_VIEW_HOLDER;
-        } else if (!mIsReferendum && index < getRowCount() - 1) {
+        } else if (index < getRowCount() - 1) {
             return CONTEST_DETAIL_VIEW_HOLDER;
         }
 

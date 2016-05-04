@@ -11,6 +11,7 @@ import com.votinginfoproject.VotingInformationProject.R;
  */
 public class ReferendumItemViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextView;
+    private final TextView mSectionTextView;
 
     /**
      * View Holder for an Referendum Item. Expects to use the row_referendum_item layout
@@ -19,9 +20,17 @@ public class ReferendumItemViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         mTextView = (TextView) itemView.findViewById(R.id.text_view);
+        mSectionTextView = (TextView) itemView.findViewById(R.id.text_view_section);
     }
 
-    public void setText(String text) {
+    public void bindData(String sectionText, String text) {
+        if (sectionText == null) {
+            mSectionTextView.setVisibility(View.GONE);
+        } else {
+            mSectionTextView.setVisibility(View.VISIBLE);
+            mSectionTextView.setText(sectionText);
+        }
+
         mTextView.setText(text);
     }
 

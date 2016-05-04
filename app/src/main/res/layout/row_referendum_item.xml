@@ -4,14 +4,25 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:padding="16dp"
     >
+
+    <TextView
+        android:id="@+id/text_view_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="Referendum Text"
+        />
 
     <TextView
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="web"
+        android:padding="16dp"
         android:textColor="@color/dark_text"
         android:textColorLink="?colorPrimary"
         tools:text="Please vote yes to support the cost saving plan to consolidate 19 government programs into one location. No more wasted time going to different places for county services. Already approved by the County Council, the $127M public/private partnership consolidates programs currently housed in 14 locations. \n\nFact: no tax increases are necessary. The project saves taxpayers money by ending expensive leases and reducing 38 positions that would be redundant in one location. Fact: the fully furnished costs are locked in - with the prices guaranteed by the builder. Fact: maintaining existing leases, older facilities and redundant positions will costs tens of millions more than a new, centralized building over 30 years (including interest). \n\nThis pencils out. One new building is more cost effective than renting numerous buildings. Don't be misled by scare tactics and political shenanigans. Saving money + customer service = fiscally responsible governing. Get the facts: www.pierceountywa.org/GSB\n\nREBUTTAL OF ARGUMENT AGAINST:\n\nTransparency: The county publicly announced this proposal two years ago. It's been discussed at over 30 public meetings. The County Council voted 6-1to spend $1 million to design the building on land the county already owns. Like a home mortgage, the fixed 30 year lease saves money for community priorities like public safety. Critics refuse to acknowledge that consolidating operations makes fiscal sense. Please don't let their false claims block a more efficient government.\n\nFOR MORE INFORMATION:\n\nhttps://weiapplets.sos.wa.gov/myvote/onlinevotersguide/Measures?electionid=…"
