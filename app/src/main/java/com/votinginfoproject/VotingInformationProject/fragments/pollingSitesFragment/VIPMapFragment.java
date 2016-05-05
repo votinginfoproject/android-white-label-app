@@ -4,12 +4,10 @@ import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -163,7 +161,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         mapView = super.onCreateView(inflater, container, savedInstanceState);
         rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_map, container, false);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.BELOW, R.id.toolbar);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.toolbar_wrapper);
         rootView.addView(mapView, layoutParams);
 
         @LayoutRes int selectedSort = R.id.sort_all;
@@ -295,7 +293,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
                 try {
                     map.setMyLocationEnabled(true);
 
-                } catch(SecurityException ex) {
+                } catch (SecurityException ex) {
                     Log.wtf(TAG, "Location permissions appear granted, but still encountered exception.");
                 }
             }
