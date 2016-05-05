@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFra
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -133,6 +134,18 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             mListener = (PollingSitesListFragment.PollingSitesListener) context;
         } else {
             throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof PollingSitesListFragment.PollingSitesListener) {
+            mListener = (PollingSitesListFragment.PollingSitesListener) activity;
+        } else {
+            throw new RuntimeException(activity.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
     }
@@ -274,10 +287,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     }
 
     public void attemptToGetLocation() {
-        //Check for location Permissions
         if (LocationPermissions.granted(getContext())) {
             //Do location stuff
-            Log.e(TAG, "Location granted!!");
             if (map != null) {
                 mListener.startPollingLocation();
 
@@ -290,6 +301,22 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             }
         } else if (!LocationPermissions.grantedForApplication(getContext())) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+    }
+
+    /**
+     * Override getContext to return activity if context is not available
+     * <p/>
+     * This is a problem with older devices where getContext is not utilized
+     *
+     * @return Context
+     */
+    @Override
+    public Context getContext() {
+        try {
+            return super.getContext();
+        } catch (NoSuchMethodError error) {
+            return getActivity();
         }
     }
 

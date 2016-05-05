@@ -210,6 +210,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             getView().attemptToGetLocation();
         } else if (mUsingLastKnownLocation) {
             getView().toggleEnableGlobalLocationView(true);
+
             if (!LocationPermissions.grantedForApplication(mContext)) {
                 getView().showEnableAppLocationPrompt();
             }

@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -30,7 +27,6 @@ import com.votinginfoproject.VotingInformationProject.activities.BaseActivity;
 import com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorActivity;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
-import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.application.LocationPermissions;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment.CandidateInformationFragment;
@@ -113,14 +109,14 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 lastFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                
+
             } else if (lastFragment instanceof VIPMapFragment) {
                 ((VIPMapFragment) lastFragment).attemptToGetLocation();
             }
         }
     }
 
-        @Override
+    @Override
     public void onBackPressed() {
         FragmentManager manager = getFragmentManager();
 
