@@ -161,7 +161,12 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
+        if (manager.getBackStackEntryCount() > 0) {
+            transaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out, R.animator.fade_in, R.animator.fade_out);
+        }
+
         manager.popBackStack(TOP_LEVEL_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         transaction.replace(R.id.layout_content, parentLevelFragment, TOP_LEVEL_TAG);
 
         transaction.addToBackStack(TOP_LEVEL_TAG);
@@ -176,6 +181,9 @@ public class VoterInformationActivity extends BaseActivity<VoterInformationPrese
         FragmentTransaction transaction = manager.beginTransaction();
 
         String fragmentTag = String.valueOf(childLevelFragment.hashCode());
+
+        transaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out, R.animator.fade_in, R.animator.fade_out);
+
         transaction.replace(R.id.layout_content, childLevelFragment, fragmentTag);
 
         transaction.addToBackStack(fragmentTag);
