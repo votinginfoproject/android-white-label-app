@@ -33,6 +33,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     private Button mGoButton;
     private EditText mAddressEditText;
     private TextView mStatusTextView;
+    private View mStatusContainer;
     private View mElectionSelectorWrapper;
     private View mPartySelectorWrapper;
     private TextView mElectionsTextView;
@@ -54,6 +55,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
         mGoButton = (Button) findViewById(R.id.home_button_go);
         mAddressEditText = (EditText) findViewById(R.id.home_edit_text_address);
         mStatusTextView = (TextView) findViewById(R.id.home_label_status);
+        mStatusContainer = findViewById(R.id.home_container_status);
         mElectionSelectorWrapper = findViewById(R.id.home_container_election_selector);
         mPartySelectorWrapper = findViewById(R.id.home_container_party_selector);
 
@@ -253,7 +255,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     public void showMessage(String message) {
         mStatusTextView.setText(message);
 
-        mStatusTextView.setVisibility(View.VISIBLE);
+        mStatusContainer.setVisibility(View.VISIBLE);
         mStatusTextView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
     }
 
@@ -266,6 +268,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
 
     @Override
     public void hideStatusView() {
-        mStatusTextView.setVisibility(View.GONE);
+        mStatusContainer.setVisibility(View.GONE);
     }
 }

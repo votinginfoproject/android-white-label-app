@@ -40,7 +40,7 @@
     <string name="fragment.home.text_view_party_spinner_text">Elija un partido para la elección primaria:</string>
     <string name="activity_home_status_loading">Cargando información…</string>
     <string name="fragment.home.error_address_not_found">Parece como si no fuese posible encontrar su dirección. Revise si es correcta e intente nuevamente.</string>
-    <string name="fragment.home.error_parsing_address">No es posible leer la dirección que ingresó. Revise si es correcta e intente nuevamente.</string>
+    <string name="fragment.home.error_parsing_address">No se encontró ninguna información sobre las elecciones para la dirección que ha puesto, asegúrese de que ingresó los datos correctamente.</string>
     <string name="fragment.home.error_no_election_for_address">No es posible encontrar ninguna información sobre la elección para la dirección que ingresó.</string>
     <string name="fragment.home.error_no_address">Revise que ingresó una dirección e intente nuevamente.</string>
     <string name="fragment.home.error_unknown">No fue posible obtener resultados para la dirección que ingresó. Intente nuevamente más tarde.</string>

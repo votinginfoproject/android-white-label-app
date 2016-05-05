@@ -27,7 +27,7 @@
     <color name="list_divider_gray">#e6e6e6</color>
     <color name="home_button_background">#004071</color>
     <color name="home.edit.text.background">#48FFFFFF</color>
-    <color name="home_warning_background">#042a42</color>
+    <color name="home_warning_background">#D900244C</color>
     <color name="brand">#60c9f8</color>
     <color name="dark_text">#dd000000</color>
     <color name="text_light_gray">#d0d0d0</color>

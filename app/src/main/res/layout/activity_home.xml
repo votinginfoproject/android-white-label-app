@@ -74,28 +74,43 @@
             android:textSize="@dimen/activity.home.editable_text_size"
             />
 
-        <TextView
-            android:id="@+id/home.label.status"
+        <LinearLayout
+            android:id="@+id/home.container.status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/home.edit.text.address"
             android:layout_marginTop="@dimen/home_large_padding"
             android:background="@color/home_warning_background"
-            android:drawableLeft="@drawable/ic_report_problem"
-            android:drawablePadding="15sp"
-            android:drawableStart="@drawable/ic_report_problem"
-            android:gravity="start"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:padding="@dimen/home_large_padding"
-            android:textColor="@color/home.text"
-            android:textSize="14sp"
-            android:textStyle="italic"
             android:visibility="gone"
-            />
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="top"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_report_problem"
+                />
+
+            <TextView
+                android:id="@+id/home.label.status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:textColor="@color/home.text"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/home.container.election_selector"
             style="@style/fill_width_wrap_height"
-            android:layout_below="@id/home.label.status"
+            android:layout_below="@id/home.container.status"
             android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="@dimen/home_small_padding"
