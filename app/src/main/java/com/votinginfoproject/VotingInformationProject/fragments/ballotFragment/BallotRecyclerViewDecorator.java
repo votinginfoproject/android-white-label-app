@@ -37,7 +37,10 @@ public class BallotRecyclerViewDecorator extends RecyclerView.ItemDecoration {
             final View child = parent.getChildAt(i);
 
             final RecyclerView.ViewHolder viewHolder = parent.getChildViewHolder(child);
-            int top = child.getTop();
+
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+            int bottom = child.getTop() - params.topMargin + (int) (child.getTranslationY() + 0.5);
 
             //Line up divider with left padding
             int leftBounds = 0;
@@ -52,7 +55,7 @@ public class BallotRecyclerViewDecorator extends RecyclerView.ItemDecoration {
             }
 
             if (shouldDrawDecoration) {
-                mDivider.setBounds(leftBounds, top, right, top + mDivider.getIntrinsicHeight());
+                mDivider.setBounds(leftBounds, bottom - mDivider.getIntrinsicHeight(), right, bottom);
                 mDivider.draw(c);
             }
         }
