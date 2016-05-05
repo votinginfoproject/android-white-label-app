@@ -33,7 +33,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/polling_locations_list"
+            android:id="@+id/recycler_view"
             android:name="com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment.PollingSitesFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

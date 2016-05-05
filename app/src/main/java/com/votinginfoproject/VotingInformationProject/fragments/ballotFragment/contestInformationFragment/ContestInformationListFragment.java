@@ -68,7 +68,7 @@ public class ContestInformationListFragment extends Fragment implements BottomNa
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.polling_locations_list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.addItemDecoration(new BallotRecyclerViewDecorator(getActivity()));
 
         // Set the adapter

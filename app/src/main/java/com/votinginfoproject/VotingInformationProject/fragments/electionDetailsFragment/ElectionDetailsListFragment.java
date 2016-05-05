@@ -15,32 +15,22 @@ import com.votinginfoproject.VotingInformationProject.activities.voterInformatio
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemDecoration;
+
 /**
  * Created by max on 4/15/16.
  */
 public class ElectionDetailsListFragment extends Fragment implements BottomNavigationFragment, ElectionDetailsView {
-    public interface ElectionDetailsListFragmentCallback {
-        void navigateToURL(String urlString);
-
-        void reportErrorButtonClicked();
-
-        void navigateToDirectionsView(String address);
-    }
-
     private ElectionDetailsPresenter mPresenter;
-
     private RecyclerView mRecyclerView;
-
     private ElectionDetailsRecyclerViewAdapter mAdapter;
-
     private Toolbar mToolbar;
+
+    public ElectionDetailsListFragment() {
+    }
 
     public static ElectionDetailsListFragment newInstance() {
         ElectionDetailsListFragment fragment = new ElectionDetailsListFragment();
         return fragment;
-    }
-
-    public ElectionDetailsListFragment() {
     }
 
     @Override
@@ -48,7 +38,7 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
         mPresenter = new ElectionDetailsPresenterImpl();
         mPresenter.setView(this);
 
-        View view = inflater.inflate(R.layout.fragment_recycler_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         Context context = view.getContext();
 
         mAdapter = new ElectionDetailsRecyclerViewAdapter(context, mPresenter);
@@ -109,5 +99,13 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
         if (getActivity() instanceof ElectionDetailsListFragmentCallback) {
             ((ElectionDetailsListFragmentCallback) getActivity()).navigateToDirectionsView(address);
         }
+    }
+
+    public interface ElectionDetailsListFragmentCallback {
+        void navigateToURL(String urlString);
+
+        void reportErrorButtonClicked();
+
+        void navigateToDirectionsView(String address);
     }
 }

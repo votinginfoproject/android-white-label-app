@@ -18,10 +18,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorEdgeEffect">@color/colorAccentDark</item>
 
-        <!--<item name="android:panelColorBackground">@drawable/selector_overflow_menu</item>-->
-        <!--<item name="android:panelFullBackground">@drawable/selector_overflow_menu</item>-->
-
-
         <item name="android:radioButtonStyle">@style/vip_radio_style</item>
         <item name="android:windowIsTranslucent">false</item>
 

@@ -58,7 +58,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.polling_locations_list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         //Update Decoration
         mRecyclerView.addItemDecoration(new BallotRecyclerViewDecorator(getActivity()));
@@ -126,7 +126,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
 
     /**
      * Override getContext to return activity if context is not available
-     * <p>
+     * <p/>
      * This is a problem with older devices where getContext is not utilized
      *
      * @return
