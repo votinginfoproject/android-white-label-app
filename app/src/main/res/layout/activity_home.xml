@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity.home.horizontal_margin"
     android:paddingRight="@dimen/activity.home.horizontal_margin"
     android:paddingStart="@dimen/activity.home.horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <TextView
             android:id="@+id/home.label.brand"
@@ -30,7 +32,8 @@
             android:textColor="@color/brand"
             android:textIsSelectable="false"
             android:textSize="15sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/home_label_title"
@@ -40,7 +43,8 @@
             android:text="@string/fragment.home.text_view_voting_info"
             android:textColor="@color/home.text"
             android:textSize="28sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/home.label.enter_address"
@@ -51,7 +55,8 @@
             android:labelFor="@+id/home.edit.text.address"
             android:text="@string/fragment.home.text_view_getting_started"
             android:textColor="@color/home.text"
-            android:textSize="@dimen/activity.home.label_text_size"/>
+            android:textSize="@dimen/activity.home.label_text_size"
+            />
 
         <EditText
             android:id="@+id/home.edit.text.address"
@@ -66,7 +71,8 @@
             android:padding="5sp"
             android:paddingBottom="5sp"
             android:textColor="@color/white"
-            android:textSize="@dimen/activity.home.editable_text_size"/>
+            android:textSize="@dimen/activity.home.editable_text_size"
+            />
 
         <TextView
             android:id="@+id/home.label.status"
@@ -81,9 +87,10 @@
             android:gravity="start"
             android:padding="@dimen/home_large_padding"
             android:textColor="@color/home.text"
-            android:textSize="@dimen/text_small"
+            android:textSize="14sp"
             android:textStyle="italic"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            />
 
         <LinearLayout
             android:id="@+id/home.container.election_selector"
@@ -93,7 +100,8 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/home_small_padding"
             android:paddingTop="@dimen/home_small_padding"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
             <TextView
                 android:id="@+id/home.label.select_election"
@@ -101,7 +109,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fragment.home.text_view_election_spinner_text"
                 android:textColor="@color/home.text"
-                android:textSize="@dimen/activity.home.label_text_size"/>
+                android:textSize="@dimen/activity.home.label_text_size"
+                />
 
             <TextView
                 android:id="@+id/home.selector.election"
@@ -112,7 +121,8 @@
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:textColor="@color/home.text"
-                android:textSize="@dimen/activity.home.editable_text_size"/>
+                android:textSize="@dimen/activity.home.editable_text_size"
+                />
 
         </LinearLayout>
 
@@ -124,7 +134,8 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/home_small_padding"
             android:paddingTop="@dimen/home_small_padding"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
             <TextView
                 android:id="@+id/home.label.select_party"
@@ -132,7 +143,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fragment.home.text_view_party_spinner_text"
                 android:textColor="@color/home.text"
-                android:textSize="@dimen/activity.home.label_text_size"/>
+                android:textSize="@dimen/activity.home.label_text_size"
+                />
 
             <TextView
                 android:id="@+id/home.selector.party"
@@ -144,7 +156,8 @@
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:textColor="@color/home.text"
-                android:textSize="@dimen/activity.home.editable_text_size"/>
+                android:textSize="@dimen/activity.home.editable_text_size"
+                />
         </LinearLayout>
 
         <Button
@@ -157,7 +170,8 @@
             android:layout_marginRight="60dp"
             android:contentDescription="@string/fragment.home.go_button_accessibility_description"
             android:text="@string/activity.home.go_button"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            />
 
         <ImageButton
             android:id="@+id/home.button.about_us"
@@ -168,12 +182,14 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/button_ripple_white"
             android:padding="18dp"
-            android:src="@drawable/ic_info"/>
+            android:src="@drawable/ic_info"
+            />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/stars"/>
+            android:src="@drawable/stars"
+            />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
