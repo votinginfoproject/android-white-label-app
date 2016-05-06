@@ -142,11 +142,6 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
     }
 
     @Override
-    public Candidate getCandidate() {
-        return super.getCandidate();
-    }
-
-    @Override
     public int getRowCount() {
         Candidate candidate = getCandidate();
 
