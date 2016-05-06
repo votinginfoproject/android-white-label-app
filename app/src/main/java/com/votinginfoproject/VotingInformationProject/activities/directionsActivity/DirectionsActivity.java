@@ -538,7 +538,6 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 getPresenter().lastKnownLocationUpdated();
             } else {
                 getPresenter().checkLocationPermissions();
-                //TODO decide what to do when there's a null location (location unavailable or turned off globally)
             }
         }
     }

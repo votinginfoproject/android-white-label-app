@@ -99,18 +99,20 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void lastKnownLocationUpdated() {
-        if (mUsingLastKnownLocation) {
+        if (mUsingLastKnownLocation && !mHasEnqueuedRequests) {
             requestAllTransitModes();
         }
     }
 
     @Override
     public void checkLocationPermissions() {
-        if (locationServicesEnabled()) {
-            getView().toggleEnableGlobalLocationView(false);
-            getView().attemptToGetLocation();
-        } else if (mUsingLastKnownLocation) {
-            getView().toggleEnableGlobalLocationView(true);
+        if (getView() != null) {
+            if (locationServicesEnabled()) {
+                getView().toggleEnableGlobalLocationView(false);
+                getView().attemptToGetLocation();
+            } else if (mUsingLastKnownLocation) {
+                getView().toggleEnableGlobalLocationView(true);
+            }
         }
     }
 
@@ -311,6 +313,10 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             mTransitModesToInteractors.put(transitMode, interactor);
 
             mHasEnqueuedRequests = true;
+
+            if (getView() != null) {
+                refreshViewData();
+            }
         }
     }
 
