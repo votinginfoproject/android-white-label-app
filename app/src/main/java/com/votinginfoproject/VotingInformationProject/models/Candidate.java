@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
 
 import com.google.gson.annotations.SerializedName;
 

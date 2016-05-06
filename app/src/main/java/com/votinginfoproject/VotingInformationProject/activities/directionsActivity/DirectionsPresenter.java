@@ -1,7 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.activities.directionsActivity;
 
-import android.support.v4.content.PermissionChecker;
-
 import com.votinginfoproject.VotingInformationProject.activities.BasePresenter;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
 

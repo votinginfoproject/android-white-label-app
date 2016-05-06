@@ -3,8 +3,6 @@ package com.votinginfoproject.VotingInformationProject.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Created by max on 4/11/16.
  */

@@ -8,8 +8,6 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import java.util.Set;
-
 /**
  * Created by max on 5/4/16.
  */

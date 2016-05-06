@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -67,7 +66,7 @@ public class ElectionBodySubtitleViewHolder extends RecyclerView.ViewHolder {
 
             mChevronImageView.setImageDrawable(drawable);
 
-            if(drawable instanceof Animatable) {
+            if (drawable instanceof Animatable) {
                 Animatable animatable = (Animatable) drawable;
 
                 animatable.start();
