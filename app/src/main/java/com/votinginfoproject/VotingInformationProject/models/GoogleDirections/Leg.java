@@ -2,14 +2,13 @@ package com.votinginfoproject.VotingInformationProject.models.GoogleDirections;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Routes with no waypoints will consist of a single leg.
- *
+ * <p/>
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Leg implements Parcelable {
@@ -37,14 +36,14 @@ public class Leg implements Parcelable {
         }
     };
 
-    public List<Step> steps;
-    public List<Integer> via_waypoint;
-    public Distance distance;
-    public Duration duration;
-    public String start_address;
-    public String end_address;
-    public Location start_location;
-    public Location end_location;
+    public final List<Step> steps;
+    public final List<Integer> via_waypoint;
+    public final Distance distance;
+    public final Duration duration;
+    public final String start_address;
+    public final String end_address;
+    public final Location start_location;
+    public final Location end_location;
 
     private Leg(Parcel parcel) {
         steps = new ArrayList<>();

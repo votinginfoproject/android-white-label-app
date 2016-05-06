@@ -14,11 +14,11 @@ import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.c
  * Created by marcvandehey on 5/3/16.
  */
 public class CandidateDetailViewHolder extends RecyclerView.ViewHolder implements DecoratedViewHolder {
-    private ImageView imageView;
-    private TextView titleTextView;
-    private TextView descriptionTextView;
-    private TextView sectionTextView;
-    private View clickableView;
+    private final ImageView imageView;
+    private final TextView titleTextView;
+    private final TextView descriptionTextView;
+    private final TextView sectionTextView;
+    private final View clickableView;
 
     public CandidateDetailViewHolder(View itemView) {
         super(itemView);

@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/main_content"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true"
-                                                 tools:context="com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.votinginfoproject.VotingInformationProject.activities.directionsActivity.DirectionsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/map_view"
-            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/appbar"/>
+            android:layout_below="@+id/appbar"
+            android:visibility="invisible" />
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -27,8 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:paddingTop="@dimen/appbar_padding_top"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            >
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -36,8 +33,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                >
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
             </android.support.v7.widget.Toolbar>
 
@@ -45,8 +41,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -55,95 +50,94 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/appbar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <LinearLayout
             android:id="@+id/loading"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?android:attr/colorBackground"
             android:layout_below="@+id/appbar"
-            android:gravity="center">
+            android:background="?android:attr/colorBackground"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ProgressBar
                 android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleLarge"
-                android:indeterminateDrawable="@drawable/progress_indeterminate_blue"
-                android:indeterminate="true"/>
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/progress_indeterminate_blue" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/connection_error"
-            android:alpha="0"
-            android:background="?android:attr/colorBackground"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/appbar"
-            android:visibility="gone"
-            android:gravity="center">
+            android:alpha="0"
+            android:background="?android:attr/colorBackground"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_error_outline"
-                android:tint="@color/text_light_gray"/>
+                android:tint="@color/text_light_gray" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/text_light_gray"
-                android:text="@string/directions.error.connection_error"/>
+                android:text="@string/directions.error.connection_error"
+                android:textColor="@color/text_light_gray" />
 
             <Button
                 android:id="@+id/retry_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
                 android:background="@android:color/transparent"
-                android:textColor="@color/colorPrimary"
-                android:text="@string/retry"/>
+                android:text="@string/retry"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/enable_location"
-            android:alpha="0"
-            android:visibility="gone"
-            android:background="?android:attr/colorBackground"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/appbar"
-            android:gravity="center">
+            android:alpha="0"
+            android:background="?android:attr/colorBackground"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_error_outline"
-                android:tint="@color/text_light_gray"/>
+                android:tint="@color/text_light_gray" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/text_light_gray"
-                android:text="Please enable location services."/>
+                android:text="@string/location.enable_location_services_prompt"
+                android:textColor="@color/text_light_gray" />
 
             <Button
                 android:id="@+id/location_settings_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
                 android:background="@android:color/transparent"
-                android:textColor="@color/colorPrimary"
-                android:text="Go to settings"/>
+                android:text="@string/location.open_settings"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary" />
 
 
         </LinearLayout>

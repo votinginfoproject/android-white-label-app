@@ -3,8 +3,8 @@ package com.votinginfoproject.VotingInformationProject.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by kathrynkillebrew on 7/14/14.
@@ -21,32 +21,36 @@ public class Contest implements Parcelable {
         }
     };
 
-    public String id;
-    public String type;
-    public String primaryParty;
-    public String electorateSpecifications;
-    public String special;
-    public String office;
-    public List<String> level;
-    public List<String> roles;
-    public District district;
-    public Long numberElected;
-    public Long numberVotingFor;
-    public Long ballotPlacement;
-    public List<Candidate> candidates;
-
-    public String referendumTitle;
-    public String referendumSubtitle;
-    public String referendumUrl;
-    public String referendumBrief;
-    public String referendumText;
-    public String referendumProStatement;
-    public String referendumConStatement;
-    public String referendumPassageThreshold;
-    public String referendumEffectOfAbstain;
-    public List<Source> sources;
+    public final String id;
+    public final String type;
+    public final String primaryParty;
+    public final String electorateSpecifications;
+    public final String special;
+    public final String office;
+    public final List<String> level;
+    public final List<String> roles;
+    public final District district;
+    public final Long numberElected;
+    public final Long numberVotingFor;
+    public final Long ballotPlacement;
+    public final List<Candidate> candidates;
+    public final String referendumTitle;
+    public final String referendumSubtitle;
+    public final String referendumUrl;
+    public final String referendumBrief;
+    public final String referendumText;
+    public final String referendumProStatement;
+    public final String referendumConStatement;
+    public final String referendumPassageThreshold;
+    public final String referendumEffectOfAbstain;
+    public final List<Source> sources;
 
     public Contest(Parcel parcel) {
+        level = new LinkedList<>();
+        roles = new LinkedList<>();
+        candidates = new LinkedList<>();
+        sources = new LinkedList<>();
+
         id = parcel.readString();
         type = parcel.readString();
         primaryParty = parcel.readString();

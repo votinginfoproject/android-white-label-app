@@ -23,10 +23,10 @@ public class PollingSiteItemRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private static final int REPORT_ERROR_VIEW_HOLDER = 0x2;
     private final Election mElection;
     private final PollingSitesListFragment.PollingSitesListener mListener;
-    private ArrayList<PollingLocation> mPollingLocations;
-    private boolean hasHeader;
+    private final ArrayList<PollingLocation> mPollingLocations;
+    private final boolean hasHeader;
 
-    private Context mContext;
+    private final Context mContext;
 
     public PollingSiteItemRecyclerViewAdapter(Context context,
                                               Election election,

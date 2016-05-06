@@ -4,13 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
 
@@ -20,7 +17,7 @@ import com.votinginfoproject.VotingInformationProject.models.CoordinatePair;
 public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     private static final String TAG = AboutVIPPresenterImpl.class.getSimpleName();
 
-    private Context mContext;
+    private final Context mContext;
 
     private boolean mHasAttachedView = false;
     private boolean mPresentingLegalNotices = false;
@@ -89,7 +86,7 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     @Override
     void viewTransitionEnded() {
 
-        if(mPresentingLegalNotices) {
+        if (mPresentingLegalNotices) {
             GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
             if (apiAvailability.isGooglePlayServicesAvailable(mContext) == ConnectionResult.SUCCESS) {
                 getView().setInformationText(apiAvailability.getOpenSourceSoftwareLicenseInfo(mContext));

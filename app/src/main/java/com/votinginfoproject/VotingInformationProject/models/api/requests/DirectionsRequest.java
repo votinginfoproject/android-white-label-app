@@ -11,10 +11,10 @@ import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Lo
 public class DirectionsRequest implements RequestType {
     private static final String TAG = DirectionsRequest.class.getSimpleName();
 
-    private String originCoordinates;
-    private String destinationCoordinates;
-    private String directionsKey;
-    private String travelMode;
+    private final String originCoordinates;
+    private final String destinationCoordinates;
+    private final String directionsKey;
+    private final String travelMode;
 
     public DirectionsRequest(
             @NonNull String directionsKey,

@@ -39,7 +39,7 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.addItemDecoration(new ElectionDetailsItemDecoration(getActivity(), ElectionDetailsItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new ElectionDetailsItemDecoration(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.invalidate();
 

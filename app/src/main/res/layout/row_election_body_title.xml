@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:minHeight="@dimen/fragment.election_details.item_min_height"
+    android:orientation="horizontal"
     android:paddingLeft="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge"
-    android:gravity="center_vertical">
+    android:paddingRight="@dimen/fragment.election_details.subtitle_image_horizontal_padding_edge">
 
     <TextView
         android:id="@+id/body_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/text_gray"/>
+        android:textColor="@color/text_gray"
+        android:textStyle="bold" />
 
 </LinearLayout>

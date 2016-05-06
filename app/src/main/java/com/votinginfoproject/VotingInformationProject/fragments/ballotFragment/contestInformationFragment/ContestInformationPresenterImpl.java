@@ -17,11 +17,11 @@ import java.util.Locale;
 public class ContestInformationPresenterImpl extends ContestInformationPresenter {
     private static final String TAG = ContestInformationPresenterImpl.class.getSimpleName();
 
-    private Contest mContest;
-    private Election mElection;
+    private final Contest mContest;
+    private final Election mElection;
 
-    private boolean mHasHeader;
-    private boolean mIsReferendum;
+    private final boolean mHasHeader;
+    private final boolean mIsReferendum;
 
     private int districtIndex = -1;
     private int typeIndex = -1;

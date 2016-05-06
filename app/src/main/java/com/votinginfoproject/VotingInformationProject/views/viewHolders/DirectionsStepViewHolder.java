@@ -14,10 +14,10 @@ import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.St
  * Created by max on 4/25/16.
  */
 public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
-    private TextView mInstructionsText;
-    private TextView mDistanceText;
-    private TextView mDurationText;
-    private View mDistanceDurationDivider;
+    private final TextView mInstructionsText;
+    private final TextView mDistanceText;
+    private final TextView mDurationText;
+    private final View mDistanceDurationDivider;
 
     private Step mStep;
 
@@ -67,16 +67,16 @@ public class DirectionsStepViewHolder extends RecyclerView.ViewHolder {
     /* Html.fromHtml returns a Spanned, which has no trim function.
        Can't trim mStep.html_instructions because it uses tags for whitespace :( */
     private static CharSequence trimTrailingWhitespace(CharSequence source) {
-        if(source == null) {
+        if (source == null) {
             return "";
         }
 
         int i = source.length();
 
         // loop back to the first non-whitespace character
-        while(--i >= 0 && Character.isWhitespace(source.charAt(i))) {
+        while (--i >= 0 && Character.isWhitespace(source.charAt(i))) {
         }
 
-        return source.subSequence(0, i+1);
+        return source.subSequence(0, i + 1);
     }
 }

@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by andrew on 8/1/14.
@@ -28,7 +29,7 @@ public class VoterInfoTests extends AndroidTestCase {
         VoterInfoResponse info = VoterInformation.getVoterInfo();
 
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat api_date_format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat api_date_format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date today = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, -1);
         Date yesterday = calendar.getTime();

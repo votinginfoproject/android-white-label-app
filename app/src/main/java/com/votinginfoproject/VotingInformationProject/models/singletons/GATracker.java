@@ -12,9 +12,9 @@ import java.util.HashMap;
  * Created by marcvandehey on 3/2/16.
  */
 public class GATracker {
-    private static GATracker ourInstance = new GATracker();
+    private static final GATracker ourInstance = new GATracker();
 
-    private HashMap<TrackerName, Tracker> trackers = new HashMap<>();
+    private final HashMap<TrackerName, Tracker> trackers = new HashMap<>();
 
     public static void registerTracker(Context context, TrackerName trackerId) {
         if (ourInstance.trackers.get(trackerId) == null) {

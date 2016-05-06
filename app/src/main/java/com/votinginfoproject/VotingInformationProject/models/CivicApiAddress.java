@@ -22,13 +22,13 @@ public class CivicApiAddress implements Parcelable {
         }
     };
 
-    public String locationName;
-    public String line1;
-    public String line2;
-    public String line3;
-    public String city;
-    public String state;
-    public String zip;
+    public final String locationName;
+    public final String line1;
+    public final String line2;
+    public final String line3;
+    public final String city;
+    public final String state;
+    public final String zip;
     // the co-ordinates are not in the API response; the app will set them when geocoded
     public double latitude;
     public double longitude;

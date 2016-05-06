@@ -10,8 +10,8 @@ import android.util.Log;
 public class GeocodeRequest implements RequestType {
     private static final String TAG = GeocodeRequest.class.getSimpleName();
 
-    private String address;
-    private String geocodeKey;
+    private final String address;
+    private final String geocodeKey;
 
     public GeocodeRequest(@NonNull String geocodeKey, @NonNull String address) {
         this.geocodeKey = geocodeKey;

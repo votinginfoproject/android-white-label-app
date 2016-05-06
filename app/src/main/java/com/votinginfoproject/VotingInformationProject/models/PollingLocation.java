@@ -32,15 +32,17 @@ public class PollingLocation implements Parcelable {
     public final static int POLLING_TYPE_EARLY_VOTE = 0x1;
     public final static int POLLING_TYPE_DROP_BOX = 0x2;
 
-    public CivicApiAddress address;
-    public String id;
-    public String name;
-    public String startDate;
-    public String endDate;
-    public String pollingHours;
-    public String voterServices; // This field is not populated for polling locations.
+    public final CivicApiAddress address;
+    public final String id;
+    public final String name;
+    public final String startDate;
+    public final String endDate;
+    public final String pollingHours;
+    public final String voterServices; // This field is not populated for polling locations.
+
+    //These aren't set in the response, but when the app is geocoded.
     public Location location;
-    public float distance = 0.f;
+    public float distance;
 
     public int pollingLocationType = POLLING_TYPE_LOCATION;
 

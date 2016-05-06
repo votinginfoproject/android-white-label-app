@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -103,7 +102,7 @@ public class ReportErrorActivity extends BaseActivity<ReportErrorPresenter> impl
     }
 
     private class ReportErrorWebViewClient extends WebViewClient {
-        private String mReportErrorUrl;
+        private final String mReportErrorUrl;
 
         private boolean finished = false;
 

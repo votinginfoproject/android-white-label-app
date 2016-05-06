@@ -63,8 +63,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     private static final String KEY_MAP_STATE = "Map_state";
 
-    private static int tab_selected_alpha = (int) (255 * 0.6);
-    private static int fade_duration = 250;
+    private static final int tab_selected_alpha = (int) (255 * 0.6);
+    private static final int fade_duration = 250;
 
     private Toolbar mToolbar;
 

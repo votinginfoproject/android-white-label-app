@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.models.GoogleDirections;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +22,13 @@ public class Route implements Parcelable {
         }
     };
 
-    public String summary;
-    public Bounds bounds;
-    public String copyrights;
-    public Polyline overview_polyline;
-    public List<String> warnings;
-    public List<Integer> waypoint_order;
-    public List<Leg> legs;
+    public final String summary;
+    public final Bounds bounds;
+    public final String copyrights;
+    public final Polyline overview_polyline;
+    public final List<String> warnings;
+    public final List<Integer> waypoint_order;
+    public final List<Leg> legs;
 
     private Route(Parcel parcel) {
         summary = parcel.readString();

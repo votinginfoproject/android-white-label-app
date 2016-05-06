@@ -23,9 +23,8 @@ public class VoterInfoResponse implements RequestType {
 
     private transient final String TAG = VoterInfoResponse.class.getSimpleName();
 
-    public String kind;
     public Election election;
-    public List<Election> otherElections;
+    public final List<Election> otherElections;
     public CivicApiAddress normalizedInput;
     public ArrayList<PollingLocation> pollingLocations;
     public ArrayList<PollingLocation> earlyVoteSites;
@@ -67,38 +66,6 @@ public class VoterInfoResponse implements RequestType {
         }
 
         return parties;
-    }
-
-    public List<Contest> getFilteredContestsForParty(String party) {
-        if (contests == null) return new ArrayList<>();
-
-        ArrayList<Contest> filteredContests = new ArrayList<>(contests.size());
-
-        Log.d(TAG, "Filtering contest list for party: " + party);
-
-        // build filtered list of contests based on party
-        if (contests != null) {
-            // filter contest list for primary party
-            if (!party.isEmpty()) {
-                for (Contest contest : contests) {
-                    if (contest.primaryParty != null && !contest.primaryParty.isEmpty()) {
-                        if (contest.primaryParty.equals(party)) {
-                            filteredContests.add(contest);
-                        }
-                    } else {
-                        // this contest isn't a primary; show it
-                        filteredContests.add(contest);
-                    }
-                }
-            } else {
-                // no selected party; show all
-                filteredContests.addAll(contests);
-            }
-        } else {
-            Log.d(TAG, "No contests for this election!");
-        }
-
-        return filteredContests;
     }
 
     /**

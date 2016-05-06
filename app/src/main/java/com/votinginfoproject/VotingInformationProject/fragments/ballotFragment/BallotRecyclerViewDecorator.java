@@ -18,7 +18,7 @@ public class BallotRecyclerViewDecorator extends RecyclerView.ItemDecoration {
             android.R.attr.listDivider
     };
 
-    private Drawable mDivider;
+    private final Drawable mDivider;
 
     public BallotRecyclerViewDecorator(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);

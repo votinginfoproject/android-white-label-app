@@ -19,8 +19,8 @@ public class Duration implements Parcelable {
         }
     };
 
-    public int value;
-    public String text;
+    public final int value;
+    public final String text;
 
     private Duration(Parcel parcel) {
         value = parcel.readInt();

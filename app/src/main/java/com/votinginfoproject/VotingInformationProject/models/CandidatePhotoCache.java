@@ -9,7 +9,7 @@ import java.util.UUID;
  * Created by kathrynkillebrew on 8/13/14.
  */
 public class CandidatePhotoCache {
-    private LruCache<UUID, Bitmap> mMemoryCache;
+    private final LruCache<UUID, Bitmap> mMemoryCache;
 
     public CandidatePhotoCache() {
         // Get max available VM memory; exceeding this amount will throw an

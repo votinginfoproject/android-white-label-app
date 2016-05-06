@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by kathrynkillebrew on 7/31/14.
  */
 public class Polyline implements Parcelable {
-    public String points;
+    public final String points;
 
     public static final Creator<Polyline> CREATOR = new Creator<Polyline>() {
         @Override

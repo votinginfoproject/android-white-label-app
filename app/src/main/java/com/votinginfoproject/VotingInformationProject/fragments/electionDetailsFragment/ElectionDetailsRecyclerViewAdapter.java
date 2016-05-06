@@ -34,8 +34,8 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private final Context mContext;
     private final ElectionDetailsPresenter mPresenter;
-    private boolean hasHeader;
-    private List<ListItem> parentListNodes;
+    private final boolean hasHeader;
+    private final List<ListItem> parentListNodes;
 
     public ElectionDetailsRecyclerViewAdapter(Context context, ElectionDetailsPresenter presenter) {
         mContext = context;
@@ -335,13 +335,13 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     class ListItem {
         public final int mViewType;
+        public final String mText;
         public View.OnClickListener onItemClickListener;
-        public String mText;
         public String mURLString;
         public int mImageId = 0;
         public boolean isExpanded = false;
         public boolean isFirstSubtitle = false;
-        public List<ListItem> mHiddenListItems = new ArrayList<>();
+        public final List<ListItem> mHiddenListItems = new ArrayList<>();
 
         public ListItem(int viewType, String text) {
             mViewType = viewType;
@@ -361,7 +361,7 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     abstract class DetailClickListener implements View.OnClickListener {
-        ListItem mItem;
+        final ListItem mItem;
 
         public DetailClickListener(ListItem item) {
             mItem = item;

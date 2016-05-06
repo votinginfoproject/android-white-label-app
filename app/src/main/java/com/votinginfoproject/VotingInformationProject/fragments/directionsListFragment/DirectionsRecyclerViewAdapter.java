@@ -14,7 +14,7 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.Directio
 public class DirectionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = DirectionsRecyclerViewAdapter.class.getSimpleName();
 
-    private DirectionsListViewPresenter mPresenter;
+    private final DirectionsListViewPresenter mPresenter;
 
     public DirectionsRecyclerViewAdapter(DirectionsListViewPresenter presenter) {
         mPresenter = presenter;

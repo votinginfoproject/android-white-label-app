@@ -19,8 +19,8 @@ public class Bounds implements Parcelable {
         }
     };
 
-    public Location northeast;
-    public Location southwest;
+    public final Location northeast;
+    public final Location southwest;
 
     private Bounds(Parcel parcel) {
         northeast = parcel.readParcelable(Location.class.getClassLoader());

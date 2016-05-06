@@ -2,7 +2,6 @@ package com.votinginfoproject.VotingInformationProject.views.viewHolders;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,9 +13,9 @@ import com.votinginfoproject.VotingInformationProject.R;
  * Created by marcvandehey on 5/3/16.
  */
 public class CandidateHeaderViewHolder extends RecyclerView.ViewHolder {
-    private ImageView imageView;
-    private TextView titleTextView;
-    private TextView descriptionTextView;
+    private final ImageView imageView;
+    private final TextView titleTextView;
+    private final TextView descriptionTextView;
 
     public CandidateHeaderViewHolder(View itemView) {
         super(itemView);

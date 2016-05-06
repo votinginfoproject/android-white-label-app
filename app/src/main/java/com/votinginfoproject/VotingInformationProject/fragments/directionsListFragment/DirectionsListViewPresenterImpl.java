@@ -1,9 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments.directionsListFragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Leg;
 import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Route;
@@ -11,13 +9,14 @@ import com.votinginfoproject.VotingInformationProject.models.GoogleDirections.St
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Created by max on 4/22/16.
  */
 public class DirectionsListViewPresenterImpl extends DirectionsListViewPresenter {
     private static final String TAG = DirectionsListViewPresenterImpl.class.getSimpleName();
 
-    private ArrayList<Step> mSteps = new ArrayList<>();
+    private final ArrayList<Step> mSteps = new ArrayList<>();
 
     public DirectionsListViewPresenterImpl(Route route) {
         for (Leg leg : route.legs) {

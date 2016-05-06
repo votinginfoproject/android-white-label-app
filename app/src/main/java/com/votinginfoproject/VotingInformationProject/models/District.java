@@ -17,9 +17,9 @@ public class District implements Parcelable {
         }
     };
 
-    public String id;
-    public String name;
-    public String scope;
+    public final String id;
+    public final String name;
+    public final String scope;
 
     public District(Parcel parcel) {
         id = parcel.readString();

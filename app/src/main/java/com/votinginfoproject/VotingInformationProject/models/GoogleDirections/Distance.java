@@ -19,8 +19,8 @@ public class Distance implements Parcelable {
         }
     };
 
-    public int value;
-    public String text;
+    public final int value;
+    public final String text;
 
     private Distance(Parcel parcel) {
         value = parcel.readInt();

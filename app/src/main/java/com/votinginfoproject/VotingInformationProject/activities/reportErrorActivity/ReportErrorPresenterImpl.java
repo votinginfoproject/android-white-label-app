@@ -8,7 +8,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.votinginfoproject.VotingInformationProject.R;
-import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 /**
  * Created by max on 5/3/16.
@@ -19,7 +18,7 @@ public class ReportErrorPresenterImpl extends ReportErrorPresenter implements Pa
     private static final String KEY_HOME_ADDRESS = "home_address";
     private static final String KEY_ELECTION_ID = "election_id";
 
-    private String mFeedbackURL;
+    private final String mFeedbackURL;
     private String mElectionID;
     private String mHomeAddress;
 

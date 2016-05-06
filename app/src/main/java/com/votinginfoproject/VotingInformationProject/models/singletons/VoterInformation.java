@@ -23,21 +23,21 @@ import java.util.Locale;
 public class VoterInformation {
     private static final String TAG = VoterInformation.class.getSimpleName();
 
-    private static String ARG_POLLING_LOCATIONS = "polling_locations";
-    private static String ARG_EARLY_LOCATIONS = "early_locations";
-    private static String ARG_DROP_LOCATIONS = "drop_locations";
-    private static String ARG_ALL_LOCATIONS = "all_locations";
+    private static final String ARG_POLLING_LOCATIONS = "polling_locations";
+    private static final String ARG_EARLY_LOCATIONS = "early_locations";
+    private static final String ARG_DROP_LOCATIONS = "drop_locations";
+    private static final String ARG_ALL_LOCATIONS = "all_locations";
 
-    private static String ARG_SELECTED_ELECTION = "selected_election";
-    private static String ARG_SELECTED_PARTY = "selected_party";
+    private static final String ARG_SELECTED_ELECTION = "selected_election";
+    private static final String ARG_SELECTED_PARTY = "selected_party";
 
-    private static String ARG_LAST_LOCATION = "last_location";
+    private static final String ARG_LAST_LOCATION = "last_location";
 
-    private static String ARG_HOME_ADDRESS = "home_address";
-    private static String ARG_STATE_ADDRESS = "state_admin_address";
-    private static String ARG_LOCAL_ADDRESS = "local_admin_address";
+    private static final String ARG_HOME_ADDRESS = "home_address";
+    private static final String ARG_STATE_ADDRESS = "state_admin_address";
+    private static final String ARG_LOCAL_ADDRESS = "local_admin_address";
 
-    private static VoterInformation ourInstance = new VoterInformation();
+    private static final VoterInformation ourInstance = new VoterInformation();
     ArrayList<PollingLocation> pollingLocations;
     ArrayList<PollingLocation> earlyVotingLocations;
     ArrayList<PollingLocation> dropBoxLocations;

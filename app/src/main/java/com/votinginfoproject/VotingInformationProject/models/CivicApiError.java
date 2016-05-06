@@ -15,7 +15,7 @@ public class CivicApiError {
     /**
      * Here are some of the possible error codes.
      * TODO:  Find out what the other error codes are.
-     *
+     * <p/>
      * reason -> message (notes)
      * ------------------
      * invalid -> Election unknown
@@ -26,6 +26,7 @@ public class CivicApiError {
 
     // map error reason to string resource error message
     public static final Map<String, Integer> errorMessages;
+
     static {
         Map<String, Integer> messages = new HashMap<>(4);
         messages.put("invalid", R.string.fragment_home_error_no_election_for_address);

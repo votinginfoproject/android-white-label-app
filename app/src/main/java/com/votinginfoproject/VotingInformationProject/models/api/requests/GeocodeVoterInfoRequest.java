@@ -10,8 +10,8 @@ import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 public class GeocodeVoterInfoRequest implements RequestType {
     private static final String TAG = GeocodeRequest.class.getSimpleName();
 
-    private VoterInfoResponse voterInfoResponse;
-    private String geocodeKey;
+    private final VoterInfoResponse voterInfoResponse;
+    private final String geocodeKey;
 
     public GeocodeVoterInfoRequest(@NonNull String geocodeKey, @NonNull VoterInfoResponse voterInfoResponse) {
         this.geocodeKey = geocodeKey;

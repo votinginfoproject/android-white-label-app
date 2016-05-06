@@ -20,14 +20,14 @@ public class Step implements Parcelable {
         }
     };
 
-    public String travel_mode;
-    public Location start_location;
-    public Location end_location;
-    public Polyline polyline;
-    public Duration duration;
-    public String html_instructions;
-    public String maneuver;
-    public Distance distance;
+    public final String travel_mode;
+    public final Location start_location;
+    public final Location end_location;
+    public final Polyline polyline;
+    public final Duration duration;
+    public final String html_instructions;
+    public final String maneuver;
+    public final Distance distance;
 
     public Step(Parcel parcel) {
         travel_mode = parcel.readString();

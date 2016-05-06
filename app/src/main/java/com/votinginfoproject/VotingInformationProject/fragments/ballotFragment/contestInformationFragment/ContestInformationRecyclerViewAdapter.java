@@ -18,7 +18,7 @@ import com.votinginfoproject.VotingInformationProject.views.viewHolders.ReportEr
  */
 public class ContestInformationRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final ContestInformationItemOnClickListener mListener;
-    private ContestInformationPresenter mPresenter;
+    private final ContestInformationPresenter mPresenter;
 
     public ContestInformationRecyclerViewAdapter(ContestInformationPresenter presenter, ContestInformationItemOnClickListener listener) {
         mPresenter = presenter;

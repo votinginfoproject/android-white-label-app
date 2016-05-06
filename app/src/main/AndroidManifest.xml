@@ -37,22 +37,22 @@
 
         <activity
             android:name=".activities.voterInformationActivity.VoterInformationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.aboutActivity.AboutVIPActivity"
             android:label="@string/about.app.title"
             android:parentActivityName=".activities.homeActivity.HomeActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.directionsActivity.DirectionsActivity"
             android:label="@string/title_activity_directions"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.reportErrorActivity.ReportErrorActivity"
             android:label="@string/title_activity_directions"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

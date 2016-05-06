@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activities.aboutActivity.AboutVIPActivity"
-    >
+    tools:context=".activities.aboutActivity.AboutVIPActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="afterDescendants"
-        tools:context=".activities.voterInformationActivity.VoterInformationActivity"
-        >
+        tools:context=".activities.voterInformationActivity.VoterInformationActivity">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,8 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
         <FrameLayout
             android:id="@+id/layout_content"
@@ -32,15 +28,13 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_navigation_bar"
             android:layout_alignParentTop="true"
-            android:layout_below="@+id/toolbar_wrapper"
-            />
+            android:layout_below="@+id/toolbar" />
 
         <com.votinginfoproject.VotingInformationProject.views.BottomNavigationBar
             android:id="@id/bottom_navigation_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            />
+            android:layout_alignParentBottom="true" />
 
 
     </RelativeLayout>

@@ -27,16 +27,16 @@ import java.util.List;
 public class DirectionsPresenterImpl extends DirectionsPresenter implements DirectionsInteractor.DirectionsCallback {
     private static final String TAG = DirectionsPresenterImpl.class.getSimpleName();
 
-    private Context mContext;
+    private final Context mContext;
 
-    private boolean mUsingLastKnownLocation;
-    private PollingLocation mPollingLocation;
+    private final boolean mUsingLastKnownLocation;
+    private final PollingLocation mPollingLocation;
 
-    private String[] mAllTransitModes = TransitModes.ALL;
-    private HashMap<String, Route> transitModesToRoutes = new HashMap<>();
+    private final String[] mAllTransitModes = TransitModes.ALL;
+    private final HashMap<String, Route> transitModesToRoutes = new HashMap<>();
 
-    private List<String> mQueuedTransitModes = new ArrayList<>();
-    private HashMap<String, DirectionsInteractor> mTransitModesToInteractors = new HashMap<>();
+    private final List<String> mQueuedTransitModes = new ArrayList<>();
+    private final HashMap<String, DirectionsInteractor> mTransitModesToInteractors = new HashMap<>();
 
     private int mIndexOfPresentedRoute;
     private boolean mIsPresentingMap;
@@ -70,7 +70,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     @Override
     public void onSaveState(@NonNull Bundle state) {
-        for (String transitMode: getTransitModes()) {
+        for (String transitMode : getTransitModes()) {
             state.putParcelable(transitMode, getRouteForTransitMode(transitMode));
         }
     }
@@ -283,7 +283,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         if (mUsingLastKnownLocation) {
             if (locationServicesEnabled()) {
                 origin = VoterInformation.getLastKnownLocation();
-            } else if (getView() != null){
+            } else if (getView() != null) {
                 getView().toggleEnableGlobalLocationView(true);
             }
         } else {

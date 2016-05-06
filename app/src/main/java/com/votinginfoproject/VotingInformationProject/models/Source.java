@@ -18,8 +18,8 @@ public class Source implements Parcelable {
         }
     };
 
-    public String name;
-    public Boolean official;
+    public final String name;
+    public final Boolean official;
 
     public Source(Parcel parcel) {
         name = parcel.readString();

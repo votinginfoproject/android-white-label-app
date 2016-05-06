@@ -30,7 +30,7 @@
     </array>
 
     <!-- Prompt to enable location services -->
-    <string name="activity.vip.tab.enable_location_services_prompt">No se puede encontrar la ubicación actual.  ¿Desea activar los servicios de localización ahora?</string>
+    <string name="location.enable_location_services_prompt">No se puede encontrar la ubicación actual.  ¿Desea activar los servicios de localización ahora?</string>
 
     <!-- Home View Strings -->
     <string name="fragment.home.text_view_brand_name">The Voting Information Project</string>
@@ -55,7 +55,7 @@
 
     <!-- Feedback Strings -->
     <string name="feedback.link">Report an Error</string>
-    <string name="feedback.loading">Cargando formulario de comentarios...</string>
+    <string name="feedback.loading">Cargando formulario de comentarios…</string>
 
     <!-- Election View Strings -->
     <string name="fragment.ballot.list.header.contests">Competencias</string>
@@ -137,7 +137,7 @@
     <string name="directions.label.open_in_maps_button">Abrir en Google Maps</string>
     <string name="directions.error.no_directions_found">No se puede encontrar direcciones.</string>
     <string name="directions.error.no_origin">No se puede encontrar el punto de origen para las direcciones.</string>
-    <string name="directions.loading">Cargando direcciones...</string>
+    <string name="directions.loading">Cargando direcciones…</string>
 
     <!-- About App strings -->
     <string name="about.app.title">Acerca de</string>
@@ -152,7 +152,7 @@ Enviando un correo electrónico al Departamento de Privacidad a info@votinginfop
 Departamento de Privacidad\nProyecto de Información Electoral\nIniciativas electorales\n901 E St. NW\nWashington, DC 20004-2008
 </string>
     <string name="about.title.legal_notices">Avisos Legales</string>
-    <string name="about.description.legal_notices">BSD modificada (de 3 cláusulas)\n\nCopyright (c) 2014, The Pew Charitable Trust\n\nTodos los derechos reservados.\n\nLa redistribución y el uso en las formas de código fuente y binario, con o sin modificaciones, están permitidos siempre que se cumplan las siguientes condiciones:\n1. Las redistribuciones del código fuente deben conservar el aviso de copyright anterior, esta lista de condiciones y el siguiente descargo de responsabilidad.\n2. Las redistribuciones en formato binario deben reproducir el aviso de copyright anterior, esta lista de condiciones y la siguiente renuncia en la documentación y/u otros materiales suministrados con la distribución.\n3. Ni el nombre de los titulares de derechos de autor ni los nombres de sus colaboradores pueden usarse para apoyar o promocionar productos derivados de este software sin permiso previo y por escrito.\n\nESTE SOFTWARE SE SUMINISTRA POR The Pew Charitable Trust "COMO ESTÁ" Y CUALQUIER GARANTÍA EXPRESA O IMPLÍCITAS, INCLUYENDO, PERO NO LIMITADO A, LAS GARANTÍAS IMPLÍCITAS DE COMERCIALIZACIÓN Y APTITUD PARA UN PROPÓSITO DETERMINADO SON RECHAZADAS. EN NINGÚN CASO The Pew Charitable Trust SERÁ RESPONSABLE POR NINGÚN DAÑO DIRECTO, INDIRECTO, INCIDENTAL, ESPECIAL, EJEMPLAR O CONSECUENTE (INCLUYENDO, PERO NO LIMITADO A, LA ADQUISICIÓN DE BIENES O SERVICIOS; LA PÉRDIDA DE USO, DE DATOS O DE BENEFICIOS; O INTERRUPCIÓN DE LA ACTIVIDAD EMPRESARIAL) O POR CUALQUIER TEORÍA DE RESPONSABILIDAD, YA SEA POR CONTRATO, RESPONSABILIDAD ESTRICTA O AGRAVIO (INCLUYENDO NEGLIGENCIA O CUALQUIER OTRA CAUSA) QUE SURJA DE CUALQUIER MANERA DEL USO DE ESTE SOFTWARE, INCLUSO SI SE HA ADVERTIDO DE LA POSIBILIDAD DE TALES DAÑOS.\n\n</string>
+    <string name="about.description.legal_notices">BSD modificada (de 3 cláusulas)\n\nCopyright © 2014, The Pew Charitable Trust\n\nTodos los derechos reservados.\n\nLa redistribución y el uso en las formas de código fuente y binario, con o sin modificaciones, están permitidos siempre que se cumplan las siguientes condiciones:\n1. Las redistribuciones del código fuente deben conservar el aviso de copyright anterior, esta lista de condiciones y el siguiente descargo de responsabilidad.\n2. Las redistribuciones en formato binario deben reproducir el aviso de copyright anterior, esta lista de condiciones y la siguiente renuncia en la documentación y/u otros materiales suministrados con la distribución.\n3. Ni el nombre de los titulares de derechos de autor ni los nombres de sus colaboradores pueden usarse para apoyar o promocionar productos derivados de este software sin permiso previo y por escrito.\n\nESTE SOFTWARE SE SUMINISTRA POR The Pew Charitable Trust "COMO ESTÁ" Y CUALQUIER GARANTÍA EXPRESA O IMPLÍCITAS, INCLUYENDO, PERO NO LIMITADO A, LAS GARANTÍAS IMPLÍCITAS DE COMERCIALIZACIÓN Y APTITUD PARA UN PROPÓSITO DETERMINADO SON RECHAZADAS. EN NINGÚN CASO The Pew Charitable Trust SERÁ RESPONSABLE POR NINGÚN DAÑO DIRECTO, INDIRECTO, INCIDENTAL, ESPECIAL, EJEMPLAR O CONSECUENTE (INCLUYENDO, PERO NO LIMITADO A, LA ADQUISICIÓN DE BIENES O SERVICIOS; LA PÉRDIDA DE USO, DE DATOS O DE BENEFICIOS; O INTERRUPCIÓN DE LA ACTIVIDAD EMPRESARIAL) O POR CUALQUIER TEORÍA DE RESPONSABILIDAD, YA SEA POR CONTRATO, RESPONSABILIDAD ESTRICTA O AGRAVIO (INCLUYENDO NEGLIGENCIA O CUALQUIER OTRA CAUSA) QUE SURJA DE CUALQUIER MANERA DEL USO DE ESTE SOFTWARE, INCLUSO SI SE HA ADVERTIDO DE LA POSIBILIDAD DE TALES DAÑOS.\n\n</string>
     <string name="contest.label.referendum_text">Detalles del referéndum</string>
     <string name="candidate.toolbar">Candidato</string>
     <string name="candidate.details.email">Correo electrónico</string>
@@ -161,7 +161,7 @@ Departamento de Privacidad\nProyecto de Información Electoral\nIniciativas elec
     <string name="title_activity_directions">Obtener instrucciones</string>
     <string name="directions.error.connection_error">Los datos del mapa no están disponible. Compruebe su conexión de red</string>
     <string name="about.title.mail_only">Su próxima elección es solamente por correo.</string>
-    <string name="about.loading.legal_notices">Cargando...</string>
+    <string name="about.loading.legal_notices">Cargando…</string>
     <string name="about.error.legal_notices">Los servicios de Google Play no están disponibles.</string>
     <string name="about.description.mail_only">Su próxima elección es solamente por correo. Por favor, póngase en contacto con su funcionario electoral de su localidad para obtener más información sobre cómo recibir y devolver su papeleta.</string>
 </resources>

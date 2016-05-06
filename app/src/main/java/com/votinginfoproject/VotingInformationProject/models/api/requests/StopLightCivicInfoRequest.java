@@ -12,7 +12,7 @@ import com.votinginfoproject.VotingInformationProject.R;
  */
 public class StopLightCivicInfoRequest extends CivicInfoRequest {
     private final static String TAG = StopLightCivicInfoRequest.class.getSimpleName();
-    private String stopLightAPIKey;
+    private final String stopLightAPIKey;
 
     /**
      * Creates a CivicInfoRequest request body for the CivicInfoInteractor to consume

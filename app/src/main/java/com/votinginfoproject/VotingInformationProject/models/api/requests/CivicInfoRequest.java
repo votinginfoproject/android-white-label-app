@@ -14,12 +14,12 @@ import com.votinginfoproject.VotingInformationProject.R;
 public class CivicInfoRequest implements RequestType {
     private static final String TAG = CivicInfoRequest.class.getSimpleName();
 
-    private boolean officialOnly;
-    private boolean preproductionData;
-    private String electionId;
-    private String address;
-    private String browserKey;
-    private String apiVersion;
+    private final boolean officialOnly;
+    private final boolean preproductionData;
+    private final String electionId;
+    private final String address;
+    private final String browserKey;
+    private final String apiVersion;
 
     /**
      * Creates a CivicInfoRequest request body for the CivicInfoInteractor to consume

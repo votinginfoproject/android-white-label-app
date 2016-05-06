@@ -183,12 +183,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 //        polylineBounds = mActivity.getPolylineBounds();
 
         // check if this map view is for an election administration body
-        if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE) ||
-                locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            haveElectionAdminBody = true;
-        } else {
-            haveElectionAdminBody = false;
-        }
+        haveElectionAdminBody = locationId.equals(ElectionAdministrationBody.AdminBody.STATE) ||
+                locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL);
 
         //TODO Send in This Location instead of using hashmap
         // set selected location to zoom to
@@ -324,7 +320,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             attemptToGetLocation();
         } else {
             //Show error
-            Snackbar.make(mBottomCardViewHolder.getView(), R.string.activity_vip_tab_enable_location_services_prompt, Snackbar.LENGTH_SHORT);
+            Snackbar.make(mBottomCardViewHolder.getView(), R.string.location_enable_location_services_prompt, Snackbar.LENGTH_SHORT);
         }
     }
 

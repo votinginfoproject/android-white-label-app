@@ -33,8 +33,8 @@ public class SocialMediaChannel implements Parcelable {
         }
     };
 
-    public String id;
-    public String type;
+    public final String id;
+    public final String type;
 
     public SocialMediaChannel(Parcel parcel) {
         id = parcel.readString();

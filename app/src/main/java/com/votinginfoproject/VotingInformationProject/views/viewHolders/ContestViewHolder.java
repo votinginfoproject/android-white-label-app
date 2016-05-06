@@ -12,10 +12,10 @@ import com.votinginfoproject.VotingInformationProject.models.Contest;
  * Created by marcvandehey on 4/21/16.
  */
 public class ContestViewHolder extends ViewHolder implements DecoratedViewHolder {
-    private View mClickableView;
-    private TextView mTitle;
-    private TextView mDescription;
-    private TextView mSectionTitle;
+    private final View mClickableView;
+    private final TextView mTitle;
+    private final TextView mDescription;
+    private final TextView mSectionTitle;
 
     public ContestViewHolder(View itemView) {
         super(itemView);

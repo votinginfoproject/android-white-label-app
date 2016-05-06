@@ -53,7 +53,7 @@ public class AboutVIPFragment extends Fragment {
     private Toolbar mToolbar;
     private View mProgressBarContainer;
 
-    private int mAnimationDurationMillis = 400;
+    private final int mAnimationDurationMillis = 400;
 
     public static AboutVIPFragment newInstance(String titleText, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
         AboutVIPFragment fragment = new AboutVIPFragment();
@@ -111,7 +111,7 @@ public class AboutVIPFragment extends Fragment {
             }
         });
 
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

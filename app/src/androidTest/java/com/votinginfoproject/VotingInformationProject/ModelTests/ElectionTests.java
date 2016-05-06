@@ -3,9 +3,11 @@ package com.votinginfoproject.VotingInformationProject.ModelTests;
 import android.test.AndroidTestCase;
 
 import com.votinginfoproject.VotingInformationProject.models.Election;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by andrew on 8/1/14.
@@ -34,7 +36,7 @@ public class ElectionTests extends AndroidTestCase {
     public void testDateCheckForPassedElection() {
         Election election = new Election();
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat election_date_api_format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date electionDay = calendar.getTime();
 
         // set election day to today

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:background="?selectableItemBackground"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
+    android:background="?selectableItemBackground"
+    android:gravity="center_vertical"
     android:minHeight="@dimen/fragment.election_details.item_min_height"
-    android:gravity="center_vertical">
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/fragment.election_details.subtitle_horizontal_padding"
+    android:paddingRight="@dimen/fragment.election_details.subtitle_horizontal_padding">
 
     <TextView
         android:id="@+id/body_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_gray"/>
+        android:textColor="@color/text_gray" />
 
 </LinearLayout>

@@ -12,10 +12,10 @@ import com.votinginfoproject.VotingInformationProject.models.Candidate;
  * Created by marcvandehey on 4/28/16.
  */
 public class CandidateViewHolder extends RecyclerView.ViewHolder implements DecoratedViewHolder {
-    private View mClickableView;
-    private TextView mTitle;
-    private TextView mDescription;
-    private TextView mSectionTitle;
+    private final View mClickableView;
+    private final TextView mTitle;
+    private final TextView mDescription;
+    private final TextView mSectionTitle;
 
     public CandidateViewHolder(View itemView) {
         super(itemView);

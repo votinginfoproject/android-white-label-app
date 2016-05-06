@@ -31,8 +31,8 @@ public abstract class ContestInformationPresenter extends BasePresenter<ContestI
     public abstract int getViewTypeForIndex(int index);
 
     public class DataHolder {
-        public String title;
-        public String description;
+        public final String title;
+        public final String description;
 
         public DataHolder(String title, String description) {
             this.title = title;

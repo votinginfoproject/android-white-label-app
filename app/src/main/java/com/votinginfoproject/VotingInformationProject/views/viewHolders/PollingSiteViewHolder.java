@@ -95,8 +95,7 @@ public class PollingSiteViewHolder extends RecyclerView.ViewHolder {
                 Animation a = new Animation() {
                     @Override
                     protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        final int deltaHeight = (int) ((newHeight - oldHeight) * interpolatedTime + oldHeight);
-                        mView.getLayoutParams().height = deltaHeight;
+                        mView.getLayoutParams().height = (int) ((newHeight - oldHeight) * interpolatedTime + oldHeight);
                         mView.requestLayout();
                     }
 

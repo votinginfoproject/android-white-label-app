@@ -12,9 +12,9 @@ import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.c
  * Created by marcvandehey on 4/28/16.
  */
 public class ContestDetailViewHolder extends RecyclerView.ViewHolder implements DecoratedViewHolder {
-    private TextView mTitle;
-    private TextView mDescription;
-    private TextView mSectionTitle;
+    private final TextView mTitle;
+    private final TextView mDescription;
+    private final TextView mSectionTitle;
 
     public ContestDetailViewHolder(View itemView) {
         super(itemView);
