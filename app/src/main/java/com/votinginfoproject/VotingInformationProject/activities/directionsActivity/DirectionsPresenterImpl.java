@@ -27,7 +27,7 @@ import java.util.List;
 public class DirectionsPresenterImpl extends DirectionsPresenter implements DirectionsInteractor.DirectionsCallback {
     private static final String TAG = DirectionsPresenterImpl.class.getSimpleName();
 
-    private final Context mContext;
+    private Context mContext;
 
     private final boolean mUsingLastKnownLocation;
     private final PollingLocation mPollingLocation;
@@ -81,6 +81,8 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             interactor.cancel(true);
         }
 
+        mContext = null;
+
         setView(null);
     }
 
@@ -101,6 +103,10 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     public void lastKnownLocationUpdated() {
         if (mUsingLastKnownLocation && !mHasEnqueuedRequests) {
             requestAllTransitModes();
+
+            if (getView() != null) {
+                getView().refreshViewData();
+            }
         }
     }
 
@@ -202,6 +208,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
     public void retryButtonPressed() {
         requestAllTransitModes();
 
+        getView().refreshViewData();
         getView().toggleConnectionErrorView(false);
         getView().toggleLoadingView(true);
     }
@@ -295,14 +302,16 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         }
 
         if (origin != null) {
+            String directionsAPIKey = mContext.getString(R.string.google_api_browser_key);
+
             for (String transitMode : mQueuedTransitModes) {
-                enqueueRequest(transitMode, origin);
+                enqueueRequest(directionsAPIKey, transitMode, origin);
             }
         }
     }
 
-    private void enqueueRequest(String transitMode, Location origin) {
-        if (origin != null && mPollingLocation.location != null) {
+    private void enqueueRequest(String directionsAPIKey, String transitMode, @NonNull Location origin) {
+        if (mPollingLocation.location != null) {
             String directionsKey = mContext.getString(R.string.google_api_browser_key);
 
             DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
@@ -313,10 +322,6 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
             mTransitModesToInteractors.put(transitMode, interactor);
 
             mHasEnqueuedRequests = true;
-
-            if (getView() != null) {
-                refreshViewData();
-            }
         }
     }
 
