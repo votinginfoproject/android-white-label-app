@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.votinginfoproject.VotingInformationProject"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.votinginfoproject.VotingInformationProject"
+    android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".application.VIPApp"
@@ -19,53 +19,40 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeHome">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.AboutActivity"
-            android:label="@string/about.app.title"
-            android:parentActivityName=".activities.VIPTabBarActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.votinginfoproject.VotingInformationProject.activities.VIPTabBarActivity"/>
         </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
 
         <!-- Google Maps API Key required. Please reference the "Adding API keys for the app" section of the Readme for more details. -->
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_api_android_key"/>
+            android:value="@string/google_api_android_key" />
 
-        <activity android:name=".activities.voterInformationActivity.VoterInformationActivity"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
-            android:parentActivityName=".activities.homeActivity.HomeActivity"
+            android:name=".activities.voterInformationActivity.VoterInformationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".activities.aboutActivity.AboutVIPActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/about.app.title">
-        </activity>
+            android:label="@string/about.app.title"
+            android:parentActivityName=".activities.homeActivity.HomeActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activities.directionsActivity.DirectionsActivity"
             android:label="@string/title_activity_directions"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".activities.reportErrorActivity.ReportErrorActivity"
             android:label="@string/title_activity_directions"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

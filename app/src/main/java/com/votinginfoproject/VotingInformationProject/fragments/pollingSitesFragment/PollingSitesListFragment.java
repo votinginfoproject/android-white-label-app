@@ -29,8 +29,6 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
     private static final String ARG_CURRENT_SORT = "current_sort";
 
-    private Toolbar mToolbar;
-
     private PollingSitesPresenterImpl mPresenter;
 
     private PollingSitesListener mListener;
@@ -47,9 +45,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     }
 
     public static PollingSitesListFragment newInstance() {
-        PollingSitesListFragment fragment = new PollingSitesListFragment();
-
-        return fragment;
+        return new PollingSitesListFragment();
     }
 
     public static PollingSitesListFragment newInstance(@LayoutRes int currentSort) {
@@ -126,16 +122,16 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         super.onViewCreated(view, savedInstanceState);
 
         if (view != null) {
-            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
-            if (mToolbar == null) {
+            if (toolbar == null) {
                 Log.e(TAG, "No toolbar found in class: " + getClass().getSimpleName());
             } else {
-                mToolbar.inflateMenu(R.menu.polling_sites_list);
+                toolbar.inflateMenu(R.menu.polling_sites_list);
 
-                mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-                mToolbar.setTitle(R.string.bottom_navigation_title_polls);
-                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+                toolbar.setTitle(R.string.bottom_navigation_title_polls);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (getActivity() instanceof VoterInformationActivity) {
@@ -144,27 +140,27 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
                     }
                 });
 
-                mToolbar.setOnMenuItemClickListener(this);
+                toolbar.setOnMenuItemClickListener(this);
 
                 if (!mPresenter.hasPollingLocations()) {
-                    mToolbar.getMenu().removeItem(R.id.sort_polling_locations);
+                    toolbar.getMenu().removeItem(R.id.sort_polling_locations);
                 }
 
                 if (!mPresenter.hasEarlyVotingLocations()) {
-                    mToolbar.getMenu().removeItem(R.id.sort_early_vote);
+                    toolbar.getMenu().removeItem(R.id.sort_early_vote);
                 }
 
                 if (!mPresenter.hasDropBoxLocations()) {
-                    mToolbar.getMenu().removeItem(R.id.sort_drop_boxes);
+                    toolbar.getMenu().removeItem(R.id.sort_drop_boxes);
                 }
 
                 //If there aren't any polling locations
                 if (!mPresenter.hasPollingLocations() &&
                         !mPresenter.hasEarlyVotingLocations() &&
                         !mPresenter.hasDropBoxLocations()) {
-                    mToolbar.getMenu().removeGroup(R.id.filter_polling_sites);
+                    toolbar.getMenu().removeGroup(R.id.filter_polling_sites);
                 } else {
-                    mToolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
+                    toolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
                 }
             }
         }

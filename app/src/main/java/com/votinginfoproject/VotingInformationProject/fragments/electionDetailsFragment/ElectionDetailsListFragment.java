@@ -20,28 +20,22 @@ import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemD
  * Created by max on 4/15/16.
  */
 public class ElectionDetailsListFragment extends Fragment implements BottomNavigationFragment, ElectionDetailsView {
-    private ElectionDetailsPresenter mPresenter;
     private RecyclerView mRecyclerView;
     private ElectionDetailsRecyclerViewAdapter mAdapter;
-    private Toolbar mToolbar;
-
-    public ElectionDetailsListFragment() {
-    }
 
     public static ElectionDetailsListFragment newInstance() {
-        ElectionDetailsListFragment fragment = new ElectionDetailsListFragment();
-        return fragment;
+        return new ElectionDetailsListFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mPresenter = new ElectionDetailsPresenterImpl();
-        mPresenter.setView(this);
+        ElectionDetailsPresenter presenter = new ElectionDetailsPresenterImpl();
+        presenter.setView(this);
 
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         Context context = view.getContext();
 
-        mAdapter = new ElectionDetailsRecyclerViewAdapter(context, mPresenter);
+        mAdapter = new ElectionDetailsRecyclerViewAdapter(context, presenter);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -57,12 +51,12 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
         super.onViewCreated(view, savedInstanceState);
 
         if (view != null) {
-            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
-            if (mToolbar != null) {
-                mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-                mToolbar.setTitle(R.string.bottom_navigation_title_details);
-                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            if (toolbar != null) {
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+                toolbar.setTitle(R.string.bottom_navigation_title_details);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (getActivity() instanceof VoterInformationActivity) {

@@ -34,23 +34,21 @@ public class ElectionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     private final Context mContext;
     private final ElectionDetailsPresenter mPresenter;
-    private final Election mElection;
-    private final ElectionAdministrationBody mLocalAdmin;
-    private final ElectionAdministrationBody mStateAdmin;
     private boolean hasHeader;
     private List<ListItem> parentListNodes;
 
     public ElectionDetailsRecyclerViewAdapter(Context context, ElectionDetailsPresenter presenter) {
         mContext = context;
         mPresenter = presenter;
-        mElection = mPresenter.getElection();
-        mLocalAdmin = mPresenter.getLocalAdmin();
-        mStateAdmin = mPresenter.getStateAdmin();
 
-        parentListNodes = getListNodesForBody(mLocalAdmin, "Local");
-        parentListNodes.addAll(getListNodesForBody(mStateAdmin, "State"));
+        ElectionAdministrationBody localAdmin = mPresenter.getLocalAdmin();
+        parentListNodes = getListNodesForBody(localAdmin, "Local");
 
-        hasHeader = (mElection != null);
+        ElectionAdministrationBody stateAdmin = mPresenter.getStateAdmin();
+        parentListNodes.addAll(getListNodesForBody(stateAdmin, "State"));
+
+        Election election = mPresenter.getElection();
+        hasHeader = (election != null);
     }
 
     @Override

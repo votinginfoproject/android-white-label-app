@@ -1,5 +1,6 @@
 package com.votinginfoproject.VotingInformationProject;
 
+import com.votinginfoproject.VotingInformationProject.application.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.AdministrationRegion;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
@@ -8,7 +9,6 @@ import com.votinginfoproject.VotingInformationProject.models.Election;
 import com.votinginfoproject.VotingInformationProject.models.ElectionAdministrationBody;
 import com.votinginfoproject.VotingInformationProject.models.Source;
 import com.votinginfoproject.VotingInformationProject.models.State;
-import com.votinginfoproject.VotingInformationProject.application.VIPApp;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
@@ -19,10 +19,8 @@ import java.util.ArrayList;
  */
 public class MockVIPAppContext {
 
-    private VIPApp app;
-
     public MockVIPAppContext() {
-        app = new VIPApp();
+        VIPApp app = new VIPApp();
 
         VoterInfoResponse testInfo = new VoterInfoResponse();
         Election testElection = new Election();

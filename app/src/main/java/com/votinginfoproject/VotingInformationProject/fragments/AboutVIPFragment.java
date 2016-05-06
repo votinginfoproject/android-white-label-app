@@ -28,7 +28,7 @@ import java.util.Collections;
  * Created by max on 4/12/16.
  */
 
-public class AboutVIPFragment extends Fragment  {
+public class AboutVIPFragment extends Fragment {
     private static final String TAG = AboutVIPFragment.class.getSimpleName();
 
     private static final String ARG_TITLE = "mTitle";
@@ -54,7 +54,6 @@ public class AboutVIPFragment extends Fragment  {
     private View mProgressBarContainer;
 
     private int mAnimationDurationMillis = 400;
-    private float mAnimationSmoothing = 2f;
 
     public static AboutVIPFragment newInstance(String titleText, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
         AboutVIPFragment fragment = new AboutVIPFragment();
@@ -231,7 +230,7 @@ public class AboutVIPFragment extends Fragment  {
         int from = isRevealing ? 0 : viewRadius;
         int to = isRevealing ? viewRadius : 0;
 
-        Animator reveal = ViewAnimationUtils.createCircularReveal(getView(),transitionPoint.x, transitionPoint.y, from, to);
+        Animator reveal = ViewAnimationUtils.createCircularReveal(getView(), transitionPoint.x, transitionPoint.y, from, to);
         reveal.setInterpolator(getAnimationInterpolator(isRevealing));
         reveal.setDuration(mAnimationDurationMillis);
         return reveal;
@@ -251,11 +250,12 @@ public class AboutVIPFragment extends Fragment  {
     }
 
     private TimeInterpolator getAnimationInterpolator(boolean isRevealing) {
+        float animationSmoothing = 2f;
         if (isRevealing) {
-            return new DecelerateInterpolator(mAnimationSmoothing);
+            return new DecelerateInterpolator(animationSmoothing);
         }
 
-        return new AccelerateInterpolator(mAnimationSmoothing);
+        return new AccelerateInterpolator(animationSmoothing);
     }
 
     private int getEnclosingCircleRadius(View v, int cx, int cy) {

@@ -63,8 +63,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
     private static final String KEY_MAP_STATE = "Map_state";
 
-    private static int selected_alpha = 255;
-    private static int unselected_alpha = (int) (255 * 0.6);
+    private static int tab_selected_alpha = (int) (255 * 0.6);
     private static int fade_duration = 250;
 
     private Toolbar mToolbar;
@@ -282,7 +281,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
                 TabLayout.Tab tab = mTabLayout.newTab();
 
                 tab.setIcon(tabData.drawableID);
-                tab.getIcon().setAlpha(unselected_alpha);
+                tab.getIcon().setAlpha(tab_selected_alpha);
 
                 tab.setContentDescription(tabData.contentDescriptionID);
 
@@ -461,7 +460,8 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         if (tab.getIcon() != null) {
-            tab.getIcon().setAlpha(selected_alpha);
+            int maxAlpha = 255;
+            tab.getIcon().setAlpha(maxAlpha);
 
             int tabIndex = mTabLayout.getSelectedTabPosition();
             if (tabIndex >= 0) {
@@ -473,7 +473,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
         if (tab.getIcon() != null) {
-            tab.getIcon().setAlpha(unselected_alpha);
+            tab.getIcon().setAlpha(tab_selected_alpha);
         }
     }
 
@@ -528,7 +528,7 @@ public class DirectionsActivity extends BaseActivity<DirectionsPresenter> implem
 
             if (lastLocation != null) {
                 com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location formattedLocation =
-                    new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
+                        new com.votinginfoproject.VotingInformationProject.models.GoogleDirections.Location();
 
                 formattedLocation.lat = (float) lastLocation.getLatitude();
                 formattedLocation.lng = (float) lastLocation.getLongitude();

@@ -10,8 +10,6 @@ import java.util.ArrayList;
  * Created by marcvandehey on 3/31/16.
  */
 public interface HomeView {
-    public static final int PICK_CONTACT_REQUEST = 1;
-
     void navigateToAboutActivity();
 
     void navigateToVoterInformationActivity(VoterInfoResponse voterInfoResponse, String partyFilter);
