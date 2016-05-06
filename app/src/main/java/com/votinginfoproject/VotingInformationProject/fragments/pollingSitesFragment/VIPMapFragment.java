@@ -188,26 +188,31 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
 
         //TODO Send in This Location instead of using hashmap
         // set selected location to zoom to
-        if (locationId.equals(HOME)) {
-            thisLocation = homeLocation;
-        } else if (locationId.equals(ElectionAdministrationBody.AdminBody.STATE)) {
-            //TODO rework this
-            if (VoterInformation.getStateAdministrationBody() != null) {
-                thisLocation = VoterInformation.getStateAdministrationBody().getPhysicalAddress().getLocation();
-            }
+        switch (locationId) {
+            case HOME:
+                thisLocation = homeLocation;
+                break;
+            case ElectionAdministrationBody.AdminBody.STATE:
+                //TODO rework this
+                if (VoterInformation.getStateAdministrationBody() != null) {
+                    thisLocation = VoterInformation.getStateAdministrationBody().getPhysicalAddress().getLocation();
+                }
 
-        } else if (locationId.equals(ElectionAdministrationBody.AdminBody.LOCAL)) {
-            if (VoterInformation.getLocalAdministrationBody() != null) {
-                thisLocation = VoterInformation.getLocalAdministrationBody().getPhysicalAddress().getLocation();
-            }
-        } else {
-            Log.d(TAG, "Have location ID: " + locationId);
+                break;
+            case ElectionAdministrationBody.AdminBody.LOCAL:
+                if (VoterInformation.getLocalAdministrationBody() != null) {
+                    thisLocation = VoterInformation.getLocalAdministrationBody().getPhysicalAddress().getLocation();
+                }
 
-            //TODO rework this
+                break;
+            default:
+                Log.d(TAG, "Have location ID: " + locationId);
+
+                //TODO rework this
 //            selectedLocation = VoterInformation.getVoterInfoResponse().getLocationForId(locationId);
-
-            CivicApiAddress address = selectedLocation.address;
-            thisLocation = new LatLng(address.latitude, address.longitude);
+                CivicApiAddress address = selectedLocation.address;
+                thisLocation = new LatLng(address.latitude, address.longitude);
+                break;
         }
 
         // check if already instantiated
