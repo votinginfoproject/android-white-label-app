@@ -38,88 +38,90 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
             geocodeVoterInfoRequest = (GeocodeVoterInfoRequest) params[0];
 
             VoterInfoResponse voterInfoResponse = geocodeVoterInfoRequest.getVoterInfoResponse();
+            
+            if (voterInfoResponse.normalizedInput != null) {
+                OkHttpClient client = new OkHttpClient();
+                Gson gson = new GsonBuilder().create();
 
-            OkHttpClient client = new OkHttpClient();
-            Gson gson = new GsonBuilder().create();
+                GeocodeRequest homeGeocodeRequest = new GeocodeRequest(geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.normalizedInput.toGeocodeString());
 
-            GeocodeRequest homeGeocodeRequest = new GeocodeRequest(geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.normalizedInput.toGeocodeString());
+                Request homeAddressRequest = new Request.Builder().url(homeGeocodeRequest.buildQueryString()).build();
+                GeocodeLocationResult homeAddressResponse;
 
-            Request homeAddressRequest = new Request.Builder().url(homeGeocodeRequest.buildQueryString()).build();
-            GeocodeLocationResult homeAddressResponse;
+                try {
+                    Response okHttpResponse = client.newCall(homeAddressRequest).execute();
+                    homeAddressResponse = gson.fromJson(okHttpResponse.body().string(), GeocodeLocationResult.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Unexpected error in Geocoding Home Location");
+                    homeAddressResponse = new GeocodeLocationResult();
+                }
 
-            try {
-                Response okHttpResponse = client.newCall(homeAddressRequest).execute();
-                homeAddressResponse = gson.fromJson(okHttpResponse.body().string(), GeocodeLocationResult.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Unexpected error in Geocoding Home Location");
-                homeAddressResponse = new GeocodeLocationResult();
+                Location homeLocation = null;
+
+                if (!homeAddressResponse.getResults().isEmpty()) {
+                    Result homeGeocode = homeAddressResponse.getResults().get(0);
+
+                    homeLocation = homeGeocode.getGeometry().getLocation();
+                }
+
+                if (homeLocation == null) {
+                    //Error occurred with getting home location, cannot proceed
+                    return geocodeVoterInfoRequest;
+                }
+
+                //TODO pass use metric in correctly
+                ArrayList<PollingLocation> geocodedPollingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getPollingLocations(), homeLocation, VoterInformation.useMetric());
+                ArrayList<PollingLocation> geocodedEarlyVotingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getOpenEarlyVoteSites(), homeLocation, VoterInformation.useMetric());
+                ArrayList<PollingLocation> geocodedDropBoxLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getOpenDropOffLocations(), homeLocation, VoterInformation.useMetric());
+
+                CivicApiAddress stateAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
+
+                if (stateAdminAddress != null) {
+                    Location stateAdminLocation = getGeocodedLocation(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), stateAdminAddress);
+                    float stateAdminDistance = getDistance(homeLocation, stateAdminLocation, VoterInformation.useMetric());
+
+                    stateAdminAddress.latitude = stateAdminLocation.lat;
+                    stateAdminAddress.longitude = stateAdminLocation.lng;
+                    stateAdminAddress.distance = stateAdminDistance;
+                }
+
+                //Set up Local Administration Body
+                ElectionAdministrationBody localAdministrationBody = voterInfoResponse.getLocalAdmin();
+
+                if (localAdministrationBody != null) {
+                    CivicApiAddress localPhysicalAddress = getLocationForApiAddress(localAdministrationBody.getPhysicalAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+                    CivicApiAddress localCorrespondenceAddress = getLocationForApiAddress(localAdministrationBody.getCorrespondenceAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+
+                    localAdministrationBody.setPhysicalAddress(localPhysicalAddress);
+                    localAdministrationBody.setCorrespondenceAddress(localCorrespondenceAddress);
+
+                    VoterInformation.setLocalAdministrationBody(localAdministrationBody);
+                }
+
+                //Setup State Administration Body
+                ElectionAdministrationBody stateAdministrationBody = voterInfoResponse.getStateAdmin();
+
+                if (stateAdministrationBody != null) {
+                    CivicApiAddress statePhysicalAddress = getLocationForApiAddress(stateAdministrationBody.getPhysicalAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+                    CivicApiAddress stateCorrespondenceAddress = getLocationForApiAddress(stateAdministrationBody.getCorrespondenceAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
+
+                    stateAdministrationBody.setPhysicalAddress(statePhysicalAddress);
+                    stateAdministrationBody.setCorrespondenceAddress(stateCorrespondenceAddress);
+
+                    VoterInformation.setStateAdministrationBody(stateAdministrationBody);
+                }
+
+                //Setup Home address
+                CivicApiAddress homeAddress = voterInfoResponse.normalizedInput;
+                homeAddress.latitude = homeLocation.lat;
+                homeAddress.longitude = homeLocation.lng;
+
+                VoterInformation.setHomeAddress(homeAddress);
+
+                //Polling Locations
+                VoterInformation.setPollingLocations(geocodedPollingLocations, geocodedEarlyVotingLocations, geocodedDropBoxLocations);
             }
-
-            Location homeLocation = null;
-
-            if (!homeAddressResponse.getResults().isEmpty()) {
-                Result homeGeocode = homeAddressResponse.getResults().get(0);
-
-                homeLocation = homeGeocode.getGeometry().getLocation();
-            }
-
-            if (homeLocation == null) {
-                //Error occurred with getting home location, cannot proceed
-                return geocodeVoterInfoRequest;
-            }
-
-            //TODO pass use metric in correctly
-            ArrayList<PollingLocation> geocodedPollingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getPollingLocations(), homeLocation, VoterInformation.useMetric());
-            ArrayList<PollingLocation> geocodedEarlyVotingLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getOpenEarlyVoteSites(), homeLocation, VoterInformation.useMetric());
-            ArrayList<PollingLocation> geocodedDropBoxLocations = getGeocodedLocationForList(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), voterInfoResponse.getOpenDropOffLocations(), homeLocation, VoterInformation.useMetric());
-
-            CivicApiAddress stateAdminAddress = voterInfoResponse.getAdminAddress(ElectionAdministrationBody.AdminBody.STATE);
-
-            if (stateAdminAddress != null) {
-                Location stateAdminLocation = getGeocodedLocation(client, gson, geocodeVoterInfoRequest.getGeocodeKey(), stateAdminAddress);
-                float stateAdminDistance = getDistance(homeLocation, stateAdminLocation, VoterInformation.useMetric());
-
-                stateAdminAddress.latitude = stateAdminLocation.lat;
-                stateAdminAddress.longitude = stateAdminLocation.lng;
-                stateAdminAddress.distance = stateAdminDistance;
-            }
-
-            //Set up Local Administration Body
-            ElectionAdministrationBody localAdministrationBody = voterInfoResponse.getLocalAdmin();
-
-            if (localAdministrationBody != null) {
-                CivicApiAddress localPhysicalAddress = getLocationForApiAddress(localAdministrationBody.getPhysicalAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
-                CivicApiAddress localCorrespondenceAddress = getLocationForApiAddress(localAdministrationBody.getCorrespondenceAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
-
-                localAdministrationBody.setPhysicalAddress(localPhysicalAddress);
-                localAdministrationBody.setCorrespondenceAddress(localCorrespondenceAddress);
-
-                VoterInformation.setLocalAdministrationBody(localAdministrationBody);
-            }
-
-            //Setup State Administration Body
-            ElectionAdministrationBody stateAdministrationBody = voterInfoResponse.getStateAdmin();
-
-            if (stateAdministrationBody != null) {
-                CivicApiAddress statePhysicalAddress = getLocationForApiAddress(stateAdministrationBody.getPhysicalAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
-                CivicApiAddress stateCorrespondenceAddress = getLocationForApiAddress(stateAdministrationBody.getCorrespondenceAddress(), client, gson, geocodeVoterInfoRequest.getGeocodeKey(), homeLocation);
-
-                stateAdministrationBody.setPhysicalAddress(statePhysicalAddress);
-                stateAdministrationBody.setCorrespondenceAddress(stateCorrespondenceAddress);
-
-                VoterInformation.setStateAdministrationBody(stateAdministrationBody);
-            }
-
-            //Setup Home address
-            CivicApiAddress homeAddress = voterInfoResponse.normalizedInput;
-            homeAddress.latitude = homeLocation.lat;
-            homeAddress.longitude = homeLocation.lng;
-
-            VoterInformation.setHomeAddress(homeAddress);
-
-            //Polling Locations
-            VoterInformation.setPollingLocations(geocodedPollingLocations, geocodedEarlyVotingLocations, geocodedDropBoxLocations);
         }
 
         return geocodeVoterInfoRequest;
