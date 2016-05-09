@@ -53,7 +53,7 @@ public class CandidateInformationRecyclerViewAdapter extends RecyclerView.Adapte
             Candidate candidate = mPresenter.getCandidate();
 
             if (mPresenter.getView() != null) {
-                candidateHeaderViewHolder.bindData(mPresenter.getView().getContext(), candidate.candidateUrl, candidate.name, candidate.party);
+                candidateHeaderViewHolder.bindData(mPresenter.getView().getContext(), candidate.getCandidateUrl(), candidate.name, candidate.party);
             }
 
         } else if (holder instanceof CandidateDetailViewHolder) {

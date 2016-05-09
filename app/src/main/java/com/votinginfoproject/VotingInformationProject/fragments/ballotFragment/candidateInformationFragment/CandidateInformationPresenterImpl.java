@@ -67,7 +67,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
         if (index == websiteIndex) {
             return new DataHolder(
                     getSectionTitleForIndex(index),
-                    getCandidate().candidateUrl,
+                    getCandidate().getCandidateUrl(),
                     context.getString(R.string.candidate_details_website),
                     context.getString(R.string.accessibility_description_website),
                     R.drawable.ic_computer,
@@ -76,7 +76,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
                         public void onClick(View v) {
                             //Navigate to URL
                             if (getView() != null) {
-                                getView().navigateToUrl(getCandidate().candidateUrl);
+                                getView().navigateToUrl(getCandidate().getCandidateUrl());
                             }
                         }
                     });
@@ -146,7 +146,7 @@ public class CandidateInformationPresenterImpl extends CandidateInformationPrese
 
         int rowCount = 1;//Added row for header
 
-        if (candidate.candidateUrl != null) {
+        if (candidate.getCandidateUrl() != null) {
             websiteIndex = rowCount;
             rowCount++;
         }

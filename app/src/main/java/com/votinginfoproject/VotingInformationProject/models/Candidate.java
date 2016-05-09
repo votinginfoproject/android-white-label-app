@@ -25,13 +25,14 @@ public class Candidate implements Parcelable {
 
     public String name;
     public String party;
-    public String candidateUrl;
     public String phone;
     @SerializedName("photo_url")
-    public String photoUrl;
     public String email;
     public Long orderOnBallot;
     public List<SocialMediaChannel> channels;
+
+    private String candidateUrl;
+    private String photoUrl;
 
     public Candidate(Parcel parcel) {
         name = parcel.readString();
@@ -93,5 +94,19 @@ public class Candidate implements Parcelable {
     @Override
     public String toString() {
         return name + "\n" + party;
+    }
+
+    public String getPhotoUrl() {
+        if (photoUrl != null) {
+            return photoUrl.toLowerCase();
+        }
+        return null;
+    }
+
+    public String getCandidateUrl() {
+        if (candidateUrl != null) {
+            return candidateUrl.toLowerCase();
+        }
+        return null;
     }
 }
