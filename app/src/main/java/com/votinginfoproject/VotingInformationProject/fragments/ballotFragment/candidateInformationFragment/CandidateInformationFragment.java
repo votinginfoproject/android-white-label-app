@@ -174,7 +174,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
     }
 
     @Override
-    public void reportClicked() {
+    public void navigateToReportError() {
         mListener.reportErrorClicked();
     }
 

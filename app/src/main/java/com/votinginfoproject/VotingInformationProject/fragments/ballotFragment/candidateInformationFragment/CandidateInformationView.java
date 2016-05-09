@@ -14,5 +14,5 @@ public interface CandidateInformationView {
 
     void navigateToEmail(String email);
 
-    void reportClicked();
+    void navigateToReportError();
 }
