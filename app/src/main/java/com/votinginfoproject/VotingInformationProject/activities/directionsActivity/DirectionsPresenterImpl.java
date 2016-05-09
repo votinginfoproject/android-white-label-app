@@ -183,7 +183,17 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
                     updateViewMap();
                 }
             }
-        } else {
+        }
+        /* Google Directions will sometimes return a ZERO_RESPONSE error code, which means no
+        * route was found. This is a non-critical error and we only need to prompt a retry if the
+        * error ISN'T this. */
+        else if (!response.status.equalsIgnoreCase(DirectionsResponse.STATUS_ZERO_RESULTS)) {
+            transitModesToRoutes.clear();
+
+            for (DirectionsInteractor interactor : mTransitModesToInteractors.values()) {
+                interactor.cancel(true);
+            }
+
             showConnectionError();
         }
     }
