@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenter;
 import com.votinginfoproject.VotingInformationProject.activities.reportErrorActivity.ReportErrorPresenterImpl;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment.ContestListFragment;
@@ -127,11 +129,17 @@ public class VoterInformationPresenterImpl extends VoterInformationPresenter {
 
     @Override
     void reportErrorButtonClicked() {
-        String electionID = VoterInformation.getElection().getId();
-        String homeAddress = VoterInformation.getHomeAddress().toGeocodeString();
+        if (VoterInformation.getElection() != null && VoterInformation.getHomeAddress() != null) {
+            String electionID = VoterInformation.getElection().getId();
+            String homeAddress = VoterInformation.getHomeAddress().toGeocodeString();
 
-        ReportErrorPresenter presenter = new ReportErrorPresenterImpl(getView().getContext(), electionID, homeAddress);
+            ReportErrorPresenter presenter = new ReportErrorPresenterImpl(getView().getContext(), electionID, homeAddress);
 
-        getView().navigateToReportErrorActivity(presenter);
+            getView().navigateToReportErrorActivity(presenter);
+        } else {
+            Toast.makeText(getView().getContext(),
+                    R.string.error_no_election_information,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

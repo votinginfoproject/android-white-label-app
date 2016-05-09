@@ -18,7 +18,7 @@
     <string name="error.no_phone">Phone not installed</string>
     <string name="error.no_email">Email client not installed</string>
     <string name="error.no_browser">Web browser not installed</string>
-
+    <string name="error.no_election_information">Could not retrieve sufficient information.</string>
     <!-- Tab Bar Strings -->
     <string name="bottom.navigation.title.ballot">Ballot</string>
     <string name="bottom.navigation.title.polls">Polling Sites</string>
