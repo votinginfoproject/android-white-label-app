@@ -12,5 +12,7 @@ public interface ContestListView {
 
     void onReportErrorClicked();
 
+    void toggleEmptyView(boolean empty);
+
     Context getContext();
 }

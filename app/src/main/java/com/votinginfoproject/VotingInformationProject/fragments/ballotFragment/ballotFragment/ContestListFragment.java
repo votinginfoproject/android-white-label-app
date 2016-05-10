@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.ballotFragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.BaseFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.BallotRecyclerViewDecorator;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link ContestListListener}
  * interface.
  */
-public class ContestListFragment extends Fragment implements BottomNavigationFragment, ContestListView {
+public class ContestListFragment extends BaseFragment<ContestListPresenter> implements BottomNavigationFragment, ContestListView {
     private static final String TAG = ContestListFragment.class.getSimpleName();
 
     private static final String ARG_ELECTION = "arg_election";
@@ -37,6 +37,8 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
     private ContestListRecyclerViewAdapter mAdapter;
     private ContestListListener mListener;
     private RecyclerView mRecyclerView;
+
+    private View mEmptyView;
 
     public ContestListFragment() {
         //Required Empty Constructor
@@ -63,6 +65,7 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
             ArrayList<Contest> contests = getArguments().getParcelableArrayList(ARG_CONTESTS);
 
             ContestListPresenterImpl presenter = new ContestListPresenterImpl(this, election, contests);
+            setPresenter(presenter);
             mAdapter = new ContestListRecyclerViewAdapter(presenter);
         }
     }
@@ -83,6 +86,8 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
         if (mAdapter != null) {
             mRecyclerView.setAdapter(mAdapter);
         }
+
+        mEmptyView = view.findViewById(R.id.empty);
 
         return view;
     }
@@ -179,6 +184,14 @@ public class ContestListFragment extends Fragment implements BottomNavigationFra
     @Override
     public void onReportErrorClicked() {
         mListener.reportErrorClicked();
+    }
+
+    @Override
+    public void toggleEmptyView(boolean empty) {
+        int visibility = empty ? View.VISIBLE : View.GONE;
+
+        mEmptyView.setVisibility(visibility);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
