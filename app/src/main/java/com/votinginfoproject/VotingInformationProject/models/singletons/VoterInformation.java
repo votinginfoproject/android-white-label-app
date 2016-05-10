@@ -85,6 +85,19 @@ public class VoterInformation {
         response.setUpLocations();
     }
 
+    public static void clear() {
+        ourInstance.selectedElection = null;
+        ourInstance.selectedParty = "";
+        ourInstance.contests = new ArrayList<>();
+        ourInstance.pollingLocations = new ArrayList<>();
+        ourInstance.earlyVotingLocations = new ArrayList<>();
+        ourInstance.dropBoxLocations = new ArrayList<>();
+        ourInstance.allLocations = new ArrayList<>();
+        ourInstance.homeAddress = null;
+        ourInstance.localAdministrationBody = null;
+        ourInstance.stateAdministrationBody = null;
+    }
+
     public static Election getElection() {
         return ourInstance.selectedElection;
     }

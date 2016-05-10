@@ -219,6 +219,8 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
                 request = new CivicInfoRequest(mContext, electionId, searchAddress);
             }
 
+            VoterInformation.clear();
+            
             mCivicInteractor.enqueueRequest(request, this);
         }
     }

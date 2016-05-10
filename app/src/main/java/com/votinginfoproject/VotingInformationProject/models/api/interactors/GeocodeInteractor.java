@@ -38,7 +38,7 @@ public class GeocodeInteractor extends BaseInteractor<GeocodeVoterInfoRequest, G
             geocodeVoterInfoRequest = (GeocodeVoterInfoRequest) params[0];
 
             VoterInfoResponse voterInfoResponse = geocodeVoterInfoRequest.getVoterInfoResponse();
-            
+
             if (voterInfoResponse.normalizedInput != null) {
                 OkHttpClient client = new OkHttpClient();
                 Gson gson = new GsonBuilder().create();
