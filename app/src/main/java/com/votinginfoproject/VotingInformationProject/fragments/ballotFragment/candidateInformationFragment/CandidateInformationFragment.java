@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.candidateInformationFragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,18 +14,18 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.BaseFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.BallotRecyclerViewDecorator;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 
 /**
  * Created by marcvandehey on 5/2/16.
  */
-public class CandidateInformationFragment extends Fragment implements CandidateInformationView, BottomNavigationFragment {
+public class CandidateInformationFragment extends BaseFragment<CandidateInformationPresenter> implements CandidateInformationView, BottomNavigationFragment {
     private static final String TAG = CandidateInformationFragment.class.getSimpleName();
     private static final String ARG_PRESENTER = "arg_presenter";
 
     private CandidateInformationRecyclerViewAdapter mAdapter;
-    private CandidateInformationPresenter mPresenter;
     private RecyclerView mRecyclerView;
     private CandidateInformationListener mListener;
 
@@ -49,7 +48,7 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mPresenter = getArguments().getParcelable(ARG_PRESENTER);
+            setPresenter((CandidateInformationPresenter) getArguments().getParcelable(ARG_PRESENTER));
         }
     }
 
@@ -69,10 +68,10 @@ public class CandidateInformationFragment extends Fragment implements CandidateI
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 1));
 
         mAdapter = new CandidateInformationRecyclerViewAdapter();
-        mPresenter.setView(this);
+        getPresenter().setView(this);
 
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setPresenter(mPresenter);
+        mAdapter.setPresenter(getPresenter());
 
         return view;
     }

@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.BaseFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.BallotRecyclerViewDecorator;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.Candidate;
@@ -24,7 +24,7 @@ import com.votinginfoproject.VotingInformationProject.models.Election;
 /**
  * Created by marcvandehey on 4/21/16.
  */
-public class ContestInformationListFragment extends Fragment implements BottomNavigationFragment, ContestInformationView, ContestInformationRecyclerViewAdapter.ContestInformationItemOnClickListener {
+public class ContestInformationListFragment extends BaseFragment<ContestInformationPresenter> implements BottomNavigationFragment, ContestInformationView, ContestInformationRecyclerViewAdapter.ContestInformationItemOnClickListener {
     private static final String TAG = ContestInformationListFragment.class.getSimpleName();
 
     private static final String ARG_ELECTION = "arg_election";
@@ -58,8 +58,8 @@ public class ContestInformationListFragment extends Fragment implements BottomNa
             Election election = getArguments().getParcelable(ARG_ELECTION);
             Contest contest = getArguments().getParcelable(ARG_CONTEST);
 
-            ContestInformationPresenter presenter = new ContestInformationPresenterImpl(this, election, contest);
-            mAdapter = new ContestInformationRecyclerViewAdapter(presenter, this);
+            setPresenter(new ContestInformationPresenterImpl(this, election, contest));
+            mAdapter = new ContestInformationRecyclerViewAdapter(getPresenter(), this);
         }
     }
 
