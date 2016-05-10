@@ -46,11 +46,9 @@
 
             <TextView
                 android:id="@+id/empty_text"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/activity.voter.information.empty_text_width"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
+                android:gravity="center" />
 
         </LinearLayout>
     </LinearLayout>

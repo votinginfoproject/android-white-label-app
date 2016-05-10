@@ -1,7 +1,6 @@
 package com.votinginfoproject.VotingInformationProject.fragments.pollingSitesFragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -18,19 +17,18 @@ import android.widget.TextView;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.BaseFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.models.PollingLocation;
 import com.votinginfoproject.VotingInformationProject.views.viewHolders.DividerItemDecoration;
 
 import java.util.ArrayList;
 
-public class PollingSitesListFragment extends Fragment implements BottomNavigationFragment, Toolbar.OnMenuItemClickListener, PollingSitesView {
+public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter> implements BottomNavigationFragment, Toolbar.OnMenuItemClickListener, PollingSitesView {
 
     private static final String TAG = PollingSitesListFragment.class.getSimpleName();
 
     private static final String ARG_CURRENT_SORT = "current_sort";
-
-    private PollingSitesPresenterImpl mPresenter;
 
     private PollingSitesListener mListener;
 
@@ -66,9 +64,9 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (getArguments() != null) {
-            mPresenter = new PollingSitesPresenterImpl(getArguments().getInt(ARG_CURRENT_SORT, R.id.sort_all));
+            setPresenter(new PollingSitesPresenterImpl(this, getArguments().getInt(ARG_CURRENT_SORT, R.id.sort_all)));
         } else {
-            mPresenter = new PollingSitesPresenterImpl();
+            setPresenter(new PollingSitesPresenterImpl(this));
         }
 
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
@@ -84,12 +82,10 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
 
-        mAdapter = new PollingSiteItemRecyclerViewAdapter(context, mPresenter.getElection(), mPresenter.getSortedLocations(), mListener);
+        mAdapter = new PollingSiteItemRecyclerViewAdapter(context, getPresenter().getElection(), getPresenter().getSortedLocations(), mListener);
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.invalidate();
-
-        mPresenter.setView(this);
 
         return view;
     }
@@ -147,25 +143,25 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
                 toolbar.setOnMenuItemClickListener(this);
 
-                if (!mPresenter.hasPollingLocations()) {
+                if (!getPresenter().hasPollingLocations()) {
                     toolbar.getMenu().removeItem(R.id.sort_polling_locations);
                 }
 
-                if (!mPresenter.hasEarlyVotingLocations()) {
+                if (!getPresenter().hasEarlyVotingLocations()) {
                     toolbar.getMenu().removeItem(R.id.sort_early_vote);
                 }
 
-                if (!mPresenter.hasDropBoxLocations()) {
+                if (!getPresenter().hasDropBoxLocations()) {
                     toolbar.getMenu().removeItem(R.id.sort_drop_boxes);
                 }
 
                 //If there aren't any polling locations
-                if (!mPresenter.hasPollingLocations() &&
-                        !mPresenter.hasEarlyVotingLocations() &&
-                        !mPresenter.hasDropBoxLocations()) {
+                if (!getPresenter().hasPollingLocations() &&
+                        !getPresenter().hasEarlyVotingLocations() &&
+                        !getPresenter().hasDropBoxLocations()) {
                     toolbar.getMenu().removeGroup(R.id.filter_polling_sites);
                 } else {
-                    toolbar.getMenu().findItem(mPresenter.getCurrentSort()).setChecked(true);
+                    toolbar.getMenu().findItem(getPresenter().getCurrentSort()).setChecked(true);
                 }
             }
         }
@@ -178,7 +174,7 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        mPresenter.menuItemClicked(item.getItemId());
+        getPresenter().menuItemClicked(item.getItemId());
         item.setChecked(true);
 
         return true;
@@ -213,10 +209,8 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
     @Override
     public void toggleEmpty(boolean empty) {
-        int visibility = empty ? View.VISIBLE : View.GONE;
-
-        mEmptyView.setVisibility(visibility);
-        mRecyclerView.setVisibility(View.GONE);
+        mEmptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        mRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
     /**

@@ -192,10 +192,8 @@ public class ContestListFragment extends BaseFragment<ContestListPresenter> impl
 
     @Override
     public void toggleEmptyView(boolean empty) {
-        int visibility = empty ? View.VISIBLE : View.GONE;
-
-        mEmptyView.setVisibility(visibility);
-        mRecyclerView.setVisibility(View.GONE);
+        mEmptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        mRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
     @Override

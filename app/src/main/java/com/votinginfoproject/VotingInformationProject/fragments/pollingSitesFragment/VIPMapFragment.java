@@ -167,7 +167,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             selectedSort = getArguments().getInt(ARG_CURRENT_SORT);
         }
 
-        mPresenter = new PollingSitesPresenterImpl(selectedSort);
+        mPresenter = new PollingSitesPresenterImpl(this, selectedSort);
         mPresenter.setView(this);
 
         allLocations = VoterInformation.getAllPollingLocations();
