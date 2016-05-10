@@ -23,7 +23,7 @@ import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemD
 public class ElectionDetailsListFragment extends BaseFragment<ElectionDetailsPresenter> implements BottomNavigationFragment, ElectionDetailsView {
     private RecyclerView mRecyclerView;
     private ElectionDetailsRecyclerViewAdapter mAdapter;
-    private View mEmptyView;
+    private View mNoContentContainer;
 
     public static ElectionDetailsListFragment newInstance() {
         return new ElectionDetailsListFragment();
@@ -40,10 +40,10 @@ public class ElectionDetailsListFragment extends BaseFragment<ElectionDetailsPre
 
         mAdapter = new ElectionDetailsRecyclerViewAdapter(context, presenter);
 
-        mEmptyView = view.findViewById(R.id.empty);
+        mNoContentContainer = view.findViewById(R.id.fragment_recycler_container_no_content);
 
-        TextView emptyText = (TextView) mEmptyView.findViewById(R.id.empty_text);
-        emptyText.setText(R.string.details_empty);
+        TextView emptyText = (TextView) mNoContentContainer.findViewById(R.id.fragment_recycler_text_view_no_content);
+        emptyText.setText(R.string.details_label_empty_list);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -97,9 +97,9 @@ public class ElectionDetailsListFragment extends BaseFragment<ElectionDetailsPre
     }
 
     @Override
-    public void toggleEmptyView(boolean empty) {
-        mEmptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
-        mRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
+    public void showNoContentView() {
+        mNoContentContainer.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     @Override

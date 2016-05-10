@@ -37,18 +37,20 @@
             tools:listitem="@layout/row_polling_site" />
 
         <LinearLayout
-            android:id="@+id/empty"
+            android:id="@+id/fragment.recycler.container.no_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:gravity="center"
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/empty_text"
-                android:layout_width="@dimen/activity.voter.information.empty_text_width"
+                android:id="@+id/fragment.recycler.text_view.no_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center" />
+                android:layout_marginLeft="@dimen/activity.voter.information.no_content.horizontal_margin"
+                android:layout_marginRight="@dimen/activity.voter.information.no_content.horizontal_margin"
+                android:gravity="center"
+                android:text="@string/details.label.empty_list" />
 
         </LinearLayout>
     </LinearLayout>

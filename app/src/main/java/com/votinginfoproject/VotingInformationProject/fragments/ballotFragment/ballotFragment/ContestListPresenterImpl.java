@@ -49,7 +49,7 @@ public class ContestListPresenterImpl extends ContestListPresenter {
         super.onAttachView(view);
         
         if (mContests.size() == 0) {
-            getView().toggleEmptyView(true);
+            getView().showNoContentView();
         }
     }
 

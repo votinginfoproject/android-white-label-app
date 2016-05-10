@@ -39,7 +39,7 @@ public class ContestListFragment extends BaseFragment<ContestListPresenter> impl
     private ContestListListener mListener;
     private RecyclerView mRecyclerView;
 
-    private View mEmptyView;
+    private View mNoContentContainer;
 
     public ContestListFragment() {
         //Required Empty Constructor
@@ -88,10 +88,10 @@ public class ContestListFragment extends BaseFragment<ContestListPresenter> impl
             mRecyclerView.setAdapter(mAdapter);
         }
 
-        mEmptyView = view.findViewById(R.id.empty);
+        mNoContentContainer = view.findViewById(R.id.fragment_recycler_container_no_content);
 
-        TextView emptyText = (TextView) mEmptyView.findViewById(R.id.empty_text);
-        emptyText.setText(R.string.contest_empty);
+        TextView emptyText = (TextView) mNoContentContainer.findViewById(R.id.fragment_recycler_text_view_no_content);
+        emptyText.setText(R.string.contest_label_empty_list);
 
         return view;
     }
@@ -191,9 +191,9 @@ public class ContestListFragment extends BaseFragment<ContestListPresenter> impl
     }
 
     @Override
-    public void toggleEmptyView(boolean empty) {
-        mEmptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
-        mRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
+    public void showNoContentView() {
+        mNoContentContainer.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     @Override

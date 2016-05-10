@@ -36,7 +36,7 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
 
     private RecyclerView mRecyclerView;
 
-    private View mEmptyView;
+    private View mNoContentContainer;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,10 +73,10 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-        mEmptyView = view.findViewById(R.id.empty);
+        mNoContentContainer = view.findViewById(R.id.fragment_recycler_container_no_content);
 
-        TextView emptyText = (TextView) mEmptyView.findViewById(R.id.empty_text);
-        emptyText.setText(R.string.locations_empty);
+        TextView emptyText = (TextView) mNoContentContainer.findViewById(R.id.fragment_recycler_text_view_no_content);
+        emptyText.setText(R.string.locations_label_empty_list);
 
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -93,7 +93,6 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
 
         if (context instanceof PollingSitesListener) {
             mListener = (PollingSitesListener) context;
@@ -208,9 +207,9 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
     }
 
     @Override
-    public void toggleEmpty(boolean empty) {
-        mEmptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
-        mRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
+    public void showNoContentView() {
+        mNoContentContainer.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     /**

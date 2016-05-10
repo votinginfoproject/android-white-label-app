@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public interface PollingSitesView {
     void navigateToDirections(PollingLocation pollingLocation);
 
-    void toggleEmpty(boolean empty);
+    void showNoContentView();
 
     void navigateToMap(@LayoutRes int currentSort);
 

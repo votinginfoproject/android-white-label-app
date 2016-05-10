@@ -47,7 +47,7 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
         super.onAttachView(view);
 
         if (getSortedLocations().isEmpty()) {
-            view.toggleEmpty(true);
+            view.showNoContentView();
         }
     }
 

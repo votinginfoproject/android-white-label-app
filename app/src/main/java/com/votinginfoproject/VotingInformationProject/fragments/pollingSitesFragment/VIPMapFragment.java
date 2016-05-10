@@ -377,7 +377,7 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     }
 
     @Override
-    public void toggleEmpty(boolean empty) {
+    public void showNoContentView() {
         //Not implemented
     }
 

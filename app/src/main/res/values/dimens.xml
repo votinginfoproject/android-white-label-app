@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="activity.voter.information.empty_text_width">240dp</dimen>
+    <dimen name="activity.voter.information.no_content.horizontal_margin">50dp</dimen>
 
     <dimen name="activity.home.horizontal_margin">32dp</dimen>
     <dimen name="activity.home.editable_text_box_size">48dp</dimen>

@@ -33,7 +33,7 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
         super.onAttachView(view);
 
         if (getLocalAdmin() == null && getStateAdmin() == null) {
-            getView().toggleEmptyView(true);
+            getView().showNoContentView();
         }
     }
 
