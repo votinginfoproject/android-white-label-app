@@ -29,6 +29,15 @@ public class ElectionDetailsPresenterImpl extends ElectionDetailsPresenter {
     }
 
     @Override
+    public void onAttachView(ElectionDetailsView view) {
+        super.onAttachView(view);
+
+        if (getLocalAdmin() == null && getStateAdmin() == null) {
+            getView().toggleEmptyView(true);
+        }
+    }
+
+    @Override
     public ElectionAdministrationBody getLocalAdmin() {
         return VoterInformation.getLocalAdministrationBody();
     }

@@ -1,6 +1,5 @@
 package com.votinginfoproject.VotingInformationProject.fragments.electionDetailsFragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,15 +12,17 @@ import android.view.ViewGroup;
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationView;
+import com.votinginfoproject.VotingInformationProject.fragments.BaseFragment;
 import com.votinginfoproject.VotingInformationProject.fragments.bottomNavigationFragment.BottomNavigationFragment;
 import com.votinginfoproject.VotingInformationProject.views.ElectionDetailsItemDecoration;
 
 /**
  * Created by max on 4/15/16.
  */
-public class ElectionDetailsListFragment extends Fragment implements BottomNavigationFragment, ElectionDetailsView {
+public class ElectionDetailsListFragment extends BaseFragment<ElectionDetailsPresenter> implements BottomNavigationFragment, ElectionDetailsView {
     private RecyclerView mRecyclerView;
     private ElectionDetailsRecyclerViewAdapter mAdapter;
+    private View mEmptyView;
 
     public static ElectionDetailsListFragment newInstance() {
         return new ElectionDetailsListFragment();
@@ -31,11 +32,14 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ElectionDetailsPresenter presenter = new ElectionDetailsPresenterImpl();
         presenter.setView(this);
+        setPresenter(presenter);
 
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         Context context = view.getContext();
 
         mAdapter = new ElectionDetailsRecyclerViewAdapter(context, presenter);
+
+        mEmptyView = view.findViewById(R.id.empty);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -86,6 +90,12 @@ public class ElectionDetailsListFragment extends Fragment implements BottomNavig
         if (getActivity() instanceof ElectionDetailsListFragmentCallback) {
             ((ElectionDetailsListFragmentCallback) getActivity()).reportErrorButtonClicked();
         }
+    }
+
+    @Override
+    public void toggleEmptyView(boolean empty) {
+        mEmptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        mRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
     @Override
