@@ -31,15 +31,22 @@ public class PollingSitesPresenterImpl extends PollingSitesPresenter {
 
     private PollingLocation lastClickedLocation;
 
-    public PollingSitesPresenterImpl(PollingSitesView pollingSitesView) {
+    public PollingSitesPresenterImpl(@LayoutRes int selectedSort) {
         mappedPollingLocations = new HashMap<>();
-        setView(pollingSitesView);
+        currentSort = selectedSort;
     }
 
-    public PollingSitesPresenterImpl(PollingSitesView pollingSitesView, @LayoutRes int selectedSort) {
-        mappedPollingLocations = new HashMap<>();
-        setView(pollingSitesView);
-        currentSort = selectedSort;
+    public PollingSitesPresenterImpl() {
+        //Init with default sort
+    }
+
+    @Override
+    public void setView(PollingSitesView view) {
+        super.setView(view);
+
+        if (getSortedLocations().isEmpty()) {
+            view.toggleEmpty(true);
+        }
     }
 
     @Override

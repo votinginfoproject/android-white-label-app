@@ -37,6 +37,8 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
 
     private RecyclerView mRecyclerView;
 
+    private View mEmptyView;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -63,14 +65,16 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (getArguments() != null) {
-            mPresenter = new PollingSitesPresenterImpl(this, getArguments().getInt(ARG_CURRENT_SORT, R.id.sort_all));
+            mPresenter = new PollingSitesPresenterImpl(getArguments().getInt(ARG_CURRENT_SORT, R.id.sort_all));
         } else {
-            mPresenter = new PollingSitesPresenterImpl(this);
+            mPresenter = new PollingSitesPresenterImpl();
         }
 
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+        mEmptyView = view.findViewById(R.id.empty);
 
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -81,12 +85,15 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.invalidate();
 
+        mPresenter.setView(this);
+
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
 
         if (context instanceof PollingSitesListener) {
             mListener = (PollingSitesListener) context;
@@ -179,11 +186,6 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     }
 
     @Override
-    public void navigateToErrorForm() {
-        mListener.reportErrorClicked();
-    }
-
-    @Override
     public void navigateToMap(@LayoutRes int currentSort) {
         mListener.mapButtonClicked(currentSort);
     }
@@ -203,6 +205,14 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
     @Override
     public void showLocationCard(PollingLocation location) {
         //Not Implemented
+    }
+
+    @Override
+    public void toggleEmpty(boolean empty) {
+        int visibility = empty ? View.VISIBLE : View.GONE;
+
+        mEmptyView.setVisibility(visibility);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     /**

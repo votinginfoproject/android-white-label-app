@@ -35,6 +35,21 @@
             app:layoutManager="LinearLayoutManager"
             tools:context=".fragments.pollingSitesFragment.PollingSitesListFragment"
             tools:listitem="@layout/row_polling_site" />
+
+        <LinearLayout
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No info found" />
+
+
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

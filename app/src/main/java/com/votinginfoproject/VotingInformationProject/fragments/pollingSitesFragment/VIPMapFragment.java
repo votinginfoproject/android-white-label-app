@@ -167,7 +167,8 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
             selectedSort = getArguments().getInt(ARG_CURRENT_SORT);
         }
 
-        mPresenter = new PollingSitesPresenterImpl(this, selectedSort);
+        mPresenter = new PollingSitesPresenterImpl(selectedSort);
+        mPresenter.setView(this);
 
         allLocations = VoterInformation.getAllPollingLocations();
 
@@ -359,11 +360,6 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
     }
 
     @Override
-    public void navigateToErrorForm() {
-        //Not implemented
-    }
-
-    @Override
     public void navigateToMap(@LayoutRes int currentSort) {
         //Not implemented
     }
@@ -378,6 +374,11 @@ public class VIPMapFragment extends MapFragment implements Toolbar.OnMenuItemCli
         if (map != null) {
             mPresenter.onMapNeedsLayout(map);
         }
+    }
+
+    @Override
+    public void toggleEmpty(boolean empty) {
+        //Not implemented
     }
 
     @Override
