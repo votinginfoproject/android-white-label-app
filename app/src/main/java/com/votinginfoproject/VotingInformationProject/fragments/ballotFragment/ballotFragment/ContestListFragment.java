@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
@@ -88,6 +89,9 @@ public class ContestListFragment extends BaseFragment<ContestListPresenter> impl
         }
 
         mEmptyView = view.findViewById(R.id.empty);
+
+        TextView emptyText = (TextView) mEmptyView.findViewById(R.id.empty_text);
+        emptyText.setText(R.string.contest_empty);
 
         return view;
     }

@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
@@ -40,6 +41,9 @@ public class ElectionDetailsListFragment extends BaseFragment<ElectionDetailsPre
         mAdapter = new ElectionDetailsRecyclerViewAdapter(context, presenter);
 
         mEmptyView = view.findViewById(R.id.empty);
+
+        TextView emptyText = (TextView) mEmptyView.findViewById(R.id.empty_text);
+        emptyText.setText(R.string.details_empty);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));

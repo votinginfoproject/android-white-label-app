@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.votinginfoproject.VotingInformationProject.R;
 import com.votinginfoproject.VotingInformationProject.activities.voterInformationActivity.VoterInformationActivity;
@@ -75,6 +76,9 @@ public class PollingSitesListFragment extends Fragment implements BottomNavigati
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         mEmptyView = view.findViewById(R.id.empty);
+
+        TextView emptyText = (TextView) mEmptyView.findViewById(R.id.empty_text);
+        emptyText.setText(R.string.locations_empty);
 
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));

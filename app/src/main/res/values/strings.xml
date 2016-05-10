@@ -79,6 +79,7 @@
     <string name="contest.label.referendum_text">Referendum Details</string>
     <string name="contest.label.referendum_pro">Referendum Pro</string>
     <string name="contest.label.referendum_con">Referendum Con</string>
+    <string name="contest.empty">The ballot for this election is not currently available.</string>
 
     <!-- Candidate Details Strings -->
     <string name="candidate.toolbar">Candidate</string>
@@ -121,6 +122,7 @@
     <string name="details.label.correspondence_address">Correspondence Address</string>
     <string name="details.label.physical_address">Physical Address</string>
     <string name="details.label.election_officials">Election Officials</string>
+    <string name="details.empty">There is no further information about this election available.</string>
     <!-- End Election Detail Strings -->
 
 
@@ -133,6 +135,7 @@
     <string name="locations.list.none_found">No locations found.</string>
     <string name="locations.distance_suffix_imperial">mi.</string>
     <string name="locations.distance_suffix_metric">km</string>
+    <string name="locations.empty">There is currently no information on polling sites in your area.</string>
 
     <!-- Locations map strings -->
     <string name="locations.map.label.user_address">User Address</string>
