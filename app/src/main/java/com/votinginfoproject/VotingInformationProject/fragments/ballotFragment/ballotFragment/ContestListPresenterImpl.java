@@ -47,13 +47,12 @@ public class ContestListPresenterImpl extends ContestListPresenter {
     @Override
     public void onAttachView(ContestListView view) {
         super.onAttachView(view);
-        
+
         if (mContests.size() == 0) {
             getView().showNoContentView();
         }
     }
-
-
+    
     @Override
     public Contest getContest(int index) {
         index -= (hasHeader()) ? 1 : 0;

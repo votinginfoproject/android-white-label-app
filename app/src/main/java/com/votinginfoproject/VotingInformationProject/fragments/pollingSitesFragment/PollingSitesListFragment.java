@@ -38,6 +38,8 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
 
     private View mNoContentContainer;
 
+    private Toolbar mToolbar;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -122,16 +124,16 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
         super.onViewCreated(view, savedInstanceState);
 
         if (view != null) {
-            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
-            if (toolbar == null) {
+            if (mToolbar == null) {
                 Log.e(TAG, "No toolbar found in class: " + getClass().getSimpleName());
             } else {
-                toolbar.inflateMenu(R.menu.polling_sites_list);
+                mToolbar.inflateMenu(R.menu.polling_sites_list);
 
-                toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-                toolbar.setTitle(R.string.bottom_navigation_title_polls);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+                mToolbar.setTitle(R.string.bottom_navigation_title_polls);
+                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (getActivity() instanceof VoterInformationActivity) {
@@ -140,27 +142,27 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
                     }
                 });
 
-                toolbar.setOnMenuItemClickListener(this);
+                mToolbar.setOnMenuItemClickListener(this);
 
                 if (!getPresenter().hasPollingLocations()) {
-                    toolbar.getMenu().removeItem(R.id.sort_polling_locations);
+                    mToolbar.getMenu().removeItem(R.id.sort_polling_locations);
                 }
 
                 if (!getPresenter().hasEarlyVotingLocations()) {
-                    toolbar.getMenu().removeItem(R.id.sort_early_vote);
+                    mToolbar.getMenu().removeItem(R.id.sort_early_vote);
                 }
 
                 if (!getPresenter().hasDropBoxLocations()) {
-                    toolbar.getMenu().removeItem(R.id.sort_drop_boxes);
+                    mToolbar.getMenu().removeItem(R.id.sort_drop_boxes);
                 }
 
                 //If there aren't any polling locations
                 if (!getPresenter().hasPollingLocations() &&
                         !getPresenter().hasEarlyVotingLocations() &&
                         !getPresenter().hasDropBoxLocations()) {
-                    toolbar.getMenu().removeGroup(R.id.filter_polling_sites);
+                    mToolbar.getMenu().removeGroup(R.id.filter_polling_sites);
                 } else {
-                    toolbar.getMenu().findItem(getPresenter().getCurrentSort()).setChecked(true);
+                    mToolbar.getMenu().findItem(getPresenter().getCurrentSort()).setChecked(true);
                 }
             }
         }
@@ -210,6 +212,7 @@ public class PollingSitesListFragment extends BaseFragment<PollingSitesPresenter
     public void showNoContentView() {
         mNoContentContainer.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
+        mToolbar.getMenu().removeItem(R.id.map_view);
     }
 
     /**
