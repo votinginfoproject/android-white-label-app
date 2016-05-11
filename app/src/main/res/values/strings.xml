@@ -60,7 +60,7 @@
     <!-- Feedback Strings -->
     <string name="feedback.link">Report an Error</string>
     <string name="feedback.loading">Loading feedback form…</string>
-    <string name="feedback.url">https://voter-info-tool.appspot.com/feedback</string>
+    <string name="feedback.url" translatable="false">https://voter-info-tool.appspot.com/feedback</string>
 
     <!-- Election View Strings -->
     <string name="fragment.ballot.list.header.contests">Contests</string>
@@ -77,8 +77,8 @@
     <string name="contest.label.ballot_placement">Ballot Placement</string>
     <string name="contest.header.candidate_list">Candidates</string>
     <string name="contest.label.referendum_text">Referendum Details</string>
-    <string name="contest.label.referendum_pro">Referendum Pro</string>
-    <string name="contest.label.referendum_con">Referendum Con</string>
+    <string name="contest.label.referendum_pro" translatable="false">Referendum Pro</string>
+    <string name="contest.label.referendum_con" translatable="false">Referendum Con</string>
     <string name="contest.label.empty_list">The ballot for this election is not currently available.</string>
 
     <!-- Candidate Details Strings -->
