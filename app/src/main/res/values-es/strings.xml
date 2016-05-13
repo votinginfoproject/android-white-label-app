@@ -164,4 +164,11 @@ Departamento de Privacidad\nProyecto de Información Electoral\nIniciativas elec
     <string name="about.loading.legal_notices">Cargando…</string>
     <string name="about.error.legal_notices">Los servicios de Google Play no están disponibles.</string>
     <string name="about.description.mail_only">Su próxima elección es solamente por correo. Por favor, póngase en contacto con su funcionario electoral de su localidad para obtener más información sobre cómo recibir y devolver su papeleta.</string>
+    <string name="contest.label.empty_list">No hay concursos disponibles.</string>
+    <string name="details.label.empty_list">No hay detalles de la elección disponibles.</string>
+    <string name="locations.label.empty_list">No hay centros de votación cerca.</string>
+    <string name="about.additional_information">Información Adicional</string>
+    <string name="error.no_election_information">No se pudo recuperar información suficiente. </string>
+    <string name="location.open_settings">Ve a la configuración</string>
+    <string name="retry">Intente nuevamente</string>
 </resources>
