@@ -312,7 +312,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
         }
 
         if (origin != null) {
-            String directionsAPIKey = mContext.getString(R.string.google_api_browser_key);
+            String directionsAPIKey = mContext.getString(R.string.google_api_android_key);
 
             for (String transitMode : mQueuedTransitModes) {
                 enqueueRequest(directionsAPIKey, transitMode, origin);
@@ -322,7 +322,7 @@ public class DirectionsPresenterImpl extends DirectionsPresenter implements Dire
 
     private void enqueueRequest(String directionsAPIKey, String transitMode, @NonNull Location origin) {
         if (mPollingLocation.location != null) {
-            String directionsKey = mContext.getString(R.string.google_api_browser_key);
+            String directionsKey = mContext.getString(R.string.google_api_android_key);
 
             DirectionsRequest request = new DirectionsRequest(directionsKey, transitMode, origin, mPollingLocation.location);
 

@@ -35,7 +35,7 @@ public class CivicInfoRequest implements RequestType {
          * Make sure the API keys have been added to the project
          * Check out the "Adding API keys for the app" section of the readme for more details
          */
-        this.browserKey = context.getResources().getString(R.string.google_api_browser_key);
+        this.browserKey = context.getResources().getString(R.string.google_api_android_key);
         this.officialOnly = context.getResources().getBoolean(R.bool.civic_info_official_only);
         this.preproductionData = context.getResources().getBoolean(R.bool.use_preproduction);
         this.apiVersion = context.getResources().getString(R.string.civic_info_api_version);

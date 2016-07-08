@@ -84,6 +84,7 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
 *  In the [Google Developer Console](https://console.developers.google.com), under the project APIs, enable:
     -  Directions API
     -  Google Civic Information API
+    -  Google Geocoding API
     -  Google Maps Android API v2
     -  Google Analytics App Tracking SDK
 
@@ -111,8 +112,6 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
         -  `<SHA1 fingerprint>`;com.votinginfoproject.VotingInformationProject
     
 *  Edit `app/src/main/res/values/api_keys.xml` in the project to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
-
-    -  Note that the Google Maps API uses the Android key, and the Google Directions and Civic Info APIs use the browser key.
 
 ### Set up Google Analytics
 *  Copy the `app_tracker.xml.template` file from the `xmltemplates` directory to `app/src/main/res/xml/app_tracker.xml`.

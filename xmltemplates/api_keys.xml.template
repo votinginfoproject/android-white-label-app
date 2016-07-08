@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="google_api_android_key" translatable="false"></string>
-    <string name="google_api_browser_key" translatable="false"></string>
     <string name="stoplight_api_key" translatable="false"></string>
     <string name="civic_info_api_version" translatable="false">v2</string>
     <bool name="civic_info_official_only" translatable="false">false</bool>
     <string name="google_analytics_tracking_id" translatable="false"></string>
     <bool name="use_test_election" translatable="false">false</bool>
+    <bool name="use_preproduction" translatable="false">false</bool>
     <bool name="production_data_only" translatable="false">true</bool>
 
     <!-- Note this is ignored for Live builds -->
