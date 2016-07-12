@@ -52,7 +52,7 @@ public class ContestListPresenterImpl extends ContestListPresenter {
             getView().showNoContentView();
         }
     }
-    
+
     @Override
     public Contest getContest(int index) {
         index -= (hasHeader()) ? 1 : 0;
@@ -102,9 +102,11 @@ public class ContestListPresenterImpl extends ContestListPresenter {
 
     @Override
     public int getViewTypeForIndex(int index) {
+        int adjustedIndex = index - (hasHeader() ? 1 : 0);
+
         if (index == 0 && hasHeader()) {
             return ELECTION_VIEW_HOLDER;
-        } else if (index < getContestCount() - (hasHeader() ? 1 : 0)) {
+        } else if (adjustedIndex < getContestCount() - 1) {
             return CONTEST_VIEW_HOLDER;
         } else {
             return REPORT_VIEW_HOLDER;

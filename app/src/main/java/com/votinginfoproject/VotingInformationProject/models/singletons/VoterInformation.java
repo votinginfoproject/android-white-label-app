@@ -22,6 +22,8 @@ import java.util.Locale;
  * Created by marcvandehey on 3/2/16.
  */
 public class VoterInformation {
+    public static final String ALL_PARTIES_LABEL = "All Parties";
+
     private static final String TAG = VoterInformation.class.getSimpleName();
 
     private static final String ARG_POLLING_LOCATIONS = "polling_locations";
@@ -124,7 +126,7 @@ public class VoterInformation {
     }
 
     public static void setPartyFilter(String selectedParty) {
-        if (selectedParty != null) {
+        if (selectedParty != null && !selectedParty.equals(ALL_PARTIES_LABEL)) {
             ourInstance.selectedParty = selectedParty;
         } else {
             ourInstance.selectedParty = "";
@@ -148,7 +150,7 @@ public class VoterInformation {
     }
 
     public static ArrayList<Contest> getContests() {
-        if (getSelectedParty().isEmpty()) {
+        if (getSelectedParty().isEmpty() || getSelectedParty().equals(ALL_PARTIES_LABEL)) {
             return ourInstance.contests;
         } else {
             ArrayList<Contest> contests = new ArrayList<>();

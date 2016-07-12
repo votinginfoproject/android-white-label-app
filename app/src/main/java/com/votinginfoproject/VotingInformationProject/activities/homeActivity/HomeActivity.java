@@ -24,6 +24,7 @@ import com.votinginfoproject.VotingInformationProject.activities.voterInformatio
 import com.votinginfoproject.VotingInformationProject.adapters.HomePickerAdapter;
 import com.votinginfoproject.VotingInformationProject.models.VoterInfoResponse;
 import com.votinginfoproject.VotingInformationProject.models.singletons.GATracker;
+import com.votinginfoproject.VotingInformationProject.models.singletons.VoterInformation;
 
 import java.util.ArrayList;
 
@@ -206,7 +207,11 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
 
     @Override
     public void setPartyText(String partyText) {
-        mPartyTextView.setText(partyText);
+        if (partyText == null || partyText.equals(VoterInformation.ALL_PARTIES_LABEL)) {
+            mPartyTextView.setText(getString(R.string.fragment_home_all_parties));
+        } else {
+            mPartyTextView.setText(partyText);
+        }
     }
 
     @Override

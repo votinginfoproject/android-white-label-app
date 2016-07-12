@@ -51,7 +51,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         mSelectedElection = 0;
         mSelectedParty = 0;
 
-        allPartiesString = context.getString(R.string.fragment_home_all_parties);
+        allPartiesString = VoterInformation.ALL_PARTIES_LABEL;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             mSelectedParty = party;
             getView().setPartyText(mParties.get(mSelectedParty));
 
-            if(mParties.get(mSelectedParty).equals(mContext.getString(R.string.fragment_home_all_parties))) {
+            if (mParties.get(mSelectedParty).equals(mContext.getString(R.string.fragment_home_all_parties))) {
                 VoterInformation.setPartyFilter("");
             } else {
                 VoterInformation.setPartyFilter(mParties.get(mSelectedParty));
@@ -223,7 +223,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             }
 
             VoterInformation.clear();
-            
+
             mCivicInteractor.enqueueRequest(request, this);
         }
     }
