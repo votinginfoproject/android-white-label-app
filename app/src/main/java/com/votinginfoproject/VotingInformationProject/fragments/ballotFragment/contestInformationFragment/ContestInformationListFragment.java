@@ -157,7 +157,6 @@ public class ContestInformationListFragment extends BaseFragment<ContestInformat
 
     @Override
     public void resetView() {
-        //TODO DO THIS
         mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
 
     }

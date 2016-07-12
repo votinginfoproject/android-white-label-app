@@ -2,6 +2,7 @@ package com.votinginfoproject.VotingInformationProject.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +34,6 @@ public class Contest implements Parcelable {
     public final Long numberElected;
     public final Long numberVotingFor;
     public final Long ballotPlacement;
-    public final List<Candidate> candidates;
     public final String referendumTitle;
     public final String referendumSubtitle;
     public final String referendumUrl;
@@ -44,6 +44,7 @@ public class Contest implements Parcelable {
     public final String referendumPassageThreshold;
     public final String referendumEffectOfAbstain;
     public final List<Source> sources;
+    public List<Candidate> candidates;
 
     public Contest(Parcel parcel) {
         level = new LinkedList<>();
@@ -76,6 +77,18 @@ public class Contest implements Parcelable {
         parcel.readList(sources, Source.class.getClassLoader());
     }
 
+    public Contest copy() {
+        Parcel parcel = Parcel.obtain();
+        writeToParcel(parcel, 0);
+
+        parcel.setDataPosition(0);
+        Contest contest = Contest.CREATOR.createFromParcel(parcel);
+
+        parcel.recycle();
+
+        return contest;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -94,9 +107,11 @@ public class Contest implements Parcelable {
         dest.writeStringList(roles);
 
         dest.writeParcelable(district, 0);
-        dest.writeLong(numberElected);
-        dest.writeLong(numberVotingFor);
-        dest.writeLong(ballotPlacement);
+
+        dest.writeLong(numberElected != null ? numberElected : 0);
+        dest.writeLong(numberVotingFor != null ? numberVotingFor : 0);
+        dest.writeLong(ballotPlacement != null ? ballotPlacement : 0);
+
         dest.writeList(candidates);
 
         dest.writeString(referendumTitle);

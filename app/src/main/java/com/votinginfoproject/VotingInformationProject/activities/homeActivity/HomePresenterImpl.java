@@ -59,7 +59,6 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         if (savedState != null) {
             String voterInfoString = savedState.getString(VOTER_INFO_KEY);
 
-
             Log.v(TAG, "Saved String: " + voterInfoString);
 
             if (voterInfoString != null && voterInfoString.length() > 0) {
@@ -130,7 +129,11 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
             mSelectedParty = party;
             getView().setPartyText(mParties.get(mSelectedParty));
 
-            VoterInformation.setSelectedParty(mParties.get(mSelectedParty));
+            if(mParties.get(mSelectedParty).equals(mContext.getString(R.string.fragment_home_all_parties))) {
+                VoterInformation.setPartyFilter("");
+            } else {
+                VoterInformation.setPartyFilter(mParties.get(mSelectedParty));
+            }
         }
     }
 
@@ -322,7 +325,7 @@ public class HomePresenterImpl extends HomePresenter implements CivicInfoInterac
         mParties = mVoterInfoResponse.getUniqueParties();
         mParties.add(0, allPartiesString);
 
-        VoterInformation.setSelectedParty(allPartiesString);
+        VoterInformation.setPartyFilter(allPartiesString);
         if (mParties.size() > 1) {
             getView().setPartyText(mParties.get(0));
             mSelectedParty = 0;

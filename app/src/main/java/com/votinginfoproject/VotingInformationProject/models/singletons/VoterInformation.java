@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.votinginfoproject.VotingInformationProject.models.Candidate;
 import com.votinginfoproject.VotingInformationProject.models.CivicApiAddress;
 import com.votinginfoproject.VotingInformationProject.models.Contest;
 import com.votinginfoproject.VotingInformationProject.models.Election;
@@ -122,8 +123,12 @@ public class VoterInformation {
         return ourInstance.selectedParty;
     }
 
-    public static void setSelectedParty(String selectedParty) {
-        ourInstance.selectedParty = selectedParty;
+    public static void setPartyFilter(String selectedParty) {
+        if (selectedParty != null) {
+            ourInstance.selectedParty = selectedParty;
+        } else {
+            ourInstance.selectedParty = "";
+        }
     }
 
     public static ElectionAdministrationBody getStateAdministrationBody() {
@@ -143,7 +148,33 @@ public class VoterInformation {
     }
 
     public static ArrayList<Contest> getContests() {
-        return ourInstance.contests;
+        if (getSelectedParty().isEmpty()) {
+            return ourInstance.contests;
+        } else {
+            ArrayList<Contest> contests = new ArrayList<>();
+
+            Log.v("selected party", "Selected Party: " + getSelectedParty());
+
+            for (Contest contest : ourInstance.contests) {
+                Contest contestCopy = contest.copy();
+                contestCopy.candidates = new ArrayList<>();
+
+                for (int i = 0; i < contest.candidates.size(); i++) {
+                    Candidate candidate = contest.candidates.get(i);
+
+                    //Remove candidate from the list that does not belong to the selected party
+                    if (candidate.party != null && candidate.party.equals(getSelectedParty())) {
+                        contestCopy.candidates.add(candidate);
+                    }
+                }
+
+                if (contestCopy.candidates.size() > 0) {
+                    contests.add(contestCopy);
+                }
+            }
+
+            return contests;
+        }
     }
 
     public static void setPollingLocations(ArrayList<PollingLocation> pollingLocations, ArrayList<PollingLocation> earlyVotingLocations, ArrayList<PollingLocation> dropBoxLocations) {

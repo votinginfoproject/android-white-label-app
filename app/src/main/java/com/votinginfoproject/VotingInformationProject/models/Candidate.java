@@ -67,7 +67,7 @@ public class Candidate implements Parcelable {
         dest.writeString(phone);
         dest.writeString(photoUrl);
         dest.writeString(email);
-        dest.writeLong(orderOnBallot);
+        dest.writeLong(orderOnBallot != null ? orderOnBallot : 0);
         dest.writeList(channels);
     }
 
