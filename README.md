@@ -87,29 +87,6 @@ The emulator will run much faster with hardware acceleration enabled.  Please se
     -  Google Geocoding API
     -  Google Maps Android API v2
     -  Google Analytics App Tracking SDK
-
-*  Add your certificate fingerprint as an allowed Android application in the Google Developer Console
-
-    -  [Get the SHA1 certificate fingerprint for your Android Studio installation.](https://developers.google.com/maps/documentation/android/start)  On Windows:
-    
-         -  Find the directory where Java is installed under Android Studio -> File -> Project Structure -> SDK location
-         
-         -  Open the command prompt and go into the Java bin directory:
-            `cd <JDK directory>\bin`
-            
-         -  Use the Android keytool.exe program to get the SHA1 fingerprint for the debug key used to sign the app:
-         
-            ```
-            keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
-            ```
-            
-         -  Copy the SH1 fingerprint output by the above command.
-
-    -  Go to Apis & auth -> Credentials -> Key for Android applications in the Google Developer Console.
-    
-    -  Add the following line under **Edit allowed Android applications**:
-    
-        -  `<SHA1 fingerprint>`;com.votinginfoproject.VotingInformationProject
     
 *  Edit `app/src/main/res/values/api_keys.xml` in the project to add in your API keys from the [Google Developer Console](https://console.developers.google.com).
 
