@@ -88,18 +88,6 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/button.legal_notices"
-                        style="@style/about_additional_into_button">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/about.title.legal_notices"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>

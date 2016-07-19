@@ -14,7 +14,5 @@ public abstract class AboutVIPPresenter extends BasePresenter<AboutVIPView> {
 
     abstract void privacyPolicyClicked(MotionEvent event);
 
-    abstract void legalNoticesClicked(MotionEvent event);
-
     abstract void onBackPressed();
 }

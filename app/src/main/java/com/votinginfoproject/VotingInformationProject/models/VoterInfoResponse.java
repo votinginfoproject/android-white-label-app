@@ -20,11 +20,9 @@ public class VoterInfoResponse implements RequestType {
     // limit drop box locations to first 50, and polling and early voting sites to first 25
     private transient static final int MAX_VOTING_SITES = 25;
     private transient static final int MAX_DROP_BOX_SITES = 50;
-
-    private transient final String TAG = VoterInfoResponse.class.getSimpleName();
-
-    public Election election;
     public final List<Election> otherElections;
+    private transient final String TAG = VoterInfoResponse.class.getSimpleName();
+    public Election election;
     public CivicApiAddress normalizedInput;
     public ArrayList<PollingLocation> pollingLocations;
     public ArrayList<PollingLocation> earlyVoteSites;
@@ -205,7 +203,14 @@ public class VoterInfoResponse implements RequestType {
             State thisState = state.get(0);
 
             if (thisState != null && thisState.local_jurisdiction != null && thisState.local_jurisdiction.electionAdministrationBody != null) {
-                return thisState.local_jurisdiction.electionAdministrationBody;
+
+                ElectionAdministrationBody body = thisState.local_jurisdiction.electionAdministrationBody;
+
+                if (body.name == null || body.name.isEmpty()) {
+                    body.name = thisState.local_jurisdiction.name;
+                }
+
+                return body;
             }
         }
 

@@ -106,7 +106,6 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
     private void navigateToPreviousFragment(final AboutVIPFragment fragmentToRemove) {
         Animator unreveal = fragmentToRemove.prepareUnrevealAnimator();
 
-
         unreveal.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -137,10 +136,6 @@ public class AboutVIPActivity extends BaseActivity<AboutVIPPresenter> implements
 
     public void privacyPolicyClicked(MotionEvent event) {
         getPresenter().privacyPolicyClicked(event);
-    }
-
-    public void legalNoticesClicked(MotionEvent event) {
-        getPresenter().legalNoticesClicked(event);
     }
 
     public void viewTransitionEnded() {

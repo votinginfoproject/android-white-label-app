@@ -36,24 +36,19 @@ public class AboutVIPFragment extends Fragment {
     private static final String ARG_SHOWS_INFO_BUTTONS = "mShowsAdditionalInfoButtons";
     private static final String ARG_TRANSITION_POINT = "mTransitionPoint";
     private static final String ARG_IS_LOADING = "mIsLoading";
-
+    private final int mAnimationDurationMillis = 400;
     private AboutVIPActivity myActivity;
-
     private String mInfoText;
     private String mTitle;
     private CoordinatePair mTransitionPoint;
     private boolean mShowsAdditionalInfoButtons;
     private boolean mIsLoading;
-
     private TextView mAboutTextView;
     private View mAdditionalInformationView;
     private View mTermsOfUseButton;
     private View mPrivacyPolicyButton;
-    private View mLegalNoticesButton;
     private Toolbar mToolbar;
     private View mProgressBarContainer;
-
-    private final int mAnimationDurationMillis = 400;
 
     public static AboutVIPFragment newInstance(String titleText, String infoText, boolean isLoading, boolean showsAdditionalInfoButtons, CoordinatePair transitionPoint) {
         AboutVIPFragment fragment = new AboutVIPFragment();
@@ -97,7 +92,6 @@ public class AboutVIPFragment extends Fragment {
         mAdditionalInformationView = view.findViewById(R.id.additional_information);
         mTermsOfUseButton = view.findViewById(R.id.button_terms_of_use);
         mPrivacyPolicyButton = view.findViewById(R.id.button_privacy_policy);
-        mLegalNoticesButton = view.findViewById(R.id.button_legal_notices);
         mProgressBarContainer = view.findViewById(R.id.progress_bar_container);
 
         setupViewListeners();
@@ -161,16 +155,6 @@ public class AboutVIPFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     myActivity.privacyPolicyClicked(event);
-                }
-                return false;
-            }
-        });
-
-        mLegalNoticesButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    myActivity.legalNoticesClicked(event);
                 }
                 return false;
             }

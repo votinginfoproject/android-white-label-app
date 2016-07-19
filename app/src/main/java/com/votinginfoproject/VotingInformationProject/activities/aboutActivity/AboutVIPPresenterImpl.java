@@ -68,16 +68,6 @@ public class AboutVIPPresenterImpl extends AboutVIPPresenter {
     }
 
     @Override
-    void legalNoticesClicked(MotionEvent event) {
-        mPresentingLegalNotices = true;
-
-        navigateToNewAboutView(R.string.about_title_legal_notices,
-                R.string.about_loading_legal_notices,
-                true,
-                new CoordinatePair((int) event.getRawX(), (int) event.getRawY()));
-    }
-
-    @Override
     void onBackPressed() {
         mPresentingLegalNotices = false;
         getView().navigateToPreviousView();
