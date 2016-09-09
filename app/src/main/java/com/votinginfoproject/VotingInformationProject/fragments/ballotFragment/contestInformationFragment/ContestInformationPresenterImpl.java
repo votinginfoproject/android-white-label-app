@@ -42,7 +42,7 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
 
         mHasHeader = mElection != null;
 
-        mIsReferendum = mContest.type.equals("Referendum");
+        mIsReferendum = mContest.type.toLowerCase().equals("referendum");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ContestInformationPresenterImpl extends ContestInformationPresenter
             description = candidate.party;
         } else if (index == districtIndex) {
             title = getView().getContext().getString(R.string.contest_label_office);
-            description = mContest.office;
+            description = mContest.district.name;
         } else if (index == typeIndex) {
             title = getView().getContext().getString(R.string.contest_label_type);
             description = mContest.type;

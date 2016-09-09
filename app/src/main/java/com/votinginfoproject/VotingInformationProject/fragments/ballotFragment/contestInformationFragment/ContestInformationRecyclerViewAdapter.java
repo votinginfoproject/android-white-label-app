@@ -1,6 +1,7 @@
 package com.votinginfoproject.VotingInformationProject.fragments.ballotFragment.contestInformationFragment;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,8 @@ public class ContestInformationRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Log.e("here", "referendum found!");
+
         if (holder instanceof CandidateViewHolder) {
             CandidateViewHolder candidateViewHolder = (CandidateViewHolder) holder;
 

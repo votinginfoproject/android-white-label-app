@@ -6,7 +6,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
     defaultConfig {
         applicationId 'com.votinginfoproject.vip'
         versionName "4.0.0"
@@ -40,18 +40,19 @@ dependencies {
 
     // use Google Maps utility library for polyline decoder
     // https://github.com/googlemaps/android-maps-utils
-    compile 'com.google.code.gson:gson:2.4'
+    
+
+    compile  'com.google.code.gson:gson:2.4'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:support-v4:23.3.0'
-    compile "com.android.support:support-v13:23.3.0"
+    compile 'com.android.support:support-v13:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.android.support:customtabs:23.3.0'
-
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
-    compile 'com.google.android.gms:play-services-location:8.4.0'
-    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:7.5.0'
+    compile 'com.google.android.gms:play-services-location:7.5.0'
+    compile 'com.google.android.gms:play-services-maps:7.5.0'
     compile 'com.google.maps.android:android-maps-utils:0.3.4'
     compile 'com.jakewharton:butterknife:7.0.1'
 }
