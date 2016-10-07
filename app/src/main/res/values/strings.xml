@@ -47,13 +47,13 @@
     <string name="fragment.home.error_parsing_address">We couldn\'t read the address you entered.  Please check that it\'s right and try again</string>
     <string name="fragment.home.error_no_election_for_address">We couldn\'t find any election information for the address you entered.\n\nPlease check to make sure you entered it correctly, contact your election official, or try again closer to Election Day.\n\nInformation will be available 2 &#8211; 4 weeks prior to the election. For the most complete and up to date information, consult your local election official.</string>
     <string name="fragment.home.error_no_address">Please check that you\'ve got an address entered and try again.</string>
-    <string name="fragment.home.error_unknown">We weren\'t able to get results for the address you entered.  Please try again later.</string>
+    <string name="fragment.home.error_unknown">Unfortunately, we do not have information available yet for your state for the upcoming election.  Please check back closer to Election Day.</string>
     <string name="fragment.home.error_no_internet">Cannot connect to the Internet.  Please check your connection.</string>
     <string name="fragment.home.go_button_accessibility_description">Go to search results.</string>
     <string name="fragment.home.select_contact_button_description">Open contacts to select a contact address.</string>
     <string name="fragment.home.select_location_button_description">Use current location to search for elections.</string>
     <string name="fragment.home.search_button_description">Search for results.</string>
-    <string name="fragment.home.election_spinner_description">Please pick an election"</string>
+    <string name="fragment.home.election_spinner_description">Please pick an election:</string>
     <string name="fragment.home.party_spinner_description">Please pick a party:</string>
     <string name="fragment.home.all_parties">All Parties</string>
 
