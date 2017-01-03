@@ -1,3 +1,5 @@
+This app is no longer being supported by the Voting Information Project.
+
 android-white-label-app
 =======================
 
